@@ -8,10 +8,8 @@
     "postinstall:workspaces": "npm run build",
     "test": "jest --config jest_node.config.js && jest --config jest_jsdom.config.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "github.com/turbopuffer/turbopuffer-typescript"
-  },
+  "homepage": "https://turbopuffer.com",
+  "repository": "https://github.com/turbopuffer/turbopuffer-typescript.git",
   "author": "Morgan Gallant <morgan@turbopuffer.com>",
   "license": "MIT",
   "keywords": [
