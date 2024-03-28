@@ -1,6 +1,6 @@
 {
   "name": "@turbopuffer/turbopuffer",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Official Typescript API client library for turbopuffer.com",
   "scripts": {
     "build": "rm -rf dist && tsc",
@@ -26,6 +26,7 @@
     "README.md",
     "LICENSE"
   ],
+  "main": "./dist/turbopuffer.js",
   "devDependencies": {
     "@types/isomorphic-fetch": "^0.0.39",
     "@types/jest": "^29.5.12",
