@@ -47,3 +47,9 @@ let results = await client.query({
   },
 });
 ```
+
+To publish a new version,
+
+```bash
+npm publish --access public
+```

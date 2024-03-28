@@ -4,8 +4,8 @@
   "description": "Official Typescript API client library for turbopuffer.com",
   "scripts": {
     "build": "rm -rf dist && tsc",
-    "prepublishOnly": "build",
-    "postinstall:workspaces": "build",
+    "prepublishOnly": "npm run build",
+    "postinstall:workspaces": "npm run build",
     "test": "jest --config jest_node.config.js && jest --config jest_jsdom.config.js"
   },
   "repository": {
@@ -21,7 +21,9 @@
     "semantic search"
   ],
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
   "devDependencies": {
     "@types/isomorphic-fetch": "^0.0.39",
