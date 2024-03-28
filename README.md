@@ -10,13 +10,15 @@ Usage:
 
 ```ts
 // Make a new client
-const client = new Turbopuffer({
+const tpuf = new Turbopuffer({
   apiKey: process.env.TURBOPUFFER_API_KEY as string,
 });
 
-// Upsert some vectors to a namespace
-await client.upsert({
-  "my-cool-namespace",
+// Instantiate an object to work with a namespace
+const ns = tpuf.namespace("my-cool-namespace");
+
+// Upsert some vectors
+await ns.upsert({
   vectors: [
     {
       id: 1,
@@ -38,9 +40,8 @@ await client.upsert({
   distance_metric: "cosine_distance",
 });
 
-// Query the namespace
-let results = await client.query({
-  namespace,
+// Query
+let results = await ns.query({
   vector: [1, 1],
   filters: {
     numbers: [["In", [2, 4]]],

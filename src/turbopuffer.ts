@@ -76,7 +76,7 @@ export class TurbopufferError extends Error {
   }
 }
 
-/* Client */
+/* Base Client */
 export class Turbopuffer {
   private baseUrl: string;
   apiKey: string;
@@ -170,94 +170,10 @@ export class Turbopuffer {
   }
 
   /**
-   * Creates, updates, or deletes vectors.
-   * See: https://turbopuffer.com/docs/reference/upsert
-   */
-  async upsert({
-    namespace,
-    vectors,
-    distance_metric,
-  }: {
-    namespace: string;
-    vectors: Vector[];
-    distance_metric: DistanceMetric;
-  }): Promise<void> {
-    await this.doRequest<{ status: string }>({
-      method: "POST",
-      path: `/v1/vectors/${namespace}`,
-      compress: vectors.length > 10,
-      body: {
-        upserts: vectors,
-        distance_metric,
-      },
-    });
-  }
-
-  /**
-   * Queries vectors.
-   * See: https://turbopuffer.com/docs/reference/query
-   */
-  async query({
-    namespace,
-    ...params
-  }: {
-    namespace: string;
-    vector?: number[];
-    distance_metric?: DistanceMetric;
-    top_k?: number;
-    include_vectors?: boolean;
-    include_attributes?: boolean | string[];
-    filters?: Filters;
-  }): Promise<QueryResults> {
-    return (
-      await this.doRequest<QueryResults>({
-        method: "POST",
-        path: `/v1/vectors/${namespace}/query`,
-        body: params,
-      })
-    ).body;
-  }
-
-  /**
-   * Export all vectors at full precision.
-   * See: https://turbopuffer.com/docs/reference/list
-   */
-  async export({
-    namespace,
-    cursor,
-  }: {
-    namespace: string;
-    cursor?: string;
-  }): Promise<{ vectors: Vector[]; next_cursor?: string }> {
-    type responseType = ColumnarVectors & { next_cursor: string };
-    let response = await this.doRequest<responseType>({
-      method: "GET",
-      path: `/v1/vectors/${namespace}`,
-      query: { cursor },
-    });
-    return {
-      vectors: fromColumnar(response.body),
-      next_cursor: response.body.next_cursor,
-    };
-  }
-
-  /**
-   * Fetches the approximate number of vectors in a namespace.
-   */
-  async approxNumVectors(namespace: string): Promise<number> {
-    let response = await this.doRequest<{}>({
-      method: "HEAD",
-      path: `/v1/vectors/${namespace}`,
-    });
-    let num = response.headers.get("X-turbopuffer-Approx-Num-Vectors");
-    return num ? parseInt(num) : 0;
-  }
-
-  /**
    * List all your namespaces.
    * See: https://turbopuffer.com/docs/reference/namespaces
    */
-  async listNamespaces({
+  async namespaces({
     cursor,
     page_size,
   }: {
@@ -277,13 +193,109 @@ export class Turbopuffer {
   }
 
   /**
+   * Creates a namespace object to operate on. Operations
+   * should be called on the Namespace object itself.
+   */
+  namespace(id: string): Namespace {
+    return new Namespace(this, id);
+  }
+}
+
+export class Namespace {
+  private client: Turbopuffer;
+  id: string;
+
+  constructor(client: Turbopuffer, id: string) {
+    this.client = client;
+    this.id = id;
+  }
+
+  /**
+   * Creates, updates, or deletes vectors.
+   * See: https://turbopuffer.com/docs/reference/upsert
+   */
+  async upsert({
+    vectors,
+    distance_metric,
+  }: {
+    vectors: Vector[];
+    distance_metric: DistanceMetric;
+  }): Promise<void> {
+    await this.client.doRequest<{ status: string }>({
+      method: "POST",
+      path: `/v1/vectors/${this.id}`,
+      compress: vectors.length > 10,
+      body: {
+        upserts: vectors,
+        distance_metric,
+      },
+    });
+  }
+
+  /**
+   * Queries vectors.
+   * See: https://turbopuffer.com/docs/reference/query
+   */
+  async query({
+    ...params
+  }: {
+    vector?: number[];
+    distance_metric?: DistanceMetric;
+    top_k?: number;
+    include_vectors?: boolean;
+    include_attributes?: boolean | string[];
+    filters?: Filters;
+  }): Promise<QueryResults> {
+    return (
+      await this.client.doRequest<QueryResults>({
+        method: "POST",
+        path: `/v1/vectors/${this.id}/query`,
+        body: params,
+      })
+    ).body;
+  }
+
+  /**
+   * Export all vectors at full precision.
+   * See: https://turbopuffer.com/docs/reference/list
+   */
+  async export({
+    cursor,
+  }: {
+    cursor?: string;
+  }): Promise<{ vectors: Vector[]; next_cursor?: string }> {
+    type responseType = ColumnarVectors & { next_cursor: string };
+    let response = await this.client.doRequest<responseType>({
+      method: "GET",
+      path: `/v1/vectors/${this.id}`,
+      query: { cursor },
+    });
+    return {
+      vectors: fromColumnar(response.body),
+      next_cursor: response.body.next_cursor,
+    };
+  }
+
+  /**
+   * Fetches the approximate number of vectors in a namespace.
+   */
+  async approxNumVectors({}: {}): Promise<number> {
+    let response = await this.client.doRequest<{}>({
+      method: "HEAD",
+      path: `/v1/vectors/${this.id}`,
+    });
+    let num = response.headers.get("X-turbopuffer-Approx-Num-Vectors");
+    return num ? parseInt(num) : 0;
+  }
+
+  /**
    * Delete a namespace fully (all data).
    * See: https://turbopuffer.com/docs/reference/delete-namespace
    */
-  async deleteNamespace(namespace: string): Promise<void> {
-    await this.doRequest<{ status: string }>({
+  async delete(): Promise<void> {
+    await this.client.doRequest<{ status: string }>({
       method: "DELETE",
-      path: `/v1/vectors/${namespace}`,
+      path: `/v1/vectors/${this.id}`,
     });
   }
 
@@ -292,22 +304,20 @@ export class Turbopuffer {
    * See: https://turbopuffer.com/docs/reference/recall
    */
   async recall({
-    namespace,
     num,
     top_k,
     filters,
     queries,
   }: {
-    namespace: string;
     num?: number;
     top_k?: number;
     filters?: Filters;
     queries?: number[][];
   }): Promise<RecallMeasurement> {
     return (
-      await this.doRequest<RecallMeasurement>({
+      await this.client.doRequest<RecallMeasurement>({
         method: "POST",
-        path: `/v1/vectors/${namespace}/_debug/recall`,
+        path: `/v1/vectors/${this.id}/_debug/recall`,
         compress: queries && queries.length > 10,
         body: {
           num,
