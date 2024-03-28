@@ -1,6 +1,6 @@
 {
   "name": "@turbopuffer/turbopuffer",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Official Typescript API client library for turbopuffer.com",
   "scripts": {
     "build": "rm -rf dist && tsc",
@@ -9,7 +9,10 @@
     "test": "jest --config jest_node.config.js && jest --config jest_jsdom.config.js"
   },
   "homepage": "https://turbopuffer.com",
-  "repository": "https://github.com/turbopuffer/turbopuffer-typescript.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/turbopuffer/turbopuffer-typescript.git"
+  },
   "author": "Morgan Gallant <morgan@turbopuffer.com>",
   "license": "MIT",
   "keywords": [
