@@ -39,12 +39,13 @@ export type FilterOperator =
   | "NotIGlob"
   | "And"
   | "Or";
+export type FilterFieldsOperator = "And" | "Or";
 export type FilterValue = Exclude<AttributeType, null>;
-export type FilterEntry = FilterOperator | FilterValue;
-export type FilterParam = FixedLengthArray<FilterEntry | FilterEntry[], 2>;
-export type Filters = {
-  [key: string]: FilterParam[];
+export type FilterParam = [FilterOperator, Array<FilterParam> | FilterValue];
+export type FilterFields = {
+  [key: string]: FilterParam;
 };
+export type Filters = FilterFields | [FilterFieldsOperator, Filters | Array<Filters>];
 export type QueryResults = {
   id: Id;
   vector?: number[];

@@ -44,7 +44,7 @@ await ns.upsert({
 let results = await ns.query({
   vector: [1, 1],
   filters: {
-    numbers: [["In", [2, 4]]],
+    numbers: ["In", [2, 4]],
   },
 });
 ```
