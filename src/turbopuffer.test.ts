@@ -38,12 +38,31 @@ test("sanity", async () => {
   let results = await ns.query({
     vector: [1, 1],
     filters: {
-      numbers: [["In", [2, 4]]],
+      numbers: ["In", [2, 4]],
     },
   });
   expect(results.length).toEqual(2);
   expect(results[0].id).toEqual(2);
   expect(results[1].id).toEqual(1);
+
+  let results2 = await ns.query({
+    vector: [1, 1],
+    filters: ["And", [
+      {
+        numbers: ["Or", [
+          ["In", [2, 3]],
+          ["In", [1, 3]],
+        ]]
+      },
+      ["Or", {
+        foo: ["Eq", "bar"],
+        numbers: ["In", 4],
+      }]
+    ]],
+  });
+  expect(results2.length).toEqual(2);
+  expect(results2[0].id).toEqual(2);
+  expect(results2[1].id).toEqual(1);
 
   let recall = await ns.recall({
     num: 1,
@@ -61,7 +80,7 @@ test("sanity", async () => {
     await ns.query({
       vector: [1, 1],
       filters: {
-        numbers: [["In", [2, 4]]],
+        numbers: ["In", [2, 4]],
       },
     });
   } catch (_: any) {
