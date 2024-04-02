@@ -39,13 +39,10 @@ export type FilterOperator =
   | "NotIGlob"
   | "And"
   | "Or";
-export type FilterFieldsOperator = "And" | "Or";
+export type FilterConnective = "And" | "Or";
 export type FilterValue = Exclude<AttributeType, null>;
-export type FilterParam = [FilterOperator, Array<FilterParam> | FilterValue];
-export type FilterFields = {
-  [key: string]: FilterParam;
-};
-export type Filters = FilterFields | [FilterFieldsOperator, Filters | Array<Filters>];
+export type FilterCondition = [string, FilterOperator, FilterValue];
+export type Filters = [FilterConnective, Filters[]] | FilterCondition;
 export type QueryResults = {
   id: Id;
   vector?: number[];
