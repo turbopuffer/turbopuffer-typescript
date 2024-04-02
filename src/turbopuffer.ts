@@ -86,7 +86,7 @@ export class Turbopuffer {
   constructor({
     apiKey,
     baseUrl = "https://api.turbopuffer.com",
-    upsertBatchSize = 5000,
+    upsertBatchSize = 10000,
   }: {
     apiKey: string;
     baseUrl?: string;
