@@ -17,6 +17,20 @@ const config = {
       "warn",
       { prefer: "type-imports", fixStyle: "separate-type-imports" },
     ],
+    "@typescript-eslint/naming-convention": [
+      "warn",
+      {
+        selector: ["variable", "property"],
+        format: ["camelCase"],
+        leadingUnderscore: "allow",
+        trailingUnderscore: "allow",
+      },
+      {
+        selector: ["variable", "function"],
+        format: null,
+        modifiers: ["global"],
+      },
+    ],
     "@typescript-eslint/no-misused-promises": [
       2,
       { checksVoidReturn: { attributes: false } },
