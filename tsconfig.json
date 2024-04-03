@@ -1,18 +1,18 @@
 {
-    "compilerOptions": {
-        "rootDir": "src",
-        "outDir": "dist",
-        "target": "ES2017",
-        "module": "commonjs",
-        "moduleResolution": "Node",
-        "lib": ["es2017", "es2022", "es7", "es6", "dom"],
-        "strict": true,
-        "sourceMap": true,
-        "esModuleInterop": true,
-        "declaration": true,
-        "declarationMap": true,
-        "resolveJsonModule": true
-    },
-    "include": ["src"],
-    "exclude": ["src/*.test.ts"]
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "target": "ES2017",
+    "module": "commonjs",
+    "moduleResolution": "Node",
+    "lib": ["es2017", "es2022", "es7", "es6", "dom"],
+    "strict": true,
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "declaration": true,
+    "declarationMap": true,
+    "resolveJsonModule": true
+  },
+  "include": ["src"],
+  "exclude": ["src/*.test.ts"]
 }
