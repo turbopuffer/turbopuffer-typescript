@@ -7,7 +7,7 @@
 
 import pako from "pako";
 import "isomorphic-fetch";
-import {version} from '../package.json';
+import { version } from "../package.json";
 
 /**
  * Utility Types
@@ -16,14 +16,12 @@ import {version} from '../package.json';
  */
 export type Id = string | number;
 export type AttributeType = null | string | number | string[] | number[];
-export type Attributes = {
-  [key: string]: AttributeType;
-};
-export type Vector = {
+export type Attributes = Record<string, AttributeType>;
+export interface Vector {
   id: Id;
   vector?: number[];
   attributes?: Attributes;
-};
+}
 export type DistanceMetric = "cosine_distance" | "euclidean_squared";
 export type FilterOperator =
   | "Eq"
@@ -50,28 +48,28 @@ export type QueryResults = {
   attributes?: Attributes;
   dist?: number;
 }[];
-export type NamespaceDesc = {
+export interface NamespaceDesc {
   id: string;
   approx_count: number;
   dimensions: number;
   created_at: string; // RFC3339 format
-};
-export type NamespacesListResult = {
+}
+export interface NamespacesListResult {
   namespaces: NamespaceDesc[];
   next_cursor?: string;
-};
-export type RecallMeasurement = {
+}
+export interface RecallMeasurement {
   avg_recall: number;
   avg_exhaustive_count: number;
   avg_ann_count: number;
-};
+}
 
 /* Error type */
 export class TurbopufferError extends Error {
   status?: number;
   constructor(
     public error: string,
-    { status }: { status?: number }
+    { status }: { status?: number },
   ) {
     super(error);
     this.status = status;
@@ -112,9 +110,7 @@ export class Turbopuffer {
   }: {
     method: string;
     path: string;
-    query?: {
-      [key: string]: string | undefined;
-    };
+    query?: Record<string, string | undefined>;
     body?: any;
     compress?: boolean;
     retryable?: boolean;
@@ -122,14 +118,14 @@ export class Turbopuffer {
     const url = new URL(`${this.baseUrl}${path}`);
     if (query) {
       Object.keys(query).forEach((key) => {
-        let value = query[key];
+        const value = query[key];
         if (value) {
           url.searchParams.append(key, value);
         }
       });
     }
 
-    let headers: Record<string, string> = {
+    const headers: Record<string, string> = {
       // eslint-disable-next-line @typescript-eslint/naming-convention
       "Accept-Encoding": "gzip",
       // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -150,8 +146,8 @@ export class Turbopuffer {
     }
 
     const maxAttempts = retryable ? 3 : 1;
-    var response!: Response;
-    var error: TurbopufferError | null = null;
+    let response!: Response;
+    let error: TurbopufferError | null = null;
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
       response = await fetch(url.toString(), {
         method,
@@ -162,7 +158,7 @@ export class Turbopuffer {
         let message: string | undefined = undefined;
         if (response.headers.get("Content-Type") === "application/json") {
           try {
-            let body = await response.json();
+            const body = await response.json();
             if (body && body.status === "error") {
               message = body.error;
             } else {
@@ -171,13 +167,15 @@ export class Turbopuffer {
           } catch (_: any) {}
         } else {
           try {
-            let body = await response.text();
+            const body = await response.text();
             if (body) {
               message = body;
             }
           } catch (_: any) {}
         }
-        error = new TurbopufferError(message || response.statusText, { status: response.status });
+        error = new TurbopufferError(message || response.statusText, {
+          status: response.status,
+        });
       }
       if (
         error &&
@@ -332,7 +330,7 @@ export class Namespace {
     cursor?: string;
   }): Promise<{ vectors: Vector[]; next_cursor?: string }> {
     type responseType = ColumnarVectors & { next_cursor: string };
-    let response = await this.client.doRequest<responseType>({
+    const response = await this.client.doRequest<responseType>({
       method: "GET",
       path: `/v1/vectors/${this.id}`,
       query: { cursor: params?.cursor },
@@ -349,12 +347,12 @@ export class Namespace {
    * Fetches the approximate number of vectors in a namespace.
    */
   async approxNumVectors(): Promise<number> {
-    let response = await this.client.doRequest<{}>({
+    const response = await this.client.doRequest<{}>({
       method: "HEAD",
       path: `/v1/vectors/${this.id}`,
       retryable: true,
     });
-    let num = response.headers.get("X-turbopuffer-Approx-Num-Vectors");
+    const num = response.headers.get("X-turbopuffer-Approx-Num-Vectors");
     return num ? parseInt(num) : 0;
   }
 
@@ -406,14 +404,12 @@ export class Namespace {
 
 /* Helpers */
 
-type ColumnarAttributes = {
-  [key: string]: AttributeType[];
-};
-type ColumnarVectors = {
+type ColumnarAttributes = Record<string, AttributeType[]>;
+interface ColumnarVectors {
   ids: Id[];
   vectors: number[][];
   attributes?: ColumnarAttributes;
-};
+}
 
 // Unused atm.
 function toColumnar(vectors: Vector[]): ColumnarVectors {
@@ -424,9 +420,9 @@ function toColumnar(vectors: Vector[]): ColumnarVectors {
       attributes: {},
     };
   }
-  let attributes: ColumnarAttributes = {};
+  const attributes: ColumnarAttributes = {};
   vectors.forEach((vec, i) => {
-    for (let [key, val] of Object.entries(vec.attributes || {})) {
+    for (const [key, val] of Object.entries(vec.attributes || {})) {
       if (!attributes[key]) {
         attributes[key] = new Array<AttributeType>(vectors.length).fill(null);
       }
@@ -441,7 +437,7 @@ function toColumnar(vectors: Vector[]): ColumnarVectors {
 }
 
 function fromColumnar(cv: ColumnarVectors): Vector[] {
-  let res = new Array<Vector>(cv.ids.length);
+  const res = new Array<Vector>(cv.ids.length);
   const attributeEntries = Object.entries(cv.attributes || {});
   for (let i = 0; i < cv.ids.length; i++) {
     res[i] = {
@@ -449,7 +445,7 @@ function fromColumnar(cv: ColumnarVectors): Vector[] {
       vector: cv.vectors[i],
       attributes: cv.attributes
         ? Object.fromEntries(
-            attributeEntries.map(([key, values]) => [key, values[i]])
+            attributeEntries.map(([key, values]) => [key, values[i]]),
           )
         : undefined,
     };

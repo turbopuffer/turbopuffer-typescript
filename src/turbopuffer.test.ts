@@ -1,7 +1,7 @@
 import { Turbopuffer } from "./turbopuffer";
 
 const tpuf = new Turbopuffer({
-  apiKey: process.env.TURBOPUFFER_API_KEY as string,
+  apiKey: process.env.TURBOPUFFER_API_KEY!,
 });
 
 test("sanity", async () => {
@@ -43,7 +43,7 @@ test("sanity", async () => {
   expect(results[0].id).toEqual(2);
   expect(results[1].id).toEqual(1);
 
-  let results2 = await ns.query({
+  const results2 = await ns.query({
     vector: [1, 1],
     filters: [
       "And",
@@ -69,7 +69,7 @@ test("sanity", async () => {
   expect(results2[0].id).toEqual(2);
   expect(results2[1].id).toEqual(1);
 
-  let recall = await ns.recall({
+  const recall = await ns.recall({
     num: 1,
     top_k: 2,
   });
