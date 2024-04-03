@@ -12,5 +12,5 @@
         "declaration": true,
         "declarationMap": true,
     },
-    "include": ["src/turbopuffer.ts"]
+    "include": ["src"]
 }

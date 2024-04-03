@@ -68,7 +68,10 @@ export type RecallMeasurement = {
 /* Error type */
 export class TurbopufferError extends Error {
   status?: number;
-  constructor(public error: string, { status }: { status?: number }) {
+  constructor(
+    public error: string,
+    { status }: { status?: number }
+  ) {
     super(error);
     this.status = status;
   }
@@ -116,7 +119,9 @@ export class Turbopuffer {
     }
 
     let headers: Record<string, string> = {
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       "Accept-Encoding": "gzip",
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       Authorization: `Bearer ${this.apiKey}`,
     };
     if (body) {
@@ -334,6 +339,7 @@ export class Namespace {
 
 // See https://github.com/microsoft/TypeScript/issues/26223.
 interface FixedLengthArray<T extends any, L extends number> extends Array<T> {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   0: T;
   length: L;
 }
