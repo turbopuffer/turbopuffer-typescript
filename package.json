@@ -10,7 +10,8 @@
     "format": "prettier --check . --ignore-path ./.gitignore",
     "format:fix": "prettier --check . --ignore-path ./.gitignore --write",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "typecheck": "tsc --noEmit"
   },
   "homepage": "https://turbopuffer.com",
   "repository": {
