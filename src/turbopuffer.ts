@@ -160,13 +160,16 @@ export class Turbopuffer {
       });
       if (response.status >= 400) {
         let message: string | undefined = undefined;
-        try {
-          let body = await response.json();
-          if (body && body.status === "error") {
-            message = body.error || (body as string);
-          }
-        } catch (_: any) {}
-        if (!message) {
+        if (response.headers.get("Content-Type") === "application/json") {
+          try {
+            let body = await response.json();
+            if (body && body.status === "error") {
+              message = body.error;
+            } else {
+              message = JSON.stringify(body);
+            }
+          } catch (_: any) {}
+        } else {
           try {
             let body = await response.text();
             if (body) {
