@@ -351,7 +351,7 @@ export class Namespace {
    * Fetches the approximate number of vectors in a namespace.
    */
   async approxNumVectors(): Promise<number> {
-    const response = await this.client.doRequest<{}>({
+    const response = await this.client.doRequest<object>({
       method: "HEAD",
       path: `/v1/vectors/${this.id}`,
       retryable: true,
