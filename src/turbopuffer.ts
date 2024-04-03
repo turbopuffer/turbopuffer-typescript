@@ -329,8 +329,8 @@ export class Namespace {
   async export(params?: {
     cursor?: string;
   }): Promise<{ vectors: Vector[]; next_cursor?: string }> {
-    type responseType = ColumnarVectors & { next_cursor: string };
-    const response = await this.client.doRequest<responseType>({
+    type ResponseType = ColumnarVectors & { next_cursor: string };
+    const response = await this.client.doRequest<ResponseType>({
       method: "GET",
       path: `/v1/vectors/${this.id}`,
       query: { cursor: params?.cursor },
