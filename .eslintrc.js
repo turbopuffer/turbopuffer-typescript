@@ -26,6 +26,10 @@ const config = {
         trailingUnderscore: "allow",
       },
       {
+        selector: ["typeLike"],
+        format: ["PascalCase"],
+      },
+      {
         selector: ["variable", "function"],
         format: null,
         modifiers: ["global"],
