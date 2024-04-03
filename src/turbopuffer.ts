@@ -164,14 +164,18 @@ export class Turbopuffer {
             } else {
               message = JSON.stringify(body);
             }
-          } catch (_: unknown) {}
+          } catch (_: unknown) {
+            /* empty */
+          }
         } else {
           try {
             const body = await response.text();
             if (body) {
               message = body;
             }
-          } catch (_: unknown) {}
+          } catch (_: unknown) {
+            /* empty */
+          }
         }
         error = new TurbopufferError(message ?? response.statusText, {
           status: response.status,

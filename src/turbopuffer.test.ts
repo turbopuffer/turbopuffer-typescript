@@ -11,7 +11,9 @@ test("sanity", async () => {
 
   try {
     await ns.deleteAll();
-  } catch (_: unknown) {}
+  } catch (_: unknown) {
+    /* empty */
+  }
 
   await ns.upsert({
     vectors: [
