@@ -11,7 +11,7 @@ test("sanity", async () => {
 
   try {
     await ns.deleteAll();
-  } catch (_: any) {}
+  } catch (_: unknown) {}
 
   await ns.upsert({
     vectors: [
@@ -98,7 +98,7 @@ test("sanity", async () => {
       vector: [1, 1],
       filters: ["numbers", "In", [2, 4]],
     });
-  } catch (_: any) {
+  } catch (_: unknown) {
     gotError = true;
   }
   expect(gotError).toBe(true);

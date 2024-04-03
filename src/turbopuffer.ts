@@ -69,7 +69,7 @@ export class TurbopufferError extends Error {
   status?: number;
   constructor(
     public error: string,
-    { status }: { status?: number },
+    { status }: { status?: number }
   ) {
     super(error);
     this.status = status;
@@ -111,7 +111,7 @@ export class Turbopuffer {
     method: string;
     path: string;
     query?: Record<string, string | undefined>;
-    body?: any;
+    body?: unknown;
     compress?: boolean;
     retryable?: boolean;
   }): Promise<{ body?: T; headers: Headers }> {
@@ -164,14 +164,14 @@ export class Turbopuffer {
             } else {
               message = JSON.stringify(body);
             }
-          } catch (_: any) {}
+          } catch (_: unknown) {}
         } else {
           try {
             const body = await response.text();
             if (body) {
               message = body;
             }
-          } catch (_: any) {}
+          } catch (_: unknown) {}
         }
         error = new TurbopufferError(message || response.statusText, {
           status: response.status,
@@ -445,7 +445,7 @@ function fromColumnar(cv: ColumnarVectors): Vector[] {
       vector: cv.vectors[i],
       attributes: cv.attributes
         ? Object.fromEntries(
-            attributeEntries.map(([key, values]) => [key, values[i]]),
+            attributeEntries.map(([key, values]) => [key, values[i]])
           )
         : undefined,
     };
