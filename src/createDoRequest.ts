@@ -11,6 +11,15 @@ export interface RequestParams {
 }
 export type RequestResponse<T> = Promise<{ body?: T; headers: Headers }>;
 
+/**
+ * This a curried helper function that returns a function for making fetch
+ * requests against the API.
+ *
+ * @param baseUrl The base URL of the API endpoint.
+ * @param apiKey The API key to use for authentication.
+ *
+ * @returns A function to make requests against the API.
+ */
 export const createDoRequest =
   <T>(baseUrl: string, apiKey: string) =>
   async ({
