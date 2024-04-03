@@ -5,83 +5,25 @@
  * Based off the initial work of https://github.com/holocron-hq! Thank you ❤️
  */
 
-import pako from "pako";
 import "isomorphic-fetch";
-import {version} from '../package.json';
-
-/**
- * Utility Types
- *
- * Note: At the moment, negative numbers aren't supported.
- */
-export type Id = string | number;
-export type AttributeType = null | string | number | string[] | number[];
-export type Attributes = {
-  [key: string]: AttributeType;
-};
-export type Vector = {
-  id: Id;
-  vector?: number[];
-  attributes?: Attributes;
-};
-export type DistanceMetric = "cosine_distance" | "euclidean_squared";
-export type FilterOperator =
-  | "Eq"
-  | "NotEq"
-  | "In"
-  | "NotIn"
-  | "Lt"
-  | "Lte"
-  | "Gt"
-  | "Gte"
-  | "Glob"
-  | "NotGlob"
-  | "IGlob"
-  | "NotIGlob"
-  | "And"
-  | "Or";
-export type FilterConnective = "And" | "Or";
-export type FilterValue = Exclude<AttributeType, null>;
-export type FilterCondition = [string, FilterOperator, FilterValue];
-export type Filters = [FilterConnective, Filters[]] | FilterCondition;
-export type QueryResults = {
-  id: Id;
-  vector?: number[];
-  attributes?: Attributes;
-  dist?: number;
-}[];
-export type NamespaceDesc = {
-  id: string;
-  approx_count: number;
-  dimensions: number;
-  created_at: string; // RFC3339 format
-};
-export type NamespacesListResult = {
-  namespaces: NamespaceDesc[];
-  next_cursor?: string;
-};
-export type RecallMeasurement = {
-  avg_recall: number;
-  avg_exhaustive_count: number;
-  avg_ann_count: number;
-};
-
-/* Error type */
-export class TurbopufferError extends Error {
-  status?: number;
-  constructor(
-    public error: string,
-    { status }: { status?: number }
-  ) {
-    super(error);
-    this.status = status;
-  }
-}
+import type { RequestParams, RequestResponse } from "./createDoRequest";
+import { createDoRequest } from "./createDoRequest";
+import type {
+  AttributeType,
+  DistanceMetric,
+  Filters,
+  Id,
+  NamespacesListResult,
+  QueryResults,
+  RecallMeasurement,
+  Vector,
+} from "./schemas";
 
 /* Base Client */
 export class Turbopuffer {
   private baseUrl: string;
   apiKey: string;
+  doRequest: <T>(_: RequestParams) => RequestResponse<T>;
 
   constructor({
     apiKey,
@@ -92,124 +34,8 @@ export class Turbopuffer {
   }) {
     this.baseUrl = baseUrl;
     this.apiKey = apiKey;
-  }
 
-  statusCodeShouldRetry(statusCode: number): boolean {
-    return statusCode >= 500;
-  }
-
-  delay(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
-
-  async doRequest<T>({
-    method,
-    path,
-    query,
-    body,
-    compress,
-    retryable,
-  }: {
-    method: string;
-    path: string;
-    query?: {
-      [key: string]: string | undefined;
-    };
-    body?: any;
-    compress?: boolean;
-    retryable?: boolean;
-  }): Promise<{ body?: T; headers: Headers }> {
-    const url = new URL(`${this.baseUrl}${path}`);
-    if (query) {
-      Object.keys(query).forEach((key) => {
-        let value = query[key];
-        if (value) {
-          url.searchParams.append(key, value);
-        }
-      });
-    }
-
-    let headers: Record<string, string> = {
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      "Accept-Encoding": "gzip",
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      Authorization: `Bearer ${this.apiKey}`,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      "User-Agent": `tpuf-typescript/${version}`,
-    };
-    if (body) {
-      headers["Content-Type"] = "application/json";
-    }
-
-    let requestBody: BodyInit | null = null;
-    if (body && compress) {
-      headers["Content-Encoding"] = "gzip";
-      requestBody = pako.gzip(JSON.stringify(body));
-    } else if (body) {
-      requestBody = JSON.stringify(body);
-    }
-
-    const maxAttempts = retryable ? 3 : 1;
-    var response!: Response;
-    var error: TurbopufferError | null = null;
-    for (let attempt = 0; attempt < maxAttempts; attempt++) {
-      response = await fetch(url.toString(), {
-        method,
-        headers,
-        body: requestBody,
-      });
-      if (response.status >= 400) {
-        let message: string | undefined = undefined;
-        if (response.headers.get("Content-Type") === "application/json") {
-          try {
-            let body = await response.json();
-            if (body && body.status === "error") {
-              message = body.error;
-            } else {
-              message = JSON.stringify(body);
-            }
-          } catch (_: any) {}
-        } else {
-          try {
-            let body = await response.text();
-            if (body) {
-              message = body;
-            }
-          } catch (_: any) {}
-        }
-        error = new TurbopufferError(message || response.statusText, { status: response.status });
-      }
-      if (
-        error &&
-        this.statusCodeShouldRetry(response.status) &&
-        attempt + 1 != maxAttempts
-      ) {
-        await this.delay(150 * (attempt + 1)); // 150ms, 300ms, 450ms
-        continue;
-      }
-      break;
-    }
-    if (error) {
-      throw error;
-    }
-
-    if (!response.body) {
-      return {
-        headers: response.headers,
-      };
-    }
-
-    const json = await response.json();
-    if (json.status && json.status === "error") {
-      throw new TurbopufferError(json.error || (json as string), {
-        status: response.status,
-      });
-    }
-
-    return {
-      body: json as T,
-      headers: response.headers,
-    };
+    this.doRequest = createDoRequest(this.baseUrl, this.apiKey);
   }
 
   /**
@@ -331,8 +157,8 @@ export class Namespace {
   async export(params?: {
     cursor?: string;
   }): Promise<{ vectors: Vector[]; next_cursor?: string }> {
-    type responseType = ColumnarVectors & { next_cursor: string };
-    let response = await this.client.doRequest<responseType>({
+    type ResponseType = ColumnarVectors & { next_cursor: string };
+    const response = await this.client.doRequest<ResponseType>({
       method: "GET",
       path: `/v1/vectors/${this.id}`,
       query: { cursor: params?.cursor },
@@ -349,12 +175,12 @@ export class Namespace {
    * Fetches the approximate number of vectors in a namespace.
    */
   async approxNumVectors(): Promise<number> {
-    let response = await this.client.doRequest<{}>({
+    const response = await this.client.doRequest<object>({
       method: "HEAD",
       path: `/v1/vectors/${this.id}`,
       retryable: true,
     });
-    let num = response.headers.get("X-turbopuffer-Approx-Num-Vectors");
+    const num = response.headers.get("X-turbopuffer-Approx-Num-Vectors");
     return num ? parseInt(num) : 0;
   }
 
@@ -406,14 +232,12 @@ export class Namespace {
 
 /* Helpers */
 
-type ColumnarAttributes = {
-  [key: string]: AttributeType[];
-};
-type ColumnarVectors = {
+type ColumnarAttributes = Record<string, AttributeType[]>;
+interface ColumnarVectors {
   ids: Id[];
   vectors: number[][];
   attributes?: ColumnarAttributes;
-};
+}
 
 // Unused atm.
 function toColumnar(vectors: Vector[]): ColumnarVectors {
@@ -424,9 +248,9 @@ function toColumnar(vectors: Vector[]): ColumnarVectors {
       attributes: {},
     };
   }
-  let attributes: ColumnarAttributes = {};
+  const attributes: ColumnarAttributes = {};
   vectors.forEach((vec, i) => {
-    for (let [key, val] of Object.entries(vec.attributes || {})) {
+    for (const [key, val] of Object.entries(vec.attributes ?? {})) {
       if (!attributes[key]) {
         attributes[key] = new Array<AttributeType>(vectors.length).fill(null);
       }
@@ -441,8 +265,8 @@ function toColumnar(vectors: Vector[]): ColumnarVectors {
 }
 
 function fromColumnar(cv: ColumnarVectors): Vector[] {
-  let res = new Array<Vector>(cv.ids.length);
-  const attributeEntries = Object.entries(cv.attributes || {});
+  const res = new Array<Vector>(cv.ids.length);
+  const attributeEntries = Object.entries(cv.attributes ?? {});
   for (let i = 0; i < cv.ids.length; i++) {
     res[i] = {
       id: cv.ids[i],
