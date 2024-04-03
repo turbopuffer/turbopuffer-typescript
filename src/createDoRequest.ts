@@ -1,15 +1,22 @@
 import pako from "pako";
+import { z } from "zod";
 import { version } from "../package.json";
 
-export interface RequestParams {
+export interface RequestParams<T> {
   method: string;
   path: string;
+  schema: z.ZodType<T, z.ZodTypeDef, unknown>;
   query?: Record<string, string | undefined>;
   body?: unknown;
   compress?: boolean;
   retryable?: boolean;
 }
 export type RequestResponse<T> = Promise<{ body?: T; headers: Headers }>;
+
+const REQUEST_RESPONSE_ERROR_SCHEMA = z.object({
+  status: z.literal("error"),
+  error: z.string(),
+});
 
 /**
  * This a curried helper function that returns a function for making fetch
@@ -21,15 +28,16 @@ export type RequestResponse<T> = Promise<{ body?: T; headers: Headers }>;
  * @returns A function to make requests against the API.
  */
 export const createDoRequest =
-  <T>(baseUrl: string, apiKey: string) =>
+  <T extends object>(baseUrl: string, apiKey: string) =>
   async ({
     method,
     path,
+    schema,
     query,
     body,
     compress,
     retryable,
-  }: RequestParams): RequestResponse<T> => {
+  }: RequestParams<T>): RequestResponse<T> => {
     const url = new URL(`${baseUrl}${path}`);
     if (query) {
       Object.keys(query).forEach((key) => {
@@ -72,15 +80,20 @@ export const createDoRequest =
       if (response.status >= 400) {
         let message: string | undefined = undefined;
         if (response.headers.get("Content-Type") === "application/json") {
-          try {
-            const body = await response.json();
-            if (body && body.status === "error") {
-              message = body.error;
-            } else {
-              message = JSON.stringify(body);
+          const rawJson = ((): unknown => {
+            try {
+              return response.json();
+            } catch (_: unknown) {
+              /* empty */
             }
-          } catch (_: unknown) {
-            /* empty */
+          })();
+          const parsed = z.record(z.string(), z.unknown()).safeParse(rawJson);
+          if (!parsed.success) throw new Error("Failed to parse response");
+
+          if ("error" in parsed.data && typeof parsed.data.error === "string") {
+            message = parsed.data.error;
+          } else {
+            message = JSON.stringify(rawJson);
           }
         } else {
           try {
@@ -116,15 +129,18 @@ export const createDoRequest =
       };
     }
 
-    const json = await response.json();
-    if (json.status && json.status === "error") {
-      throw new TurbopufferError(json.error || (json as string), {
+    const rawJson: unknown = await response.json();
+    const parsed = schema.or(REQUEST_RESPONSE_ERROR_SCHEMA).safeParse(rawJson);
+    if (!parsed.success) throw new Error("Failed to parse response");
+
+    if ("error" in parsed.data) {
+      throw new TurbopufferError(parsed.data.error, {
         status: response.status,
       });
     }
 
     return {
-      body: json as T,
+      body: parsed.data,
       headers: response.headers,
     };
   };

@@ -6,8 +6,16 @@
  */
 
 import "isomorphic-fetch";
+import { z } from "zod";
 import type { RequestParams, RequestResponse } from "./createDoRequest";
 import { createDoRequest } from "./createDoRequest";
+import {
+  ATTRIBUTE_TYPE_SCHEMA,
+  ID_SCHEMA,
+  NAMESPACES_LIST_RESULT_SCHEMA,
+  QUERY_RESULTS_SCHEMA,
+  RECALL_MEASUREMENT_SCHEMA,
+} from "./schemas";
 import type {
   AttributeType,
   DistanceMetric,
@@ -23,7 +31,7 @@ import type {
 export class Turbopuffer {
   private baseUrl: string;
   apiKey: string;
-  doRequest: <T>(_: RequestParams) => RequestResponse<T>;
+  doRequest: <T extends object>(_: RequestParams<T>) => RequestResponse<T>;
 
   constructor({
     apiKey,
@@ -50,9 +58,10 @@ export class Turbopuffer {
     page_size?: number;
   }): Promise<NamespacesListResult> {
     return (
-      await this.doRequest<NamespacesListResult>({
+      await this.doRequest({
         method: "GET",
         path: "/v1/vectors",
+        schema: NAMESPACES_LIST_RESULT_SCHEMA,
         query: {
           cursor,
           page_size: page_size ? page_size.toString() : undefined,
@@ -97,9 +106,10 @@ export class Namespace {
   }): Promise<void> {
     for (let i = 0; i < vectors.length; i += batchSize) {
       const batch = vectors.slice(i, i + batchSize);
-      await this.client.doRequest<{ status: string }>({
+      await this.client.doRequest({
         method: "POST",
         path: `/v1/vectors/${this.id}`,
+        schema: z.object({ status: z.string() }),
         compress: batch.length > 10,
         body: {
           upserts: batch,
@@ -114,9 +124,10 @@ export class Namespace {
    * Deletes vectors (by IDs).
    */
   async delete({ ids }: { ids: Id[] }): Promise<void> {
-    await this.client.doRequest<{ status: string }>({
+    await this.client.doRequest({
       method: "POST",
       path: `/v1/vectors/${this.id}`,
+      schema: z.object({ status: z.string() }),
       compress: ids.length > 500,
       body: {
         ids: ids,
@@ -141,9 +152,10 @@ export class Namespace {
     filters?: Filters;
   }): Promise<QueryResults> {
     return (
-      await this.client.doRequest<QueryResults>({
+      await this.client.doRequest({
         method: "POST",
         path: `/v1/vectors/${this.id}/query`,
+        schema: QUERY_RESULTS_SCHEMA,
         body: params,
         retryable: true,
       })
@@ -157,10 +169,12 @@ export class Namespace {
   async export(params?: {
     cursor?: string;
   }): Promise<{ vectors: Vector[]; next_cursor?: string }> {
-    type ResponseType = ColumnarVectors & { next_cursor: string };
-    const response = await this.client.doRequest<ResponseType>({
+    const response = await this.client.doRequest({
       method: "GET",
       path: `/v1/vectors/${this.id}`,
+      schema: COLUMNAR_VECTORS_SCHEMA.and(
+        z.object({ next_cursor: z.string() })
+      ),
       query: { cursor: params?.cursor },
       retryable: true,
     });
@@ -175,9 +189,10 @@ export class Namespace {
    * Fetches the approximate number of vectors in a namespace.
    */
   async approxNumVectors(): Promise<number> {
-    const response = await this.client.doRequest<object>({
+    const response = await this.client.doRequest({
       method: "HEAD",
       path: `/v1/vectors/${this.id}`,
+      schema: z.object({}),
       retryable: true,
     });
     const num = response.headers.get("X-turbopuffer-Approx-Num-Vectors");
@@ -189,9 +204,10 @@ export class Namespace {
    * See: https://turbopuffer.com/docs/reference/delete-namespace
    */
   async deleteAll(): Promise<void> {
-    await this.client.doRequest<{ status: string }>({
+    await this.client.doRequest({
       method: "DELETE",
       path: `/v1/vectors/${this.id}`,
+      schema: z.object({ status: z.string() }),
       retryable: true,
     });
   }
@@ -212,9 +228,10 @@ export class Namespace {
     queries?: number[][];
   }): Promise<RecallMeasurement> {
     return (
-      await this.client.doRequest<RecallMeasurement>({
+      await this.client.doRequest({
         method: "POST",
         path: `/v1/vectors/${this.id}/_debug/recall`,
+        schema: RECALL_MEASUREMENT_SCHEMA,
         compress: queries && queries.length > 10,
         body: {
           num,
@@ -232,12 +249,18 @@ export class Namespace {
 
 /* Helpers */
 
-type ColumnarAttributes = Record<string, AttributeType[]>;
-interface ColumnarVectors {
-  ids: Id[];
-  vectors: number[][];
-  attributes?: ColumnarAttributes;
-}
+type ColumnarAttributes = z.infer<typeof COLUMNAR_ATTRIBUTES_SCHEMA>;
+const COLUMNAR_ATTRIBUTES_SCHEMA = z.record(
+  z.string(),
+  ATTRIBUTE_TYPE_SCHEMA.array()
+);
+
+type ColumnarVectors = z.infer<typeof COLUMNAR_VECTORS_SCHEMA>;
+const COLUMNAR_VECTORS_SCHEMA = z.object({
+  ids: ID_SCHEMA.array(),
+  vectors: z.number().array().array(),
+  attributes: COLUMNAR_ATTRIBUTES_SCHEMA.optional(),
+});
 
 // Unused atm.
 function toColumnar(vectors: Vector[]): ColumnarVectors {

@@ -48,6 +48,7 @@
   },
   "dependencies": {
     "isomorphic-fetch": "^3.0.0",
-    "pako": "^2.1.0"
+    "pako": "^2.1.0",
+    "zod": "^3.22.4"
   }
 }
