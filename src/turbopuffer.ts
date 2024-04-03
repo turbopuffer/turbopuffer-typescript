@@ -173,7 +173,7 @@ export class Turbopuffer {
             }
           } catch (_: unknown) {}
         }
-        error = new TurbopufferError(message || response.statusText, {
+        error = new TurbopufferError(message ?? response.statusText, {
           status: response.status,
         });
       }
@@ -422,7 +422,7 @@ function toColumnar(vectors: Vector[]): ColumnarVectors {
   }
   const attributes: ColumnarAttributes = {};
   vectors.forEach((vec, i) => {
-    for (const [key, val] of Object.entries(vec.attributes || {})) {
+    for (const [key, val] of Object.entries(vec.attributes ?? {})) {
       if (!attributes[key]) {
         attributes[key] = new Array<AttributeType>(vectors.length).fill(null);
       }
@@ -438,7 +438,7 @@ function toColumnar(vectors: Vector[]): ColumnarVectors {
 
 function fromColumnar(cv: ColumnarVectors): Vector[] {
   const res = new Array<Vector>(cv.ids.length);
-  const attributeEntries = Object.entries(cv.attributes || {});
+  const attributeEntries = Object.entries(cv.attributes ?? {});
   for (let i = 0; i < cv.ids.length; i++) {
     res[i] = {
       id: cv.ids[i],
