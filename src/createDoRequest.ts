@@ -129,7 +129,7 @@ export const createDoRequest =
     };
   };
 
-/* Error type */
+/** An error class for errors returned by the turbopuffer API. */
 export class TurbopufferError extends Error {
   status?: number;
   constructor(
@@ -141,10 +141,12 @@ export class TurbopufferError extends Error {
   }
 }
 
+/** A helper function to determine if a status code should be retried. */
 function statusCodeShouldRetry(statusCode: number): boolean {
   return statusCode >= 500;
 }
 
+/** A helper function to delay for a given number of milliseconds. */
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
