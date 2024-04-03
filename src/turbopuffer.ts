@@ -159,14 +159,22 @@ export class Turbopuffer {
         body: requestBody,
       });
       if (response.status >= 400) {
-        let message = response.statusText;
+        let message: string | undefined = undefined;
         try {
-          let body = await response.text();
-          if (body) {
-            message = body;
+          let body = await response.json();
+          if (body && body.status === "error") {
+            message = body.error || (body as string);
           }
         } catch (_: any) {}
-        error = new TurbopufferError(message, { status: response.status });
+        if (!message) {
+          try {
+            let body = await response.text();
+            if (body) {
+              message = body;
+            }
+          } catch (_: any) {}
+        }
+        error = new TurbopufferError(message || response.statusText, { status: response.status });
       }
       if (
         error &&
