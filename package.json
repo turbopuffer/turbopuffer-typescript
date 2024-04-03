@@ -9,7 +9,8 @@
     "test": "jest --config jest_node.config.js && jest --config jest_jsdom.config.js",
     "format": "prettier --check . --ignore-path ./.gitignore",
     "format:fix": "prettier --check . --ignore-path ./.gitignore --write",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "homepage": "https://turbopuffer.com",
   "repository": {
