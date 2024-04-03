@@ -10,7 +10,7 @@ test("sanity", async () => {
   );
 
   try {
-    await ns.delete();
+    await ns.deleteAll();
   } catch (_: any) {}
 
   await ns.upsert({
@@ -45,16 +45,25 @@ test("sanity", async () => {
 
   let results2 = await ns.query({
     vector: [1, 1],
-    filters: ["And", [
-      ["Or", [
-        ["numbers", "In", [2, 3]],
-        ["numbers", "In", [1, 7]],
-      ]],
-      ["Or", [
-        ["foo", "Eq", "bar"],
-        ["numbers", "In", 4],
-      ]]
-    ]],
+    filters: [
+      "And",
+      [
+        [
+          "Or",
+          [
+            ["numbers", "In", [2, 3]],
+            ["numbers", "In", [1, 7]],
+          ],
+        ],
+        [
+          "Or",
+          [
+            ["foo", "Eq", "bar"],
+            ["numbers", "In", 4],
+          ],
+        ],
+      ],
+    ],
   });
   expect(results2.length).toEqual(2);
   expect(results2[0].id).toEqual(2);
@@ -68,7 +77,19 @@ test("sanity", async () => {
   expect(recall.avg_exhaustive_count).toEqual(2);
   expect(recall.avg_ann_count).toEqual(2);
 
-  await ns.delete();
+  // Delete the second vector.
+  await ns.delete({ ids: [1] });
+
+  // If we query now, we should only get one result.
+  results = await ns.query({
+    vector: [1, 1],
+    filters: ["numbers", "In", [2, 4]],
+  });
+  expect(results.length).toEqual(1);
+  expect(results[0].id).toEqual(2);
+
+  // Delete the entire namespace.
+  await ns.deleteAll();
 
   // For some reason, expect().toThrow doesn't catch properly
   let gotError = false;

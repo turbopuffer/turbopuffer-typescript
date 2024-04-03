@@ -7,6 +7,7 @@
 
 import pako from "pako";
 import "isomorphic-fetch";
+import {version} from '../package.json';
 
 /**
  * Utility Types
@@ -20,7 +21,7 @@ export type Attributes = {
 };
 export type Vector = {
   id: Id;
-  vector: number[];
+  vector?: number[];
   attributes?: Attributes;
 };
 export type DistanceMetric = "cosine_distance" | "euclidean_squared";
@@ -93,12 +94,21 @@ export class Turbopuffer {
     this.apiKey = apiKey;
   }
 
+  statusCodeShouldRetry(statusCode: number): boolean {
+    return statusCode >= 500;
+  }
+
+  delay(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
   async doRequest<T>({
     method,
     path,
     query,
     body,
     compress,
+    retryable,
   }: {
     method: string;
     path: string;
@@ -107,7 +117,8 @@ export class Turbopuffer {
     };
     body?: any;
     compress?: boolean;
-  }): Promise<{ body: T; headers: Headers }> {
+    retryable?: boolean;
+  }): Promise<{ body?: T; headers: Headers }> {
     const url = new URL(`${this.baseUrl}${path}`);
     if (query) {
       Object.keys(query).forEach((key) => {
@@ -123,6 +134,8 @@ export class Turbopuffer {
       "Accept-Encoding": "gzip",
       // eslint-disable-next-line @typescript-eslint/naming-convention
       Authorization: `Bearer ${this.apiKey}`,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      "User-Agent": `tpuf-typescript/${version}`,
     };
     if (body) {
       headers["Content-Type"] = "application/json";
@@ -136,25 +149,52 @@ export class Turbopuffer {
       requestBody = JSON.stringify(body);
     }
 
-    const response = await fetch(url.toString(), {
-      method,
-      headers,
-      body: requestBody,
-    });
-    if (response.status >= 400) {
-      let message = response.statusText;
-      try {
-        let body = await response.text();
-        if (body) {
-          message = body;
+    const maxAttempts = retryable ? 3 : 1;
+    var response!: Response;
+    var error: TurbopufferError | null = null;
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+      response = await fetch(url.toString(), {
+        method,
+        headers,
+        body: requestBody,
+      });
+      if (response.status >= 400) {
+        let message: string | undefined = undefined;
+        if (response.headers.get("Content-Type") === "application/json") {
+          try {
+            let body = await response.json();
+            if (body && body.status === "error") {
+              message = body.error;
+            } else {
+              message = JSON.stringify(body);
+            }
+          } catch (_: any) {}
+        } else {
+          try {
+            let body = await response.text();
+            if (body) {
+              message = body;
+            }
+          } catch (_: any) {}
         }
-      } catch (_: any) {}
-      throw new TurbopufferError(message, { status: response.status });
+        error = new TurbopufferError(message || response.statusText, { status: response.status });
+      }
+      if (
+        error &&
+        this.statusCodeShouldRetry(response.status) &&
+        attempt + 1 != maxAttempts
+      ) {
+        await this.delay(150 * (attempt + 1)); // 150ms, 300ms, 450ms
+        continue;
+      }
+      break;
+    }
+    if (error) {
+      throw error;
     }
 
-    if (method == "HEAD") {
+    if (!response.body) {
       return {
-        body: {} as T,
         headers: response.headers,
       };
     }
@@ -191,8 +231,9 @@ export class Turbopuffer {
           cursor,
           page_size: page_size ? page_size.toString() : undefined,
         },
+        retryable: true,
       })
-    ).body;
+    ).body!;
   }
 
   /**
@@ -214,24 +255,48 @@ export class Namespace {
   }
 
   /**
-   * Creates, updates, or deletes vectors.
+   * Creates or updates vectors.
    * See: https://turbopuffer.com/docs/reference/upsert
+   *
+   * Note: Will automatically batch according to the client's configured batch size.
    */
   async upsert({
     vectors,
     distance_metric,
+    batchSize = 10000,
   }: {
     vectors: Vector[];
     distance_metric: DistanceMetric;
+    batchSize?: number;
   }): Promise<void> {
+    for (let i = 0; i < vectors.length; i += batchSize) {
+      const batch = vectors.slice(i, i + batchSize);
+      await this.client.doRequest<{ status: string }>({
+        method: "POST",
+        path: `/v1/vectors/${this.id}`,
+        compress: batch.length > 10,
+        body: {
+          upserts: batch,
+          distance_metric,
+        },
+        retryable: true, // Upserts are idempotent
+      });
+    }
+  }
+
+  /**
+   * Deletes vectors (by IDs).
+   */
+  async delete({ ids }: { ids: Id[] }): Promise<void> {
     await this.client.doRequest<{ status: string }>({
       method: "POST",
       path: `/v1/vectors/${this.id}`,
-      compress: vectors.length > 10,
+      compress: ids.length > 500,
       body: {
-        upserts: vectors,
-        distance_metric,
+        ids: ids,
+        vectors: new Array(ids.length).fill(null),
       },
+      retryable: true,
     });
   }
 
@@ -254,38 +319,40 @@ export class Namespace {
         method: "POST",
         path: `/v1/vectors/${this.id}/query`,
         body: params,
+        retryable: true,
       })
-    ).body;
+    ).body!;
   }
 
   /**
    * Export all vectors at full precision.
    * See: https://turbopuffer.com/docs/reference/list
    */
-  async export({
-    cursor,
-  }: {
+  async export(params?: {
     cursor?: string;
   }): Promise<{ vectors: Vector[]; next_cursor?: string }> {
     type responseType = ColumnarVectors & { next_cursor: string };
     let response = await this.client.doRequest<responseType>({
       method: "GET",
       path: `/v1/vectors/${this.id}`,
-      query: { cursor },
+      query: { cursor: params?.cursor },
+      retryable: true,
     });
+    const body = response.body!;
     return {
-      vectors: fromColumnar(response.body),
-      next_cursor: response.body.next_cursor,
+      vectors: fromColumnar(body),
+      next_cursor: body.next_cursor,
     };
   }
 
   /**
    * Fetches the approximate number of vectors in a namespace.
    */
-  async approxNumVectors({}: {}): Promise<number> {
+  async approxNumVectors(): Promise<number> {
     let response = await this.client.doRequest<{}>({
       method: "HEAD",
       path: `/v1/vectors/${this.id}`,
+      retryable: true,
     });
     let num = response.headers.get("X-turbopuffer-Approx-Num-Vectors");
     return num ? parseInt(num) : 0;
@@ -295,10 +362,11 @@ export class Namespace {
    * Delete a namespace fully (all data).
    * See: https://turbopuffer.com/docs/reference/delete-namespace
    */
-  async delete(): Promise<void> {
+  async deleteAll(): Promise<void> {
     await this.client.doRequest<{ status: string }>({
       method: "DELETE",
       path: `/v1/vectors/${this.id}`,
+      retryable: true,
     });
   }
 
@@ -330,19 +398,13 @@ export class Namespace {
             ? queries.reduce((acc, value) => acc.concat(value), [])
             : undefined,
         },
+        retryable: true,
       })
-    ).body;
+    ).body!;
   }
 }
 
 /* Helpers */
-
-// See https://github.com/microsoft/TypeScript/issues/26223.
-interface FixedLengthArray<T extends any, L extends number> extends Array<T> {
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  0: T;
-  length: L;
-}
 
 type ColumnarAttributes = {
   [key: string]: AttributeType[];
@@ -373,7 +435,7 @@ function toColumnar(vectors: Vector[]): ColumnarVectors {
   });
   return {
     ids: vectors.map((v) => v.id),
-    vectors: vectors.map((v) => v.vector),
+    vectors: vectors.map((v) => v.vector!),
     attributes: attributes,
   };
 }
