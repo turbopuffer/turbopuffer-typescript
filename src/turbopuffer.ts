@@ -7,6 +7,7 @@
 
 import pako from "pako";
 import "isomorphic-fetch";
+import {version} from '../package.json';
 
 /**
  * Utility Types
@@ -20,7 +21,7 @@ export type Attributes = {
 };
 export type Vector = {
   id: Id;
-  vector: number[];
+  vector?: number[];
   attributes?: Attributes;
 };
 export type DistanceMetric = "cosine_distance" | "euclidean_squared";
@@ -81,20 +82,16 @@ export class TurbopufferError extends Error {
 export class Turbopuffer {
   private baseUrl: string;
   apiKey: string;
-  upsertBatchSize: number;
 
   constructor({
     apiKey,
     baseUrl = "https://api.turbopuffer.com",
-    upsertBatchSize = 10000,
   }: {
     apiKey: string;
     baseUrl?: string;
-    upsertBatchSize?: number;
   }) {
     this.baseUrl = baseUrl;
     this.apiKey = apiKey;
-    this.upsertBatchSize = upsertBatchSize;
   }
 
   statusCodeShouldRetry(statusCode: number): boolean {
@@ -137,6 +134,8 @@ export class Turbopuffer {
       "Accept-Encoding": "gzip",
       // eslint-disable-next-line @typescript-eslint/naming-convention
       Authorization: `Bearer ${this.apiKey}`,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      "User-Agent": `tpuf-typescript/${version}`,
     };
     if (body) {
       headers["Content-Type"] = "application/json";
@@ -253,12 +252,14 @@ export class Namespace {
   async upsert({
     vectors,
     distance_metric,
+    batchSize = 10000,
   }: {
     vectors: Vector[];
     distance_metric: DistanceMetric;
+    batchSize?: number;
   }): Promise<void> {
-    for (let i = 0; i < vectors.length; i += this.client.upsertBatchSize) {
-      const batch = vectors.slice(i, i + this.client.upsertBatchSize);
+    for (let i = 0; i < vectors.length; i += batchSize) {
+      const batch = vectors.slice(i, i + batchSize);
       await this.client.doRequest<{ status: string }>({
         method: "POST",
         path: `/v1/vectors/${this.id}`,
@@ -423,7 +424,7 @@ function toColumnar(vectors: Vector[]): ColumnarVectors {
   });
   return {
     ids: vectors.map((v) => v.id),
-    vectors: vectors.map((v) => v.vector),
+    vectors: vectors.map((v) => v.vector!),
     attributes: attributes,
   };
 }
