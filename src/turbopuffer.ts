@@ -8,6 +8,7 @@
 import "isomorphic-fetch";
 import type { RequestParams, RequestResponse } from "./createDoRequest";
 import { createDoRequest } from "./createDoRequest";
+export { TurbopufferError } from "./createDoRequest";
 
 /**
  * Utility Types
