@@ -1,3 +1,5 @@
+import type { BodyInit, Response } from "undici";
+import { fetch, Agent } from "undici";
 import pako from "pako";
 import { version } from "../package.json";
 
@@ -11,26 +13,54 @@ export interface RequestParams {
 }
 export type RequestResponse<T> = Promise<{ body?: T; headers: Headers }>;
 
+export interface HTTPClient {
+  doRequest<T>(_: RequestParams): RequestResponse<T>;
+}
+
 /**
- * This a curried helper function that returns a function for making fetch
- * requests against the API.
+ * This a helper function that returns a class for making fetch requests
+ * against the API.
  *
  * @param baseUrl The base URL of the API endpoint.
  * @param apiKey The API key to use for authentication.
  *
- * @returns A function to make requests against the API.
+ * @returns An HTTPClient to make requests against the API.
  */
-export const createDoRequest =
-  <T>(baseUrl: string, apiKey: string) =>
-  async ({
+export const createHTTPClient = (baseUrl: string, apiKey: string) =>
+  new DefaultHTTPClient(baseUrl, apiKey);
+
+class DefaultHTTPClient implements HTTPClient {
+  private agent: Agent;
+  private baseUrl: string;
+  private apiKey: string;
+  readonly userAgent = `tpuf-typescript/${version}`;
+
+  constructor(baseUrl: string, apiKey: string) {
+    this.baseUrl = baseUrl;
+    this.apiKey = apiKey;
+
+    this.agent = new Agent({
+      keepAliveTimeout: 1 * 60 * 60 * 1000, // 1 hour, default duration socket can be kept alive
+      keepAliveMaxTimeout: 24 * 60 * 60 * 1000, // 24 hours, maximum configurable timeout with server hint
+    });
+
+    // warm up a single connection, intentionally drop the promise
+    void fetch(this.baseUrl, {
+      method: "HEAD",
+      headers: { "User-Agent": this.userAgent },
+      dispatcher: this.agent,
+    });
+  }
+
+  async doRequest<T>({
     method,
     path,
     query,
     body,
     compress,
     retryable,
-  }: RequestParams): RequestResponse<T> => {
-    const url = new URL(`${baseUrl}${path}`);
+  }: RequestParams): RequestResponse<T> {
+    const url = new URL(`${this.baseUrl}${path}`);
     if (query) {
       Object.keys(query).forEach((key) => {
         const value = query[key];
@@ -44,9 +74,9 @@ export const createDoRequest =
       // eslint-disable-next-line @typescript-eslint/naming-convention
       "Accept-Encoding": "gzip",
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      Authorization: `Bearer ${apiKey}`,
+      Authorization: `Bearer ${this.apiKey}`,
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      "User-Agent": `tpuf-typescript/${version}`,
+      "User-Agent": this.userAgent,
     };
     if (body) {
       headers["Content-Type"] = "application/json";
@@ -68,12 +98,13 @@ export const createDoRequest =
         method,
         headers,
         body: requestBody,
+        dispatcher: this.agent,
       });
       if (response.status >= 400) {
         let message: string | undefined = undefined;
         if (response.headers.get("Content-Type") === "application/json") {
           try {
-            const body = await response.json();
+            const body = (await response.json()) as any;
             if (body && body.status === "error") {
               message = body.error;
             } else {
@@ -116,7 +147,7 @@ export const createDoRequest =
       };
     }
 
-    const json = await response.json();
+    const json = (await response.json()) as any;
     if (json.status && json.status === "error") {
       throw new TurbopufferError(json.error || (json as string), {
         status: response.status,
@@ -127,14 +158,15 @@ export const createDoRequest =
       body: json as T,
       headers: response.headers,
     };
-  };
+  }
+}
 
 /** An error class for errors returned by the turbopuffer API. */
 export class TurbopufferError extends Error {
   status?: number;
   constructor(
     public error: string,
-    { status }: { status?: number }
+    { status }: { status?: number },
   ) {
     super(error);
     this.status = status;
