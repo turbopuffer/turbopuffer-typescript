@@ -55,7 +55,7 @@ class DefaultHTTPClient implements HTTPClient {
 
     for (var i = 0; i < warmConnections; i++) {
       // send a small request to put some connections in the pool
-      fetch(this.baseUrl, {
+      void fetch(this.baseUrl, {
         method: "HEAD",
         headers: { "User-Agent": this.userAgent },
         dispatcher: this.agent,
