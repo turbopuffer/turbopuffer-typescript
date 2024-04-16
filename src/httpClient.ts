@@ -26,8 +26,12 @@ export interface HTTPClient {
  *
  * @returns An HTTPClient to make requests against the API.
  */
-export const createHTTPClient = (baseUrl: string, apiKey: string) =>
-  new DefaultHTTPClient(baseUrl, apiKey);
+export const createHTTPClient = (
+  baseUrl: string,
+  apiKey: string,
+  idleTimeout: number,
+  warmConnections: number,
+) => new DefaultHTTPClient(baseUrl, apiKey, idleTimeout, warmConnections);
 
 class DefaultHTTPClient implements HTTPClient {
   private agent: Agent;
@@ -35,21 +39,28 @@ class DefaultHTTPClient implements HTTPClient {
   private apiKey: string;
   readonly userAgent = `tpuf-typescript/${version}`;
 
-  constructor(baseUrl: string, apiKey: string) {
+  constructor(
+    baseUrl: string,
+    apiKey: string,
+    idleTimeout: number,
+    warmConnections: number,
+  ) {
     this.baseUrl = baseUrl;
     this.apiKey = apiKey;
 
     this.agent = new Agent({
-      keepAliveTimeout: 1 * 60 * 60 * 1000, // 1 hour, default duration socket can be kept alive
-      keepAliveMaxTimeout: 24 * 60 * 60 * 1000, // 24 hours, maximum configurable timeout with server hint
+      keepAliveTimeout: idleTimeout, // how long a socket can be idle for before it is closed
+      keepAliveMaxTimeout: 24 * 60 * 60 * 1000, // maximum configurable timeout with server hint
     });
 
-    // warm up a single connection, intentionally drop the promise
-    void fetch(this.baseUrl, {
-      method: "HEAD",
-      headers: { "User-Agent": this.userAgent },
-      dispatcher: this.agent,
-    });
+    for (var i = 0; i < warmConnections; i++) {
+      // send a small request to put some connections in the pool
+      fetch(this.baseUrl, {
+        method: "HEAD",
+        headers: { "User-Agent": this.userAgent },
+        dispatcher: this.agent,
+      });
+    }
   }
 
   async doRequest<T>({

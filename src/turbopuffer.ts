@@ -66,21 +66,25 @@ export interface RecallMeasurement {
 
 /* Base Client */
 export class Turbopuffer {
-  private baseUrl: string;
-  apiKey: string;
   http: HTTPClient;
 
   constructor({
     apiKey,
     baseUrl = "https://api.turbopuffer.com",
+    connectionIdleTimeout = 60 * 1000, // socket idle timeout in ms, default 1 minute
+    warmConnections = 0, // number of connections to open initially when creating a new client
   }: {
     apiKey: string;
     baseUrl?: string;
+    connectionIdleTimeout?: number;
+    warmConnections?: number;
   }) {
-    this.baseUrl = baseUrl;
-    this.apiKey = apiKey;
-
-    this.http = createHTTPClient(this.baseUrl, this.apiKey);
+    this.http = createHTTPClient(
+      baseUrl,
+      apiKey,
+      connectionIdleTimeout,
+      warmConnections,
+    );
   }
 
   /**
