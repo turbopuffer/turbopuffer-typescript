@@ -53,7 +53,7 @@ class DefaultHTTPClient implements HTTPClient {
       keepAliveMaxTimeout: 24 * 60 * 60 * 1000, // maximum configurable timeout with server hint
     });
 
-    for (var i = 0; i < warmConnections; i++) {
+    for (let i = 0; i < warmConnections; i++) {
       // send a small request to put some connections in the pool
       void fetch(this.baseUrl, {
         method: "HEAD",
