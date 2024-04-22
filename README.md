@@ -10,6 +10,8 @@ Usage:
 
 ```ts
 // Make a new client
+// Connections are pooled for the lifetime of the client
+// We recommend creating a single instance and reusing it for all calls
 const tpuf = new Turbopuffer({
   apiKey: process.env.TURBOPUFFER_API_KEY as string,
 });

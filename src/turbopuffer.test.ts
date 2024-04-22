@@ -6,7 +6,7 @@ const tpuf = new Turbopuffer({
 
 test("sanity", async () => {
   const ns = tpuf.namespace(
-    "typescript_sdk_" + expect.getState().currentTestName
+    "typescript_sdk_" + expect.getState().currentTestName,
   );
 
   try {

@@ -5,10 +5,9 @@
  * Based off the initial work of https://github.com/holocron-hq! Thank you ❤️
  */
 
-import "isomorphic-fetch";
-import type { RequestParams, RequestResponse } from "./createDoRequest";
-import { createDoRequest } from "./createDoRequest";
-export { TurbopufferError } from "./createDoRequest";
+import type { HTTPClient } from "./httpClient";
+import { createHTTPClient } from "./httpClient";
+export { TurbopufferError } from "./httpClient";
 
 /**
  * Utility Types
@@ -67,21 +66,25 @@ export interface RecallMeasurement {
 
 /* Base Client */
 export class Turbopuffer {
-  private baseUrl: string;
-  apiKey: string;
-  doRequest: <T>(_: RequestParams) => RequestResponse<T>;
+  http: HTTPClient;
 
   constructor({
     apiKey,
     baseUrl = "https://api.turbopuffer.com",
+    connectionIdleTimeout = 60 * 1000, // socket idle timeout in ms, default 1 minute
+    warmConnections = 0, // number of connections to open initially when creating a new client
   }: {
     apiKey: string;
     baseUrl?: string;
+    connectionIdleTimeout?: number;
+    warmConnections?: number;
   }) {
-    this.baseUrl = baseUrl;
-    this.apiKey = apiKey;
-
-    this.doRequest = createDoRequest(this.baseUrl, this.apiKey);
+    this.http = createHTTPClient(
+      baseUrl,
+      apiKey,
+      connectionIdleTimeout,
+      warmConnections,
+    );
   }
 
   /**
@@ -96,7 +99,7 @@ export class Turbopuffer {
     page_size?: number;
   }): Promise<NamespacesListResult> {
     return (
-      await this.doRequest<NamespacesListResult>({
+      await this.http.doRequest<NamespacesListResult>({
         method: "GET",
         path: "/v1/vectors",
         query: {
@@ -143,7 +146,7 @@ export class Namespace {
   }): Promise<void> {
     for (let i = 0; i < vectors.length; i += batchSize) {
       const batch = vectors.slice(i, i + batchSize);
-      await this.client.doRequest<{ status: string }>({
+      await this.client.http.doRequest<{ status: string }>({
         method: "POST",
         path: `/v1/vectors/${this.id}`,
         compress: batch.length > 10,
@@ -160,7 +163,7 @@ export class Namespace {
    * Deletes vectors (by IDs).
    */
   async delete({ ids }: { ids: Id[] }): Promise<void> {
-    await this.client.doRequest<{ status: string }>({
+    await this.client.http.doRequest<{ status: string }>({
       method: "POST",
       path: `/v1/vectors/${this.id}`,
       compress: ids.length > 500,
@@ -187,7 +190,7 @@ export class Namespace {
     filters?: Filters;
   }): Promise<QueryResults> {
     return (
-      await this.client.doRequest<QueryResults>({
+      await this.client.http.doRequest<QueryResults>({
         method: "POST",
         path: `/v1/vectors/${this.id}/query`,
         body: params,
@@ -204,7 +207,7 @@ export class Namespace {
     cursor?: string;
   }): Promise<{ vectors: Vector[]; next_cursor?: string }> {
     type ResponseType = ColumnarVectors & { next_cursor: string };
-    const response = await this.client.doRequest<ResponseType>({
+    const response = await this.client.http.doRequest<ResponseType>({
       method: "GET",
       path: `/v1/vectors/${this.id}`,
       query: { cursor: params?.cursor },
@@ -221,7 +224,7 @@ export class Namespace {
    * Fetches the approximate number of vectors in a namespace.
    */
   async approxNumVectors(): Promise<number> {
-    const response = await this.client.doRequest<object>({
+    const response = await this.client.http.doRequest<object>({
       method: "HEAD",
       path: `/v1/vectors/${this.id}`,
       retryable: true,
@@ -235,7 +238,7 @@ export class Namespace {
    * See: https://turbopuffer.com/docs/reference/delete-namespace
    */
   async deleteAll(): Promise<void> {
-    await this.client.doRequest<{ status: string }>({
+    await this.client.http.doRequest<{ status: string }>({
       method: "DELETE",
       path: `/v1/vectors/${this.id}`,
       retryable: true,
@@ -258,7 +261,7 @@ export class Namespace {
     queries?: number[][];
   }): Promise<RecallMeasurement> {
     return (
-      await this.client.doRequest<RecallMeasurement>({
+      await this.client.http.doRequest<RecallMeasurement>({
         method: "POST",
         path: `/v1/vectors/${this.id}/_debug/recall`,
         compress: queries && queries.length > 10,
@@ -319,7 +322,7 @@ function fromColumnar(cv: ColumnarVectors): Vector[] {
       vector: cv.vectors[i],
       attributes: cv.attributes
         ? Object.fromEntries(
-            attributeEntries.map(([key, values]) => [key, values[i]])
+            attributeEntries.map(([key, values]) => [key, values[i]]),
           )
         : undefined,
     };
