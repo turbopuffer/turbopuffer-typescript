@@ -1,4 +1,4 @@
-import { Turbopuffer } from "./turbopuffer";
+import { Turbopuffer, TurbopufferError } from "./turbopuffer";
 
 const tpuf = new Turbopuffer({
   apiKey: process.env.TURBOPUFFER_API_KEY!,
@@ -94,14 +94,43 @@ test("sanity", async () => {
   await ns.deleteAll();
 
   // For some reason, expect().toThrow doesn't catch properly
-  let gotError = false;
+  let gotError: any = null;
   try {
     await ns.query({
       vector: [1, 1],
       filters: ["numbers", "In", [2, 4]],
     });
-  } catch (_: unknown) {
-    gotError = true;
+  } catch (e: any) {
+    gotError = e;
   }
-  expect(gotError).toBe(true);
+  expect(gotError).toStrictEqual(
+    new TurbopufferError(
+      "💔 Resource not found; the requested namespace is empty.",
+      { status: 404 },
+    ),
+  );
+});
+
+test("connection errors are wrapped", async () => {
+  const tpuf = new Turbopuffer({
+    baseUrl: "https://api.turbopuffer.com:12345",
+    apiKey: process.env.TURBOPUFFER_API_KEY!,
+    connectTimeout: 500,
+  });
+
+  const ns = tpuf.namespace(
+    "typescript_sdk_" + expect.getState().currentTestName,
+  );
+
+  let gotError: any = null;
+  try {
+    await ns.query({
+      vector: [1, 1],
+    });
+  } catch (e: any) {
+    gotError = e;
+  }
+  expect(gotError).toStrictEqual(
+    new TurbopufferError("fetch failed: Connect Timeout Error", {}),
+  );
 });

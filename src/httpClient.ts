@@ -29,9 +29,17 @@ export interface HTTPClient {
 export const createHTTPClient = (
   baseUrl: string,
   apiKey: string,
+  connectTimeout: number,
   idleTimeout: number,
   warmConnections: number,
-) => new DefaultHTTPClient(baseUrl, apiKey, idleTimeout, warmConnections);
+) =>
+  new DefaultHTTPClient(
+    baseUrl,
+    apiKey,
+    connectTimeout,
+    idleTimeout,
+    warmConnections,
+  );
 
 class DefaultHTTPClient implements HTTPClient {
   private agent: Agent;
@@ -42,6 +50,7 @@ class DefaultHTTPClient implements HTTPClient {
   constructor(
     baseUrl: string,
     apiKey: string,
+    connectTimeout: number,
     idleTimeout: number,
     warmConnections: number,
   ) {
@@ -51,6 +60,9 @@ class DefaultHTTPClient implements HTTPClient {
     this.agent = new Agent({
       keepAliveTimeout: idleTimeout, // how long a socket can be idle for before it is closed
       keepAliveMaxTimeout: 24 * 60 * 60 * 1000, // maximum configurable timeout with server hint
+      connect: {
+        timeout: connectTimeout,
+      },
     });
 
     for (let i = 0; i < warmConnections; i++) {
@@ -105,13 +117,33 @@ class DefaultHTTPClient implements HTTPClient {
     let response!: Response;
     let error: TurbopufferError | null = null;
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
-      response = await fetch(url.toString(), {
-        method,
-        headers,
-        body: requestBody,
-        dispatcher: this.agent,
-      });
-      if (response.status >= 400) {
+      error = null;
+      try {
+        response = await fetch(url.toString(), {
+          method,
+          headers,
+          body: requestBody,
+          dispatcher: this.agent,
+        });
+      } catch (e: unknown) {
+        if (e instanceof Error) {
+          if (e.cause instanceof Error) {
+            // wrap generic undici "fetch failed" error with the underlying cause
+            error = new TurbopufferError(`fetch failed: ${e.cause.message}`, {
+              cause: e,
+            });
+          } else {
+            // wrap other errors directly
+            error = new TurbopufferError(`fetch failed: ${e.message}`, {
+              cause: e,
+            });
+          }
+        } else {
+          // not an Error? shouldn't happen but good to be thorough
+          throw e;
+        }
+      }
+      if (!error && response.status >= 400) {
         let message: string | undefined = undefined;
         if (response.headers.get("Content-Type") === "application/json") {
           try {
@@ -140,7 +172,7 @@ class DefaultHTTPClient implements HTTPClient {
       }
       if (
         error &&
-        statusCodeShouldRetry(response.status) &&
+        statusCodeShouldRetry(error.status) &&
         attempt + 1 != maxAttempts
       ) {
         await delay(150 * (attempt + 1)); // 150ms, 300ms, 450ms
@@ -177,16 +209,16 @@ export class TurbopufferError extends Error {
   status?: number;
   constructor(
     public error: string,
-    { status }: { status?: number },
+    { status, cause }: { status?: number; cause?: Error },
   ) {
-    super(error);
+    super(error, { cause: cause });
     this.status = status;
   }
 }
 
 /** A helper function to determine if a status code should be retried. */
-function statusCodeShouldRetry(statusCode: number): boolean {
-  return statusCode >= 500;
+function statusCodeShouldRetry(statusCode?: number): boolean {
+  return !statusCode || statusCode >= 500;
 }
 
 /** A helper function to delay for a given number of milliseconds. */

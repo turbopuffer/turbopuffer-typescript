@@ -71,17 +71,20 @@ export class Turbopuffer {
   constructor({
     apiKey,
     baseUrl = "https://api.turbopuffer.com",
+    connectTimeout = 10 * 1000, // timeout to establish a connection
     connectionIdleTimeout = 60 * 1000, // socket idle timeout in ms, default 1 minute
     warmConnections = 0, // number of connections to open initially when creating a new client
   }: {
     apiKey: string;
     baseUrl?: string;
+    connectTimeout?: number;
     connectionIdleTimeout?: number;
     warmConnections?: number;
   }) {
     this.http = createHTTPClient(
       baseUrl,
       apiKey,
+      connectTimeout,
       connectionIdleTimeout,
       warmConnections,
     );
