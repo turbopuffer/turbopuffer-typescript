@@ -47,9 +47,9 @@ test("sanity", async () => {
   expect(results[1].id).toEqual(1);
 
   const metrics = resultsWithMetrics.metrics;
-  expect(metrics["approx_namespace_size"]).toEqual(2);
-  expect(metrics["exhaustive_search.count"]).toEqual(2);
-  expect(metrics["processing_time.dur"]).toBeGreaterThan(10);
+  expect(metrics.approx_namespace_size).toEqual(2);
+  expect(metrics.exhaustive_search_count).toEqual(2);
+  expect(metrics.processing_time).toBeGreaterThan(10);
 
   const results2 = await ns.query({
     vector: [1, 1],

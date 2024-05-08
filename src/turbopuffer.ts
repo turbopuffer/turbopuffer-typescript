@@ -42,12 +42,22 @@ export type FilterConnective = "And" | "Or";
 export type FilterValue = Exclude<AttributeType, null>;
 export type FilterCondition = [string, FilterOperator, FilterValue];
 export type Filters = [FilterConnective, Filters[]] | FilterCondition;
+
 export type QueryResults = {
   id: Id;
   vector?: number[];
   attributes?: Attributes;
   dist?: number;
 }[];
+
+export type QueryMetrics = {
+  approx_namespace_size: number;
+  cache_hit_ratio: number;
+  cache_temperature: string;
+  processing_time: number;
+  exhaustive_search_count: number;
+};
+
 export interface NamespaceDesc {
   id: string;
   approx_count: number;
@@ -64,8 +74,8 @@ export interface RecallMeasurement {
   avg_ann_count: number;
 }
 
-function parseServerTiming(value: string): Record<string, string | number> {
-  let output: Record<string, string | number> = {};
+function parseServerTiming(value: string): Record<string, string> {
+  let output: Record<string, string> = {};
   const sections = value.split(", ");
   for (let section of sections) {
     let tokens = section.split(";");
@@ -74,11 +84,18 @@ function parseServerTiming(value: string): Record<string, string | number> {
       let components = token.split("=");
       let key = base_key + "." + components[0];
       let value = components[1];
-      let number = parseFloat(value);
-      output[key] = isNaN(number) ? value : number;
+      output[key] = value;
     }
   }
   return output;
+}
+
+function parseIntMetric(value: string | null): number {
+  return value ? parseInt(value) : 0;
+}
+
+function parseFloatMetric(value: string | null): number {
+  return value ? parseFloat(value) : 0;
 }
 
 /* Base Client */
@@ -228,7 +245,7 @@ export class Namespace {
     filters?: Filters;
   }): Promise<{
     results: QueryResults;
-    metrics: Record<string, string | number>;
+    metrics: QueryMetrics;
   }> {
     let response = await this.client.http.doRequest<QueryResults>({
       method: "POST",
@@ -237,9 +254,6 @@ export class Namespace {
       retryable: true,
     });
 
-    const approxNamespaceSizeStr = response.headers.get(
-      "X-turbopuffer-Approx-Namespace-Size",
-    );
     const serverTimingStr = response.headers.get("Server-Timing");
     const serverTiming = serverTimingStr
       ? parseServerTiming(serverTimingStr)
@@ -248,10 +262,15 @@ export class Namespace {
     return {
       results: response.body!,
       metrics: {
-        approx_namespace_size: approxNamespaceSizeStr
-          ? parseInt(approxNamespaceSizeStr)
-          : 0,
-        ...serverTiming,
+        approx_namespace_size: parseIntMetric(
+          response.headers.get("X-turbopuffer-Approx-Namespace-Size"),
+        ),
+        cache_hit_ratio: parseFloatMetric(serverTiming["cache.hit_ratio"]),
+        cache_temperature: serverTiming["cache.temperature"],
+        processing_time: parseIntMetric(serverTiming["processing_time.dur"]),
+        exhaustive_search_count: parseIntMetric(
+          serverTiming["exhaustive_search.count"],
+        ),
       },
     };
   }
