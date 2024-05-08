@@ -37,13 +37,19 @@ test("sanity", async () => {
     distance_metric: "cosine_distance",
   });
 
-  let results = await ns.query({
+  const resultsWithMetrics = await ns.queryWithMetrics({
     vector: [1, 1],
     filters: ["numbers", "In", [2, 4]],
   });
+  let results = resultsWithMetrics.results;
   expect(results.length).toEqual(2);
   expect(results[0].id).toEqual(2);
   expect(results[1].id).toEqual(1);
+
+  const metrics = resultsWithMetrics.metrics;
+  expect(metrics["approx_namespace_size"]).toEqual(2);
+  expect(metrics["exhaustive_search.count"]).toEqual(2);
+  expect(metrics["processing_time.dur"]).toBeGreaterThan(10);
 
   const results2 = await ns.query({
     vector: [1, 1],

@@ -64,6 +64,23 @@ export interface RecallMeasurement {
   avg_ann_count: number;
 }
 
+function parseServerTiming(value: string): Record<string, string | number> {
+  let output: Record<string, string | number> = {};
+  const sections = value.split(", ");
+  for (let section of sections) {
+    let tokens = section.split(";");
+    let base_key = tokens.shift();
+    for (let token of tokens) {
+      let components = token.split("=");
+      let key = base_key + "." + components[0];
+      let value = components[1];
+      let number = parseFloat(value);
+      output[key] = isNaN(number) ? value : number;
+    }
+  }
+  return output;
+}
+
 /* Base Client */
 export class Turbopuffer {
   http: HTTPClient;
@@ -192,14 +209,51 @@ export class Namespace {
     include_attributes?: boolean | string[];
     filters?: Filters;
   }): Promise<QueryResults> {
-    return (
-      await this.client.http.doRequest<QueryResults>({
-        method: "POST",
-        path: `/v1/vectors/${this.id}/query`,
-        body: params,
-        retryable: true,
-      })
-    ).body!;
+    let resultsWithMetrics = await this.queryWithMetrics(params);
+    return resultsWithMetrics.results;
+  }
+
+  /**
+   * Queries vectors and returns performance metrics along with the results.
+   * See: https://turbopuffer.com/docs/reference/query
+   */
+  async queryWithMetrics({
+    ...params
+  }: {
+    vector?: number[];
+    distance_metric?: DistanceMetric;
+    top_k?: number;
+    include_vectors?: boolean;
+    include_attributes?: boolean | string[];
+    filters?: Filters;
+  }): Promise<{
+    results: QueryResults;
+    metrics: Record<string, string | number>;
+  }> {
+    let response = await this.client.http.doRequest<QueryResults>({
+      method: "POST",
+      path: `/v1/vectors/${this.id}/query`,
+      body: params,
+      retryable: true,
+    });
+
+    const approxNamespaceSizeStr = response.headers.get(
+      "X-turbopuffer-Approx-Namespace-Size",
+    );
+    const serverTimingStr = response.headers.get("Server-Timing");
+    const serverTiming = serverTimingStr
+      ? parseServerTiming(serverTimingStr)
+      : {};
+
+    return {
+      results: response.body!,
+      metrics: {
+        approx_namespace_size: approxNamespaceSizeStr
+          ? parseInt(approxNamespaceSizeStr)
+          : 0,
+        ...serverTiming,
+      },
+    };
   }
 
   /**
