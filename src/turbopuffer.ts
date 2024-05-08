@@ -42,12 +42,22 @@ export type FilterConnective = "And" | "Or";
 export type FilterValue = Exclude<AttributeType, null>;
 export type FilterCondition = [string, FilterOperator, FilterValue];
 export type Filters = [FilterConnective, Filters[]] | FilterCondition;
+
 export type QueryResults = {
   id: Id;
   vector?: number[];
   attributes?: Attributes;
   dist?: number;
 }[];
+
+export type QueryMetrics = {
+  approx_namespace_size: number;
+  cache_hit_ratio: number;
+  cache_temperature: string;
+  processing_time: number;
+  exhaustive_search_count: number;
+};
+
 export interface NamespaceDesc {
   id: string;
   approx_count: number;
@@ -62,6 +72,30 @@ export interface RecallMeasurement {
   avg_recall: number;
   avg_exhaustive_count: number;
   avg_ann_count: number;
+}
+
+function parseServerTiming(value: string): Record<string, string> {
+  let output: Record<string, string> = {};
+  const sections = value.split(", ");
+  for (let section of sections) {
+    let tokens = section.split(";");
+    let base_key = tokens.shift();
+    for (let token of tokens) {
+      let components = token.split("=");
+      let key = base_key + "." + components[0];
+      let value = components[1];
+      output[key] = value;
+    }
+  }
+  return output;
+}
+
+function parseIntMetric(value: string | null): number {
+  return value ? parseInt(value) : 0;
+}
+
+function parseFloatMetric(value: string | null): number {
+  return value ? parseFloat(value) : 0;
 }
 
 /* Base Client */
@@ -192,14 +226,53 @@ export class Namespace {
     include_attributes?: boolean | string[];
     filters?: Filters;
   }): Promise<QueryResults> {
-    return (
-      await this.client.http.doRequest<QueryResults>({
-        method: "POST",
-        path: `/v1/vectors/${this.id}/query`,
-        body: params,
-        retryable: true,
-      })
-    ).body!;
+    let resultsWithMetrics = await this.queryWithMetrics(params);
+    return resultsWithMetrics.results;
+  }
+
+  /**
+   * Queries vectors and returns performance metrics along with the results.
+   * See: https://turbopuffer.com/docs/reference/query
+   */
+  async queryWithMetrics({
+    ...params
+  }: {
+    vector?: number[];
+    distance_metric?: DistanceMetric;
+    top_k?: number;
+    include_vectors?: boolean;
+    include_attributes?: boolean | string[];
+    filters?: Filters;
+  }): Promise<{
+    results: QueryResults;
+    metrics: QueryMetrics;
+  }> {
+    let response = await this.client.http.doRequest<QueryResults>({
+      method: "POST",
+      path: `/v1/vectors/${this.id}/query`,
+      body: params,
+      retryable: true,
+    });
+
+    const serverTimingStr = response.headers.get("Server-Timing");
+    const serverTiming = serverTimingStr
+      ? parseServerTiming(serverTimingStr)
+      : {};
+
+    return {
+      results: response.body!,
+      metrics: {
+        approx_namespace_size: parseIntMetric(
+          response.headers.get("X-turbopuffer-Approx-Namespace-Size"),
+        ),
+        cache_hit_ratio: parseFloatMetric(serverTiming["cache.hit_ratio"]),
+        cache_temperature: serverTiming["cache.temperature"],
+        processing_time: parseIntMetric(serverTiming["processing_time.dur"]),
+        exhaustive_search_count: parseIntMetric(
+          serverTiming["exhaustive_search.count"],
+        ),
+      },
+    };
   }
 
   /**
