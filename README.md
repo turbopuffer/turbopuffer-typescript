@@ -1,6 +1,6 @@
 The **official TypeScript SDK** for Turbopuffer.
 
-To install,
+To install:
 
 ```bash
 npm i @turbopuffer/turbopuffer
@@ -49,7 +49,13 @@ let results = await ns.query({
 });
 ```
 
-To publish a new version,
+To run tests:
+
+```bash
+npm run test
+```
+
+To publish a new version:
 
 ```bash
 npm publish --access public

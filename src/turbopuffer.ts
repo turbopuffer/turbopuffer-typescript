@@ -7,7 +7,7 @@
 
 import pako from "pako";
 import "isomorphic-fetch";
-import {version} from '../package.json';
+import { version } from "../package.json";
 
 /**
  * Utility Types
@@ -50,14 +50,14 @@ export type QueryResults = {
   attributes?: Attributes;
   dist?: number;
 }[];
-export type NamespaceDesc = {
+export type NamespaceMetadata = {
   id: string;
   approx_count: number;
   dimensions: number;
-  created_at: string; // RFC3339 format
+  created_at: Date; // RFC3339 format
 };
 export type NamespacesListResult = {
-  namespaces: NamespaceDesc[];
+  namespaces: { id: string }[];
   next_cursor?: string;
 };
 export type RecallMeasurement = {
@@ -71,7 +71,7 @@ export class TurbopufferError extends Error {
   status?: number;
   constructor(
     public error: string,
-    { status }: { status?: number }
+    { status }: { status?: number },
   ) {
     super(error);
     this.status = status;
@@ -142,7 +142,7 @@ export class Turbopuffer {
     }
 
     let requestBody: BodyInit | null = null;
-    if (body && compress) {
+    if (body && compress && body.len > 512) {
       headers["Content-Encoding"] = "gzip";
       requestBody = pako.gzip(JSON.stringify(body));
     } else if (body) {
@@ -168,16 +168,18 @@ export class Turbopuffer {
             } else {
               message = JSON.stringify(body);
             }
-          } catch (_: any) {}
+          } catch (_: any) { }
         } else {
           try {
             let body = await response.text();
             if (body) {
               message = body;
             }
-          } catch (_: any) {}
+          } catch (_: any) { }
         }
-        error = new TurbopufferError(message || response.statusText, { status: response.status });
+        error = new TurbopufferError(message || response.statusText, {
+          status: response.status,
+        });
       }
       if (
         error &&
@@ -194,6 +196,12 @@ export class Turbopuffer {
     }
 
     if (!response.body) {
+      return {
+        headers: response.headers,
+      };
+    }
+
+    if (method === "HEAD") {
       return {
         headers: response.headers,
       };
@@ -348,14 +356,21 @@ export class Namespace {
   /**
    * Fetches the approximate number of vectors in a namespace.
    */
-  async approxNumVectors(): Promise<number> {
+  async metadata(): Promise<NamespaceMetadata> {
     let response = await this.client.doRequest<{}>({
       method: "HEAD",
       path: `/v1/vectors/${this.id}`,
       retryable: true,
     });
-    let num = response.headers.get("X-turbopuffer-Approx-Num-Vectors");
-    return num ? parseInt(num) : 0;
+
+    return {
+      id: this.id,
+      approx_count: parseInt(
+        response.headers.get("X-turbopuffer-Approx-Num-Vectors")!,
+      ),
+      dimensions: parseInt(response.headers.get("X-turbopuffer-Dimensions")!),
+      created_at: new Date(response.headers.get("X-turbopuffer-Created-At")!),
+    };
   }
 
   /**
@@ -449,8 +464,8 @@ function fromColumnar(cv: ColumnarVectors): Vector[] {
       vector: cv.vectors[i],
       attributes: cv.attributes
         ? Object.fromEntries(
-            attributeEntries.map(([key, values]) => [key, values[i]])
-          )
+          attributeEntries.map(([key, values]) => [key, values[i]]),
+        )
         : undefined,
     };
   }
