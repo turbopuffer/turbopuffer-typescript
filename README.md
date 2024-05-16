@@ -51,6 +51,12 @@ let results = await ns.query({
 });
 ```
 
+To run the tests,
+
+```bash
+npm run test
+```
+
 To publish a new version,
 
 ```bash

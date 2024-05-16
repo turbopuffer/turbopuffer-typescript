@@ -96,6 +96,14 @@ test("sanity", async () => {
   expect(results.length).toEqual(1);
   expect(results[0].id).toEqual(2);
 
+  let num = await ns.approxNumVectors();
+  expect(num).toEqual(1);
+
+  let metadata = await ns.metadata();
+  expect(metadata.approx_count).toEqual(1);
+  expect(metadata.dimensions).toEqual(2);
+  expect(metadata.created_at).not.toBeNull();
+
   // Delete the entire namespace.
   await ns.deleteAll();
 

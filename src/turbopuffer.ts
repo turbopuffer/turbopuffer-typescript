@@ -58,14 +58,14 @@ export type QueryMetrics = {
   exhaustive_search_count: number;
 };
 
-export interface NamespaceDesc {
+export interface NamespaceMetadata {
   id: string;
   approx_count: number;
   dimensions: number;
-  created_at: string; // RFC3339 format
+  created_at: Date;
 }
 export interface NamespacesListResult {
-  namespaces: NamespaceDesc[];
+  namespaces: { id: string }[];
   next_cursor?: string;
 }
 export interface RecallMeasurement {
@@ -300,13 +300,24 @@ export class Namespace {
    * Fetches the approximate number of vectors in a namespace.
    */
   async approxNumVectors(): Promise<number> {
-    const response = await this.client.http.doRequest<object>({
+    return (await this.metadata()).approx_count;
+  }
+
+  async metadata(): Promise<NamespaceMetadata> {
+    const response = await this.client.http.doRequest<NamespaceMetadata>({
       method: "HEAD",
       path: `/v1/vectors/${this.id}`,
       retryable: true,
     });
-    const num = response.headers.get("X-turbopuffer-Approx-Num-Vectors");
-    return num ? parseInt(num) : 0;
+
+    return {
+      id: this.id,
+      approx_count: parseInt(
+        response.headers.get("X-turbopuffer-Approx-Num-Vectors")!,
+      ),
+      dimensions: parseInt(response.headers.get("X-turbopuffer-Dimensions")!),
+      created_at: new Date(response.headers.get("X-turbopuffer-Created-At")!),
+    };
   }
 
   /**
