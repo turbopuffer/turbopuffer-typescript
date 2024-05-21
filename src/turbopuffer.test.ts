@@ -96,6 +96,21 @@ test("sanity", async () => {
   expect(results.length).toEqual(1);
   expect(results[0].id).toEqual(2);
 
+  let num = await ns.approxNumVectors();
+  expect(num).toEqual(1);
+
+  let metadata = await ns.metadata();
+  expect(metadata.approx_count).toEqual(1);
+  expect(metadata.dimensions).toEqual(2);
+
+  // Check that `metadata.created_at` data is a valid Date for today, but don't bother checking the
+  // time. We know it was created today as the test deletes the namespace in the
+  // beginning. When we compare against the current time, ensure it's UTC.
+  const now = new Date();
+  expect(metadata.created_at.getFullYear()).toEqual(now.getUTCFullYear());
+  expect(metadata.created_at.getMonth()).toEqual(now.getUTCMonth());
+  expect(metadata.created_at.getDate()).toEqual(now.getUTCDate());
+
   // Delete the entire namespace.
   await ns.deleteAll();
 
