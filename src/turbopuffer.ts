@@ -56,6 +56,8 @@ export type QueryMetrics = {
   cache_temperature: string;
   processing_time: number;
   exhaustive_search_count: number;
+  response_time: number;
+  body_read_time: number;
 };
 
 export interface NamespaceMetadata {
@@ -271,6 +273,8 @@ export class Namespace {
         exhaustive_search_count: parseIntMetric(
           serverTiming["exhaustive_search.count"],
         ),
+        response_time: response.request_timing.response_time,
+        body_read_time: response.request_timing.body_read_time,
       },
     };
   }

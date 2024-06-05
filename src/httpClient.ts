@@ -1,4 +1,4 @@
-import type { BodyInit, Response } from "undici";
+import type { Response } from "undici";
 import { fetch, Agent } from "undici";
 import pako from "pako";
 import { version } from "../package.json";
@@ -11,7 +11,17 @@ export interface RequestParams {
   compress?: boolean;
   retryable?: boolean;
 }
-export type RequestResponse<T> = Promise<{ body?: T; headers: Headers }>;
+
+export type RequestTiming = {
+  response_time: number;
+  body_read_time: number;
+};
+
+export type RequestResponse<T> = Promise<{
+  body?: T;
+  headers: Headers;
+  request_timing: RequestTiming;
+}>;
 
 export interface HTTPClient {
   doRequest<T>(_: RequestParams): RequestResponse<T>;
@@ -105,7 +115,7 @@ class DefaultHTTPClient implements HTTPClient {
       headers["Content-Type"] = "application/json";
     }
 
-    let requestBody: BodyInit | null = null;
+    let requestBody: Uint8Array | string | null = null;
     if (body && compress) {
       headers["Content-Encoding"] = "gzip";
       requestBody = pako.gzip(JSON.stringify(body));
@@ -116,8 +126,12 @@ class DefaultHTTPClient implements HTTPClient {
     const maxAttempts = retryable ? 3 : 1;
     let response!: Response;
     let error: TurbopufferError | null = null;
+    let request_start!: number;
+    let response_start!: number;
+
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
       error = null;
+      request_start = performance.now();
       try {
         response = await fetch(url.toString(), {
           method,
@@ -143,6 +157,8 @@ class DefaultHTTPClient implements HTTPClient {
           throw e;
         }
       }
+      response_start = performance.now();
+
       if (!error && response.status >= 400) {
         let message: string | undefined = undefined;
         if (response.headers.get("Content-Type") === "application/json") {
@@ -184,9 +200,10 @@ class DefaultHTTPClient implements HTTPClient {
       throw error;
     }
 
-    if (!response.body) {
+    if (method === "HEAD" || !response.body) {
       return {
         headers: response.headers,
+        request_timing: make_request_timing(request_start, response_start),
       };
     }
 
@@ -197,9 +214,16 @@ class DefaultHTTPClient implements HTTPClient {
       });
     }
 
+    let response_end = performance.now();
+
     return {
       body: json as T,
       headers: response.headers,
+      request_timing: make_request_timing(
+        request_start,
+        response_start,
+        response_end,
+      ),
     };
   }
 }
@@ -224,4 +248,15 @@ function statusCodeShouldRetry(statusCode?: number): boolean {
 /** A helper function to delay for a given number of milliseconds. */
 function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function make_request_timing(
+  request_start: number,
+  response_start: number,
+  response_end?: number,
+): RequestTiming {
+  return {
+    response_time: response_start - request_start,
+    body_read_time: response_end ? response_end - response_start : 0,
+  };
 }
