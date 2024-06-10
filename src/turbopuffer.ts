@@ -17,6 +17,13 @@ export { TurbopufferError } from "./httpClient";
 export type Id = string | number;
 export type AttributeType = null | string | number | string[] | number[];
 export type Attributes = Record<string, AttributeType>;
+export type Schema = Record<string, {
+  type?: string;
+  bm25?: boolean | Record<string, string|boolean>;
+}>;
+export type RankBySingleField = [string, "BM25", string];
+export type RankBy = RankBySingleField | ["Sum", RankBySingleField[]];
+
 export interface Vector {
   id: Id;
   vector?: number[];
@@ -48,6 +55,7 @@ export type QueryResults = {
   vector?: number[];
   attributes?: Attributes;
   dist?: number;
+  rank_by?: RankBy;
 }[];
 
 export type QueryMetrics = {
@@ -177,10 +185,12 @@ export class Namespace {
   async upsert({
     vectors,
     distance_metric,
+    schema,
     batchSize = 10000,
   }: {
     vectors: Vector[];
     distance_metric: DistanceMetric;
+    schema?: Schema,
     batchSize?: number;
   }): Promise<void> {
     for (let i = 0; i < vectors.length; i += batchSize) {
@@ -192,6 +202,7 @@ export class Namespace {
         body: {
           upserts: batch,
           distance_metric,
+          schema,
         },
         retryable: true, // Upserts are idempotent
       });
@@ -227,6 +238,7 @@ export class Namespace {
     include_vectors?: boolean;
     include_attributes?: boolean | string[];
     filters?: Filters;
+    rank_by?: RankBy;
   }): Promise<QueryResults> {
     let resultsWithMetrics = await this.queryWithMetrics(params);
     return resultsWithMetrics.results;
@@ -245,6 +257,7 @@ export class Namespace {
     include_vectors?: boolean;
     include_attributes?: boolean | string[];
     filters?: Filters;
+    rank_by?: RankBy;
   }): Promise<{
     results: QueryResults;
     metrics: QueryMetrics;
