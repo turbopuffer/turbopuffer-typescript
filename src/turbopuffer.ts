@@ -267,6 +267,7 @@ export class Namespace {
       path: `/v1/vectors/${this.id}/query`,
       body: params,
       retryable: true,
+      compress: true,
     });
 
     const serverTimingStr = response.headers.get("Server-Timing");
