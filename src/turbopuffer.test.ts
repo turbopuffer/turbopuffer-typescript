@@ -6,7 +6,7 @@ const tpuf = new Turbopuffer({
 
 test("bm25_with_custom_schema_and_sum_query", async () => {
   const ns = tpuf.namespace(
-    "typescript_sdk_" + expect.getState().currentTestName,
+    "typescript_sdk_" + expect.getState().currentTestName
   );
 
   try {
@@ -16,15 +16,15 @@ test("bm25_with_custom_schema_and_sum_query", async () => {
   }
 
   const schema = {
-    "text": {
-      "type": "?string",
-      "bm25": {
-        "language": "english",
-        "stemming": true,
-        "case_sensitive": false,
-        "remove_stopwords": true
-      }
-    }
+    text: {
+      type: "?string",
+      bm25: {
+        language: "english",
+        stemming: true,
+        case_sensitive: false,
+        remove_stopwords: true,
+      },
+    },
   };
 
   await ns.upsert({
@@ -32,46 +32,60 @@ test("bm25_with_custom_schema_and_sum_query", async () => {
       {
         id: 1,
         vector: [0.1, 0.1],
-        attributes: { text: "Walruses are large marine mammals with long tusks and whiskers" }
+        attributes: {
+          text: "Walruses are large marine mammals with long tusks and whiskers",
+        },
       },
       {
         id: 2,
         vector: [0.2, 0.2],
-        attributes: { text: "They primarily inhabit the cold Arctic regions" }
+        attributes: { text: "They primarily inhabit the cold Arctic regions" },
       },
       {
         id: 3,
         vector: [0.3, 0.3],
-        attributes: { text: "Walruses use their tusks to help haul themselves onto ice" }
+        attributes: {
+          text: "Walruses use their tusks to help haul themselves onto ice",
+        },
       },
       {
         id: 4,
         vector: [0.4, 0.4],
-        attributes: { text: "Their diet mainly consists of mollusks and other sea creatures" }
+        attributes: {
+          text: "Their diet mainly consists of mollusks and other sea creatures",
+        },
       },
       {
         id: 5,
         vector: [0.5, 0.5],
-        attributes: { text: "Walrus populations are affected by climate change and melting ice" }
+        attributes: {
+          text: "Walrus populations are affected by climate change and melting ice",
+        },
       },
     ],
     distance_metric: "cosine_distance",
-    schema: schema
+    schema: schema,
   });
 
   const results = await ns.query({
-    rank_by: ["Sum", [["text", "BM25", "large tusk"], ["text", "BM25", "mollusk diet"]]]
+    rank_by: [
+      "Sum",
+      [
+        ["text", "BM25", "large tusk"],
+        ["text", "BM25", "mollusk diet"],
+      ],
+    ],
   });
 
   expect(results.length).toEqual(3);
   expect(results[0].id).toEqual(4);
   expect(results[1].id).toEqual(1);
   expect(results[2].id).toEqual(3);
-})
+});
 
 test("bm25_with_default_schema_and_simple_query", async () => {
   const ns = tpuf.namespace(
-    "typescript_sdk_" + expect.getState().currentTestName,
+    "typescript_sdk_" + expect.getState().currentTestName
   );
 
   try {
@@ -81,10 +95,10 @@ test("bm25_with_default_schema_and_simple_query", async () => {
   }
 
   const schema = {
-    "text": {
-      "type": "?string",
-      "bm25": true
-    }
+    text: {
+      type: "?string",
+      bm25: true,
+    },
   };
 
   await ns.upsert({
@@ -92,20 +106,24 @@ test("bm25_with_default_schema_and_simple_query", async () => {
       {
         id: 1,
         vector: [0.1, 0.1],
-        attributes: { text: "Walruses can produce a variety of funny sounds, including whistles, grunts, and bell-like noises." },
+        attributes: {
+          text: "Walruses can produce a variety of funny sounds, including whistles, grunts, and bell-like noises.",
+        },
       },
       {
         id: 2,
         vector: [0.2, 0.2],
-        attributes: { text: "They sometimes use their tusks as a tool to break through ice or to scratch their bodies." },
-      }
+        attributes: {
+          text: "They sometimes use their tusks as a tool to break through ice or to scratch their bodies.",
+        },
+      },
     ],
     distance_metric: "cosine_distance",
-    schema: schema
+    schema: schema,
   });
 
   const results = await ns.query({
-    rank_by: ["text", "BM25", "scratch"]
+    rank_by: ["text", "BM25", "scratch"],
   });
 
   expect(results.length).toEqual(1);
@@ -114,7 +132,7 @@ test("bm25_with_default_schema_and_simple_query", async () => {
 
 test("sanity", async () => {
   const ns = tpuf.namespace(
-    "typescript_sdk_" + expect.getState().currentTestName,
+    "typescript_sdk_" + expect.getState().currentTestName
   );
 
   try {
@@ -206,10 +224,10 @@ test("sanity", async () => {
   expect(results.length).toEqual(1);
   expect(results[0].id).toEqual(2);
 
-  let num = await ns.approxNumVectors();
+  const num = await ns.approxNumVectors();
   expect(num).toEqual(1);
 
-  let metadata = await ns.metadata();
+  const metadata = await ns.metadata();
   expect(metadata.approx_count).toEqual(1);
   expect(metadata.dimensions).toEqual(2);
 
@@ -225,20 +243,20 @@ test("sanity", async () => {
   await ns.deleteAll();
 
   // For some reason, expect().toThrow doesn't catch properly
-  let gotError: any = null;
+  let gotError: unknown = null;
   try {
     await ns.query({
       vector: [1, 1],
       filters: ["numbers", "In", [2, 4]],
     });
-  } catch (e: any) {
+  } catch (e: unknown) {
     gotError = e;
   }
   expect(gotError).toStrictEqual(
     new TurbopufferError(
       "💔 Resource not found; the requested namespace is empty.",
-      { status: 404 },
-    ),
+      { status: 404 }
+    )
   );
 });
 
@@ -250,18 +268,18 @@ test("connection errors are wrapped", async () => {
   });
 
   const ns = tpuf.namespace(
-    "typescript_sdk_" + expect.getState().currentTestName,
+    "typescript_sdk_" + expect.getState().currentTestName
   );
 
-  let gotError: any = null;
+  let gotError: unknown = null;
   try {
     await ns.query({
       vector: [1, 1],
     });
-  } catch (e: any) {
+  } catch (e: unknown) {
     gotError = e;
   }
   expect(gotError).toStrictEqual(
-    new TurbopufferError("fetch failed: Connect Timeout Error", {}),
+    new TurbopufferError("fetch failed: Connect Timeout Error", {})
   );
 });

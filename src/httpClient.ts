@@ -12,10 +12,10 @@ export interface RequestParams {
   retryable?: boolean;
 }
 
-export type RequestTiming = {
+export interface RequestTiming {
   response_time: number;
   body_read_time: number;
-};
+}
 
 export type RequestResponse<T> = Promise<{
   body?: T;
@@ -41,14 +41,14 @@ export const createHTTPClient = (
   apiKey: string,
   connectTimeout: number,
   idleTimeout: number,
-  warmConnections: number,
+  warmConnections: number
 ) =>
   new DefaultHTTPClient(
     baseUrl,
     apiKey,
     connectTimeout,
     idleTimeout,
-    warmConnections,
+    warmConnections
   );
 
 class DefaultHTTPClient implements HTTPClient {
@@ -62,7 +62,7 @@ class DefaultHTTPClient implements HTTPClient {
     apiKey: string,
     connectTimeout: number,
     idleTimeout: number,
-    warmConnections: number,
+    warmConnections: number
   ) {
     this.baseUrl = baseUrl;
     this.apiKey = apiKey;
@@ -104,11 +104,8 @@ class DefaultHTTPClient implements HTTPClient {
     }
 
     const headers: Record<string, string> = {
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       "Accept-Encoding": "gzip",
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       Authorization: `Bearer ${this.apiKey}`,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       "User-Agent": this.userAgent,
     };
     if (body) {
@@ -214,7 +211,7 @@ class DefaultHTTPClient implements HTTPClient {
       });
     }
 
-    let response_end = performance.now();
+    const response_end = performance.now();
 
     return {
       body: json as T,
@@ -222,7 +219,7 @@ class DefaultHTTPClient implements HTTPClient {
       request_timing: make_request_timing(
         request_start,
         response_start,
-        response_end,
+        response_end
       ),
     };
   }
@@ -233,7 +230,7 @@ export class TurbopufferError extends Error {
   status?: number;
   constructor(
     public error: string,
-    { status, cause }: { status?: number; cause?: Error },
+    { status, cause }: { status?: number; cause?: Error }
   ) {
     super(error, { cause: cause });
     this.status = status;
@@ -253,7 +250,7 @@ function delay(ms: number) {
 function make_request_timing(
   request_start: number,
   response_start: number,
-  response_end?: number,
+  response_end?: number
 ): RequestTiming {
   return {
     response_time: response_start - request_start,
