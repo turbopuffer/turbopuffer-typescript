@@ -21,7 +21,10 @@ export type Schema = Record<
   string,
   {
     type?: string;
+<<<<<<< HEAD
     filterable?: boolean;
+=======
+>>>>>>> 2589699 (-    schema?: Schema,)
     bm25?: boolean | Record<string, string | boolean>;
   }
 >;
@@ -62,7 +65,7 @@ export type QueryResults = {
   rank_by?: RankBy;
 }[];
 
-export type QueryMetrics = {
+export interface QueryMetrics {
   approx_namespace_size: number;
   cache_hit_ratio: number;
   cache_temperature: string;
@@ -70,7 +73,7 @@ export type QueryMetrics = {
   exhaustive_search_count: number;
   response_time: number;
   body_read_time: number;
-};
+}
 
 export interface NamespaceMetadata {
   id: string;
@@ -89,15 +92,15 @@ export interface RecallMeasurement {
 }
 
 function parseServerTiming(value: string): Record<string, string> {
-  let output: Record<string, string> = {};
+  const output: Record<string, string> = {};
   const sections = value.split(", ");
-  for (let section of sections) {
-    let tokens = section.split(";");
-    let base_key = tokens.shift();
-    for (let token of tokens) {
-      let components = token.split("=");
-      let key = base_key + "." + components[0];
-      let value = components[1];
+  for (const section of sections) {
+    const tokens = section.split(";");
+    const base_key = tokens.shift();
+    for (const token of tokens) {
+      const components = token.split("=");
+      const key = base_key + "." + components[0];
+      const value = components[1];
       output[key] = value;
     }
   }
@@ -244,7 +247,7 @@ export class Namespace {
     filters?: Filters;
     rank_by?: RankBy;
   }): Promise<QueryResults> {
-    let resultsWithMetrics = await this.queryWithMetrics(params);
+    const resultsWithMetrics = await this.queryWithMetrics(params);
     return resultsWithMetrics.results;
   }
 
@@ -266,7 +269,7 @@ export class Namespace {
     results: QueryResults;
     metrics: QueryMetrics;
   }> {
-    let response = await this.client.http.doRequest<QueryResults>({
+    const response = await this.client.http.doRequest<QueryResults>({
       method: "POST",
       path: `/v1/vectors/${this.id}/query`,
       body: params,
@@ -423,16 +426,16 @@ function toColumnar(vectors: Vector[]): ColumnarVectors {
 }
 
 function fromColumnar(cv: ColumnarVectors): Vector[] {
-  const res = new Array<Vector>(cv.ids.length);
+  const res = new Array<Vector>(cv.ids?.length);
   const attributeEntries = Object.entries(cv.attributes ?? {});
-  for (let i = 0; i < cv.ids.length; i++) {
+  for (let i = 0; i < cv.ids?.length; i++) {
     res[i] = {
       id: cv.ids[i],
       vector: cv.vectors[i],
       attributes: cv.attributes
         ? Object.fromEntries(
-            attributeEntries.map(([key, values]) => [key, values[i]])
-          )
+          attributeEntries.map(([key, values]) => [key, values[i]])
+        )
         : undefined,
     };
   }
