@@ -21,10 +21,7 @@ export type Schema = Record<
   string,
   {
     type?: string;
-<<<<<<< HEAD
     filterable?: boolean;
-=======
->>>>>>> 2589699 (-    schema?: Schema,)
     bm25?: boolean | Record<string, string | boolean>;
   }
 >;
@@ -137,7 +134,7 @@ export class Turbopuffer {
       apiKey,
       connectTimeout,
       connectionIdleTimeout,
-      warmConnections
+      warmConnections,
     );
   }
 
@@ -286,13 +283,13 @@ export class Namespace {
       results: response.body!,
       metrics: {
         approx_namespace_size: parseIntMetric(
-          response.headers.get("X-turbopuffer-Approx-Namespace-Size")
+          response.headers.get("X-turbopuffer-Approx-Namespace-Size"),
         ),
         cache_hit_ratio: parseFloatMetric(serverTiming["cache.hit_ratio"]),
         cache_temperature: serverTiming["cache.temperature"],
         processing_time: parseIntMetric(serverTiming["processing_time.dur"]),
         exhaustive_search_count: parseIntMetric(
-          serverTiming["exhaustive_search.count"]
+          serverTiming["exhaustive_search.count"],
         ),
         response_time: response.request_timing.response_time,
         body_read_time: response.request_timing.body_read_time,
@@ -338,7 +335,7 @@ export class Namespace {
     return {
       id: this.id,
       approx_count: parseInt(
-        response.headers.get("X-turbopuffer-Approx-Num-Vectors")!
+        response.headers.get("X-turbopuffer-Approx-Num-Vectors")!,
       ),
       dimensions: parseInt(response.headers.get("X-turbopuffer-Dimensions")!),
       created_at: new Date(response.headers.get("X-turbopuffer-Created-At")!),
@@ -434,7 +431,7 @@ function fromColumnar(cv: ColumnarVectors): Vector[] {
       vector: cv.vectors[i],
       attributes: cv.attributes
         ? Object.fromEntries(
-          attributeEntries.map(([key, values]) => [key, values[i]])
+          attributeEntries.map(([key, values]) => [key, values[i]]),
         )
         : undefined,
     };
