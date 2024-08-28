@@ -15,6 +15,7 @@ export interface RequestParams {
 export type RequestTiming = {
   response_time: number;
   body_read_time: number;
+  deserialize_time: number;
 };
 
 export type RequestResponse<T> = Promise<{
@@ -207,14 +208,19 @@ class DefaultHTTPClient implements HTTPClient {
       };
     }
 
-    const json = (await response.json()) as any;
+    // internally json() will read the full body, decode utf-8, and allocate a string,
+    // so splitting it up into text() and JSON.parse() has no performance impact
+    const body_text = await response.text();
+    const body_read_end = performance.now();
+
+    const json = JSON.parse(body_text);
+    const deserialize_end = performance.now();
+
     if (json.status && json.status === "error") {
       throw new TurbopufferError(json.error || (json as string), {
         status: response.status,
       });
     }
-
-    let response_end = performance.now();
 
     return {
       body: json as T,
@@ -222,7 +228,8 @@ class DefaultHTTPClient implements HTTPClient {
       request_timing: make_request_timing(
         request_start,
         response_start,
-        response_end,
+        body_read_end,
+        deserialize_end,
       ),
     };
   }
@@ -253,10 +260,13 @@ function delay(ms: number) {
 function make_request_timing(
   request_start: number,
   response_start: number,
-  response_end?: number,
+  body_read_end?: number,
+  deserialize_end?: number,
 ): RequestTiming {
   return {
     response_time: response_start - request_start,
-    body_read_time: response_end ? response_end - response_start : 0,
+    body_read_time: body_read_end ? body_read_end - response_start : 0,
+    deserialize_time:
+      deserialize_end && body_read_end ? deserialize_end - body_read_end : 0,
   };
 }
