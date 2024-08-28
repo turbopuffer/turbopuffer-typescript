@@ -178,6 +178,7 @@ test("sanity", async () => {
   expect(metrics.processing_time).toBeGreaterThan(10);
   expect(metrics.response_time).toBeGreaterThan(10);
   expect(metrics.body_read_time).toBeGreaterThan(0);
+  expect(metrics.deserialize_time).toBeGreaterThan(0);
 
   const results2 = await ns.query({
     vector: [1, 1],

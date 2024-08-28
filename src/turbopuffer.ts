@@ -70,6 +70,7 @@ export interface QueryMetrics {
   exhaustive_search_count: number;
   response_time: number;
   body_read_time: number;
+  deserialize_time: number;
 }
 
 export interface NamespaceMetadata {
@@ -293,6 +294,7 @@ export class Namespace {
         ),
         response_time: response.request_timing.response_time,
         body_read_time: response.request_timing.body_read_time,
+        deserialize_time: response.request_timing.deserialize_time,
       },
     };
   }
@@ -431,8 +433,8 @@ function fromColumnar(cv: ColumnarVectors): Vector[] {
       vector: cv.vectors[i],
       attributes: cv.attributes
         ? Object.fromEntries(
-          attributeEntries.map(([key, values]) => [key, values[i]]),
-        )
+            attributeEntries.map(([key, values]) => [key, values[i]]),
+          )
         : undefined,
     };
   }
