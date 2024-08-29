@@ -1,11 +1,11 @@
 import type { Dispatcher } from "undici";
 import { fetch, Agent } from "undici";
-import pako from "pako";
 import { version } from "../package.json";
-import { gunzip } from "node:zlib";
+import { gunzip, gzip } from "node:zlib";
 import { promisify } from "node:util";
 
-const gunzip_async = promisify(gunzip);
+const gunzipAsync = promisify(gunzip);
+const gzipAsync = promisify(gzip);
 
 export interface RequestParams {
   method: string;
@@ -19,6 +19,7 @@ export interface RequestParams {
 export type RequestTiming = {
   response_time: number;
   body_read_time: number;
+  decompress_time: number;
   deserialize_time: number;
 };
 
@@ -130,7 +131,7 @@ class DefaultHTTPClient implements HTTPClient {
     let requestBody: Uint8Array | string | null = null;
     if (body && compress) {
       headers["Content-Encoding"] = "gzip";
-      requestBody = pako.gzip(JSON.stringify(body));
+      requestBody = await gzipAsync(JSON.stringify(body));
     } else if (body) {
       requestBody = JSON.stringify(body);
     }
@@ -217,7 +218,8 @@ class DefaultHTTPClient implements HTTPClient {
       };
     }
 
-    let { body_text, body_read_end } = await consumeResponseText(response);
+    let { body_text, body_read_end, decompress_end } =
+      await consumeResponseText(response);
 
     const json = JSON.parse(body_text);
     const deserialize_end = performance.now();
@@ -235,6 +237,7 @@ class DefaultHTTPClient implements HTTPClient {
         request_start,
         response_start,
         body_read_end,
+        decompress_end,
         deserialize_end,
       ),
     };
@@ -267,13 +270,16 @@ function make_request_timing(
   request_start: number,
   response_start: number,
   body_read_end?: number,
+  decompress_end?: number,
   deserialize_end?: number,
 ): RequestTiming {
   return {
     response_time: response_start - request_start,
     body_read_time: body_read_end ? body_read_end - response_start : 0,
+    decompress_time:
+      decompress_end && body_read_end ? decompress_end - body_read_end : 0,
     deserialize_time:
-      deserialize_end && body_read_end ? deserialize_end - body_read_end : 0,
+      deserialize_end && decompress_end ? deserialize_end - decompress_end : 0,
   };
 }
 
@@ -294,17 +300,19 @@ function convertHeadersType(
 async function consumeResponseText(response: Dispatcher.ResponseData): Promise<{
   body_text: string;
   body_read_end: number;
+  decompress_end: number;
 }> {
   if (response.headers["content-encoding"] == "gzip") {
     let body_buffer = await response.body.arrayBuffer();
     let body_read_end = performance.now();
 
-    let gunzip_buffer = await gunzip_async(body_buffer);
+    let gunzip_buffer = await gunzipAsync(body_buffer);
     let body_text = gunzip_buffer.toString(); // is there a better way?
-    return { body_text, body_read_end };
+    let decompress_end = performance.now();
+    return { body_text, body_read_end, decompress_end };
   } else {
     let body_text = await response.body.text();
     let body_read_end = performance.now();
-    return { body_text, body_read_end };
+    return { body_text, body_read_end, decompress_end: body_read_end };
   }
 }
