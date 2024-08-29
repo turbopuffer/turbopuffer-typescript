@@ -1,4 +1,4 @@
-import type { Response } from "undici";
+import type { Dispatcher } from "undici";
 import { fetch, Agent } from "undici";
 import pako from "pako";
 import { version } from "../package.json";
@@ -20,7 +20,7 @@ export type RequestTiming = {
 
 export type RequestResponse<T> = Promise<{
   body?: T;
-  headers: Headers;
+  headers: Record<string, string>;
   request_timing: RequestTiming;
 }>;
 
@@ -55,6 +55,7 @@ export const createHTTPClient = (
 class DefaultHTTPClient implements HTTPClient {
   private agent: Agent;
   private baseUrl: string;
+  private origin: URL;
   private apiKey: string;
   readonly userAgent = `tpuf-typescript/${version}`;
 
@@ -66,6 +67,8 @@ class DefaultHTTPClient implements HTTPClient {
     warmConnections: number,
   ) {
     this.baseUrl = baseUrl;
+    this.origin = new URL(baseUrl);
+    this.origin.pathname = "";
     this.apiKey = apiKey;
 
     this.agent = new Agent({
@@ -103,6 +106,10 @@ class DefaultHTTPClient implements HTTPClient {
         }
       });
     }
+    path = url.pathname;
+    if (query) {
+      path += "?" + url.search;
+    }
 
     const headers: Record<string, string> = {
       // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -125,7 +132,7 @@ class DefaultHTTPClient implements HTTPClient {
     }
 
     const maxAttempts = retryable ? 3 : 1;
-    let response!: Response;
+    let response!: Dispatcher.ResponseData;
     let error: TurbopufferError | null = null;
     let request_start!: number;
     let response_start!: number;
@@ -134,12 +141,13 @@ class DefaultHTTPClient implements HTTPClient {
       error = null;
       request_start = performance.now();
       try {
-        response = await fetch(url.toString(), {
-          method,
+        response = await this.agent.request({
+          origin: this.origin,
+          path,
+          method: method as Dispatcher.HttpMethod,
           headers,
           body: requestBody,
-          dispatcher: this.agent,
-        });
+        })!;
       } catch (e: unknown) {
         if (e instanceof Error) {
           if (e.cause instanceof Error) {
@@ -160,11 +168,11 @@ class DefaultHTTPClient implements HTTPClient {
       }
       response_start = performance.now();
 
-      if (!error && response.status >= 400) {
+      if (!error && response.statusCode >= 400) {
         let message: string | undefined = undefined;
-        if (response.headers.get("Content-Type") === "application/json") {
+        if (response.headers["content-type"] === "application/json") {
           try {
-            const body = (await response.json()) as any;
+            const body = (await response.body.json()) as any;
             if (body && body.status === "error") {
               message = body.error;
             } else {
@@ -175,7 +183,7 @@ class DefaultHTTPClient implements HTTPClient {
           }
         } else {
           try {
-            const body = await response.text();
+            const body = await response.body.text();
             if (body) {
               message = body;
             }
@@ -183,9 +191,12 @@ class DefaultHTTPClient implements HTTPClient {
             /* empty */
           }
         }
-        error = new TurbopufferError(message ?? response.statusText, {
-          status: response.status,
-        });
+        error = new TurbopufferError(
+          message ?? `http error ${response.statusCode}`,
+          {
+            status: response.statusCode,
+          },
+        );
       }
       if (
         error &&
@@ -203,14 +214,14 @@ class DefaultHTTPClient implements HTTPClient {
 
     if (method === "HEAD" || !response.body) {
       return {
-        headers: response.headers,
+        headers: convertHeadersType(response.headers),
         request_timing: make_request_timing(request_start, response_start),
       };
     }
 
     // internally json() will read the full body, decode utf-8, and allocate a string,
     // so splitting it up into text() and JSON.parse() has no performance impact
-    const body_text = await response.text();
+    const body_text = await response.body.text();
     const body_read_end = performance.now();
 
     const json = JSON.parse(body_text);
@@ -218,13 +229,13 @@ class DefaultHTTPClient implements HTTPClient {
 
     if (json.status && json.status === "error") {
       throw new TurbopufferError(json.error || (json as string), {
-        status: response.status,
+        status: response.statusCode,
       });
     }
 
     return {
       body: json as T,
-      headers: response.headers,
+      headers: convertHeadersType(response.headers),
       request_timing: make_request_timing(
         request_start,
         response_start,
@@ -269,4 +280,18 @@ function make_request_timing(
     deserialize_time:
       deserialize_end && body_read_end ? deserialize_end - body_read_end : 0,
   };
+}
+
+function convertHeadersType(
+  headers: Record<string, string | string[] | undefined>,
+): Record<string, string> {
+  for (const key in headers) {
+    const v = headers[key];
+    if (v === undefined) {
+      delete headers[key];
+    } else if (Array.isArray(v)) {
+      headers[key] = v[0];
+    }
+  }
+  return headers as Record<string, string>;
 }
