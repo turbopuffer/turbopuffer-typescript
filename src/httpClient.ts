@@ -1,7 +1,11 @@
-import type { Response } from "undici";
+import type { Dispatcher } from "undici";
 import { fetch, Agent } from "undici";
-import pako from "pako";
 import { version } from "../package.json";
+import { gunzip, gzip } from "node:zlib";
+import { promisify } from "node:util";
+
+const gunzipAsync = promisify(gunzip);
+const gzipAsync = promisify(gzip);
 
 export interface RequestParams {
   method: string;
@@ -15,12 +19,13 @@ export interface RequestParams {
 export type RequestTiming = {
   response_time: number;
   body_read_time: number;
+  decompress_time: number;
   deserialize_time: number;
 };
 
 export type RequestResponse<T> = Promise<{
   body?: T;
-  headers: Headers;
+  headers: Record<string, string>;
   request_timing: RequestTiming;
 }>;
 
@@ -55,6 +60,7 @@ export const createHTTPClient = (
 class DefaultHTTPClient implements HTTPClient {
   private agent: Agent;
   private baseUrl: string;
+  private origin: URL;
   private apiKey: string;
   readonly userAgent = `tpuf-typescript/${version}`;
 
@@ -66,6 +72,8 @@ class DefaultHTTPClient implements HTTPClient {
     warmConnections: number,
   ) {
     this.baseUrl = baseUrl;
+    this.origin = new URL(baseUrl);
+    this.origin.pathname = "";
     this.apiKey = apiKey;
 
     this.agent = new Agent({
@@ -103,6 +111,10 @@ class DefaultHTTPClient implements HTTPClient {
         }
       });
     }
+    path = url.pathname;
+    if (query) {
+      path += "?" + url.search;
+    }
 
     const headers: Record<string, string> = {
       // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -119,13 +131,13 @@ class DefaultHTTPClient implements HTTPClient {
     let requestBody: Uint8Array | string | null = null;
     if (body && compress) {
       headers["Content-Encoding"] = "gzip";
-      requestBody = pako.gzip(JSON.stringify(body));
+      requestBody = await gzipAsync(JSON.stringify(body));
     } else if (body) {
       requestBody = JSON.stringify(body);
     }
 
     const maxAttempts = retryable ? 3 : 1;
-    let response!: Response;
+    let response!: Dispatcher.ResponseData;
     let error: TurbopufferError | null = null;
     let request_start!: number;
     let response_start!: number;
@@ -134,12 +146,13 @@ class DefaultHTTPClient implements HTTPClient {
       error = null;
       request_start = performance.now();
       try {
-        response = await fetch(url.toString(), {
-          method,
+        response = await this.agent.request({
+          origin: this.origin,
+          path,
+          method: method as Dispatcher.HttpMethod,
           headers,
           body: requestBody,
-          dispatcher: this.agent,
-        });
+        })!;
       } catch (e: unknown) {
         if (e instanceof Error) {
           if (e.cause instanceof Error) {
@@ -160,32 +173,29 @@ class DefaultHTTPClient implements HTTPClient {
       }
       response_start = performance.now();
 
-      if (!error && response.status >= 400) {
+      if (!error && response.statusCode >= 400) {
         let message: string | undefined = undefined;
-        if (response.headers.get("Content-Type") === "application/json") {
+        const { body_text } = await consumeResponseText(response);
+        if (response.headers["content-type"] === "application/json") {
           try {
-            const body = (await response.json()) as any;
+            const body = JSON.parse(body_text);
             if (body && body.status === "error") {
               message = body.error;
             } else {
-              message = JSON.stringify(body);
+              message = body_text;
             }
           } catch (_: unknown) {
             /* empty */
           }
         } else {
-          try {
-            const body = await response.text();
-            if (body) {
-              message = body;
-            }
-          } catch (_: unknown) {
-            /* empty */
-          }
+          message = body_text;
         }
-        error = new TurbopufferError(message ?? response.statusText, {
-          status: response.status,
-        });
+        error = new TurbopufferError(
+          message ?? `http error ${response.statusCode}`,
+          {
+            status: response.statusCode,
+          },
+        );
       }
       if (
         error &&
@@ -203,32 +213,31 @@ class DefaultHTTPClient implements HTTPClient {
 
     if (method === "HEAD" || !response.body) {
       return {
-        headers: response.headers,
+        headers: convertHeadersType(response.headers),
         request_timing: make_request_timing(request_start, response_start),
       };
     }
 
-    // internally json() will read the full body, decode utf-8, and allocate a string,
-    // so splitting it up into text() and JSON.parse() has no performance impact
-    const body_text = await response.text();
-    const body_read_end = performance.now();
+    const { body_text, body_read_end, decompress_end } =
+      await consumeResponseText(response);
 
     const json = JSON.parse(body_text);
     const deserialize_end = performance.now();
 
     if (json.status && json.status === "error") {
       throw new TurbopufferError(json.error || (json as string), {
-        status: response.status,
+        status: response.statusCode,
       });
     }
 
     return {
       body: json as T,
-      headers: response.headers,
+      headers: convertHeadersType(response.headers),
       request_timing: make_request_timing(
         request_start,
         response_start,
         body_read_end,
+        decompress_end,
         deserialize_end,
       ),
     };
@@ -261,12 +270,49 @@ function make_request_timing(
   request_start: number,
   response_start: number,
   body_read_end?: number,
+  decompress_end?: number,
   deserialize_end?: number,
 ): RequestTiming {
   return {
     response_time: response_start - request_start,
     body_read_time: body_read_end ? body_read_end - response_start : 0,
+    decompress_time:
+      decompress_end && body_read_end ? decompress_end - body_read_end : 0,
     deserialize_time:
-      deserialize_end && body_read_end ? deserialize_end - body_read_end : 0,
+      deserialize_end && decompress_end ? deserialize_end - decompress_end : 0,
   };
+}
+
+function convertHeadersType(
+  headers: Record<string, string | string[] | undefined>,
+): Record<string, string> {
+  for (const key in headers) {
+    const v = headers[key];
+    if (v === undefined) {
+      delete headers[key];
+    } else if (Array.isArray(v)) {
+      headers[key] = v[0];
+    }
+  }
+  return headers as Record<string, string>;
+}
+
+async function consumeResponseText(response: Dispatcher.ResponseData): Promise<{
+  body_text: string;
+  body_read_end: number;
+  decompress_end: number;
+}> {
+  if (response.headers["content-encoding"] == "gzip") {
+    const body_buffer = await response.body.arrayBuffer();
+    const body_read_end = performance.now();
+
+    const gunzip_buffer = await gunzipAsync(body_buffer);
+    const body_text = gunzip_buffer.toString(); // is there a better way?
+    const decompress_end = performance.now();
+    return { body_text, body_read_end, decompress_end };
+  } else {
+    const body_text = await response.body.text();
+    const body_read_end = performance.now();
+    return { body_text, body_read_end, decompress_end: body_read_end };
+  }
 }

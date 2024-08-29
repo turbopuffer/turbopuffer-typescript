@@ -1,6 +1,6 @@
 {
   "name": "@turbopuffer/turbopuffer",
-  "version": "0.5.6",
+  "version": "0.5.7",
   "description": "Official Typescript API client library for turbopuffer.com",
   "scripts": {
     "build": "rm -rf dist && tsc",
@@ -45,6 +45,6 @@
   },
   "dependencies": {
     "pako": "^2.1.0",
-    "undici": "^6.13.0"
+    "undici": "^6.19.8"
   }
 }

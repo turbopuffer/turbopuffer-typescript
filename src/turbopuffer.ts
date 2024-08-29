@@ -71,6 +71,7 @@ export interface QueryMetrics {
   response_time: number;
   body_read_time: number;
   deserialize_time: number;
+  decompress_time: number;
 }
 
 export interface NamespaceMetadata {
@@ -275,7 +276,7 @@ export class Namespace {
       compress: true,
     });
 
-    const serverTimingStr = response.headers.get("Server-Timing");
+    const serverTimingStr = response.headers["server-timing"];
     const serverTiming = serverTimingStr
       ? parseServerTiming(serverTimingStr)
       : {};
@@ -284,7 +285,7 @@ export class Namespace {
       results: response.body!,
       metrics: {
         approx_namespace_size: parseIntMetric(
-          response.headers.get("X-turbopuffer-Approx-Namespace-Size"),
+          response.headers["x-turbopuffer-approx-namespace-size"],
         ),
         cache_hit_ratio: parseFloatMetric(serverTiming["cache.hit_ratio"]),
         cache_temperature: serverTiming["cache.temperature"],
@@ -294,6 +295,7 @@ export class Namespace {
         ),
         response_time: response.request_timing.response_time,
         body_read_time: response.request_timing.body_read_time,
+        decompress_time: response.request_timing.decompress_time,
         deserialize_time: response.request_timing.deserialize_time,
       },
     };
@@ -337,10 +339,10 @@ export class Namespace {
     return {
       id: this.id,
       approx_count: parseInt(
-        response.headers.get("X-turbopuffer-Approx-Num-Vectors")!,
+        response.headers["x-turbopuffer-approx-num-vectors"]!,
       ),
-      dimensions: parseInt(response.headers.get("X-turbopuffer-Dimensions")!),
-      created_at: new Date(response.headers.get("X-turbopuffer-Created-At")!),
+      dimensions: parseInt(response.headers["x-turbopuffer-dimensions"]!),
+      created_at: new Date(response.headers["x-turbopuffer-created-at"]!),
     };
   }
 
