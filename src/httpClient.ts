@@ -175,10 +175,10 @@ class DefaultHTTPClient implements HTTPClient {
 
       if (!error && response.statusCode >= 400) {
         let message: string | undefined = undefined;
-        let { body_text } = await consumeResponseText(response);
+        const { body_text } = await consumeResponseText(response);
         if (response.headers["content-type"] === "application/json") {
           try {
-            const body = JSON.parse(body_text) as any;
+            const body = JSON.parse(body_text);
             if (body && body.status === "error") {
               message = body.error;
             } else {
@@ -218,7 +218,7 @@ class DefaultHTTPClient implements HTTPClient {
       };
     }
 
-    let { body_text, body_read_end, decompress_end } =
+    const { body_text, body_read_end, decompress_end } =
       await consumeResponseText(response);
 
     const json = JSON.parse(body_text);
@@ -303,16 +303,16 @@ async function consumeResponseText(response: Dispatcher.ResponseData): Promise<{
   decompress_end: number;
 }> {
   if (response.headers["content-encoding"] == "gzip") {
-    let body_buffer = await response.body.arrayBuffer();
-    let body_read_end = performance.now();
+    const body_buffer = await response.body.arrayBuffer();
+    const body_read_end = performance.now();
 
-    let gunzip_buffer = await gunzipAsync(body_buffer);
-    let body_text = gunzip_buffer.toString(); // is there a better way?
-    let decompress_end = performance.now();
+    const gunzip_buffer = await gunzipAsync(body_buffer);
+    const body_text = gunzip_buffer.toString(); // is there a better way?
+    const decompress_end = performance.now();
     return { body_text, body_read_end, decompress_end };
   } else {
-    let body_text = await response.body.text();
-    let body_read_end = performance.now();
+    const body_text = await response.body.text();
+    const body_read_end = performance.now();
     return { body_text, body_read_end, decompress_end: body_read_end };
   }
 }
