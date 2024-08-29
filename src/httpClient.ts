@@ -2,6 +2,10 @@ import type { Dispatcher } from "undici";
 import { fetch, Agent } from "undici";
 import pako from "pako";
 import { version } from "../package.json";
+import { gunzip } from "node:zlib";
+import { promisify } from "node:util";
+
+const gunzip_async = promisify(gunzip);
 
 export interface RequestParams {
   method: string;
@@ -170,26 +174,20 @@ class DefaultHTTPClient implements HTTPClient {
 
       if (!error && response.statusCode >= 400) {
         let message: string | undefined = undefined;
+        let { body_text } = await consumeResponseText(response);
         if (response.headers["content-type"] === "application/json") {
           try {
-            const body = (await response.body.json()) as any;
+            const body = JSON.parse(body_text) as any;
             if (body && body.status === "error") {
               message = body.error;
             } else {
-              message = JSON.stringify(body);
+              message = body_text;
             }
           } catch (_: unknown) {
             /* empty */
           }
         } else {
-          try {
-            const body = await response.body.text();
-            if (body) {
-              message = body;
-            }
-          } catch (_: unknown) {
-            /* empty */
-          }
+          message = body_text;
         }
         error = new TurbopufferError(
           message ?? `http error ${response.statusCode}`,
@@ -219,10 +217,7 @@ class DefaultHTTPClient implements HTTPClient {
       };
     }
 
-    // internally json() will read the full body, decode utf-8, and allocate a string,
-    // so splitting it up into text() and JSON.parse() has no performance impact
-    const body_text = await response.body.text();
-    const body_read_end = performance.now();
+    let { body_text, body_read_end } = await consumeResponseText(response);
 
     const json = JSON.parse(body_text);
     const deserialize_end = performance.now();
@@ -294,4 +289,22 @@ function convertHeadersType(
     }
   }
   return headers as Record<string, string>;
+}
+
+async function consumeResponseText(response: Dispatcher.ResponseData): Promise<{
+  body_text: string;
+  body_read_end: number;
+}> {
+  if (response.headers["content-encoding"] == "gzip") {
+    let body_buffer = await response.body.arrayBuffer();
+    let body_read_end = performance.now();
+
+    let gunzip_buffer = await gunzip_async(body_buffer);
+    let body_text = gunzip_buffer.toString(); // is there a better way?
+    return { body_text, body_read_end };
+  } else {
+    let body_text = await response.body.text();
+    let body_read_end = performance.now();
+    return { body_text, body_read_end };
+  }
 }
