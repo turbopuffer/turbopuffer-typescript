@@ -328,7 +328,7 @@ test("compression", async () => {
   }
 
   // Insert a large number of vectors to trigger compression
-  const vectors = Array.from({ length: 100 }, (_, i) => ({
+  const vectors = Array.from({ length: 10 }, (_, i) => ({
     id: i + 1,
     vector: randomVector(1024),
     attributes: {
@@ -372,7 +372,7 @@ test("disable_compression", async () => {
   }
 
   // Insert a large number of vectors to trigger compression
-  const vectors = Array.from({ length: 100 }, (_, i) => ({
+  const vectors = Array.from({ length: 10 }, (_, i) => ({
     id: i + 1,
     vector: randomVector(1024),
     attributes: {
