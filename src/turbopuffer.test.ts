@@ -179,6 +179,7 @@ test("sanity", async () => {
   expect(metrics.response_time).toBeGreaterThan(10);
   expect(metrics.body_read_time).toBeGreaterThan(0);
   expect(metrics.decompress_time).toEqual(0); // response was too small to compress
+  expect(metrics.compress_time).toBeGreaterThan(0);
   expect(metrics.deserialize_time).toBeGreaterThan(0);
 
   const results2 = await ns.query({
