@@ -124,12 +124,14 @@ export class Turbopuffer {
     connectTimeout = 10 * 1000, // timeout to establish a connection
     connectionIdleTimeout = 60 * 1000, // socket idle timeout in ms, default 1 minute
     warmConnections = 0, // number of connections to open initially when creating a new client
+    compression = true,
   }: {
     apiKey: string;
     baseUrl?: string;
     connectTimeout?: number;
     connectionIdleTimeout?: number;
     warmConnections?: number;
+    compression?: boolean;
   }) {
     this.http = createHTTPClient(
       baseUrl,
@@ -137,6 +139,7 @@ export class Turbopuffer {
       connectTimeout,
       connectionIdleTimeout,
       warmConnections,
+      compression,
     );
   }
 
@@ -339,10 +342,10 @@ export class Namespace {
     return {
       id: this.id,
       approx_count: parseInt(
-        response.headers["x-turbopuffer-approx-num-vectors"]!,
+        response.headers["x-turbopuffer-approx-num-vectors"],
       ),
-      dimensions: parseInt(response.headers["x-turbopuffer-dimensions"]!),
-      created_at: new Date(response.headers["x-turbopuffer-created-at"]!),
+      dimensions: parseInt(response.headers["x-turbopuffer-dimensions"]),
+      created_at: new Date(response.headers["x-turbopuffer-created-at"]),
     };
   }
 
@@ -435,8 +438,8 @@ function fromColumnar(cv: ColumnarVectors): Vector[] {
       vector: cv.vectors[i],
       attributes: cv.attributes
         ? Object.fromEntries(
-            attributeEntries.map(([key, values]) => [key, values[i]]),
-          )
+          attributeEntries.map(([key, values]) => [key, values[i]]),
+        )
         : undefined,
     };
   }
