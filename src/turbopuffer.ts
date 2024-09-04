@@ -72,6 +72,7 @@ export interface QueryMetrics {
   body_read_time: number;
   deserialize_time: number;
   decompress_time: number;
+  compress_time: number;
 }
 
 export interface NamespaceMetadata {
@@ -124,12 +125,14 @@ export class Turbopuffer {
     connectTimeout = 10 * 1000, // timeout to establish a connection
     connectionIdleTimeout = 60 * 1000, // socket idle timeout in ms, default 1 minute
     warmConnections = 0, // number of connections to open initially when creating a new client
+    compression = true,
   }: {
     apiKey: string;
     baseUrl?: string;
     connectTimeout?: number;
     connectionIdleTimeout?: number;
     warmConnections?: number;
+    compression?: boolean;
   }) {
     this.http = createHTTPClient(
       baseUrl,
@@ -137,6 +140,7 @@ export class Turbopuffer {
       connectTimeout,
       connectionIdleTimeout,
       warmConnections,
+      compression,
     );
   }
 
@@ -297,6 +301,7 @@ export class Namespace {
         body_read_time: response.request_timing.body_read_time,
         decompress_time: response.request_timing.decompress_time,
         deserialize_time: response.request_timing.deserialize_time,
+        compress_time: response.request_timing.compress_time,
       },
     };
   }
@@ -339,10 +344,10 @@ export class Namespace {
     return {
       id: this.id,
       approx_count: parseInt(
-        response.headers["x-turbopuffer-approx-num-vectors"]!,
+        response.headers["x-turbopuffer-approx-num-vectors"],
       ),
-      dimensions: parseInt(response.headers["x-turbopuffer-dimensions"]!),
-      created_at: new Date(response.headers["x-turbopuffer-created-at"]!),
+      dimensions: parseInt(response.headers["x-turbopuffer-dimensions"]),
+      created_at: new Date(response.headers["x-turbopuffer-created-at"]),
     };
   }
 

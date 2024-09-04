@@ -16,12 +16,13 @@ export interface RequestParams {
   retryable?: boolean;
 }
 
-export type RequestTiming = {
+export interface RequestTiming {
   response_time: number;
   body_read_time: number;
   decompress_time: number;
+  compress_time: number;
   deserialize_time: number;
-};
+}
 
 export type RequestResponse<T> = Promise<{
   body?: T;
@@ -48,6 +49,7 @@ export const createHTTPClient = (
   connectTimeout: number,
   idleTimeout: number,
   warmConnections: number,
+  compression: boolean,
 ) =>
   new DefaultHTTPClient(
     baseUrl,
@@ -55,6 +57,7 @@ export const createHTTPClient = (
     connectTimeout,
     idleTimeout,
     warmConnections,
+    compression,
   );
 
 class DefaultHTTPClient implements HTTPClient {
@@ -63,6 +66,7 @@ class DefaultHTTPClient implements HTTPClient {
   private origin: URL;
   private apiKey: string;
   readonly userAgent = `tpuf-typescript/${version}`;
+  private compression: boolean;
 
   constructor(
     baseUrl: string,
@@ -70,11 +74,13 @@ class DefaultHTTPClient implements HTTPClient {
     connectTimeout: number,
     idleTimeout: number,
     warmConnections: number,
+    compression: boolean,
   ) {
     this.baseUrl = baseUrl;
     this.origin = new URL(baseUrl);
     this.origin.pathname = "";
     this.apiKey = apiKey;
+    this.compression = compression;
 
     this.agent = new Agent({
       keepAliveTimeout: idleTimeout, // how long a socket can be idle for before it is closed
@@ -118,20 +124,26 @@ class DefaultHTTPClient implements HTTPClient {
 
     const headers: Record<string, string> = {
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      "Accept-Encoding": "gzip",
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       Authorization: `Bearer ${this.apiKey}`,
       // eslint-disable-next-line @typescript-eslint/naming-convention
       "User-Agent": this.userAgent,
     };
+
+    if (this.compression) {
+      headers["Accept-Encoding"] = "gzip";
+    }
+
     if (body) {
       headers["Content-Type"] = "application/json";
     }
 
+    let requestCompressionDuration;
     let requestBody: Uint8Array | string | null = null;
-    if (body && compress) {
+    if (body && compress && this.compression) {
       headers["Content-Encoding"] = "gzip";
+      const beforeRequestCompression = performance.now();
       requestBody = await gzipAsync(JSON.stringify(body));
+      requestCompressionDuration = performance.now() - beforeRequestCompression;
     } else if (body) {
       requestBody = JSON.stringify(body);
     }
@@ -152,7 +164,7 @@ class DefaultHTTPClient implements HTTPClient {
           method: method as Dispatcher.HttpMethod,
           headers,
           body: requestBody,
-        })!;
+        });
       } catch (e: unknown) {
         if (e instanceof Error) {
           if (e.cause instanceof Error) {
@@ -239,6 +251,7 @@ class DefaultHTTPClient implements HTTPClient {
         body_read_end,
         decompress_end,
         deserialize_end,
+        requestCompressionDuration,
       ),
     };
   }
@@ -272,10 +285,12 @@ function make_request_timing(
   body_read_end?: number,
   decompress_end?: number,
   deserialize_end?: number,
+  requestCompressionDuration?: number,
 ): RequestTiming {
   return {
     response_time: response_start - request_start,
     body_read_time: body_read_end ? body_read_end - response_start : 0,
+    compress_time: requestCompressionDuration ? requestCompressionDuration : 0,
     decompress_time:
       decompress_end && body_read_end ? decompress_end - body_read_end : 0,
     deserialize_time:
