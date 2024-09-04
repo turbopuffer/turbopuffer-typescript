@@ -72,6 +72,7 @@ export interface QueryMetrics {
   body_read_time: number;
   deserialize_time: number;
   decompress_time: number;
+  compress_time: number;
 }
 
 export interface NamespaceMetadata {
@@ -300,6 +301,7 @@ export class Namespace {
         body_read_time: response.request_timing.body_read_time,
         decompress_time: response.request_timing.decompress_time,
         deserialize_time: response.request_timing.deserialize_time,
+        compress_time: response.request_timing.compress_time,
       },
     };
   }

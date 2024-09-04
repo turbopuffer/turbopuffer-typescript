@@ -308,3 +308,92 @@ test("empty_namespace", async () => {
 
   await ns.export();
 });
+
+function randomVector(dims: number) {
+  return Array(dims)
+    .fill(0)
+    .map(() => Math.random());
+}
+
+test("compression", async () => {
+  const ns = tpuf.namespace(
+    "typescript_sdk_" + expect.getState().currentTestName,
+  );
+
+  try {
+    await ns.deleteAll();
+  } catch (_: unknown) {
+    /* empty */
+  }
+
+  // Insert a large number of vectors to trigger compression
+  const vectors = Array.from({ length: 100 }, (_, i) => ({
+    id: i + 1,
+    vector: randomVector(1024),
+    attributes: {
+      text: "b".repeat(1024),
+    },
+  }));
+
+  await ns.upsert({
+    vectors: vectors,
+    distance_metric: "cosine_distance",
+  });
+
+  const resultsWithMetrics = await ns.queryWithMetrics({
+    vector: randomVector(1024),
+    top_k: 10,
+    include_vectors: true,
+    include_attributes: true,
+  });
+
+  const metrics = resultsWithMetrics.metrics;
+  expect(metrics.compress_time).toBeGreaterThan(0);
+  expect(metrics.decompress_time).toBeGreaterThan(0); // Response should be compressed
+  expect(metrics.body_read_time).toBeGreaterThan(0);
+  expect(metrics.deserialize_time).toBeGreaterThan(0);
+});
+
+test("disable_compression", async () => {
+  const tpufNoCompression = new Turbopuffer({
+    apiKey: process.env.TURBOPUFFER_API_KEY!,
+    compression: false,
+  });
+
+  const ns = tpufNoCompression.namespace(
+    "typescript_sdk_" + expect.getState().currentTestName,
+  );
+
+  try {
+    await ns.deleteAll();
+  } catch (_: unknown) {
+    /* empty */
+  }
+
+  // Insert a large number of vectors to trigger compression
+  const vectors = Array.from({ length: 100 }, (_, i) => ({
+    id: i + 1,
+    vector: randomVector(1024),
+    attributes: {
+      text: "b".repeat(1024),
+    },
+  }));
+
+  await ns.upsert({
+    vectors: vectors,
+    distance_metric: "cosine_distance",
+  });
+
+  const resultsWithMetrics = await ns.queryWithMetrics({
+    vector: randomVector(1024),
+    top_k: 10,
+    include_vectors: true,
+    include_attributes: true,
+  });
+
+  const metrics = resultsWithMetrics.metrics;
+  expect(metrics.compress_time).toEqual(0);
+  expect(metrics.decompress_time).toEqual(0);
+  expect(metrics.body_read_time).toBeGreaterThan(0);
+  expect(metrics.deserialize_time).toBeGreaterThan(0);
+});
