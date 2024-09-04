@@ -440,8 +440,8 @@ function fromColumnar(cv: ColumnarVectors): Vector[] {
       vector: cv.vectors[i],
       attributes: cv.attributes
         ? Object.fromEntries(
-          attributeEntries.map(([key, values]) => [key, values[i]]),
-        )
+            attributeEntries.map(([key, values]) => [key, values[i]]),
+          )
         : undefined,
     };
   }
