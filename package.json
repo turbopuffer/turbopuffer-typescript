@@ -1,6 +1,6 @@
 {
   "name": "@turbopuffer/turbopuffer",
-  "version": "0.5.7",
+  "version": "0.5.8",
   "description": "Official Typescript API client library for turbopuffer.com",
   "scripts": {
     "build": "rm -rf dist && tsc",
