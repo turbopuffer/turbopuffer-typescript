@@ -141,9 +141,9 @@ class DefaultHTTPClient implements HTTPClient {
     let requestBody: Uint8Array | string | null = null;
     if (body && compress && this.compression) {
       headers["Content-Encoding"] = "gzip";
-      const beforeRequestCmpression = performance.now();
+      const beforeRequestCompression = performance.now();
       requestBody = await gzipAsync(JSON.stringify(body));
-      requestCompressionDuration = performance.now() - beforeRequestCmpression;
+      requestCompressionDuration = performance.now() - beforeRequestCompression;
     } else if (body) {
       requestBody = JSON.stringify(body);
     }
