@@ -15,7 +15,13 @@ export { TurbopufferError } from "./httpClient";
  * Note: At the moment, negative numbers aren't supported.
  */
 export type Id = string | number;
-export type AttributeType = null | string | number | string[] | number[];
+export type AttributeType =
+  | null
+  | string
+  | number
+  | string[]
+  | number[]
+  | boolean;
 export type Attributes = Record<string, AttributeType>;
 export type Schema = Record<
   string,
@@ -50,7 +56,7 @@ export type FilterOperator =
   | "And"
   | "Or";
 export type FilterConnective = "And" | "Or";
-export type FilterValue = Exclude<AttributeType, null>;
+export type FilterValue = AttributeType;
 export type FilterCondition = [string, FilterOperator, FilterValue];
 export type Filters = [FilterConnective, Filters[]] | FilterCondition;
 
@@ -440,8 +446,8 @@ function fromColumnar(cv: ColumnarVectors): Vector[] {
       vector: cv.vectors[i],
       attributes: cv.attributes
         ? Object.fromEntries(
-            attributeEntries.map(([key, values]) => [key, values[i]]),
-          )
+          attributeEntries.map(([key, values]) => [key, values[i]]),
+        )
         : undefined,
     };
   }
