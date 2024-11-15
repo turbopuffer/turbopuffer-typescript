@@ -149,6 +149,8 @@ test("sanity", async () => {
         attributes: {
           foo: "bar",
           numbers: [1, 2, 3],
+          maybeNull: null,
+          bool: true,
         },
       },
       {
@@ -157,6 +159,18 @@ test("sanity", async () => {
         attributes: {
           foo: "baz",
           numbers: [2, 3, 4],
+          maybeNull: null,
+          bool: true,
+        },
+      },
+      {
+        id: 3,
+        vector: [3, 4],
+        attributes: {
+          foo: "baz",
+          numbers: [17],
+          maybeNull: "oh boy!",
+          bool: true,
         },
       },
     ],
@@ -173,8 +187,8 @@ test("sanity", async () => {
   expect(results[1].id).toEqual(1);
 
   const metrics = resultsWithMetrics.metrics;
-  expect(metrics.approx_namespace_size).toEqual(2);
-  expect(metrics.exhaustive_search_count).toEqual(2);
+  expect(metrics.approx_namespace_size).toEqual(3);
+  expect(metrics.exhaustive_search_count).toEqual(3);
   expect(metrics.processing_time).toBeGreaterThan(10);
   expect(metrics.response_time).toBeGreaterThan(10);
   expect(metrics.body_read_time).toBeGreaterThan(0);
@@ -201,6 +215,9 @@ test("sanity", async () => {
             ["numbers", "In", 4],
           ],
         ],
+        ["foo", "NotEq", null],
+        ["maybeNull", "Eq", null],
+        ["bool", "Eq", true],
       ],
     ],
   });
@@ -228,10 +245,10 @@ test("sanity", async () => {
   expect(results[0].id).toEqual(2);
 
   let num = await ns.approxNumVectors();
-  expect(num).toEqual(1);
+  expect(num).toEqual(2);
 
   let metadata = await ns.metadata();
-  expect(metadata.approx_count).toEqual(1);
+  expect(metadata.approx_count).toEqual(2);
   expect(metadata.dimensions).toEqual(2);
 
   // Check that `metadata.created_at` data is a valid Date for today, but don't bother checking the
