@@ -140,7 +140,7 @@ export class Turbopuffer {
     return (
       await this.http.doRequest<NamespacesListResult>({
         method: "GET",
-        path: "/v1/vectors",
+        path: "/v1/namespaces",
         query: {
           cursor,
           page_size: page_size ? page_size.toString() : undefined,
@@ -187,7 +187,7 @@ export class Namespace {
       const batch = vectors.slice(i, i + batchSize);
       await this.client.http.doRequest<{ status: string }>({
         method: "POST",
-        path: `/v1/vectors/${this.id}`,
+        path: `/v1/namespaces/${this.id}`,
         compress: batch.length > 10,
         body: {
           upserts: batch,
@@ -204,7 +204,7 @@ export class Namespace {
   async delete({ ids }: { ids: Id[] }): Promise<void> {
     await this.client.http.doRequest<{ status: string }>({
       method: "POST",
-      path: `/v1/vectors/${this.id}`,
+      path: `/v1/namespaces/${this.id}`,
       compress: ids.length > 500,
       body: {
         ids: ids,
@@ -251,7 +251,7 @@ export class Namespace {
   }> {
     let response = await this.client.http.doRequest<QueryResults>({
       method: "POST",
-      path: `/v1/vectors/${this.id}/query`,
+      path: `/v1/namespaces/${this.id}/query`,
       body: params,
       retryable: true,
     });
@@ -289,7 +289,7 @@ export class Namespace {
     type ResponseType = ColumnarVectors & { next_cursor: string };
     const response = await this.client.http.doRequest<ResponseType>({
       method: "GET",
-      path: `/v1/vectors/${this.id}`,
+      path: `/v1/namespaces/${this.id}`,
       query: { cursor: params?.cursor },
       retryable: true,
     });
@@ -310,7 +310,7 @@ export class Namespace {
   async metadata(): Promise<NamespaceMetadata> {
     const response = await this.client.http.doRequest<NamespaceMetadata>({
       method: "HEAD",
-      path: `/v1/vectors/${this.id}`,
+      path: `/v1/namespaces/${this.id}`,
       retryable: true,
     });
 
@@ -331,7 +331,7 @@ export class Namespace {
   async deleteAll(): Promise<void> {
     await this.client.http.doRequest<{ status: string }>({
       method: "DELETE",
-      path: `/v1/vectors/${this.id}`,
+      path: `/v1/namespaces/${this.id}`,
       retryable: true,
     });
   }
@@ -354,7 +354,7 @@ export class Namespace {
     return (
       await this.client.http.doRequest<RecallMeasurement>({
         method: "POST",
-        path: `/v1/vectors/${this.id}/_debug/recall`,
+        path: `/v1/namespaces/${this.id}/_debug/recall`,
         compress: queries && queries.length > 10,
         body: {
           num,
