@@ -29,6 +29,7 @@ export type Schema = Record<
     type?: string;
     filterable?: boolean;
     bm25?: boolean | Record<string, string | boolean>;
+    full_text_search?: boolean | Record<string, string | boolean>;
   }
 >;
 export type RankBySingleField = [string, "BM25", string];
@@ -446,8 +447,8 @@ function fromColumnar(cv: ColumnarVectors): Vector[] {
       vector: cv.vectors[i],
       attributes: cv.attributes
         ? Object.fromEntries(
-          attributeEntries.map(([key, values]) => [key, values[i]]),
-        )
+            attributeEntries.map(([key, values]) => [key, values[i]]),
+          )
         : undefined,
     };
   }
