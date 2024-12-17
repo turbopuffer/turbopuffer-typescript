@@ -83,6 +83,79 @@ test("bm25_with_custom_schema_and_sum_query", async () => {
   expect(results[2].id).toEqual(3);
 });
 
+test("order_by_attribute", async () => {
+  const ns = tpuf.namespace(
+    "typescript_sdk_" + expect.getState().currentTestName,
+  );
+
+  try {
+    await ns.deleteAll();
+  } catch (_: unknown) {
+    /* empty */
+  }
+
+  await ns.upsert({
+    vectors: [
+      {
+        id: 1,
+        vector: [0.1, 0.1],
+        attributes: {
+          a: "5",
+        },
+      },
+      {
+        id: 2,
+        vector: [0.2, 0.2],
+        attributes: {
+          a: "4",
+        },
+      },
+      {
+        id: 3,
+        vector: [0.3, 0.3],
+        attributes: {
+          a: "3",
+        },
+      },
+      {
+        id: 4,
+        vector: [0.4, 0.4],
+        attributes: {
+          a: "2",
+        },
+      },
+      {
+        id: 5,
+        vector: [0.5, 0.5],
+        attributes: {
+          a: "1",
+        },
+      },
+    ],
+    distance_metric: "euclidean_squared",
+  });
+
+  const results_asc = await ns.query({
+    rank_by: ["a", "asc"],
+  });
+  expect(results_asc.length).toEqual(5);
+  expect(results_asc[0].id).toEqual(5);
+  expect(results_asc[1].id).toEqual(4);
+  expect(results_asc[2].id).toEqual(3);
+  expect(results_asc[3].id).toEqual(2);
+  expect(results_asc[4].id).toEqual(1);
+
+  const results_desc = await ns.query({
+    rank_by: ["a", "desc"],
+  });
+  expect(results_desc.length).toEqual(5);
+  expect(results_desc[0].id).toEqual(1);
+  expect(results_desc[1].id).toEqual(2);
+  expect(results_desc[2].id).toEqual(3);
+  expect(results_desc[3].id).toEqual(4);
+  expect(results_desc[4].id).toEqual(5);
+});
+
 test("bm25_with_default_schema_and_simple_query", async () => {
   const ns = tpuf.namespace(
     "typescript_sdk_" + expect.getState().currentTestName,

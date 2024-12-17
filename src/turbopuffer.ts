@@ -32,7 +32,11 @@ export type Schema = Record<
   }
 >;
 export type RankBySingleField = [string, "BM25", string];
-export type RankBy = RankBySingleField | ["Sum", RankBySingleField[]];
+export type OrderByAttribute = [string, "asc" | "desc"];
+export type RankBy =
+  | RankBySingleField
+  | ["Sum", RankBySingleField[]]
+  | OrderByAttribute;
 
 export interface Vector {
   id: Id;
@@ -446,8 +450,8 @@ function fromColumnar(cv: ColumnarVectors): Vector[] {
       vector: cv.vectors[i],
       attributes: cv.attributes
         ? Object.fromEntries(
-          attributeEntries.map(([key, values]) => [key, values[i]]),
-        )
+            attributeEntries.map(([key, values]) => [key, values[i]]),
+          )
         : undefined,
     };
   }
