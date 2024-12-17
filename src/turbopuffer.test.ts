@@ -128,7 +128,7 @@ test("sanity", async () => {
   }
   expect(gotError).toStrictEqual(
     new TurbopufferError(
-      "💔 Resource not found; the requested namespace is empty.",
+      "🤷 namespace 'typescript_sdk_sanity' was not found",
       { status: 404 },
     ),
   );
