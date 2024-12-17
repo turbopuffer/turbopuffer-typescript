@@ -4,6 +4,132 @@ const tpuf = new Turbopuffer({
   apiKey: process.env.TURBOPUFFER_API_KEY!,
 });
 
+test("bm25_with_custom_schema_and_sum_query", async () => {
+  const ns = tpuf.namespace(
+    "typescript_sdk_" + expect.getState().currentTestName,
+  );
+
+  try {
+    await ns.deleteAll();
+  } catch (_: unknown) {
+    /* empty */
+  }
+
+  const schema = {
+    text: {
+      type: "?string",
+      bm25: {
+        language: "english",
+        stemming: true,
+        case_sensitive: false,
+        remove_stopwords: true,
+      },
+    },
+  };
+
+  await ns.upsert({
+    vectors: [
+      {
+        id: 1,
+        vector: [0.1, 0.1],
+        attributes: {
+          text: "Walruses are large marine mammals with long tusks and whiskers",
+        },
+      },
+      {
+        id: 2,
+        vector: [0.2, 0.2],
+        attributes: { text: "They primarily inhabit the cold Arctic regions" },
+      },
+      {
+        id: 3,
+        vector: [0.3, 0.3],
+        attributes: {
+          text: "Walruses use their tusks to help haul themselves onto ice",
+        },
+      },
+      {
+        id: 4,
+        vector: [0.4, 0.4],
+        attributes: {
+          text: "Their diet mainly consists of mollusks and other sea creatures",
+        },
+      },
+      {
+        id: 5,
+        vector: [0.5, 0.5],
+        attributes: {
+          text: "Walrus populations are affected by climate change and melting ice",
+        },
+      },
+    ],
+    distance_metric: "cosine_distance",
+    schema: schema,
+  });
+
+  const results = await ns.query({
+    rank_by: [
+      "Sum",
+      [
+        ["text", "BM25", "large tusk"],
+        ["text", "BM25", "mollusk diet"],
+      ],
+    ],
+  });
+
+  expect(results.length).toEqual(3);
+  expect(results[0].id).toEqual(4);
+  expect(results[1].id).toEqual(1);
+  expect(results[2].id).toEqual(3);
+});
+
+test("bm25_with_default_schema_and_simple_query", async () => {
+  const ns = tpuf.namespace(
+    "typescript_sdk_" + expect.getState().currentTestName,
+  );
+
+  try {
+    await ns.deleteAll();
+  } catch (_: unknown) {
+    /* empty */
+  }
+
+  const schema = {
+    text: {
+      type: "?string",
+      bm25: true,
+    },
+  };
+
+  await ns.upsert({
+    vectors: [
+      {
+        id: 1,
+        vector: [0.1, 0.1],
+        attributes: {
+          text: "Walruses can produce a variety of funny sounds, including whistles, grunts, and bell-like noises.",
+        },
+      },
+      {
+        id: 2,
+        vector: [0.2, 0.2],
+        attributes: {
+          text: "They sometimes use their tusks as a tool to break through ice or to scratch their bodies.",
+        },
+      },
+    ],
+    distance_metric: "cosine_distance",
+    schema: schema,
+  });
+
+  const results = await ns.query({
+    rank_by: ["text", "BM25", "scratch"],
+  });
+
+  expect(results.length).toEqual(1);
+  expect(results[0].id).toEqual(2);
+});
+
 test("sanity", async () => {
   const ns = tpuf.namespace(
     "typescript_sdk_" + expect.getState().currentTestName,
@@ -23,6 +149,8 @@ test("sanity", async () => {
         attributes: {
           foo: "bar",
           numbers: [1, 2, 3],
+          maybeNull: null,
+          bool: true,
         },
       },
       {
@@ -31,6 +159,18 @@ test("sanity", async () => {
         attributes: {
           foo: "baz",
           numbers: [2, 3, 4],
+          maybeNull: null,
+          bool: true,
+        },
+      },
+      {
+        id: 3,
+        vector: [3, 4],
+        attributes: {
+          foo: "baz",
+          numbers: [17],
+          maybeNull: "oh boy!",
+          bool: true,
         },
       },
     ],
@@ -47,11 +187,14 @@ test("sanity", async () => {
   expect(results[1].id).toEqual(1);
 
   const metrics = resultsWithMetrics.metrics;
-  expect(metrics.approx_namespace_size).toEqual(2);
-  expect(metrics.exhaustive_search_count).toEqual(2);
+  expect(metrics.approx_namespace_size).toEqual(3);
+  expect(metrics.exhaustive_search_count).toEqual(3);
   expect(metrics.processing_time).toBeGreaterThan(10);
   expect(metrics.response_time).toBeGreaterThan(10);
   expect(metrics.body_read_time).toBeGreaterThan(0);
+  expect(metrics.decompress_time).toEqual(0); // response was too small to compress
+  expect(metrics.compress_time).toBeGreaterThan(0);
+  expect(metrics.deserialize_time).toBeGreaterThan(0);
 
   const results2 = await ns.query({
     vector: [1, 1],
@@ -72,6 +215,9 @@ test("sanity", async () => {
             ["numbers", "In", 4],
           ],
         ],
+        ["foo", "NotEq", null],
+        ["maybeNull", "Eq", null],
+        ["bool", "Eq", true],
       ],
     ],
   });
@@ -99,10 +245,10 @@ test("sanity", async () => {
   expect(results[0].id).toEqual(2);
 
   let num = await ns.approxNumVectors();
-  expect(num).toEqual(1);
+  expect(num).toEqual(2);
 
   let metadata = await ns.metadata();
-  expect(metadata.approx_count).toEqual(1);
+  expect(metadata.approx_count).toEqual(2);
   expect(metadata.dimensions).toEqual(2);
 
   // Check that `metadata.created_at` data is a valid Date for today, but don't bother checking the
@@ -127,10 +273,9 @@ test("sanity", async () => {
     gotError = e;
   }
   expect(gotError).toStrictEqual(
-    new TurbopufferError(
-      "🤷 namespace 'typescript_sdk_sanity' was not found",
-      { status: 404 },
-    ),
+    new TurbopufferError("🤷 namespace 'typescript_sdk_sanity' was not found", {
+      status: 404,
+    }),
   );
 });
 
@@ -156,4 +301,117 @@ test("connection errors are wrapped", async () => {
   expect(gotError).toStrictEqual(
     new TurbopufferError("fetch failed: Connect Timeout Error", {}),
   );
+});
+
+test("empty_namespace", async () => {
+  const tpuf = new Turbopuffer({
+    apiKey: process.env.TURBOPUFFER_API_KEY!,
+  });
+
+  const ns = tpuf.namespace(
+    "typescript_sdk_" + expect.getState().currentTestName,
+  );
+
+  await ns.upsert({
+    vectors: [
+      {
+        id: 1,
+        vector: [0.1, 0.1],
+      },
+    ],
+    distance_metric: "cosine_distance",
+  });
+
+  await ns.delete({ ids: [1] });
+
+  await ns.export();
+});
+
+function randomVector(dims: number) {
+  return Array(dims)
+    .fill(0)
+    .map(() => Math.random());
+}
+
+test("compression", async () => {
+  const ns = tpuf.namespace(
+    "typescript_sdk_" + expect.getState().currentTestName,
+  );
+
+  try {
+    await ns.deleteAll();
+  } catch (_: unknown) {
+    /* empty */
+  }
+
+  // Insert a large number of vectors to trigger compression
+  const vectors = Array.from({ length: 10 }, (_, i) => ({
+    id: i + 1,
+    vector: randomVector(1024),
+    attributes: {
+      text: "b".repeat(1024),
+    },
+  }));
+
+  await ns.upsert({
+    vectors: vectors,
+    distance_metric: "cosine_distance",
+  });
+
+  const resultsWithMetrics = await ns.queryWithMetrics({
+    vector: randomVector(1024),
+    top_k: 10,
+    include_vectors: true,
+    include_attributes: true,
+  });
+
+  const metrics = resultsWithMetrics.metrics;
+  expect(metrics.compress_time).toBeGreaterThan(0);
+  expect(metrics.decompress_time).toBeGreaterThan(0); // Response should be compressed
+  expect(metrics.body_read_time).toBeGreaterThan(0);
+  expect(metrics.deserialize_time).toBeGreaterThan(0);
+});
+
+test("disable_compression", async () => {
+  const tpufNoCompression = new Turbopuffer({
+    apiKey: process.env.TURBOPUFFER_API_KEY!,
+    compression: false,
+  });
+
+  const ns = tpufNoCompression.namespace(
+    "typescript_sdk_" + expect.getState().currentTestName,
+  );
+
+  try {
+    await ns.deleteAll();
+  } catch (_: unknown) {
+    /* empty */
+  }
+
+  // Insert a large number of vectors to trigger compression
+  const vectors = Array.from({ length: 10 }, (_, i) => ({
+    id: i + 1,
+    vector: randomVector(1024),
+    attributes: {
+      text: "b".repeat(1024),
+    },
+  }));
+
+  await ns.upsert({
+    vectors: vectors,
+    distance_metric: "cosine_distance",
+  });
+
+  const resultsWithMetrics = await ns.queryWithMetrics({
+    vector: randomVector(1024),
+    top_k: 10,
+    include_vectors: true,
+    include_attributes: true,
+  });
+
+  const metrics = resultsWithMetrics.metrics;
+  expect(metrics.compress_time).toEqual(0);
+  expect(metrics.decompress_time).toEqual(0);
+  expect(metrics.body_read_time).toBeGreaterThan(0);
+  expect(metrics.deserialize_time).toBeGreaterThan(0);
 });

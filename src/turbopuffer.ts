@@ -15,8 +15,25 @@ export { TurbopufferError } from "./httpClient";
  * Note: At the moment, negative numbers aren't supported.
  */
 export type Id = string | number;
-export type AttributeType = null | string | number | string[] | number[];
+export type AttributeType =
+  | null
+  | string
+  | number
+  | string[]
+  | number[]
+  | boolean;
 export type Attributes = Record<string, AttributeType>;
+export type Schema = Record<
+  string,
+  {
+    type?: string;
+    filterable?: boolean;
+    bm25?: boolean | Record<string, string | boolean>;
+  }
+>;
+export type RankBySingleField = [string, "BM25", string];
+export type RankBy = RankBySingleField | ["Sum", RankBySingleField[]];
+
 export interface Vector {
   id: Id;
   vector?: number[];
@@ -39,7 +56,7 @@ export type FilterOperator =
   | "And"
   | "Or";
 export type FilterConnective = "And" | "Or";
-export type FilterValue = Exclude<AttributeType, null>;
+export type FilterValue = AttributeType;
 export type FilterCondition = [string, FilterOperator, FilterValue];
 export type Filters = [FilterConnective, Filters[]] | FilterCondition;
 
@@ -48,9 +65,10 @@ export type QueryResults = {
   vector?: number[];
   attributes?: Attributes;
   dist?: number;
+  rank_by?: RankBy;
 }[];
 
-export type QueryMetrics = {
+export interface QueryMetrics {
   approx_namespace_size: number;
   cache_hit_ratio: number;
   cache_temperature: string;
@@ -58,7 +76,10 @@ export type QueryMetrics = {
   exhaustive_search_count: number;
   response_time: number;
   body_read_time: number;
-};
+  deserialize_time: number;
+  decompress_time: number;
+  compress_time: number;
+}
 
 export interface NamespaceMetadata {
   id: string;
@@ -77,15 +98,15 @@ export interface RecallMeasurement {
 }
 
 function parseServerTiming(value: string): Record<string, string> {
-  let output: Record<string, string> = {};
+  const output: Record<string, string> = {};
   const sections = value.split(", ");
-  for (let section of sections) {
-    let tokens = section.split(";");
-    let base_key = tokens.shift();
-    for (let token of tokens) {
-      let components = token.split("=");
-      let key = base_key + "." + components[0];
-      let value = components[1];
+  for (const section of sections) {
+    const tokens = section.split(";");
+    const base_key = tokens.shift();
+    for (const token of tokens) {
+      const components = token.split("=");
+      const key = base_key + "." + components[0];
+      const value = components[1];
       output[key] = value;
     }
   }
@@ -110,12 +131,14 @@ export class Turbopuffer {
     connectTimeout = 10 * 1000, // timeout to establish a connection
     connectionIdleTimeout = 60 * 1000, // socket idle timeout in ms, default 1 minute
     warmConnections = 0, // number of connections to open initially when creating a new client
+    compression = true,
   }: {
     apiKey: string;
     baseUrl?: string;
     connectTimeout?: number;
     connectionIdleTimeout?: number;
     warmConnections?: number;
+    compression?: boolean;
   }) {
     this.http = createHTTPClient(
       baseUrl,
@@ -123,6 +146,7 @@ export class Turbopuffer {
       connectTimeout,
       connectionIdleTimeout,
       warmConnections,
+      compression,
     );
   }
 
@@ -177,10 +201,12 @@ export class Namespace {
   async upsert({
     vectors,
     distance_metric,
+    schema,
     batchSize = 10000,
   }: {
     vectors: Vector[];
     distance_metric: DistanceMetric;
+    schema?: Schema;
     batchSize?: number;
   }): Promise<void> {
     for (let i = 0; i < vectors.length; i += batchSize) {
@@ -192,6 +218,7 @@ export class Namespace {
         body: {
           upserts: batch,
           distance_metric,
+          schema,
         },
         retryable: true, // Upserts are idempotent
       });
@@ -227,8 +254,9 @@ export class Namespace {
     include_vectors?: boolean;
     include_attributes?: boolean | string[];
     filters?: Filters;
+    rank_by?: RankBy;
   }): Promise<QueryResults> {
-    let resultsWithMetrics = await this.queryWithMetrics(params);
+    const resultsWithMetrics = await this.queryWithMetrics(params);
     return resultsWithMetrics.results;
   }
 
@@ -245,18 +273,20 @@ export class Namespace {
     include_vectors?: boolean;
     include_attributes?: boolean | string[];
     filters?: Filters;
+    rank_by?: RankBy;
   }): Promise<{
     results: QueryResults;
     metrics: QueryMetrics;
   }> {
-    let response = await this.client.http.doRequest<QueryResults>({
+    const response = await this.client.http.doRequest<QueryResults>({
       method: "POST",
       path: `/v1/namespaces/${this.id}/query`,
       body: params,
       retryable: true,
+      compress: true,
     });
 
-    const serverTimingStr = response.headers.get("Server-Timing");
+    const serverTimingStr = response.headers["server-timing"];
     const serverTiming = serverTimingStr
       ? parseServerTiming(serverTimingStr)
       : {};
@@ -265,7 +295,7 @@ export class Namespace {
       results: response.body!,
       metrics: {
         approx_namespace_size: parseIntMetric(
-          response.headers.get("X-turbopuffer-Approx-Namespace-Size"),
+          response.headers["x-turbopuffer-approx-namespace-size"],
         ),
         cache_hit_ratio: parseFloatMetric(serverTiming["cache.hit_ratio"]),
         cache_temperature: serverTiming["cache.temperature"],
@@ -275,6 +305,9 @@ export class Namespace {
         ),
         response_time: response.request_timing.response_time,
         body_read_time: response.request_timing.body_read_time,
+        decompress_time: response.request_timing.decompress_time,
+        deserialize_time: response.request_timing.deserialize_time,
+        compress_time: response.request_timing.compress_time,
       },
     };
   }
@@ -317,10 +350,10 @@ export class Namespace {
     return {
       id: this.id,
       approx_count: parseInt(
-        response.headers.get("X-turbopuffer-Approx-Num-Vectors")!,
+        response.headers["x-turbopuffer-approx-num-vectors"],
       ),
-      dimensions: parseInt(response.headers.get("X-turbopuffer-Dimensions")!),
-      created_at: new Date(response.headers.get("X-turbopuffer-Created-At")!),
+      dimensions: parseInt(response.headers["x-turbopuffer-dimensions"]),
+      created_at: new Date(response.headers["x-turbopuffer-created-at"]),
     };
   }
 
@@ -405,16 +438,16 @@ function toColumnar(vectors: Vector[]): ColumnarVectors {
 }
 
 function fromColumnar(cv: ColumnarVectors): Vector[] {
-  const res = new Array<Vector>(cv.ids.length);
+  const res = new Array<Vector>(cv.ids?.length);
   const attributeEntries = Object.entries(cv.attributes ?? {});
-  for (let i = 0; i < cv.ids.length; i++) {
+  for (let i = 0; i < cv.ids?.length; i++) {
     res[i] = {
       id: cv.ids[i],
       vector: cv.vectors[i],
       attributes: cv.attributes
         ? Object.fromEntries(
-            attributeEntries.map(([key, values]) => [key, values[i]]),
-          )
+          attributeEntries.map(([key, values]) => [key, values[i]]),
+        )
         : undefined,
     };
   }

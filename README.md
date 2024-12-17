@@ -59,6 +59,7 @@ npm run test
 
 To publish a new version,
 
-```bash
-npm publish --access public
-```
+1. Bump version in `package.json`
+2. `npm install` to update `package-lock.json`
+3. `npm publish --access public`
+4. `git tag vX.Y.Z`
