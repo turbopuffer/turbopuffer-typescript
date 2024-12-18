@@ -29,6 +29,7 @@ export type Schema = Record<
     type?: string;
     filterable?: boolean;
     bm25?: boolean | Record<string, string | boolean>;
+    full_text_search?: boolean | Record<string, string | boolean>;
   }
 >;
 export type RankBySingleField = [string, "BM25", string];
