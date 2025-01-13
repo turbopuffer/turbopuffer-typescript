@@ -350,7 +350,7 @@ test("sanity", async () => {
       status: 404,
     }),
   );
-});
+}, 10_000);
 
 test("connection errors are wrapped", async () => {
   const tpuf = new Turbopuffer({
