@@ -38,6 +38,9 @@ export type RankBy =
   | RankBySingleField
   | ["Sum", RankBySingleField[]]
   | OrderByAttribute;
+export interface Consistency {
+  level: "strong" | "eventual"
+}
 
 export interface Vector {
   id: Id;
@@ -260,6 +263,7 @@ export class Namespace {
     include_attributes?: boolean | string[];
     filters?: Filters;
     rank_by?: RankBy;
+    consistency?: Consistency;
   }): Promise<QueryResults> {
     const resultsWithMetrics = await this.queryWithMetrics(params);
     return resultsWithMetrics.results;
@@ -279,6 +283,7 @@ export class Namespace {
     include_attributes?: boolean | string[];
     filters?: Filters;
     rank_by?: RankBy;
+    consistency?: Consistency;
   }): Promise<{
     results: QueryResults;
     metrics: QueryMetrics;
