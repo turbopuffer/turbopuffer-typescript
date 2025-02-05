@@ -63,3 +63,4 @@ To publish a new version,
 2. `npm install` to update `package-lock.json`
 3. `npm publish --access public`
 4. `git tag vX.Y.Z`
+5. `git push origin vX.Y.Z`
