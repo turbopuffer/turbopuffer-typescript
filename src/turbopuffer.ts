@@ -23,13 +23,19 @@ export type AttributeType =
   | number[]
   | boolean;
 export type Attributes = Record<string, AttributeType>;
+export interface FTSParams {
+  language: string;
+  stemming: boolean;
+  remove_stopwords: boolean;
+  case_sensitive: boolean;
+}
 export type Schema = Record<
   string,
   {
     type?: string;
     filterable?: boolean;
-    bm25?: boolean | Record<string, string | boolean>;
-    full_text_search?: boolean | Record<string, string | boolean>;
+    bm25?: boolean | Partial<FTSParams>;
+    full_text_search?: boolean | Partial<FTSParams>;
   }
 >;
 export type RankBySingleField = [string, "BM25", string];
@@ -127,6 +133,18 @@ function parseIntMetric(value: string | null): number {
 
 function parseFloatMetric(value: string | null): number {
   return value ? parseFloat(value) : 0;
+}
+
+function pick<
+  T extends object, K extends keyof T
+>(obj: T, keys: K[]): Pick<T, K> {
+  const result: Partial<Pick<T, K>> = {};
+  for (const key of keys) {
+    if (key in obj) {
+      result[key] = obj[key];
+    }
+  }
+  return result as Pick<T, K>;
 }
 
 /* Base Client */
@@ -410,6 +428,35 @@ export class Namespace {
         retryable: true,
       })
     ).body!;
+  }
+
+  /**
+   * Returns the current schema for the namespace.
+   * See: https://turbopuffer.com/docs/schema
+   */
+  async schema(): Promise<Record<string, Schema>> {
+    const res = (await this.client.http.doRequest({
+      method: "GET",
+      path: `/v1/namespaces/${this.id}/schema`,
+      retryable: true,
+    })).body!;
+
+    for (const value of Object.values(res)) {
+      const val = value as Schema[string];
+      if (
+        typeof val.full_text_search === 'object' &&
+        val.full_text_search !== null
+      ) {
+        val.full_text_search = pick(val.full_text_search, [
+          'language',
+          'stemming',
+          'remove_stopwords',
+          'case_sensitive'
+        ]);
+      }
+    }
+
+    return res as Record<string, Schema>;
   }
 }
 
