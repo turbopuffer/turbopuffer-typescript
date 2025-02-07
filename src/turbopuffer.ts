@@ -32,6 +32,8 @@ export interface FTSParams {
   case_sensitive: boolean;
   tokenizer: string;
 }
+// TODO: index signature is a better fit here imo.
+// also look into eslint config to allow for usage of index signatures
 export type Schema = Record<
   string,
   {
@@ -425,12 +427,12 @@ export class Namespace {
    * Returns the current schema for the namespace.
    * See: https://turbopuffer.com/docs/schema
    */
-  async schema(): Promise<Record<string, Schema>> {
-    return (await this.client.http.doRequest({
+  async schema(): Promise<Schema> {
+    return (await this.client.http.doRequest<Schema>({
       method: "GET",
       path: `/v1/namespaces/${this.id}/schema`,
       retryable: true,
-    })).body! as Record<string, Schema>;
+    })).body!;
   }
 }
 
