@@ -24,10 +24,13 @@ export type AttributeType =
   | boolean;
 export type Attributes = Record<string, AttributeType>;
 export interface FTSParams {
+  k1: number;
+  b: number;
   language: string;
   stemming: boolean;
   remove_stopwords: boolean;
   case_sensitive: boolean;
+  tokenizer: string;
 }
 export type Schema = Record<
   string,
@@ -133,18 +136,6 @@ function parseIntMetric(value: string | null): number {
 
 function parseFloatMetric(value: string | null): number {
   return value ? parseFloat(value) : 0;
-}
-
-function pick<
-  T extends object, K extends keyof T
->(obj: T, keys: K[]): Pick<T, K> {
-  const result: Partial<Pick<T, K>> = {};
-  for (const key of keys) {
-    if (key in obj) {
-      result[key] = obj[key];
-    }
-  }
-  return result as Pick<T, K>;
 }
 
 /* Base Client */
@@ -435,28 +426,11 @@ export class Namespace {
    * See: https://turbopuffer.com/docs/schema
    */
   async schema(): Promise<Record<string, Schema>> {
-    const res = (await this.client.http.doRequest({
+    return (await this.client.http.doRequest({
       method: "GET",
       path: `/v1/namespaces/${this.id}/schema`,
       retryable: true,
-    })).body!;
-
-    for (const value of Object.values(res)) {
-      const val = value as Schema[string];
-      if (
-        typeof val.full_text_search === 'object' &&
-        val.full_text_search !== null
-      ) {
-        val.full_text_search = pick(val.full_text_search, [
-          'language',
-          'stemming',
-          'remove_stopwords',
-          'case_sensitive'
-        ]);
-      }
-    }
-
-    return res as Record<string, Schema>;
+    })).body! as Record<string, Schema>;
   }
 }
 

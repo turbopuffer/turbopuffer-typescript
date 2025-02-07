@@ -287,10 +287,13 @@ test("schema", async () => {
       filterable: false,
       bm25: null,
       full_text_search: {
+        k1: 1.2,
+        b: 0.75,
         language: 'english',
         stemming: true,
         remove_stopwords: true,
-        case_sensitive: false
+        case_sensitive: false,
+        tokenizer: 'Word',
       }
     },
     tags: {
@@ -298,10 +301,13 @@ test("schema", async () => {
       filterable: false,
       bm25: null,
       full_text_search: {
+        k1: 1.2,
+        b: 0.75,
         language: 'english',
         stemming: false,
         remove_stopwords: false,
-        case_sensitive: true
+        case_sensitive: true,
+        tokenizer: 'Word',
       }
     },
     private: {
