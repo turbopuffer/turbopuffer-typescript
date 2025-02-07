@@ -203,6 +203,122 @@ test("bm25_with_default_schema_and_simple_query", async () => {
   expect(results[0].id).toEqual(2);
 });
 
+test("schema", async () => {
+  const ns = tpuf.namespace(
+    "typescript_sdk_" + expect.getState().currentTestName,
+  );
+
+  try {
+    await ns.deleteAll();
+  } catch (_: unknown) {
+    /* empty */
+  }
+
+  await ns.upsert({
+    vectors: [
+      {
+        id: 1,
+        vector: [0.1, 0.1],
+        attributes: {
+          title: "one",
+          private: true,
+          tags: ["a", "b"],
+        },
+      },
+      {
+        id: 2,
+        vector: [0.2, 0.2],
+        attributes: {
+          title: null,
+          private: null,
+          tags: ["b", "d"],
+        },
+      },
+      {
+        id: 3,
+        vector: [0.3, 0.3],
+        attributes: {
+          title: "three",
+          private: false,
+          "tags": [],
+        },
+      },
+      {
+        id: 4,
+        vector: [0.4, 0.4],
+        attributes: {
+          title: "four",
+          private: true,
+          tags: ["c"],
+        },
+      },
+    ],
+    distance_metric: "cosine_distance",
+    schema: {
+      title: {
+        type: "string",
+        full_text_search: {
+          stemming: true,
+          remove_stopwords: true,
+          case_sensitive: false
+        }
+      },
+      tags: {
+        type: "[]string",
+        full_text_search: {
+          stemming: false,
+          remove_stopwords: false,
+          case_sensitive: true
+        }
+      }
+    }
+  });
+
+  const schema = await ns.schema();
+  expect(schema).toEqual({
+    id: {
+      type: 'uint',
+      filterable: null,
+      bm25: null,
+      full_text_search: null
+    },
+    title: {
+      type: 'string',
+      filterable: false,
+      bm25: null,
+      full_text_search: {
+        k1: 1.2,
+        b: 0.75,
+        language: 'english',
+        stemming: true,
+        remove_stopwords: true,
+        case_sensitive: false,
+        tokenizer: 'Word',
+      }
+    },
+    tags: {
+      type: '[]string',
+      filterable: false,
+      bm25: null,
+      full_text_search: {
+        k1: 1.2,
+        b: 0.75,
+        language: 'english',
+        stemming: false,
+        remove_stopwords: false,
+        case_sensitive: true,
+        tokenizer: 'Word',
+      }
+    },
+    private: {
+      type: 'bool',
+      filterable: true,
+      bm25: null,
+      full_text_search: null
+    }
+  });
+});
+
 test("sanity", async () => {
   const ns = tpuf.namespace(
     "typescript_sdk_" + expect.getState().currentTestName,
