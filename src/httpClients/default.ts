@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
-import { gzip, ungzip } from "pako";
+import { gzip } from "pako";
 import { version } from "../../package.json";
 import type {
   RequestParams,
@@ -30,19 +30,9 @@ function convertHeadersType(headers: Headers): Record<string, string> {
 }
 
 async function consumeResponseText(response: Response): Promise<TpufResponseWithMetadata> {
-  if (response.headers.get("content-encoding") == "gzip") {
-    const body_buffer = await response.arrayBuffer();
-    const body_read_end = performance.now();
-
-    const gunzip_buffer = ungzip(body_buffer);
-    const body_text = gunzip_buffer.toString(); // is there a better way?
-    const decompress_end = performance.now();
-    return { body_text, body_read_end, decompress_end };
-  } else {
-    const body_text = await response.text();
-    const body_read_end = performance.now();
-    return { body_text, body_read_end, decompress_end: body_read_end };
-  }
+  const body_text = await response.text();
+  const body_read_end = performance.now();
+  return { body_text, body_read_end, decompress_end: body_read_end };
 }
 
 export default class DefaultHTTPClient implements HTTPClient {
@@ -139,7 +129,7 @@ export default class DefaultHTTPClient implements HTTPClient {
           signal: AbortSignal.timeout(this.connectTimeout),
         });
       } catch (e: unknown) {
-        if (e instanceof Error) {
+        if (e instanceof Error || e instanceof DOMException) {
           if (e.cause instanceof Error) {
             // wrap generic undici "fetch failed" error with the underlying cause
             error = new TurbopufferError(`fetch failed: ${e.cause.message}`, {
@@ -151,10 +141,6 @@ export default class DefaultHTTPClient implements HTTPClient {
               cause: e,
             });
           }
-        } else if (e instanceof DOMException) {
-          error = new TurbopufferError(`fetch failed: ${e.message}`, {
-            cause: e,
-          });
         } else {
           // not an Error? shouldn't happen but good to be thorough
           throw e;
