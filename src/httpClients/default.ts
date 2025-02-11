@@ -149,6 +149,10 @@ export default class DefaultHTTPClient implements HTTPClient {
               cause: e,
             });
           }
+        } else if (e instanceof DOMException) {
+          error = new TurbopufferError(`fetch failed: ${e.message}`, {
+            cause: e,
+          });
         } else {
           // not an Error? shouldn't happen but good to be thorough
           throw e;
