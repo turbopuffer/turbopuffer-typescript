@@ -16,15 +16,17 @@ import {
 } from "../helpers";
 
 function convertHeadersType(headers: Headers): Record<string, string> {
-  for (const key in headers) {
-    const v = headers.get(key);
-    if (v === undefined) {
-      headers.delete(key);
-    } else if (Array.isArray(v)) {
-      headers.set(key, v[0] as string);
+  const normalizedHeaders: Record<string, string> = {};
+  for (const [key, value] of headers.entries()) {
+    if (value === undefined) {
+      continue;
+    } else if (Array.isArray(value)) {
+      normalizedHeaders[key] = value[0] as string;
+    } else {
+      normalizedHeaders[key] = value as string;
     }
   }
-  return headers as unknown as Record<string, string>;
+  return normalizedHeaders;
 }
 
 async function consumeResponseText(response: Response): Promise<TpufResponseWithMetadata> {
