@@ -1,4 +1,5 @@
-import { Turbopuffer, TurbopufferError } from "./turbopuffer";
+import { Turbopuffer } from "./turbopuffer";
+import { TurbopufferError } from "./helpers";
 
 const tpuf = new Turbopuffer({
   apiKey: process.env.TURBOPUFFER_API_KEY!,
