@@ -23,7 +23,7 @@ function convertHeadersType(headers: Headers): Record<string, string> {
     } else if (Array.isArray(value)) {
       normalizedHeaders[key] = value[0] as string;
     } else {
-      normalizedHeaders[key] = value as string;
+      normalizedHeaders[key] = value;
     }
   }
   return normalizedHeaders;
