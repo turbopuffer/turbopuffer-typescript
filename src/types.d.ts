@@ -1,8 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-
-import type { Dispatcher } from "undici";
-export type { Dispatcher };
-
 // Utility Types
 // Note: At the moment, negative numbers aren't supported.
 export type Id = string | number;

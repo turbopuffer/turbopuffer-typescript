@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-
 import { gzip } from "pako";
 import { version } from "../../package.json";
 import type {

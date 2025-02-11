@@ -1,12 +1,10 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-
 import { fetch, Agent } from "undici";
 import { gzip, gunzip } from "node:zlib";
 import { promisify } from "node:util";
+import type { Dispatcher } from "undici";
 
 import { version } from "../../package.json";
 import type {
-  Dispatcher,
   RequestParams,
   RequestResponse,
   HTTPClient,
