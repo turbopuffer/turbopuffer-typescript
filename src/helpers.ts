@@ -45,20 +45,6 @@ export function make_request_timing(
   };
 }
 
-export function convertHeadersType(
-  headers: Record<string, string | string[] | undefined>,
-): Record<string, string> {
-  for (const key in headers) {
-    const v = headers[key];
-    if (v === undefined) {
-      delete headers[key];
-    } else if (Array.isArray(v)) {
-      headers[key] = v[0];
-    }
-  }
-  return headers as Record<string, string>;
-}
-
 export function parseIntMetric(value: string | null): number {
   return value ? parseInt(value) : 0;
 }

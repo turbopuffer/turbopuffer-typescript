@@ -17,11 +17,24 @@ import {
   statusCodeShouldRetry,
   delay,
   make_request_timing,
-  convertHeadersType,
 } from "../helpers";
 
 const gzipAsync = promisify(gzip);
 const gunzipAsync = promisify(gunzip);
+
+function convertHeadersType(
+  headers: Record<string, string | string[] | undefined>,
+): Record<string, string> {
+  for (const key in headers) {
+    const v = headers[key];
+    if (v === undefined) {
+      delete headers[key];
+    } else if (Array.isArray(v)) {
+      headers[key] = v[0];
+    }
+  }
+  return headers as Record<string, string>;
+}
 
 async function consumeResponseText(response: Dispatcher.ResponseData): Promise<TpufResponseWithMetadata> {
   if (response.headers["content-encoding"] == "gzip") {
