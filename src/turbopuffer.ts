@@ -64,9 +64,11 @@ export class Turbopuffer {
    */
   async namespaces({
     cursor,
+    prefix,
     page_size,
   }: {
     cursor?: string;
+    prefix?: string,
     page_size?: number;
   }): Promise<NamespacesListResult> {
     return (
@@ -75,6 +77,7 @@ export class Turbopuffer {
         path: "/v1/namespaces",
         query: {
           cursor,
+          prefix,
           page_size: page_size ? page_size.toString() : undefined,
         },
         retryable: true,
