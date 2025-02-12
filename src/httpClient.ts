@@ -1,5 +1,5 @@
-import NodeHTTPClient from "./httpClients/node";
-import DefaultHTTPClient from "./httpClients/default";
+import NodeHTTPClient from "./httpClient/node";
+import DefaultHTTPClient from "./httpClient/default";
 import { runtime } from "./helpers";
 
 /**
