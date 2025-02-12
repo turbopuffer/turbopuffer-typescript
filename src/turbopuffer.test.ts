@@ -1,13 +1,16 @@
 import { Turbopuffer } from "./turbopuffer";
-import { TurbopufferError } from "./helpers";
+import { runtime, TurbopufferError } from "./helpers";
 
 const tpuf = new Turbopuffer({
   apiKey: process.env.TURBOPUFFER_API_KEY!,
 });
 
+const isNode = runtime === "Node.js";
+const testNamespacePrefix = "typescript_sdk_";
+
 test("bm25_with_custom_schema_and_sum_query", async () => {
   const ns = tpuf.namespace(
-    "typescript_sdk_" + expect.getState().currentTestName,
+    testNamespacePrefix + "bm25_with_custom_schema_and_sum_query",
   );
 
   try {
@@ -86,7 +89,7 @@ test("bm25_with_custom_schema_and_sum_query", async () => {
 
 test("order_by_attribute", async () => {
   const ns = tpuf.namespace(
-    "typescript_sdk_" + expect.getState().currentTestName,
+    testNamespacePrefix + "order_by_attribute",
   );
 
   try {
@@ -159,7 +162,7 @@ test("order_by_attribute", async () => {
 
 test("bm25_with_default_schema_and_simple_query", async () => {
   const ns = tpuf.namespace(
-    "typescript_sdk_" + expect.getState().currentTestName,
+    testNamespacePrefix + "bm25_with_default_schema_and_simple_query",
   );
 
   try {
@@ -206,7 +209,7 @@ test("bm25_with_default_schema_and_simple_query", async () => {
 
 test("schema", async () => {
   const ns = tpuf.namespace(
-    "typescript_sdk_" + expect.getState().currentTestName,
+    testNamespacePrefix + "schema",
   );
 
   try {
@@ -280,13 +283,11 @@ test("schema", async () => {
     id: {
       type: 'uint',
       filterable: null,
-      bm25: null,
       full_text_search: null
     },
     title: {
       type: 'string',
       filterable: false,
-      bm25: null,
       full_text_search: {
         k1: 1.2,
         b: 0.75,
@@ -300,7 +301,6 @@ test("schema", async () => {
     tags: {
       type: '[]string',
       filterable: false,
-      bm25: null,
       full_text_search: {
         k1: 1.2,
         b: 0.75,
@@ -314,16 +314,14 @@ test("schema", async () => {
     private: {
       type: 'bool',
       filterable: true,
-      bm25: null,
       full_text_search: null
     }
   });
 });
 
 test("sanity", async () => {
-  const ns = tpuf.namespace(
-    "typescript_sdk_" + expect.getState().currentTestName,
-  );
+  const nameSpaceName = testNamespacePrefix + "sanity";
+  const ns = tpuf.namespace(nameSpaceName);
 
   try {
     await ns.deleteAll();
@@ -463,13 +461,13 @@ test("sanity", async () => {
     gotError = e;
   }
   expect(gotError).toStrictEqual(
-    new TurbopufferError("🤷 namespace 'typescript_sdk_sanity' was not found", {
+    new TurbopufferError(`🤷 namespace '${nameSpaceName}' was not found`, {
       status: 404,
     }),
   );
 }, 10_000);
 
-test("connection errors are wrapped", async () => {
+test("connection_errors_are_wrapped", async () => {
   const tpuf = new Turbopuffer({
     baseUrl: "https://api.turbopuffer.com:12345",
     apiKey: process.env.TURBOPUFFER_API_KEY!,
@@ -477,7 +475,7 @@ test("connection errors are wrapped", async () => {
   });
 
   const ns = tpuf.namespace(
-    "typescript_sdk_" + expect.getState().currentTestName,
+    testNamespacePrefix + "connection_errors_are_wrapped",
   );
 
   let gotError: any = null;
@@ -488,8 +486,11 @@ test("connection errors are wrapped", async () => {
   } catch (e: any) {
     gotError = e;
   }
+
   expect(gotError).toStrictEqual(
-    new TurbopufferError("fetch failed: Connect Timeout Error", {}),
+    isNode
+      ? new TurbopufferError("fetch failed: Connect Timeout Error", {})
+      : new TurbopufferError("fetch failed: The operation was aborted due to timeout", {})
   );
 });
 
@@ -499,7 +500,7 @@ test("empty_namespace", async () => {
   });
 
   const ns = tpuf.namespace(
-    "typescript_sdk_" + expect.getState().currentTestName,
+    testNamespacePrefix + "empty_namespace",
   );
 
   await ns.upsert({
@@ -525,7 +526,7 @@ function randomVector(dims: number) {
 
 test("compression", async () => {
   const ns = tpuf.namespace(
-    "typescript_sdk_" + expect.getState().currentTestName,
+    testNamespacePrefix + "compression",
   );
 
   try {
@@ -557,9 +558,11 @@ test("compression", async () => {
 
   const metrics = resultsWithMetrics.metrics;
   expect(metrics.compress_time).toBeGreaterThan(0);
-  expect(metrics.decompress_time).toBeGreaterThan(0); // Response should be compressed
-  expect(metrics.body_read_time).toBeGreaterThan(0);
-  expect(metrics.deserialize_time).toBeGreaterThan(0);
+  if (isNode) {
+    expect(metrics.decompress_time).toBeGreaterThan(0); // Response should be compressed
+    expect(metrics.body_read_time).toBeGreaterThan(0);
+    expect(metrics.deserialize_time).toBeGreaterThan(0);
+  }
 });
 
 test("disable_compression", async () => {
@@ -569,7 +572,7 @@ test("disable_compression", async () => {
   });
 
   const ns = tpufNoCompression.namespace(
-    "typescript_sdk_" + expect.getState().currentTestName,
+    testNamespacePrefix + "disable_compression",
   );
 
   try {

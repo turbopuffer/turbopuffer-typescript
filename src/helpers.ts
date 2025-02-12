@@ -4,6 +4,8 @@ import type {
   Vector,
 } from "./types";
 
+export const runtime = globalThis.navigator?.userAgent.split('/')[0];
+
 /** An error class for errors returned by the turbopuffer API. */
 export class TurbopufferError extends Error {
   status?: number;

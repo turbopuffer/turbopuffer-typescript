@@ -1,4 +1,6 @@
 import NodeHTTPClient from "./httpClients/node";
+import DefaultHTTPClient from "./httpClients/default";
+import { runtime } from "./helpers";
 
 /**
  * This a helper function that returns a class for making fetch requests
@@ -16,12 +18,23 @@ export const createHTTPClient = (
   idleTimeout: number,
   warmConnections: number,
   compression: boolean,
-) =>
-  new NodeHTTPClient(
-    baseUrl,
-    apiKey,
-    connectTimeout,
-    idleTimeout,
-    warmConnections,
-    compression,
-  );
+) => {
+  if (runtime === "Node.js") {
+    return new NodeHTTPClient(
+      baseUrl,
+      apiKey,
+      connectTimeout,
+      idleTimeout,
+      warmConnections,
+      compression,
+    );
+  } else {
+    return new DefaultHTTPClient(
+      baseUrl,
+      apiKey,
+      connectTimeout,
+      warmConnections,
+      compression,
+    );
+  }
+}
