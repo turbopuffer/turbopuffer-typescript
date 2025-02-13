@@ -12,10 +12,14 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
+  "types": "./dist/types.d.ts",
   "homepage": "https://turbopuffer.com",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/turbopuffer/turbopuffer-typescript.git"
+  },
+  "browser": {
+    "./dist/httpClient/node.js": false
   },
   "author": "Morgan Gallant <morgan@turbopuffer.com>",
   "license": "MIT",
