@@ -4,7 +4,6 @@ import type {
   RequestParams,
   RequestResponse,
   HTTPClient,
-  TpufResponseWithMetadata,
 } from "../types";
 import {
   TurbopufferError,
@@ -25,12 +24,6 @@ function convertHeadersType(headers: Headers): Record<string, string> {
     }
   }
   return normalizedHeaders;
-}
-
-async function consumeResponseText(response: Response): Promise<TpufResponseWithMetadata> {
-  const body_text = await response.text();
-  const body_read_end = performance.now();
-  return { body_text, body_read_end, decompress_end: body_read_end };
 }
 
 export default class DefaultHTTPClient implements HTTPClient {
@@ -113,7 +106,7 @@ export default class DefaultHTTPClient implements HTTPClient {
 
     const maxAttempts = retryable ? 3 : 1;
     let response!: Response;
-    let error: TurbopufferError | null = null;
+    let error: TurbopufferError | Error | null = null;
     let request_start!: number;
     let response_start!: number;
 
@@ -128,18 +121,13 @@ export default class DefaultHTTPClient implements HTTPClient {
           signal: AbortSignal.timeout(this.connectTimeout),
         });
       } catch (e: unknown) {
-        if (e instanceof Error || e instanceof DOMException) {
-          if (e.cause instanceof Error) {
-            // wrap generic fetch failure errors with the underlying cause
-            error = new TurbopufferError(`fetch failed: ${e.cause.message}`, {
-              cause: e,
-            });
-          } else {
-            // wrap other errors directly
-            error = new TurbopufferError(`fetch failed: ${e.message}`, {
-              cause: e,
-            });
-          }
+        if (e instanceof DOMException) {
+          // wrap DOMException TimeoutError to make it nicer
+          error = new TurbopufferError(`fetch failed: ${e.message}`, {
+            cause: e,
+          });
+        } else if (e instanceof Error) {
+          error = e;
         } else {
           // not an Error? shouldn't happen but good to be thorough
           throw e;
@@ -149,7 +137,7 @@ export default class DefaultHTTPClient implements HTTPClient {
 
       if (!error && response.status >= 400) {
         let message: string | undefined = undefined;
-        const { body_text } = await consumeResponseText(response);
+        const body_text = await response.text();
         if (response.headers.get("content-type") === "application/json") {
           try {
             const body = JSON.parse(body_text);
@@ -172,7 +160,7 @@ export default class DefaultHTTPClient implements HTTPClient {
         );
       }
       if (
-        error &&
+        error instanceof TurbopufferError &&
         statusCodeShouldRetry(error.status) &&
         attempt + 1 != maxAttempts
       ) {
@@ -192,8 +180,7 @@ export default class DefaultHTTPClient implements HTTPClient {
       };
     }
 
-    const { body_text, body_read_end, decompress_end } =
-      await consumeResponseText(response);
+    const body_text = await response.text();
 
     const json = JSON.parse(body_text);
     const deserialize_end = performance.now();
@@ -210,8 +197,6 @@ export default class DefaultHTTPClient implements HTTPClient {
       request_timing: make_request_timing(
         request_start,
         response_start,
-        body_read_end,
-        decompress_end,
         deserialize_end,
         requestCompressionDuration,
       ),
