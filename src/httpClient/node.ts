@@ -55,7 +55,7 @@ export default class NodeHTTPClient implements HTTPClient {
   private baseUrl: string;
   private origin: URL;
   private apiKey: string;
-  readonly userAgent = `tpuf-typescript/${version}`;
+  readonly userAgent = `tpuf-typescript/${version}/node`;
   private compression: boolean;
 
   constructor(
