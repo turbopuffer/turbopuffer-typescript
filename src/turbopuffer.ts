@@ -264,6 +264,22 @@ export class Namespace {
   }
 
   /**
+   * Deletes vectors (by filter).
+   */
+  async deleteByFilter({ filters }: { filters: Filters }): Promise<number> {
+    let response = await this.client.http.doRequest<{ status: string, rows_affected: number }>({
+      method: "POST",
+      path: `/v1/namespaces/${this.id}`,
+      compress: false,
+      body: {
+        delete_by_filter: filters,
+      },
+      retryable: true,
+    });
+    return response?.body?.rows_affected || 0;
+  }
+
+  /**
    * Queries vectors.
    * See: https://turbopuffer.com/docs/reference/query
    */

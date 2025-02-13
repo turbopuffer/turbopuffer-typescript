@@ -279,13 +279,11 @@ test("schema", async () => {
     id: {
       type: 'uint',
       filterable: null,
-      bm25: null,
       full_text_search: null
     },
     title: {
       type: 'string',
       filterable: false,
-      bm25: null,
       full_text_search: {
         k1: 1.2,
         b: 0.75,
@@ -299,7 +297,6 @@ test("schema", async () => {
     tags: {
       type: '[]string',
       filterable: false,
-      bm25: null,
       full_text_search: {
         k1: 1.2,
         b: 0.75,
@@ -313,7 +310,6 @@ test("schema", async () => {
     private: {
       type: 'bool',
       filterable: true,
-      bm25: null,
       full_text_search: null
     }
   });
@@ -514,6 +510,57 @@ test("empty_namespace", async () => {
   await ns.delete({ ids: [1] });
 
   await ns.export();
+});
+
+test("delete_by_filter", async () => {
+  const ns = tpuf.namespace(
+    "typescript_sdk_" + expect.getState().currentTestName,
+  );
+
+  try {
+    await ns.deleteAll();
+  } catch (_: unknown) {
+    /* empty */
+  }
+
+  await ns.upsert({
+    vectors: [
+      {
+        id: 1,
+        vector: [1, 2],
+        attributes: {
+          foo: "bar",
+        },
+      },
+      {
+        id: 2,
+        vector: [3, 4],
+        attributes: {
+          foo: "baz",
+        },
+      },
+      {
+        id: 3,
+        vector: [3, 4],
+        attributes: {
+          foo: "baz",
+        },
+      },
+    ],
+    distance_metric: "cosine_distance",
+  });
+
+  let results = await ns.query({});
+  expect(results.length).toEqual(3);
+
+  const rowsAffected = await ns.deleteByFilter({ filters: ["foo", "Eq", "baz"] });
+  expect(rowsAffected).toEqual(2);
+
+  results = await ns.query({});
+  expect(results.length).toEqual(1);
+  expect(results[0].id).toEqual(1);
+
+  await ns.deleteAll();
 });
 
 function randomVector(dims: number) {
