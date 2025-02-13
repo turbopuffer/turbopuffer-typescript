@@ -25,7 +25,11 @@
     "vector database",
     "semantic search"
   ],
-  "files": ["dist", "README.md", "LICENSE"],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "main": "./dist/turbopuffer.js",
   "devDependencies": {
     "@types/jest": "^29.5.12",

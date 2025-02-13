@@ -240,7 +240,7 @@ test("schema", async () => {
         attributes: {
           title: "three",
           private: false,
-          "tags": [],
+          tags: [],
         },
       },
       {
@@ -260,62 +260,58 @@ test("schema", async () => {
         full_text_search: {
           stemming: true,
           remove_stopwords: true,
-          case_sensitive: false
-        }
+          case_sensitive: false,
+        },
       },
       tags: {
         type: "[]string",
         full_text_search: {
           stemming: false,
           remove_stopwords: false,
-          case_sensitive: true
-        }
-      }
-    }
+          case_sensitive: true,
+        },
+      },
+    },
   });
 
   const schema = await ns.schema();
   expect(schema).toEqual({
     id: {
-      type: 'uint',
+      type: "uint",
       filterable: null,
-      bm25: null,
-      full_text_search: null
+      full_text_search: null,
     },
     title: {
-      type: 'string',
+      type: "string",
       filterable: false,
-      bm25: null,
       full_text_search: {
         k1: 1.2,
         b: 0.75,
-        language: 'english',
+        language: "english",
         stemming: true,
         remove_stopwords: true,
         case_sensitive: false,
-        tokenizer: 'Word',
-      }
+        tokenizer: "Word",
+      },
     },
     tags: {
-      type: '[]string',
+      type: "[]string",
       filterable: false,
-      bm25: null,
       full_text_search: {
         k1: 1.2,
         b: 0.75,
-        language: 'english',
+        language: "english",
         stemming: false,
         remove_stopwords: false,
         case_sensitive: true,
-        tokenizer: 'Word',
-      }
+        tokenizer: "Word",
+      },
     },
     private: {
-      type: 'bool',
+      type: "bool",
       filterable: true,
-      bm25: null,
-      full_text_search: null
-    }
+      full_text_search: null,
+    },
   });
 });
 
@@ -514,6 +510,59 @@ test("empty_namespace", async () => {
   await ns.delete({ ids: [1] });
 
   await ns.export();
+});
+
+test("delete_by_filter", async () => {
+  const ns = tpuf.namespace(
+    "typescript_sdk_" + expect.getState().currentTestName,
+  );
+
+  try {
+    await ns.deleteAll();
+  } catch (_: unknown) {
+    /* empty */
+  }
+
+  await ns.upsert({
+    vectors: [
+      {
+        id: 1,
+        vector: [1, 2],
+        attributes: {
+          foo: "bar",
+        },
+      },
+      {
+        id: 2,
+        vector: [3, 4],
+        attributes: {
+          foo: "baz",
+        },
+      },
+      {
+        id: 3,
+        vector: [3, 4],
+        attributes: {
+          foo: "baz",
+        },
+      },
+    ],
+    distance_metric: "cosine_distance",
+  });
+
+  let results = await ns.query({});
+  expect(results.length).toEqual(3);
+
+  const rowsAffected = await ns.deleteByFilter({
+    filters: ["foo", "Eq", "baz"],
+  });
+  expect(rowsAffected).toEqual(2);
+
+  results = await ns.query({});
+  expect(results.length).toEqual(1);
+  expect(results[0].id).toEqual(1);
+
+  await ns.deleteAll();
 });
 
 function randomVector(dims: number) {
