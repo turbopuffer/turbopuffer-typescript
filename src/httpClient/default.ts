@@ -130,7 +130,7 @@ export default class DefaultHTTPClient implements HTTPClient {
       } catch (e: unknown) {
         if (e instanceof Error || e instanceof DOMException) {
           if (e.cause instanceof Error) {
-            // wrap generic undici "fetch failed" error with the underlying cause
+            // wrap generic fetch failure errors with the underlying cause
             error = new TurbopufferError(`fetch failed: ${e.cause.message}`, {
               cause: e,
             });
