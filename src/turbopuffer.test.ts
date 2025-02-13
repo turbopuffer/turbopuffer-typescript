@@ -1,11 +1,10 @@
 import { Turbopuffer } from "./turbopuffer";
-import { runtime, TurbopufferError } from "./helpers";
+import { isNode, TurbopufferError } from "./helpers";
 
 const tpuf = new Turbopuffer({
   apiKey: process.env.TURBOPUFFER_API_KEY!,
 });
 
-const isNode = runtime === "Node.js";
 const testNamespacePrefix = "typescript_sdk_";
 
 test("bm25_with_custom_schema_and_sum_query", async () => {
