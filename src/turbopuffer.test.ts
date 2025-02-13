@@ -240,7 +240,7 @@ test("schema", async () => {
         attributes: {
           title: "three",
           private: false,
-          "tags": [],
+          tags: [],
         },
       },
       {
@@ -260,58 +260,58 @@ test("schema", async () => {
         full_text_search: {
           stemming: true,
           remove_stopwords: true,
-          case_sensitive: false
-        }
+          case_sensitive: false,
+        },
       },
       tags: {
         type: "[]string",
         full_text_search: {
           stemming: false,
           remove_stopwords: false,
-          case_sensitive: true
-        }
-      }
-    }
+          case_sensitive: true,
+        },
+      },
+    },
   });
 
   const schema = await ns.schema();
   expect(schema).toEqual({
     id: {
-      type: 'uint',
+      type: "uint",
       filterable: null,
-      full_text_search: null
+      full_text_search: null,
     },
     title: {
-      type: 'string',
+      type: "string",
       filterable: false,
       full_text_search: {
         k1: 1.2,
         b: 0.75,
-        language: 'english',
+        language: "english",
         stemming: true,
         remove_stopwords: true,
         case_sensitive: false,
-        tokenizer: 'Word',
-      }
+        tokenizer: "Word",
+      },
     },
     tags: {
-      type: '[]string',
+      type: "[]string",
       filterable: false,
       full_text_search: {
         k1: 1.2,
         b: 0.75,
-        language: 'english',
+        language: "english",
         stemming: false,
         remove_stopwords: false,
         case_sensitive: true,
-        tokenizer: 'Word',
-      }
+        tokenizer: "Word",
+      },
     },
     private: {
-      type: 'bool',
+      type: "bool",
       filterable: true,
-      full_text_search: null
-    }
+      full_text_search: null,
+    },
   });
 });
 
@@ -553,7 +553,9 @@ test("delete_by_filter", async () => {
   let results = await ns.query({});
   expect(results.length).toEqual(3);
 
-  const rowsAffected = await ns.deleteByFilter({ filters: ["foo", "Eq", "baz"] });
+  const rowsAffected = await ns.deleteByFilter({
+    filters: ["foo", "Eq", "baz"],
+  });
   expect(rowsAffected).toEqual(2);
 
   results = await ns.query({});

@@ -50,7 +50,7 @@ export type RankBy =
   | ["Sum", RankBySingleField[]]
   | OrderByAttribute;
 export interface Consistency {
-  level: "strong" | "eventual"
+  level: "strong" | "eventual";
 }
 
 export interface Vector {
@@ -179,7 +179,7 @@ export class Turbopuffer {
     page_size,
   }: {
     cursor?: string;
-    prefix?: string,
+    prefix?: string;
     page_size?: number;
   }): Promise<NamespacesListResult> {
     return (
@@ -267,7 +267,10 @@ export class Namespace {
    * Deletes vectors (by filter).
    */
   async deleteByFilter({ filters }: { filters: Filters }): Promise<number> {
-    let response = await this.client.http.doRequest<{ status: string, rows_affected: number }>({
+    let response = await this.client.http.doRequest<{
+      status: string;
+      rows_affected: number;
+    }>({
       method: "POST",
       path: `/v1/namespaces/${this.id}`,
       compress: false,
@@ -447,11 +450,13 @@ export class Namespace {
    * See: https://turbopuffer.com/docs/schema
    */
   async schema(): Promise<Schema> {
-    return (await this.client.http.doRequest<Schema>({
-      method: "GET",
-      path: `/v1/namespaces/${this.id}/schema`,
-      retryable: true,
-    })).body!;
+    return (
+      await this.client.http.doRequest<Schema>({
+        method: "GET",
+        path: `/v1/namespaces/${this.id}/schema`,
+        retryable: true,
+      })
+    ).body!;
   }
 }
 
