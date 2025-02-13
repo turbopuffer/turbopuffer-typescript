@@ -33,6 +33,7 @@ export const createHTTPClient = (
       baseUrl,
       apiKey,
       connectTimeout,
+      idleTimeout,
       warmConnections,
       compression,
     );

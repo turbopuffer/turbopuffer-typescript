@@ -45,6 +45,7 @@ export default class DefaultHTTPClient implements HTTPClient {
     baseUrl: string,
     apiKey: string,
     connectTimeout: number,
+    idleTimeout: number, // not used currently, just to match NodeHTTPClient's signature
     warmConnections: number,
     compression: boolean,
   ) {
