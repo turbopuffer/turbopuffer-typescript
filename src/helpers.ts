@@ -1,5 +1,6 @@
 import type {
   ColumnarVectors,
+  MakeRequestTiming,
   RequestTiming,
   Vector,
 } from "./types";
@@ -28,14 +29,14 @@ export function delay(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export function make_request_timing(
-  request_start: number,
-  response_start: number,
-  body_read_end?: number,
-  decompress_end?: number,
-  deserialize_end?: number,
-  requestCompressionDuration?: number,
-): RequestTiming {
+export function make_request_timing({
+  request_start,
+  response_start,
+  body_read_end = 0,
+  decompress_end = 0,
+  deserialize_end = 0,
+  requestCompressionDuration = 0,
+}: MakeRequestTiming): RequestTiming {
   return {
     response_time: response_start - request_start,
     body_read_time: body_read_end ? body_read_end - response_start : 0,

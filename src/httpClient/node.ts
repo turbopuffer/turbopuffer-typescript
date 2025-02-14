@@ -214,7 +214,7 @@ export default class NodeHTTPClient implements HTTPClient {
     if (method === "HEAD" || !response.body) {
       return {
         headers: convertHeadersType(response.headers),
-        request_timing: make_request_timing(request_start, response_start),
+        request_timing: make_request_timing({ request_start, response_start }),
       };
     }
 
@@ -233,14 +233,14 @@ export default class NodeHTTPClient implements HTTPClient {
     return {
       body: json as T,
       headers: convertHeadersType(response.headers),
-      request_timing: make_request_timing(
+      request_timing: make_request_timing({
         request_start,
         response_start,
         body_read_end,
         decompress_end,
         deserialize_end,
         requestCompressionDuration,
-      ),
+      }),
     };
   }
 }

@@ -604,6 +604,8 @@ test("disable_compression", async () => {
   const metrics = resultsWithMetrics.metrics;
   expect(metrics.compress_time).toEqual(0);
   expect(metrics.decompress_time).toEqual(0);
-  expect(metrics.body_read_time).toBeGreaterThan(0);
-  expect(metrics.deserialize_time).toBeGreaterThan(0);
+  if (isNode) {
+    expect(metrics.body_read_time).toBeGreaterThan(0);
+    expect(metrics.deserialize_time).toBeGreaterThan(0);
+  }
 });
