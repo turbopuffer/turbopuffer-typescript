@@ -36,7 +36,7 @@ export type RankBy =
   | ["Sum", RankBySingleField[]]
   | OrderByAttribute;
 export interface Consistency {
-  level: "strong" | "eventual"
+  level: "strong" | "eventual";
 }
 
 export interface Vector {
@@ -120,12 +120,12 @@ export interface RequestTiming {
 }
 
 export interface MakeRequestTiming {
-  request_start: number,
-  response_start: number,
-  body_read_end?: number,
-  decompress_end?: number,
-  deserialize_end?: number,
-  requestCompressionDuration?: number,
+  request_start: number;
+  response_start: number;
+  body_read_end?: number;
+  decompress_end?: number;
+  deserialize_end?: number;
+  requestCompressionDuration?: number;
 }
 
 export type RequestResponse<T> = Promise<{

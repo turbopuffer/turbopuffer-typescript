@@ -87,9 +87,7 @@ test("bm25_with_custom_schema_and_sum_query", async () => {
 });
 
 test("order_by_attribute", async () => {
-  const ns = tpuf.namespace(
-    testNamespacePrefix + "order_by_attribute",
-  );
+  const ns = tpuf.namespace(testNamespacePrefix + "order_by_attribute");
 
   try {
     await ns.deleteAll();
@@ -207,9 +205,7 @@ test("bm25_with_default_schema_and_simple_query", async () => {
 });
 
 test("schema", async () => {
-  const ns = tpuf.namespace(
-    testNamespacePrefix + "schema",
-  );
+  const ns = tpuf.namespace(testNamespacePrefix + "schema");
 
   try {
     await ns.deleteAll();
@@ -282,7 +278,7 @@ test("schema", async () => {
     id: {
       type: "uint",
       filterable: null,
-      full_text_search: null
+      full_text_search: null,
     },
     title: {
       type: "string",
@@ -497,9 +493,7 @@ test("empty_namespace", async () => {
     apiKey: process.env.TURBOPUFFER_API_KEY!,
   });
 
-  const ns = tpuf.namespace(
-    testNamespacePrefix + "empty_namespace",
-  );
+  const ns = tpuf.namespace(testNamespacePrefix + "empty_namespace");
 
   await ns.upsert({
     vectors: [
@@ -518,7 +512,7 @@ test("empty_namespace", async () => {
 
 test("delete_by_filter", async () => {
   const ns = tpuf.namespace(
-    "typescript_sdk_" + expect.getState().currentTestName,
+    testNamespacePrefix + expect.getState().currentTestName,
   );
 
   try {
@@ -576,9 +570,7 @@ function randomVector(dims: number) {
 }
 
 test("compression", async () => {
-  const ns = tpuf.namespace(
-    testNamespacePrefix + "compression",
-  );
+  const ns = tpuf.namespace(testNamespacePrefix + "compression");
 
   try {
     await ns.deleteAll();

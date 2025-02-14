@@ -1,10 +1,6 @@
 import { gzip } from "pako";
 import { version } from "../../package.json";
-import type {
-  RequestParams,
-  RequestResponse,
-  HTTPClient,
-} from "../types";
+import type { RequestParams, RequestResponse, HTTPClient } from "../types";
 import {
   TurbopufferError,
   statusCodeShouldRetry,

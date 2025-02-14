@@ -34,7 +34,9 @@ function convertHeadersType(
   return headers as Record<string, string>;
 }
 
-async function consumeResponseText(response: Dispatcher.ResponseData): Promise<TpufResponseWithMetadata> {
+async function consumeResponseText(
+  response: Dispatcher.ResponseData,
+): Promise<TpufResponseWithMetadata> {
   if (response.headers["content-encoding"] == "gzip") {
     const body_buffer = await response.body.arrayBuffer();
     const body_read_end = performance.now();

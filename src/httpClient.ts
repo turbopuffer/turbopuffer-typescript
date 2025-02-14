@@ -33,11 +33,6 @@ export const createHTTPClient = (
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-var-requires, @typescript-eslint/no-unsafe-member-access
     const DefaultHTTPClient = require("./httpClient/default").default;
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call
-    return new DefaultHTTPClient(
-      baseUrl,
-      apiKey,
-      warmConnections,
-      compression,
-    );
+    return new DefaultHTTPClient(baseUrl, apiKey, warmConnections, compression);
   }
-}
+};

@@ -5,8 +5,9 @@ import type {
   Vector,
 } from "./types";
 
-export const runtime = globalThis.navigator?.userAgent.split('/')[0];
-export const isRuntimeFullyNodeCompatible = runtime === "Node.js" || runtime === "Deno";
+export const runtime = globalThis.navigator?.userAgent.split("/")[0];
+export const isRuntimeFullyNodeCompatible =
+  runtime === "Node.js" || runtime === "Deno";
 
 /** An error class for errors returned by the turbopuffer API. */
 export class TurbopufferError extends Error {
