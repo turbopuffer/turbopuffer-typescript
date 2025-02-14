@@ -1,5 +1,3 @@
-import NodeHTTPClient from "./httpClient/node";
-import DefaultHTTPClient from "./httpClient/default";
 import { isRuntimeFullyNodeCompatible } from "./helpers";
 
 /**
@@ -19,7 +17,10 @@ export const createHTTPClient = (
   warmConnections: number,
   compression: boolean,
 ) => {
-  if (isRuntimeFullyNodeCompatible)
+  if (isRuntimeFullyNodeCompatible) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-var-requires, @typescript-eslint/no-unsafe-member-access
+    const NodeHTTPClient = require("./httpClient/node").default;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call
     return new NodeHTTPClient(
       baseUrl,
       apiKey,
@@ -28,11 +29,15 @@ export const createHTTPClient = (
       warmConnections,
       compression,
     );
-
-  return new DefaultHTTPClient(
-    baseUrl,
-    apiKey,
-    warmConnections,
-    compression,
-  );
+  } else {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-var-requires, @typescript-eslint/no-unsafe-member-access
+    const DefaultHTTPClient = require("./httpClient/default").default;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call
+    return new DefaultHTTPClient(
+      baseUrl,
+      apiKey,
+      warmConnections,
+      compression,
+    );
+  }
 }

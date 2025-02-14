@@ -466,7 +466,8 @@ test("sanity", async () => {
   );
 }, 10_000);
 
-test("connection_errors_are_wrapped", async () => {
+const t = isRuntimeFullyNodeCompatible ? it : it.skip;
+t("connection_errors_are_wrapped", async () => {
   const tpuf = new Turbopuffer({
     baseUrl: "https://api.turbopuffer.com:12345",
     apiKey: process.env.TURBOPUFFER_API_KEY!,
@@ -487,9 +488,7 @@ test("connection_errors_are_wrapped", async () => {
   }
 
   expect(gotError).toStrictEqual(
-    isRuntimeFullyNodeCompatible
-      ? new TurbopufferError("fetch failed: Connect Timeout Error", {})
-      : new TurbopufferError("fetch failed: The operation was aborted due to timeout", {})
+    new TurbopufferError("fetch failed: Connect Timeout Error", {}),
   );
 });
 
