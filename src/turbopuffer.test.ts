@@ -1,5 +1,5 @@
 import { Turbopuffer } from "./turbopuffer";
-import { isNode, TurbopufferError } from "./helpers";
+import { isRuntimeFullyNodeCompatible, TurbopufferError } from "./helpers";
 
 const tpuf = new Turbopuffer({
   apiKey: process.env.TURBOPUFFER_API_KEY!,
@@ -487,7 +487,7 @@ test("connection_errors_are_wrapped", async () => {
   }
 
   expect(gotError).toStrictEqual(
-    isNode
+    isRuntimeFullyNodeCompatible
       ? new TurbopufferError("fetch failed: Connect Timeout Error", {})
       : new TurbopufferError("fetch failed: The operation was aborted due to timeout", {})
   );
@@ -557,7 +557,7 @@ test("compression", async () => {
 
   const metrics = resultsWithMetrics.metrics;
   expect(metrics.compress_time).toBeGreaterThan(0);
-  if (isNode) {
+  if (isRuntimeFullyNodeCompatible) {
     expect(metrics.decompress_time).toBeGreaterThan(0); // Response should be compressed
     expect(metrics.body_read_time).toBeGreaterThan(0);
     expect(metrics.deserialize_time).toBeGreaterThan(0);
@@ -604,7 +604,7 @@ test("disable_compression", async () => {
   const metrics = resultsWithMetrics.metrics;
   expect(metrics.compress_time).toEqual(0);
   expect(metrics.decompress_time).toEqual(0);
-  if (isNode) {
+  if (isRuntimeFullyNodeCompatible) {
     expect(metrics.body_read_time).toBeGreaterThan(0);
     expect(metrics.deserialize_time).toBeGreaterThan(0);
   }
