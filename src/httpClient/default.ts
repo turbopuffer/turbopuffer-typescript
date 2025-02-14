@@ -30,15 +30,12 @@ export default class DefaultHTTPClient implements HTTPClient {
   private baseUrl: string;
   private origin: URL;
   private apiKey: string;
-  private connectTimeout: number;
   readonly userAgent = `tpuf-typescript/${version}/default`;
   private compression: boolean;
 
   constructor(
     baseUrl: string,
     apiKey: string,
-    connectTimeout: number,
-    idleTimeout: number, // not used currently, just to match NodeHTTPClient's signature
     warmConnections: number,
     compression: boolean,
   ) {
@@ -46,7 +43,6 @@ export default class DefaultHTTPClient implements HTTPClient {
     this.origin = new URL(baseUrl);
     this.origin.pathname = "";
     this.apiKey = apiKey;
-    this.connectTimeout = connectTimeout;
     this.compression = compression;
 
     for (let i = 0; i < warmConnections; i++) {
@@ -118,7 +114,6 @@ export default class DefaultHTTPClient implements HTTPClient {
           method,
           headers,
           body: requestBody,
-          signal: AbortSignal.timeout(this.connectTimeout),
         });
       } catch (e: unknown) {
         if (e instanceof DOMException) {

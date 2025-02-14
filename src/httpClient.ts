@@ -32,8 +32,6 @@ export const createHTTPClient = (
   return new DefaultHTTPClient(
     baseUrl,
     apiKey,
-    connectTimeout,
-    idleTimeout,
     warmConnections,
     compression,
   );
