@@ -36,16 +36,22 @@ export class Turbopuffer {
   constructor({
     apiKey,
     baseUrl = "https://api.turbopuffer.com",
-    connectTimeout = 10 * 1000, // timeout to establish a connection
-    connectionIdleTimeout = 60 * 1000, // socket idle timeout in ms, default 1 minute
-    warmConnections = 0, // number of connections to open initially when creating a new client
+    connectTimeout = 10 * 1000,
+    connectionIdleTimeout = 60 * 1000,
+    warmConnections = 0,
     compression = true,
   }: {
+    /** The API key to authenticate with. */
     apiKey: string;
+    /** The base URL. Default is https://api.turbopuffer.com. */
     baseUrl?: string;
+    /** The timeout to establish a connection, in ms. Default is 10_000. Only applicable in Node and Deno.*/
     connectTimeout?: number;
+    /** The socket idle timeout, in ms. Default is 60_000. Only applicable in Node and Deno.*/
     connectionIdleTimeout?: number;
+    /** The number of connections to open initially when creating a new client. Default is 0. */
     warmConnections?: number;
+    /** Whether to compress requests and accept compressed responses. Default is true. */
     compression?: boolean;
   }) {
     this.http = createHTTPClient(
