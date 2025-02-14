@@ -116,12 +116,7 @@ export default class DefaultHTTPClient implements HTTPClient {
           body: requestBody,
         });
       } catch (e: unknown) {
-        if (e instanceof DOMException) {
-          // wrap DOMException TimeoutError to make it nicer
-          error = new TurbopufferError(`fetch failed: ${e.message}`, {
-            cause: e,
-          });
-        } else if (e instanceof Error) {
+        if (e instanceof Error) {
           error = e;
         } else {
           // not an Error? shouldn't happen but good to be thorough
