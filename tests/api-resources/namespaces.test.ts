@@ -96,7 +96,17 @@ describe('resource namespaces', () => {
   test('upsert: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.namespaces.upsert('namespace', { allOf: {} }, { path: '/_stainless_unknown_path' }),
+      client.namespaces.upsert(
+        'namespace',
+        {
+          attributes: { foo: [{ filterable: true, full_text_search: true, type: 'string' }] },
+          distance_metric: 'cosine_distance',
+          ids: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
+          schema: { foo: [{ filterable: true, full_text_search: true, type: 'string' }] },
+          vectors: [0],
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
     ).rejects.toThrow(Turbopuffer.NotFoundError);
   });
 });
