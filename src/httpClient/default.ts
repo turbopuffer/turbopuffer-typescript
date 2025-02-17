@@ -150,7 +150,7 @@ export default class DefaultHTTPClient implements HTTPClient {
       if (
         error &&
         statusCodeShouldRetry(error.status) &&
-        attempt + 1 != maxAttempts
+        attempt + 1 !== maxAttempts
       ) {
         await delay(150 * (attempt + 1)); // 150ms, 300ms, 450ms
         continue;
