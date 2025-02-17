@@ -1,6 +1,6 @@
 import fs from 'fs';
-import type { ResponseLike } from 'turbopuffer/internal/uploads';
-import { toFile } from 'turbopuffer/uploads';
+import type { ResponseLike } from '@turbopuffer/api/internal/uploads';
+import { toFile } from '@turbopuffer/api/uploads';
 
 class MyClass {
   name: string = 'foo';

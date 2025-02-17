@@ -1,27 +1,14 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import Turbopuffer from 'turbopuffer';
+import Turbopuffer from '@turbopuffer/api';
 
 const client = new Turbopuffer({
-  bearerToken: 'My Bearer Token',
+  apiKey: 'My API Key',
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
 describe('resource namespaces', () => {
-  // skipped: tests are disabled for the time being
-  test.skip('retrieve', async () => {
-    const responsePromise = client.namespaces.retrieve('namespace');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // skipped: tests are disabled for the time being
-  test.skip('list', async () => {
+  test('list', async () => {
     const responsePromise = client.namespaces.list();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -32,9 +19,18 @@ describe('resource namespaces', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // skipped: tests are disabled for the time being
-  test.skip('query', async () => {
-    const responsePromise = client.namespaces.query('namespace', {});
+  test('list: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.namespaces.list(
+        { cursor: 'cursor', page_size: 1, prefix: 'prefix' },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Turbopuffer.NotFoundError);
+  });
+
+  test('deleteAll', async () => {
+    const responsePromise = client.namespaces.deleteAll('namespace');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -44,13 +40,8 @@ describe('resource namespaces', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // skipped: tests are disabled for the time being
-  test.skip('upsert: only required params', async () => {
-    const responsePromise = client.namespaces.upsert('namespace', {
-      distance_metric: 'cosine_distance',
-      ids: [0],
-      vectors: [[0]],
-    });
+  test('getSchema', async () => {
+    const responsePromise = client.namespaces.getSchema('namespace');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -60,15 +51,52 @@ describe('resource namespaces', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // skipped: tests are disabled for the time being
-  test.skip('upsert: required and optional params', async () => {
-    const response = await client.namespaces.upsert('namespace', {
-      distance_metric: 'cosine_distance',
-      ids: [0],
-      vectors: [[0]],
-      attributes: { foo: [{}] },
-      copy_from_namespace: 'copy_from_namespace',
-      schema: {},
-    });
+  test('query', async () => {
+    const responsePromise = client.namespaces.query('namespace');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('query: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.namespaces.query(
+        'namespace',
+        {
+          consistency: { level: 'strong' },
+          distance_metric: 'cosine_distance',
+          filter: {},
+          include_attributes: true,
+          include_vectors: true,
+          rank_by: {},
+          top_k: 0,
+          vector: [0],
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Turbopuffer.NotFoundError);
+  });
+
+  test('upsert', async () => {
+    const responsePromise = client.namespaces.upsert('namespace');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('upsert: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.namespaces.upsert('namespace', { allOf: {} }, { path: '/_stainless_unknown_path' }),
+    ).rejects.toThrow(Turbopuffer.NotFoundError);
   });
 });

@@ -1,10 +1,10 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { APIPromise } from 'turbopuffer/api-promise';
+import { APIPromise } from '@turbopuffer/api/api-promise';
 
 import util from 'node:util';
-import Turbopuffer from 'turbopuffer';
-import { APIUserAbortError } from 'turbopuffer';
+import Turbopuffer from '@turbopuffer/api';
+import { APIUserAbortError } from '@turbopuffer/api';
 const defaultFetch = fetch;
 
 describe('instantiate client', () => {
@@ -25,7 +25,7 @@ describe('instantiate client', () => {
     const client = new Turbopuffer({
       baseURL: 'http://localhost:5000/',
       defaultHeaders: { 'X-My-Default-Header': '2' },
-      bearerToken: 'My Bearer Token',
+      apiKey: 'My API Key',
     });
 
     test('they are used in the request', () => {
@@ -79,7 +79,7 @@ describe('instantiate client', () => {
         error: jest.fn(),
       };
 
-      const client = new Turbopuffer({ logger: logger, logLevel: 'debug', bearerToken: 'My Bearer Token' });
+      const client = new Turbopuffer({ logger: logger, logLevel: 'debug', apiKey: 'My API Key' });
 
       await forceAPIResponseForClient(client);
       expect(debugMock).toHaveBeenCalled();
@@ -94,7 +94,7 @@ describe('instantiate client', () => {
         error: jest.fn(),
       };
 
-      const client = new Turbopuffer({ logger: logger, logLevel: 'info', bearerToken: 'My Bearer Token' });
+      const client = new Turbopuffer({ logger: logger, logLevel: 'info', apiKey: 'My API Key' });
 
       await forceAPIResponseForClient(client);
       expect(debugMock).not.toHaveBeenCalled();
@@ -110,7 +110,7 @@ describe('instantiate client', () => {
       };
 
       process.env['TURBOPUFFER_LOG'] = 'debug';
-      const client = new Turbopuffer({ logger: logger, bearerToken: 'My Bearer Token' });
+      const client = new Turbopuffer({ logger: logger, apiKey: 'My API Key' });
 
       await forceAPIResponseForClient(client);
       expect(debugMock).toHaveBeenCalled();
@@ -126,7 +126,7 @@ describe('instantiate client', () => {
       };
 
       process.env['TURBOPUFFER_LOG'] = 'debug';
-      const client = new Turbopuffer({ logger: logger, logLevel: 'off', bearerToken: 'My Bearer Token' });
+      const client = new Turbopuffer({ logger: logger, logLevel: 'off', apiKey: 'My API Key' });
 
       await forceAPIResponseForClient(client);
       expect(debugMock).not.toHaveBeenCalled();
@@ -138,7 +138,7 @@ describe('instantiate client', () => {
       const client = new Turbopuffer({
         baseURL: 'http://localhost:5000/',
         defaultQuery: { apiVersion: 'foo' },
-        bearerToken: 'My Bearer Token',
+        apiKey: 'My API Key',
       });
       expect(client.buildURL('/foo', null)).toEqual('http://localhost:5000/foo?apiVersion=foo');
     });
@@ -147,7 +147,7 @@ describe('instantiate client', () => {
       const client = new Turbopuffer({
         baseURL: 'http://localhost:5000/',
         defaultQuery: { apiVersion: 'foo', hello: 'world' },
-        bearerToken: 'My Bearer Token',
+        apiKey: 'My API Key',
       });
       expect(client.buildURL('/foo', null)).toEqual('http://localhost:5000/foo?apiVersion=foo&hello=world');
     });
@@ -156,7 +156,7 @@ describe('instantiate client', () => {
       const client = new Turbopuffer({
         baseURL: 'http://localhost:5000/',
         defaultQuery: { hello: 'world' },
-        bearerToken: 'My Bearer Token',
+        apiKey: 'My API Key',
       });
       expect(client.buildURL('/foo', { hello: undefined })).toEqual('http://localhost:5000/foo');
     });
@@ -165,7 +165,7 @@ describe('instantiate client', () => {
   test('custom fetch', async () => {
     const client = new Turbopuffer({
       baseURL: 'http://localhost:5000/',
-      bearerToken: 'My Bearer Token',
+      apiKey: 'My API Key',
       fetch: (url) => {
         return Promise.resolve(
           new Response(JSON.stringify({ url, custom: true }), {
@@ -183,7 +183,7 @@ describe('instantiate client', () => {
     // make sure the global fetch type is assignable to our Fetch type
     const client = new Turbopuffer({
       baseURL: 'http://localhost:5000/',
-      bearerToken: 'My Bearer Token',
+      apiKey: 'My API Key',
       fetch: defaultFetch,
     });
   });
@@ -191,7 +191,7 @@ describe('instantiate client', () => {
   test('custom signal', async () => {
     const client = new Turbopuffer({
       baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
-      bearerToken: 'My Bearer Token',
+      apiKey: 'My API Key',
       fetch: (...args) => {
         return new Promise((resolve, reject) =>
           setTimeout(
@@ -223,7 +223,7 @@ describe('instantiate client', () => {
 
     const client = new Turbopuffer({
       baseURL: 'http://localhost:5000/',
-      bearerToken: 'My Bearer Token',
+      apiKey: 'My API Key',
       fetch: testFetch,
     });
 
@@ -233,18 +233,12 @@ describe('instantiate client', () => {
 
   describe('baseUrl', () => {
     test('trailing slash', () => {
-      const client = new Turbopuffer({
-        baseURL: 'http://localhost:5000/custom/path/',
-        bearerToken: 'My Bearer Token',
-      });
+      const client = new Turbopuffer({ baseURL: 'http://localhost:5000/custom/path/', apiKey: 'My API Key' });
       expect(client.buildURL('/foo', null)).toEqual('http://localhost:5000/custom/path/foo');
     });
 
     test('no trailing slash', () => {
-      const client = new Turbopuffer({
-        baseURL: 'http://localhost:5000/custom/path',
-        bearerToken: 'My Bearer Token',
-      });
+      const client = new Turbopuffer({ baseURL: 'http://localhost:5000/custom/path', apiKey: 'My API Key' });
       expect(client.buildURL('/foo', null)).toEqual('http://localhost:5000/custom/path/foo');
     });
 
@@ -253,55 +247,55 @@ describe('instantiate client', () => {
     });
 
     test('explicit option', () => {
-      const client = new Turbopuffer({ baseURL: 'https://example.com', bearerToken: 'My Bearer Token' });
+      const client = new Turbopuffer({ baseURL: 'https://example.com', apiKey: 'My API Key' });
       expect(client.baseURL).toEqual('https://example.com');
     });
 
     test('env variable', () => {
       process.env['TURBOPUFFER_BASE_URL'] = 'https://example.com/from_env';
-      const client = new Turbopuffer({ bearerToken: 'My Bearer Token' });
+      const client = new Turbopuffer({ apiKey: 'My API Key' });
       expect(client.baseURL).toEqual('https://example.com/from_env');
     });
 
     test('empty env variable', () => {
       process.env['TURBOPUFFER_BASE_URL'] = ''; // empty
-      const client = new Turbopuffer({ bearerToken: 'My Bearer Token' });
-      expect(client.baseURL).toEqual('https://{region}.turbopuffer.com');
+      const client = new Turbopuffer({ apiKey: 'My API Key' });
+      expect(client.baseURL).toEqual('https://api.turbopuffer.com');
     });
 
     test('blank env variable', () => {
       process.env['TURBOPUFFER_BASE_URL'] = '  '; // blank
-      const client = new Turbopuffer({ bearerToken: 'My Bearer Token' });
-      expect(client.baseURL).toEqual('https://{region}.turbopuffer.com');
+      const client = new Turbopuffer({ apiKey: 'My API Key' });
+      expect(client.baseURL).toEqual('https://api.turbopuffer.com');
     });
   });
 
   test('maxRetries option is correctly set', () => {
-    const client = new Turbopuffer({ maxRetries: 4, bearerToken: 'My Bearer Token' });
+    const client = new Turbopuffer({ maxRetries: 4, apiKey: 'My API Key' });
     expect(client.maxRetries).toEqual(4);
 
     // default
-    const client2 = new Turbopuffer({ bearerToken: 'My Bearer Token' });
+    const client2 = new Turbopuffer({ apiKey: 'My API Key' });
     expect(client2.maxRetries).toEqual(2);
   });
 
   test('with environment variable arguments', () => {
     // set options via env var
-    process.env['BEARER_TOKEN'] = 'My Bearer Token';
+    process.env['TURBOPUFFER_API_KEY'] = 'My API Key';
     const client = new Turbopuffer();
-    expect(client.bearerToken).toBe('My Bearer Token');
+    expect(client.apiKey).toBe('My API Key');
   });
 
   test('with overridden environment variable arguments', () => {
     // set options via env var
-    process.env['BEARER_TOKEN'] = 'another My Bearer Token';
-    const client = new Turbopuffer({ bearerToken: 'My Bearer Token' });
-    expect(client.bearerToken).toBe('My Bearer Token');
+    process.env['TURBOPUFFER_API_KEY'] = 'another My API Key';
+    const client = new Turbopuffer({ apiKey: 'My API Key' });
+    expect(client.apiKey).toBe('My API Key');
   });
 });
 
 describe('request building', () => {
-  const client = new Turbopuffer({ bearerToken: 'My Bearer Token' });
+  const client = new Turbopuffer({ apiKey: 'My API Key' });
 
   describe('custom headers', () => {
     test('handles undefined', () => {
@@ -320,7 +314,7 @@ describe('request building', () => {
 });
 
 describe('default encoder', () => {
-  const client = new Turbopuffer({ bearerToken: 'My Bearer Token' });
+  const client = new Turbopuffer({ apiKey: 'My API Key' });
 
   class Serializable {
     toJSON() {
@@ -405,7 +399,7 @@ describe('retries', () => {
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
 
-    const client = new Turbopuffer({ bearerToken: 'My Bearer Token', timeout: 10, fetch: testFetch });
+    const client = new Turbopuffer({ apiKey: 'My API Key', timeout: 10, fetch: testFetch });
 
     expect(await client.request({ path: '/foo', method: 'get' })).toEqual({ a: 1 });
     expect(count).toEqual(2);
@@ -435,7 +429,7 @@ describe('retries', () => {
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
 
-    const client = new Turbopuffer({ bearerToken: 'My Bearer Token', fetch: testFetch, maxRetries: 4 });
+    const client = new Turbopuffer({ apiKey: 'My API Key', fetch: testFetch, maxRetries: 4 });
 
     expect(await client.request({ path: '/foo', method: 'get' })).toEqual({ a: 1 });
 
@@ -459,7 +453,7 @@ describe('retries', () => {
       capturedRequest = init;
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
-    const client = new Turbopuffer({ bearerToken: 'My Bearer Token', fetch: testFetch, maxRetries: 4 });
+    const client = new Turbopuffer({ apiKey: 'My API Key', fetch: testFetch, maxRetries: 4 });
 
     expect(
       await client.request({
@@ -489,7 +483,7 @@ describe('retries', () => {
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
     const client = new Turbopuffer({
-      bearerToken: 'My Bearer Token',
+      apiKey: 'My API Key',
       fetch: testFetch,
       maxRetries: 4,
       defaultHeaders: { 'X-Stainless-Retry-Count': null },
@@ -521,7 +515,7 @@ describe('retries', () => {
       capturedRequest = init;
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
-    const client = new Turbopuffer({ bearerToken: 'My Bearer Token', fetch: testFetch, maxRetries: 4 });
+    const client = new Turbopuffer({ apiKey: 'My API Key', fetch: testFetch, maxRetries: 4 });
 
     expect(
       await client.request({
@@ -551,7 +545,7 @@ describe('retries', () => {
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
 
-    const client = new Turbopuffer({ bearerToken: 'My Bearer Token', fetch: testFetch });
+    const client = new Turbopuffer({ apiKey: 'My API Key', fetch: testFetch });
 
     expect(await client.request({ path: '/foo', method: 'get' })).toEqual({ a: 1 });
     expect(count).toEqual(2);
@@ -581,7 +575,7 @@ describe('retries', () => {
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
 
-    const client = new Turbopuffer({ bearerToken: 'My Bearer Token', fetch: testFetch });
+    const client = new Turbopuffer({ apiKey: 'My API Key', fetch: testFetch });
 
     expect(await client.request({ path: '/foo', method: 'get' })).toEqual({ a: 1 });
     expect(count).toEqual(2);

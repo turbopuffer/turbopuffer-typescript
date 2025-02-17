@@ -5,6 +5,7 @@ export { Turbopuffer as default } from './client';
 export { type Uploadable, toFile } from './uploads';
 export { APIPromise } from './api-promise';
 export { Turbopuffer, type ClientOptions } from './client';
+export { PagePromise } from './pagination';
 export {
   TurbopufferError,
   APIError,

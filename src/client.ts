@@ -12,6 +12,8 @@ import * as Shims from './internal/shims';
 import * as Opts from './internal/request-options';
 import { VERSION } from './version';
 import * as Errors from './error';
+import * as Pagination from './pagination';
+import { AbstractPage, type ListNamespacesParams, ListNamespacesResponse } from './pagination';
 import * as Uploads from './uploads';
 import * as API from './resources/index';
 import { APIPromise } from './api-promise';
@@ -19,10 +21,15 @@ import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
 import {
-  NamespaceListResponse,
+  DocumentColumns,
+  DocumentRow,
+  NamespaceDeleteAllResponse,
+  NamespaceGetSchemaResponse,
+  NamespaceListParams,
   NamespaceQueryParams,
   NamespaceQueryResponse,
-  NamespaceRetrieveResponse,
+  NamespaceSummariesListNamespaces,
+  NamespaceSummary,
   NamespaceUpsertParams,
   NamespaceUpsertResponse,
   Namespaces,
@@ -60,9 +67,9 @@ const isLogLevel = (key: string | undefined): key is LogLevel => {
 
 export interface ClientOptions {
   /**
-   * API token used for bearer authentication
+   * API key used for authentication
    */
-  bearerToken?: string | undefined;
+  apiKey?: string | undefined;
 
   /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
@@ -137,7 +144,7 @@ type FinalizedRequestInit = RequestInit & { headers: Headers };
  * API Client for interfacing with the Turbopuffer API.
  */
 export class Turbopuffer {
-  bearerToken: string;
+  apiKey: string;
 
   baseURL: string;
   maxRetries: number;
@@ -154,8 +161,8 @@ export class Turbopuffer {
   /**
    * API Client for interfacing with the Turbopuffer API.
    *
-   * @param {string | undefined} [opts.bearerToken=process.env['BEARER_TOKEN'] ?? undefined]
-   * @param {string} [opts.baseURL=process.env['TURBOPUFFER_BASE_URL'] ?? https://{region}.turbopuffer.com] - Override the default base URL for the API.
+   * @param {string | undefined} [opts.apiKey=process.env['TURBOPUFFER_API_KEY'] ?? undefined]
+   * @param {string} [opts.baseURL=process.env['TURBOPUFFER_BASE_URL'] ?? https://api.turbopuffer.com] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
    * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
@@ -165,19 +172,19 @@ export class Turbopuffer {
    */
   constructor({
     baseURL = readEnv('TURBOPUFFER_BASE_URL'),
-    bearerToken = readEnv('BEARER_TOKEN'),
+    apiKey = readEnv('TURBOPUFFER_API_KEY'),
     ...opts
   }: ClientOptions = {}) {
-    if (bearerToken === undefined) {
+    if (apiKey === undefined) {
       throw new Errors.TurbopufferError(
-        "The BEARER_TOKEN environment variable is missing or empty; either provide it, or instantiate the Turbopuffer client with an bearerToken option, like new Turbopuffer({ bearerToken: 'My Bearer Token' }).",
+        "The TURBOPUFFER_API_KEY environment variable is missing or empty; either provide it, or instantiate the Turbopuffer client with an apiKey option, like new Turbopuffer({ apiKey: 'My API Key' }).",
       );
     }
 
     const options: ClientOptions = {
-      bearerToken,
+      apiKey,
       ...opts,
-      baseURL: baseURL || `https://{region}.turbopuffer.com`,
+      baseURL: baseURL || `https://api.turbopuffer.com`,
     };
 
     this.baseURL = options.baseURL!;
@@ -198,7 +205,7 @@ export class Turbopuffer {
 
     this._options = options;
 
-    this.bearerToken = bearerToken;
+    this.apiKey = apiKey;
   }
 
   protected defaultQuery(): Record<string, string | undefined> | undefined {
@@ -210,7 +217,7 @@ export class Turbopuffer {
   }
 
   protected authHeaders(opts: FinalRequestOptions): Headers | undefined {
-    return new Headers({ Authorization: `Bearer ${this.bearerToken}` });
+    return new Headers({ Authorization: `Bearer ${this.apiKey}` });
   }
 
   /**
@@ -393,6 +400,25 @@ export class Turbopuffer {
     }
 
     return { response, options, controller };
+  }
+
+  getAPIList<Item, PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>>(
+    path: string,
+    Page: new (...args: any[]) => PageClass,
+    opts?: RequestOptions,
+  ): Pagination.PagePromise<PageClass, Item> {
+    return this.requestAPIList(Page, { method: 'get', path, ...opts });
+  }
+
+  requestAPIList<
+    Item = unknown,
+    PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>,
+  >(
+    Page: new (...args: ConstructorParameters<typeof Pagination.AbstractPage>) => PageClass,
+    options: FinalRequestOptions,
+  ): Pagination.PagePromise<PageClass, Item> {
+    const request = this.makeRequest(options, null);
+    return new Pagination.PagePromise<PageClass, Item>(this as any as Turbopuffer, request, Page);
   }
 
   async fetchWithTimeout(
@@ -630,12 +656,23 @@ Turbopuffer.Namespaces = Namespaces;
 export declare namespace Turbopuffer {
   export type RequestOptions = Opts.RequestOptions;
 
+  export import ListNamespaces = Pagination.ListNamespaces;
+  export {
+    type ListNamespacesParams as ListNamespacesParams,
+    type ListNamespacesResponse as ListNamespacesResponse,
+  };
+
   export {
     Namespaces as Namespaces,
-    type NamespaceRetrieveResponse as NamespaceRetrieveResponse,
-    type NamespaceListResponse as NamespaceListResponse,
+    type DocumentColumns as DocumentColumns,
+    type DocumentRow as DocumentRow,
+    type NamespaceSummary as NamespaceSummary,
+    type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
+    type NamespaceGetSchemaResponse as NamespaceGetSchemaResponse,
     type NamespaceQueryResponse as NamespaceQueryResponse,
     type NamespaceUpsertResponse as NamespaceUpsertResponse,
+    type NamespaceSummariesListNamespaces as NamespaceSummariesListNamespaces,
+    type NamespaceListParams as NamespaceListParams,
     type NamespaceQueryParams as NamespaceQueryParams,
     type NamespaceUpsertParams as NamespaceUpsertParams,
   };

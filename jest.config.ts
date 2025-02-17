@@ -7,8 +7,8 @@ const config: JestConfigWithTsJest = {
     '^.+\\.(t|j)sx?$': ['@swc/jest', { sourceMaps: 'inline' }],
   },
   moduleNameMapper: {
-    '^turbopuffer$': '<rootDir>/src/index.ts',
-    '^turbopuffer/(.*)$': '<rootDir>/src/$1',
+    '^@turbopuffer/api$': '<rootDir>/src/index.ts',
+    '^@turbopuffer/api/(.*)$': '<rootDir>/src/$1',
   },
   modulePathIgnorePatterns: [
     '<rootDir>/ecosystem-tests/',

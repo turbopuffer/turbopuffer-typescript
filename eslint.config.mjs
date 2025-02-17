@@ -24,7 +24,7 @@ export default tseslint.config(
         {
           patterns: [
             {
-              group: ['turbopuffer', 'turbopuffer/*'],
+              group: ['@turbopuffer/api', '@turbopuffer/api/*'],
               message: 'Use a relative import, not a package import.',
             },
           ],

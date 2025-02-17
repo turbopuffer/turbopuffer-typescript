@@ -5,8 +5,8 @@
   "compilerOptions": {
     "rootDir": "./dist/src",
     "paths": {
-      "turbopuffer/*": ["dist/src/*"],
-      "turbopuffer": ["dist/src/index.ts"],
+      "@turbopuffer/api/*": ["dist/src/*"],
+      "@turbopuffer/api": ["dist/src/index.ts"],
     },
     "noEmit": false,
     "declaration": true,

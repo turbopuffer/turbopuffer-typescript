@@ -2,10 +2,15 @@
 
 export {
   Namespaces,
-  type NamespaceRetrieveResponse,
-  type NamespaceListResponse,
+  type DocumentColumns,
+  type DocumentRow,
+  type NamespaceSummary,
+  type NamespaceDeleteAllResponse,
+  type NamespaceGetSchemaResponse,
   type NamespaceQueryResponse,
   type NamespaceUpsertResponse,
+  type NamespaceListParams,
   type NamespaceQueryParams,
   type NamespaceUpsertParams,
+  type NamespaceSummariesListNamespaces,
 } from './namespaces';

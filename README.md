@@ -1,10 +1,10 @@
 # Turbopuffer TypeScript API Library
 
-[![NPM version](https://img.shields.io/npm/v/turbopuffer.svg)](https://npmjs.org/package/turbopuffer) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/turbopuffer)
+[![NPM version](https://img.shields.io/npm/v/@turbopuffer/api.svg)](https://npmjs.org/package/@turbopuffer/api) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/@turbopuffer/api)
 
 This library provides convenient access to the Turbopuffer REST API from server-side TypeScript or JavaScript.
 
-The REST API documentation can be found on [docs.turbopuffer.com](https://docs.turbopuffer.com). The full API of this library can be found in [api.md](api.md).
+The REST API documentation can be found on [turbopuffer.com](https://turbopuffer.com/docs). The full API of this library can be found in [api.md](api.md).
 
 It is generated with [Stainless](https://www.stainlessapi.com/).
 
@@ -15,7 +15,7 @@ npm install git+ssh://git@github.com:stainless-sdks/turbopuffer-typescript.git
 ```
 
 > [!NOTE]
-> Once this package is [published to npm](https://app.stainlessapi.com/docs/guides/publish), this will become: `npm install turbopuffer`
+> Once this package is [published to npm](https://app.stainlessapi.com/docs/guides/publish), this will become: `npm install @turbopuffer/api`
 
 ## Usage
 
@@ -23,14 +23,16 @@ The full API of this library can be found in [api.md](api.md).
 
 <!-- prettier-ignore -->
 ```js
-import Turbopuffer from 'turbopuffer';
+import Turbopuffer from '@turbopuffer/api';
 
 const client = new Turbopuffer({
-  bearerToken: process.env['BEARER_TOKEN'], // This is the default and can be omitted
+  apiKey: process.env['TURBOPUFFER_API_KEY'], // This is the default and can be omitted
 });
 
 async function main() {
-  const namespaces = await client.namespaces.list();
+  const response = await client.namespaces.upsert('products');
+
+  console.log(response.status);
 }
 
 main();
@@ -42,14 +44,14 @@ This library includes TypeScript definitions for all request params and response
 
 <!-- prettier-ignore -->
 ```ts
-import Turbopuffer from 'turbopuffer';
+import Turbopuffer from '@turbopuffer/api';
 
 const client = new Turbopuffer({
-  bearerToken: process.env['BEARER_TOKEN'], // This is the default and can be omitted
+  apiKey: process.env['TURBOPUFFER_API_KEY'], // This is the default and can be omitted
 });
 
 async function main() {
-  const namespaces: Turbopuffer.NamespaceListResponse = await client.namespaces.list();
+  const documentRows: Turbopuffer.NamespaceQueryResponse = await client.namespaces.query('products');
 }
 
 main();
@@ -66,7 +68,7 @@ a subclass of `APIError` will be thrown:
 <!-- prettier-ignore -->
 ```ts
 async function main() {
-  const namespaces = await client.namespaces.list().catch(async (err) => {
+  const documentRows = await client.namespaces.query('products').catch(async (err) => {
     if (err instanceof Turbopuffer.APIError) {
       console.log(err.status); // 400
       console.log(err.name); // BadRequestError
@@ -109,7 +111,7 @@ const client = new Turbopuffer({
 });
 
 // Or, configure per-request:
-await client.namespaces.list({
+await client.namespaces.query('products', {
   maxRetries: 5,
 });
 ```
@@ -126,7 +128,7 @@ const client = new Turbopuffer({
 });
 
 // Override per-request:
-await client.namespaces.list({
+await client.namespaces.query('products', {
   timeout: 5 * 1000,
 });
 ```
@@ -134,6 +136,37 @@ await client.namespaces.list({
 On timeout, an `APIConnectionTimeoutError` is thrown.
 
 Note that requests which time out will be [retried twice by default](#retries).
+
+## Auto-pagination
+
+List methods in the Turbopuffer API are paginated.
+You can use the `for await … of` syntax to iterate through items across all pages:
+
+```ts
+async function fetchAllNamespaces(params) {
+  const allNamespaces = [];
+  // Automatically fetches more pages as needed.
+  for await (const namespaceSummary of client.namespaces.list({ prefix: 'products' })) {
+    allNamespaces.push(namespaceSummary);
+  }
+  return allNamespaces;
+}
+```
+
+Alternatively, you can request a single page at a time:
+
+```ts
+let page = await client.namespaces.list({ prefix: 'products' });
+for (const namespaceSummary of page.namespaces) {
+  console.log(namespaceSummary);
+}
+
+// Convenience methods are provided for manually paginating:
+while (page.hasNextPage()) {
+  page = await page.getNextPage();
+  // ...
+}
+```
 
 ## Advanced Usage
 
@@ -147,13 +180,13 @@ You can also use the `.withResponse()` method to get the raw `Response` along wi
 ```ts
 const client = new Turbopuffer();
 
-const response = await client.namespaces.list().asResponse();
+const response = await client.namespaces.query('products').asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: namespaces, response: raw } = await client.namespaces.list().withResponse();
+const { data: documentRows, response: raw } = await client.namespaces.query('products').withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(namespaces);
+console.log(documentRows);
 ```
 
 ### Making custom/undocumented requests
@@ -227,7 +260,7 @@ which can be used to inspect or alter the `Request` or `Response` before/after e
 
 ```ts
 import { fetch } from 'undici'; // as one example
-import Turbopuffer from 'turbopuffer';
+import Turbopuffer from '@turbopuffer/api';
 
 const client = new Turbopuffer({
   fetch: async (url: RequestInfo, init?: RequestInit): Promise<Response> => {
@@ -247,7 +280,7 @@ This is intended for debugging purposes only and may change in the future withou
 If you want to set custom `fetch` options without overriding the `fetch` function, you can provide a `fetchOptions` object when instantiating the client or making a request. (Request-specific options override client options.)
 
 ```ts
-import Turbopuffer from 'turbopuffer';
+import Turbopuffer from '@turbopuffer/api';
 
 const client = new Turbopuffer({
   fetchOptions: {
@@ -264,7 +297,7 @@ options to requests:
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/node.svg" align="top" width="18" height="21"> **Node** <sup>[[docs](https://github.com/nodejs/undici/blob/main/docs/docs/api/ProxyAgent.md#example---proxyagent-with-fetch)]</sup>
 
 ```ts
-import Turbopuffer from 'turbopuffer';
+import Turbopuffer from '@turbopuffer/api';
 import * as undici from 'undici';
 
 const proxyAgent = new undici.ProxyAgent('http://localhost:8888');
@@ -278,7 +311,7 @@ const client = new Turbopuffer({
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/bun.svg" align="top" width="18" height="21"> **Bun** <sup>[[docs](https://bun.sh/guides/http/proxy)]</sup>
 
 ```ts
-import Turbopuffer from 'turbopuffer';
+import Turbopuffer from '@turbopuffer/api';
 
 const client = new Turbopuffer({
   fetchOptions: {
@@ -290,7 +323,7 @@ const client = new Turbopuffer({
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/deno.svg" align="top" width="18" height="21"> **Deno** <sup>[[docs](https://docs.deno.com/api/deno/~/Deno.createHttpClient)]</sup>
 
 ```ts
-import Turbopuffer from 'npm:turbopuffer';
+import Turbopuffer from 'npm:@turbopuffer/api';
 
 const httpClient = Deno.createHttpClient({ proxy: { url: 'http://localhost:8888' } });
 const client = new Turbopuffer({
