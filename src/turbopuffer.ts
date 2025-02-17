@@ -5,7 +5,7 @@
  * Based off the initial work of https://github.com/holocron-hq! Thank you ❤️
  */
 
-import { createHTTPClient } from "./httpClient";
+import { createHTTPClient } from "./createHTTPClient";
 import {
   fromColumnar,
   parseIntMetric,
