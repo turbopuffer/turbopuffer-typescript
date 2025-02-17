@@ -98,7 +98,7 @@ export default class DefaultHTTPClient implements HTTPClient {
 
     const maxAttempts = retryable ? 3 : 1;
     let response!: Response;
-    let error: TurbopufferError | Error | null = null;
+    let error: TurbopufferError | null = null;
     let request_start!: number;
     let response_start!: number;
 
@@ -113,7 +113,9 @@ export default class DefaultHTTPClient implements HTTPClient {
         });
       } catch (e: unknown) {
         if (e instanceof Error) {
-          error = e;
+          error = new TurbopufferError(`fetch failed: ${e.message}`, {
+            cause: e,
+          });
         } else {
           // not an Error? shouldn't happen but good to be thorough
           throw e;
@@ -146,7 +148,7 @@ export default class DefaultHTTPClient implements HTTPClient {
         );
       }
       if (
-        error instanceof TurbopufferError &&
+        error &&
         statusCodeShouldRetry(error.status) &&
         attempt + 1 != maxAttempts
       ) {
