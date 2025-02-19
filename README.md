@@ -53,7 +53,7 @@ const client = new Turbopuffer({
 });
 
 async function main() {
-  const response: Turbopuffer.NamespaceQueryResponse = await client.namespaces.query('products');
+  const documentRowResponses: Turbopuffer.NamespaceQueryResponse = await client.namespaces.query('products');
 }
 
 main();
@@ -70,7 +70,7 @@ a subclass of `APIError` will be thrown:
 <!-- prettier-ignore -->
 ```ts
 async function main() {
-  const response = await client.namespaces.query('products').catch(async (err) => {
+  const documentRowResponses = await client.namespaces.query('products').catch(async (err) => {
     if (err instanceof Turbopuffer.APIError) {
       console.log(err.status); // 400
       console.log(err.name); // BadRequestError
@@ -186,9 +186,11 @@ const response = await client.namespaces.query('products').asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: response, response: raw } = await client.namespaces.query('products').withResponse();
+const { data: documentRowResponses, response: raw } = await client.namespaces
+  .query('products')
+  .withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(response);
+console.log(documentRowResponses);
 ```
 
 ### Making custom/undocumented requests
