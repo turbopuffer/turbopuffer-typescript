@@ -55,12 +55,12 @@ $ cd turbopuffer-typescript
 # With yarn
 $ yarn link
 $ cd ../my-package
-$ yarn link @turbopuffer/turbopuffer
+$ yarn link @turbopuffer/api
 
 # With pnpm
 $ pnpm link --global
 $ cd ../my-package
-$ pnpm link -—global @turbopuffer/turbopuffer
+$ pnpm link -—global @turbopuffer/api
 ```
 
 ## Running tests

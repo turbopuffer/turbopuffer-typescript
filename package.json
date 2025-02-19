@@ -1,5 +1,5 @@
 {
-  "name": "@turbopuffer/turbopuffer",
+  "name": "@turbopuffer/api",
   "version": "0.0.1-alpha.0",
   "description": "The official TypeScript library for the Turbopuffer API",
   "author": "Turbopuffer <info@turbopuffer.com>",
@@ -47,8 +47,8 @@
     "typescript": "^4.8.2"
   },
   "imports": {
-    "@turbopuffer/turbopuffer": ".",
-    "@turbopuffer/turbopuffer/*": "./src/*"
+    "@turbopuffer/api": ".",
+    "@turbopuffer/api/*": "./src/*"
   },
   "exports": {
     ".": {

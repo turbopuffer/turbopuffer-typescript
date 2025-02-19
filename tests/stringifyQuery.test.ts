@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { Turbopuffer } from '@turbopuffer/turbopuffer';
+import { Turbopuffer } from '@turbopuffer/api';
 
 const { stringifyQuery } = Turbopuffer.prototype as any;
 

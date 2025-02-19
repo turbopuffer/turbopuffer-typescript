@@ -2,13 +2,8 @@
 
 Types:
 
-- <code><a href="./src/resources/namespaces.ts">AttributeSchema</a></code>
-- <code><a href="./src/resources/namespaces.ts">DistanceMetric</a></code>
 - <code><a href="./src/resources/namespaces.ts">DocumentColumns</a></code>
 - <code><a href="./src/resources/namespaces.ts">DocumentRow</a></code>
-- <code><a href="./src/resources/namespaces.ts">DocumentRowResponse</a></code>
-- <code><a href="./src/resources/namespaces.ts">FullTextSearchConfig</a></code>
-- <code><a href="./src/resources/namespaces.ts">ID</a></code>
 - <code><a href="./src/resources/namespaces.ts">NamespaceSummary</a></code>
 - <code><a href="./src/resources/namespaces.ts">NamespaceDeleteAllResponse</a></code>
 - <code><a href="./src/resources/namespaces.ts">NamespaceGetSchemaResponse</a></code>
