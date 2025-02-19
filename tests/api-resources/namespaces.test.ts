@@ -103,7 +103,7 @@ describe('resource namespaces', () => {
           distance_metric: 'cosine_distance',
           ids: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
           schema: { foo: [{ filterable: true, full_text_search: true, type: 'string' }] },
-          vectors: [0],
+          vectors: [[0]],
         },
         { path: '/_stainless_unknown_path' },
       ),

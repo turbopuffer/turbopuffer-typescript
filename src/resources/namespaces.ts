@@ -71,7 +71,7 @@ export interface DocumentColumns {
   /**
    * Vectors describing each of the documents.
    */
-  vectors?: Array<number | Array<number> | null>;
+  vectors?: Array<Array<number> | null>;
 }
 
 export namespace DocumentColumns {
@@ -445,7 +445,7 @@ export declare namespace NamespaceUpsertParams {
     /**
      * Vectors describing each of the documents.
      */
-    vectors?: Array<number | Array<number> | null>;
+    vectors?: Array<Array<number> | null>;
   }
 
   export namespace UpsertColumnar {
