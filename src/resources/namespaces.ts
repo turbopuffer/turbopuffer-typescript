@@ -245,9 +245,7 @@ export interface NamespaceSummary {
   /**
    * The namespace ID.
    */
-  id?: string;
-
-  required?: unknown;
+  id: string;
 }
 
 export interface NamespaceDeleteAllResponse {
