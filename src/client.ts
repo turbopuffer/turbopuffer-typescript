@@ -21,7 +21,6 @@ import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
 import {
-  AttributeSchema,
   DistanceMetric,
   DocumentColumns,
   DocumentRow,
@@ -668,7 +667,6 @@ export declare namespace Turbopuffer {
 
   export {
     Namespaces as Namespaces,
-    type AttributeSchema as AttributeSchema,
     type DistanceMetric as DistanceMetric,
     type DocumentColumns as DocumentColumns,
     type DocumentRow as DocumentRow,

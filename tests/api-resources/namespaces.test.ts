@@ -104,7 +104,7 @@ describe('resource namespaces', () => {
   test.skip('upsert: required and optional params', async () => {
     const response = await client.namespaces.upsert('namespace', {
       distance_metric: 'cosine_distance',
-      attributes: { foo: [{}] },
+      attributes: { foo: [{ foo: 'bar' }] },
       ids: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
       schema: { foo: [{ filterable: true, full_text_search: true, type: 'string' }] },
       vectors: [[0]],

@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../resource';
+import * as NamespacesAPI from './namespaces';
 import { APIPromise } from '../api-promise';
 import { ListNamespaces, type ListNamespacesParams, PagePromise } from '../pagination';
 import { RequestOptions } from '../internal/request-options';
@@ -55,28 +56,6 @@ export class Namespaces extends APIResource {
 export type NamespaceSummariesListNamespaces = ListNamespaces<NamespaceSummary>;
 
 /**
- * The schema for the attributes attached to a document.
- */
-export interface AttributeSchema {
-  /**
-   * Whether or not the attributes can be used in filters/WHERE clauses.
-   */
-  filterable?: boolean;
-
-  /**
-   * Whether this attribute can be used as part of a BM25 full-text search. Requires
-   * the `string` or `[]string` type, and by default, BM25-enabled attributes are not
-   * filterable. You can override this by setting `filterable: true`.
-   */
-  full_text_search?: boolean | FullTextSearchConfig;
-
-  /**
-   * The data type of the attribute.
-   */
-  type?: 'string' | 'uint' | 'uuid' | 'bool' | '[]string' | '[]uint' | '[]uuid';
-}
-
-/**
  * A function used to calculate vector similarity.
  *
  * - `cosine_distance` - Defined as `1 - cosine_similarity` and ranges from 0 to 2.
@@ -92,7 +71,7 @@ export interface DocumentColumns {
   /**
    * The attributes attached to each of the documents.
    */
-  attributes?: Record<string, Array<unknown>>;
+  attributes?: Record<string, Array<Record<string, unknown>>>;
 
   /**
    * The IDs of the documents.
@@ -117,7 +96,7 @@ export interface DocumentRow {
   /**
    * The attributes attached to the document.
    */
-  attributes?: unknown;
+  attributes?: Record<string, unknown>;
 
   /**
    * A vector describing the document.
@@ -193,7 +172,38 @@ export interface NamespaceDeleteAllResponse {
   status?: 'ok';
 }
 
-export type NamespaceGetSchemaResponse = Record<string, Array<AttributeSchema>>;
+export type NamespaceGetSchemaResponse = Record<string, Array<NamespaceGetSchemaResponse.Item>>;
+
+export namespace NamespaceGetSchemaResponse {
+  /**
+   * The schema for an attribute attached to a document.
+   */
+  export interface Item {
+    /**
+     * Whether or not the attributes can be used in filters/WHERE clauses.
+     */
+    filterable?: boolean;
+
+    /**
+     * Whether this attribute can be used as part of a BM25 full-text search. Requires
+     * the `string` or `[]string` type, and by default, BM25-enabled attributes are not
+     * filterable. You can override this by setting `filterable: true`.
+     */
+    full_text_search?: boolean | NamespacesAPI.FullTextSearchConfig;
+
+    /**
+     * The data type of the attribute.
+     *
+     * - `string` - A string.
+     * - `uint` - An unsigned integer.
+     * - `uuid` - A UUID.
+     * - `bool` - A boolean.
+     * - `[]string` - An array of strings.
+     * - `[]uint` - An array of unsigned integers.
+     */
+    type?: 'string' | 'uint' | 'uuid' | 'bool' | '[]string' | '[]uint' | '[]uuid';
+  }
+}
 
 export type NamespaceQueryResponse = Array<DocumentRow>;
 
@@ -288,7 +298,7 @@ export declare namespace NamespaceUpsertParams {
     /**
      * The attributes attached to each of the documents.
      */
-    attributes?: Record<string, Array<unknown>>;
+    attributes?: Record<string, Array<Record<string, unknown>>>;
 
     /**
      * The IDs of the documents.
@@ -298,12 +308,43 @@ export declare namespace NamespaceUpsertParams {
     /**
      * The schema of the attributes attached to the documents.
      */
-    schema?: Record<string, Array<AttributeSchema>>;
+    schema?: Record<string, Array<UpsertColumnar.Schema>>;
 
     /**
      * Vectors describing each of the documents.
      */
     vectors?: Array<Array<number> | null>;
+  }
+
+  export namespace UpsertColumnar {
+    /**
+     * The schema for an attribute attached to a document.
+     */
+    export interface Schema {
+      /**
+       * Whether or not the attributes can be used in filters/WHERE clauses.
+       */
+      filterable?: boolean;
+
+      /**
+       * Whether this attribute can be used as part of a BM25 full-text search. Requires
+       * the `string` or `[]string` type, and by default, BM25-enabled attributes are not
+       * filterable. You can override this by setting `filterable: true`.
+       */
+      full_text_search?: boolean | NamespacesAPI.FullTextSearchConfig;
+
+      /**
+       * The data type of the attribute.
+       *
+       * - `string` - A string.
+       * - `uint` - An unsigned integer.
+       * - `uuid` - A UUID.
+       * - `bool` - A boolean.
+       * - `[]string` - An array of strings.
+       * - `[]uint` - An array of unsigned integers.
+       */
+      type?: 'string' | 'uint' | 'uuid' | 'bool' | '[]string' | '[]uint' | '[]uuid';
+    }
   }
 
   export interface UpsertRowBased {
@@ -317,7 +358,38 @@ export declare namespace NamespaceUpsertParams {
     /**
      * The schema of the attributes attached to the documents.
      */
-    schema?: Record<string, Array<AttributeSchema>>;
+    schema?: Record<string, Array<UpsertRowBased.Schema>>;
+  }
+
+  export namespace UpsertRowBased {
+    /**
+     * The schema for an attribute attached to a document.
+     */
+    export interface Schema {
+      /**
+       * Whether or not the attributes can be used in filters/WHERE clauses.
+       */
+      filterable?: boolean;
+
+      /**
+       * Whether this attribute can be used as part of a BM25 full-text search. Requires
+       * the `string` or `[]string` type, and by default, BM25-enabled attributes are not
+       * filterable. You can override this by setting `filterable: true`.
+       */
+      full_text_search?: boolean | NamespacesAPI.FullTextSearchConfig;
+
+      /**
+       * The data type of the attribute.
+       *
+       * - `string` - A string.
+       * - `uint` - An unsigned integer.
+       * - `uuid` - A UUID.
+       * - `bool` - A boolean.
+       * - `[]string` - An array of strings.
+       * - `[]uint` - An array of unsigned integers.
+       */
+      type?: 'string' | 'uint' | 'uuid' | 'bool' | '[]string' | '[]uint' | '[]uuid';
+    }
   }
 
   export interface CopyFromNamespace {
@@ -334,7 +406,6 @@ export declare namespace NamespaceUpsertParams {
 
 export declare namespace Namespaces {
   export {
-    type AttributeSchema as AttributeSchema,
     type DistanceMetric as DistanceMetric,
     type DocumentColumns as DocumentColumns,
     type DocumentRow as DocumentRow,
