@@ -2,8 +2,12 @@
 
 export {
   Namespaces,
+  type AttributeSchema,
+  type DistanceMetric,
   type DocumentColumns,
   type DocumentRow,
+  type FullTextSearchConfig,
+  type ID,
   type NamespaceSummary,
   type NamespaceDeleteAllResponse,
   type NamespaceGetSchemaResponse,

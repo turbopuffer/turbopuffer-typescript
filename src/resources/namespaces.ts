@@ -55,95 +55,54 @@ export class Namespaces extends APIResource {
 export type NamespaceSummariesListNamespaces = ListNamespaces<NamespaceSummary>;
 
 /**
+ * The schema for the attributes attached to a document.
+ */
+export interface AttributeSchema {
+  /**
+   * Whether or not the attributes can be used in filters/WHERE clauses.
+   */
+  filterable?: boolean;
+
+  /**
+   * Whether this attribute can be used as part of a BM25 full-text search. Requires
+   * the `string` or `[]string` type, and by default, BM25-enabled attributes are not
+   * filterable. You can override this by setting `filterable: true`.
+   */
+  full_text_search?: boolean | FullTextSearchConfig;
+
+  /**
+   * The data type of the attribute.
+   */
+  type?: 'string' | 'uint' | 'uuid' | 'bool' | '[]string' | '[]uint' | '[]uuid';
+}
+
+/**
+ * A function used to calculate vector similarity.
+ *
+ * - `cosine_distance` - Defined as `1 - cosine_similarity` and ranges from 0 to 2.
+ *   Lower is better.
+ * - `euclidean_squared` - Defined as `sum((x - y)^2)`. Lower is better.
+ */
+export type DistanceMetric = 'cosine_distance' | 'euclidean_squared';
+
+/**
  * A list of documents in columnar format.
  */
 export interface DocumentColumns {
   /**
    * The attributes attached to each of the documents.
    */
-  attributes?: Record<string, Array<DocumentColumns.Attribute>>;
+  attributes?: Record<string, Array<AttributeSchema>>;
 
   /**
    * The IDs of the documents.
    */
-  ids?: Array<string | number>;
+  ids?: Array<ID>;
 
   /**
    * Vectors describing each of the documents.
    */
   vectors?: Array<Array<number> | null>;
-}
-
-export namespace DocumentColumns {
-  /**
-   * The schema for the attributes attached to a document.
-   */
-  export interface Attribute {
-    /**
-     * Whether or not the attributes can be used in filters/WHERE clauses.
-     */
-    filterable?: boolean;
-
-    /**
-     * Whether this attribute can be used as part of a BM25 full-text search. Requires
-     * the `string` or `[]string` type, and by default, BM25-enabled attributes are not
-     * filterable. You can override this by setting `filterable: true`.
-     */
-    full_text_search?: boolean | Attribute.FullTextSearchConfig;
-
-    /**
-     * The data type of the attribute.
-     */
-    type?: 'string' | 'uint' | 'uuid' | 'bool' | '[]string' | '[]uint' | '[]uuid';
-  }
-
-  export namespace Attribute {
-    /**
-     * Detailed configuration options for BM25 full-text search.
-     */
-    export interface FullTextSearchConfig {
-      /**
-       * Whether searching is case-sensitive. Defaults to `false` (i.e.
-       * case-insensitive).
-       */
-      case_sensitive?: boolean;
-
-      /**
-       * The language of the text. Defaults to `english`.
-       */
-      language?:
-        | 'arabic'
-        | 'danish'
-        | 'dutch'
-        | 'english'
-        | 'finnish'
-        | 'french'
-        | 'german'
-        | 'greek'
-        | 'hungarian'
-        | 'italian'
-        | 'norwegian'
-        | 'portuguese'
-        | 'romanian'
-        | 'russian'
-        | 'spanish'
-        | 'swedish'
-        | 'tamil'
-        | 'turkish';
-
-      /**
-       * Removes common words from the text based on language. Defaults to `true` (i.e.
-       * remove common words).
-       */
-      remove_stopwords?: boolean;
-
-      /**
-       * Language-specific stemming for the text. Defaults to `false` (i.e., do not
-       * stem).
-       */
-      stemming?: boolean;
-    }
-  }
 }
 
 /**
@@ -153,12 +112,12 @@ export interface DocumentRow {
   /**
    * An identifier for a document.
    */
-  id?: string | number;
+  id?: ID;
 
   /**
    * The attributes attached to the document.
    */
-  attributes?: Record<string, DocumentRow.Attributes>;
+  attributes?: Record<string, AttributeSchema>;
 
   /**
    * A vector describing the document.
@@ -166,77 +125,56 @@ export interface DocumentRow {
   vector?: Array<number> | null;
 }
 
-export namespace DocumentRow {
+/**
+ * Detailed configuration options for BM25 full-text search.
+ */
+export interface FullTextSearchConfig {
   /**
-   * The schema for the attributes attached to a document.
+   * Whether searching is case-sensitive. Defaults to `false` (i.e.
+   * case-insensitive).
    */
-  export interface Attributes {
-    /**
-     * Whether or not the attributes can be used in filters/WHERE clauses.
-     */
-    filterable?: boolean;
+  case_sensitive?: boolean;
 
-    /**
-     * Whether this attribute can be used as part of a BM25 full-text search. Requires
-     * the `string` or `[]string` type, and by default, BM25-enabled attributes are not
-     * filterable. You can override this by setting `filterable: true`.
-     */
-    full_text_search?: boolean | Attributes.FullTextSearchConfig;
+  /**
+   * The language of the text. Defaults to `english`.
+   */
+  language?:
+    | 'arabic'
+    | 'danish'
+    | 'dutch'
+    | 'english'
+    | 'finnish'
+    | 'french'
+    | 'german'
+    | 'greek'
+    | 'hungarian'
+    | 'italian'
+    | 'norwegian'
+    | 'portuguese'
+    | 'romanian'
+    | 'russian'
+    | 'spanish'
+    | 'swedish'
+    | 'tamil'
+    | 'turkish';
 
-    /**
-     * The data type of the attribute.
-     */
-    type?: 'string' | 'uint' | 'uuid' | 'bool' | '[]string' | '[]uint' | '[]uuid';
-  }
+  /**
+   * Removes common words from the text based on language. Defaults to `true` (i.e.
+   * remove common words).
+   */
+  remove_stopwords?: boolean;
 
-  export namespace Attributes {
-    /**
-     * Detailed configuration options for BM25 full-text search.
-     */
-    export interface FullTextSearchConfig {
-      /**
-       * Whether searching is case-sensitive. Defaults to `false` (i.e.
-       * case-insensitive).
-       */
-      case_sensitive?: boolean;
-
-      /**
-       * The language of the text. Defaults to `english`.
-       */
-      language?:
-        | 'arabic'
-        | 'danish'
-        | 'dutch'
-        | 'english'
-        | 'finnish'
-        | 'french'
-        | 'german'
-        | 'greek'
-        | 'hungarian'
-        | 'italian'
-        | 'norwegian'
-        | 'portuguese'
-        | 'romanian'
-        | 'russian'
-        | 'spanish'
-        | 'swedish'
-        | 'tamil'
-        | 'turkish';
-
-      /**
-       * Removes common words from the text based on language. Defaults to `true` (i.e.
-       * remove common words).
-       */
-      remove_stopwords?: boolean;
-
-      /**
-       * Language-specific stemming for the text. Defaults to `false` (i.e., do not
-       * stem).
-       */
-      stemming?: boolean;
-    }
-  }
+  /**
+   * Language-specific stemming for the text. Defaults to `false` (i.e., do not
+   * stem).
+   */
+  stemming?: boolean;
 }
+
+/**
+ * An identifier for a document.
+ */
+export type ID = string | number;
 
 /**
  * A summary of a namespace.
@@ -255,79 +193,7 @@ export interface NamespaceDeleteAllResponse {
   status?: 'ok';
 }
 
-export type NamespaceGetSchemaResponse = Record<string, Array<NamespaceGetSchemaResponse.Item>>;
-
-export namespace NamespaceGetSchemaResponse {
-  /**
-   * The schema for the attributes attached to a document.
-   */
-  export interface Item {
-    /**
-     * Whether or not the attributes can be used in filters/WHERE clauses.
-     */
-    filterable?: boolean;
-
-    /**
-     * Whether this attribute can be used as part of a BM25 full-text search. Requires
-     * the `string` or `[]string` type, and by default, BM25-enabled attributes are not
-     * filterable. You can override this by setting `filterable: true`.
-     */
-    full_text_search?: boolean | Item.FullTextSearchConfig;
-
-    /**
-     * The data type of the attribute.
-     */
-    type?: 'string' | 'uint' | 'uuid' | 'bool' | '[]string' | '[]uint' | '[]uuid';
-  }
-
-  export namespace Item {
-    /**
-     * Detailed configuration options for BM25 full-text search.
-     */
-    export interface FullTextSearchConfig {
-      /**
-       * Whether searching is case-sensitive. Defaults to `false` (i.e.
-       * case-insensitive).
-       */
-      case_sensitive?: boolean;
-
-      /**
-       * The language of the text. Defaults to `english`.
-       */
-      language?:
-        | 'arabic'
-        | 'danish'
-        | 'dutch'
-        | 'english'
-        | 'finnish'
-        | 'french'
-        | 'german'
-        | 'greek'
-        | 'hungarian'
-        | 'italian'
-        | 'norwegian'
-        | 'portuguese'
-        | 'romanian'
-        | 'russian'
-        | 'spanish'
-        | 'swedish'
-        | 'tamil'
-        | 'turkish';
-
-      /**
-       * Removes common words from the text based on language. Defaults to `true` (i.e.
-       * remove common words).
-       */
-      remove_stopwords?: boolean;
-
-      /**
-       * Language-specific stemming for the text. Defaults to `false` (i.e., do not
-       * stem).
-       */
-      stemming?: boolean;
-    }
-  }
-}
+export type NamespaceGetSchemaResponse = Record<string, Array<AttributeSchema>>;
 
 export type NamespaceQueryResponse = Array<DocumentRow>;
 
@@ -355,12 +221,8 @@ export interface NamespaceQueryParams {
 
   /**
    * A function used to calculate vector similarity.
-   *
-   * - `cosine_distance` - Defined as `1 - cosine_similarity` and ranges from 0 to 2.
-   *   Lower is better.
-   * - `euclidean_squared` - Defined as `sum((x - y)^2)`. Lower is better.
    */
-  distance_metric?: 'cosine_distance' | 'euclidean_squared';
+  distance_metric?: DistanceMetric;
 
   /**
    * Exact filters for attributes to refine search results for. Think of it as a SQL
@@ -421,26 +283,22 @@ export declare namespace NamespaceUpsertParams {
     /**
      * The attributes attached to each of the documents.
      */
-    attributes?: Record<string, Array<UpsertColumnar.Attribute>>;
+    attributes?: Record<string, Array<AttributeSchema>>;
 
     /**
      * A function used to calculate vector similarity.
-     *
-     * - `cosine_distance` - Defined as `1 - cosine_similarity` and ranges from 0 to 2.
-     *   Lower is better.
-     * - `euclidean_squared` - Defined as `sum((x - y)^2)`. Lower is better.
      */
-    distance_metric?: 'cosine_distance' | 'euclidean_squared';
+    distance_metric?: DistanceMetric;
 
     /**
      * The IDs of the documents.
      */
-    ids?: Array<string | number>;
+    ids?: Array<ID>;
 
     /**
      * The schema of the attributes attached to the documents.
      */
-    schema?: Record<string, Array<UpsertColumnar.Schema>>;
+    schema?: Record<string, Array<AttributeSchema>>;
 
     /**
      * Vectors describing each of the documents.
@@ -448,236 +306,18 @@ export declare namespace NamespaceUpsertParams {
     vectors?: Array<Array<number> | null>;
   }
 
-  export namespace UpsertColumnar {
-    /**
-     * The schema for the attributes attached to a document.
-     */
-    export interface Attribute {
-      /**
-       * Whether or not the attributes can be used in filters/WHERE clauses.
-       */
-      filterable?: boolean;
-
-      /**
-       * Whether this attribute can be used as part of a BM25 full-text search. Requires
-       * the `string` or `[]string` type, and by default, BM25-enabled attributes are not
-       * filterable. You can override this by setting `filterable: true`.
-       */
-      full_text_search?: boolean | Attribute.FullTextSearchConfig;
-
-      /**
-       * The data type of the attribute.
-       */
-      type?: 'string' | 'uint' | 'uuid' | 'bool' | '[]string' | '[]uint' | '[]uuid';
-    }
-
-    export namespace Attribute {
-      /**
-       * Detailed configuration options for BM25 full-text search.
-       */
-      export interface FullTextSearchConfig {
-        /**
-         * Whether searching is case-sensitive. Defaults to `false` (i.e.
-         * case-insensitive).
-         */
-        case_sensitive?: boolean;
-
-        /**
-         * The language of the text. Defaults to `english`.
-         */
-        language?:
-          | 'arabic'
-          | 'danish'
-          | 'dutch'
-          | 'english'
-          | 'finnish'
-          | 'french'
-          | 'german'
-          | 'greek'
-          | 'hungarian'
-          | 'italian'
-          | 'norwegian'
-          | 'portuguese'
-          | 'romanian'
-          | 'russian'
-          | 'spanish'
-          | 'swedish'
-          | 'tamil'
-          | 'turkish';
-
-        /**
-         * Removes common words from the text based on language. Defaults to `true` (i.e.
-         * remove common words).
-         */
-        remove_stopwords?: boolean;
-
-        /**
-         * Language-specific stemming for the text. Defaults to `false` (i.e., do not
-         * stem).
-         */
-        stemming?: boolean;
-      }
-    }
-
-    /**
-     * The schema for the attributes attached to a document.
-     */
-    export interface Schema {
-      /**
-       * Whether or not the attributes can be used in filters/WHERE clauses.
-       */
-      filterable?: boolean;
-
-      /**
-       * Whether this attribute can be used as part of a BM25 full-text search. Requires
-       * the `string` or `[]string` type, and by default, BM25-enabled attributes are not
-       * filterable. You can override this by setting `filterable: true`.
-       */
-      full_text_search?: boolean | Schema.FullTextSearchConfig;
-
-      /**
-       * The data type of the attribute.
-       */
-      type?: 'string' | 'uint' | 'uuid' | 'bool' | '[]string' | '[]uint' | '[]uuid';
-    }
-
-    export namespace Schema {
-      /**
-       * Detailed configuration options for BM25 full-text search.
-       */
-      export interface FullTextSearchConfig {
-        /**
-         * Whether searching is case-sensitive. Defaults to `false` (i.e.
-         * case-insensitive).
-         */
-        case_sensitive?: boolean;
-
-        /**
-         * The language of the text. Defaults to `english`.
-         */
-        language?:
-          | 'arabic'
-          | 'danish'
-          | 'dutch'
-          | 'english'
-          | 'finnish'
-          | 'french'
-          | 'german'
-          | 'greek'
-          | 'hungarian'
-          | 'italian'
-          | 'norwegian'
-          | 'portuguese'
-          | 'romanian'
-          | 'russian'
-          | 'spanish'
-          | 'swedish'
-          | 'tamil'
-          | 'turkish';
-
-        /**
-         * Removes common words from the text based on language. Defaults to `true` (i.e.
-         * remove common words).
-         */
-        remove_stopwords?: boolean;
-
-        /**
-         * Language-specific stemming for the text. Defaults to `false` (i.e., do not
-         * stem).
-         */
-        stemming?: boolean;
-      }
-    }
-  }
-
   export interface UpsertRowBased {
     /**
      * A function used to calculate vector similarity.
-     *
-     * - `cosine_distance` - Defined as `1 - cosine_similarity` and ranges from 0 to 2.
-     *   Lower is better.
-     * - `euclidean_squared` - Defined as `sum((x - y)^2)`. Lower is better.
      */
-    distance_metric?: 'cosine_distance' | 'euclidean_squared';
+    distance_metric?: DistanceMetric;
 
     /**
      * The schema of the attributes attached to the documents.
      */
-    schema?: Record<string, Array<UpsertRowBased.Schema>>;
+    schema?: Record<string, Array<AttributeSchema>>;
 
     upserts?: Array<DocumentRow>;
-  }
-
-  export namespace UpsertRowBased {
-    /**
-     * The schema for the attributes attached to a document.
-     */
-    export interface Schema {
-      /**
-       * Whether or not the attributes can be used in filters/WHERE clauses.
-       */
-      filterable?: boolean;
-
-      /**
-       * Whether this attribute can be used as part of a BM25 full-text search. Requires
-       * the `string` or `[]string` type, and by default, BM25-enabled attributes are not
-       * filterable. You can override this by setting `filterable: true`.
-       */
-      full_text_search?: boolean | Schema.FullTextSearchConfig;
-
-      /**
-       * The data type of the attribute.
-       */
-      type?: 'string' | 'uint' | 'uuid' | 'bool' | '[]string' | '[]uint' | '[]uuid';
-    }
-
-    export namespace Schema {
-      /**
-       * Detailed configuration options for BM25 full-text search.
-       */
-      export interface FullTextSearchConfig {
-        /**
-         * Whether searching is case-sensitive. Defaults to `false` (i.e.
-         * case-insensitive).
-         */
-        case_sensitive?: boolean;
-
-        /**
-         * The language of the text. Defaults to `english`.
-         */
-        language?:
-          | 'arabic'
-          | 'danish'
-          | 'dutch'
-          | 'english'
-          | 'finnish'
-          | 'french'
-          | 'german'
-          | 'greek'
-          | 'hungarian'
-          | 'italian'
-          | 'norwegian'
-          | 'portuguese'
-          | 'romanian'
-          | 'russian'
-          | 'spanish'
-          | 'swedish'
-          | 'tamil'
-          | 'turkish';
-
-        /**
-         * Removes common words from the text based on language. Defaults to `true` (i.e.
-         * remove common words).
-         */
-        remove_stopwords?: boolean;
-
-        /**
-         * Language-specific stemming for the text. Defaults to `false` (i.e., do not
-         * stem).
-         */
-        stemming?: boolean;
-      }
-    }
   }
 
   export interface CopyFromNamespace {
@@ -694,8 +334,12 @@ export declare namespace NamespaceUpsertParams {
 
 export declare namespace Namespaces {
   export {
+    type AttributeSchema as AttributeSchema,
+    type DistanceMetric as DistanceMetric,
     type DocumentColumns as DocumentColumns,
     type DocumentRow as DocumentRow,
+    type FullTextSearchConfig as FullTextSearchConfig,
+    type ID as ID,
     type NamespaceSummary as NamespaceSummary,
     type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
     type NamespaceGetSchemaResponse as NamespaceGetSchemaResponse,
