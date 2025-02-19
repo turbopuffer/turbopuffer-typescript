@@ -162,7 +162,7 @@ export class Namespace {
    * Deletes vectors (by filter).
    */
   async deleteByFilter({ filters }: { filters: Filters }): Promise<number> {
-    let response = await this.client.http.doRequest<{
+    const response = await this.client.http.doRequest<{
       status: string;
       rows_affected: number;
     }>({
