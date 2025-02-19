@@ -30,7 +30,9 @@ const client = new Turbopuffer({
 });
 
 async function main() {
-  const response = await client.namespaces.upsert('products', { distance_metric: 'cosine_distance' });
+  const response = await client.namespaces.upsert('products', {
+    documents: { distance_metric: 'cosine_distance' },
+  });
 
   console.log(response.status);
 }
