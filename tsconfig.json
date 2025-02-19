@@ -9,8 +9,8 @@
     "esModuleInterop": true,
     "baseUrl": "./",
     "paths": {
-      "@turbopuffer/api/*": ["src/*"],
-      "@turbopuffer/api": ["src/index.ts"]
+      "@turbopuffer/turbopuffer/*": ["src/*"],
+      "@turbopuffer/turbopuffer": ["src/index.ts"]
     },
     "noEmit": true,
 

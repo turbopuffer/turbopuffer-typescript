@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import Turbopuffer from '@turbopuffer/api';
+import Turbopuffer from '@turbopuffer/turbopuffer';
 
 const client = new Turbopuffer({
   apiKey: 'My API Key',
