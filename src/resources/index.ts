@@ -6,7 +6,6 @@ export {
   type DistanceMetric,
   type DocumentColumns,
   type DocumentRow,
-  type DocumentRowResponse,
   type FullTextSearchConfig,
   type ID,
   type NamespaceSummary,
