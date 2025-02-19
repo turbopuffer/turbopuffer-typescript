@@ -169,7 +169,7 @@ export interface NamespaceDeleteAllResponse {
   /**
    * The status of the request.
    */
-  status?: 'ok';
+  status: 'ok';
 }
 
 export type NamespaceGetSchemaResponse = Record<string, Array<NamespaceGetSchemaResponse.Item>>;
@@ -211,7 +211,7 @@ export interface NamespaceUpsertResponse {
   /**
    * The status of the request.
    */
-  status?: 'OK';
+  status: 'OK';
 }
 
 export interface NamespaceListParams extends ListNamespacesParams {
