@@ -23,7 +23,7 @@ export class TurbopufferError extends Error {
 
 /** A helper function to determine if a status code should be retried. */
 export function statusCodeShouldRetry(statusCode?: number): boolean {
-  return !statusCode || statusCode >= 500;
+  return !statusCode || statusCode === 408 || statusCode === 429 || statusCode >= 500;
 }
 
 /** A helper function to delay for a given number of milliseconds. */

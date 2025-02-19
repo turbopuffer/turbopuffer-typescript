@@ -512,7 +512,7 @@ test("empty_namespace", async () => {
 
 test("delete_by_filter", async () => {
   const ns = tpuf.namespace(
-    testNamespacePrefix + expect.getState().currentTestName,
+    testNamespacePrefix + "delete_by_filter",
   );
 
   try {
