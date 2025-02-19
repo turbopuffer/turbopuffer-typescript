@@ -248,7 +248,7 @@ export interface NamespaceListParams extends ListNamespacesParams {
   page_size?: number;
 
   /**
-   * Retrieve only the namespaces that match the prefix.
+   * Retrieve only namespaces that match the prefix.
    */
   prefix?: string;
 }
