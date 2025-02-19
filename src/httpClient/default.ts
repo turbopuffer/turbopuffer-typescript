@@ -26,7 +26,7 @@ export default class DefaultHTTPClient implements HTTPClient {
   private baseUrl: string;
   private origin: URL;
   private apiKey: string;
-  readonly userAgent = `tpuf-typescript/${version}/default`;
+  readonly userAgent = `tpuf-typescript/${version}/fetch`;
   private compression: boolean;
 
   constructor(

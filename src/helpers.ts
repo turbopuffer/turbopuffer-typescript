@@ -1,13 +1,44 @@
 import type {
   ColumnarVectors,
-  MakeRequestTiming,
   RequestTiming,
   Vector,
 } from "./types";
 
-export const runtime = globalThis.navigator?.userAgent.split("/")[0];
+type Runtime =
+  | "bun"
+  | "deno"
+  | "cloudflare-workers"
+  | "browser"
+  | "node"
+  | undefined;
+
+function detectRuntime(): Runtime {
+  // @ts-expect-error can be ignored
+  if (typeof globalThis.Bun !== "undefined")
+    return "bun";
+
+  // @ts-expect-error can be ignored
+  if (typeof globalThis.Deno !== "undefined")
+    return "deno";
+
+  // Look for presence of non-standard globals specific to the cloudflare runtime:
+  // https://community.cloudflare.com/t/how-to-detect-the-cloudflare-worker-runtime/293715/2.
+  // At some point in the future, we can move to using navigator.userAgent:
+  // https://developers.cloudflare.com/workers/runtime-apis/web-standards/#navigatoruseragent.
+  // @ts-expect-error can be ignored
+  if (typeof WebSocketPair !== "undefined")
+    return "cloudflare-workers";
+
+  if (typeof window !== "undefined")
+    return "browser";
+
+  if (process.release?.name === "node")
+    return "node";
+}
+
+const detectedRuntime = detectRuntime();
 export const isRuntimeFullyNodeCompatible =
-  runtime === "Node.js" || runtime === "Deno";
+  detectedRuntime === "node" || detectedRuntime === "deno";
 
 /** An error class for errors returned by the turbopuffer API. */
 export class TurbopufferError extends Error {
@@ -34,11 +65,19 @@ export function delay(ms: number) {
 export function make_request_timing({
   request_start,
   response_start,
-  body_read_end = 0,
-  decompress_end = 0,
-  deserialize_end = 0,
-  requestCompressionDuration = 0,
-}: MakeRequestTiming): RequestTiming {
+  body_read_end,
+  decompress_end,
+  deserialize_end,
+  requestCompressionDuration,
+}: {
+  request_start: number;
+  response_start: number;
+  body_read_end?: number;
+  decompress_end?: number;
+  deserialize_end?: number;
+  requestCompressionDuration?: number;
+}): RequestTiming {
+  const deserialize_start = decompress_end ?? body_read_end;
   return {
     response_time: response_start - request_start,
     body_read_time: body_read_end ? body_read_end - response_start : 0,
@@ -46,9 +85,7 @@ export function make_request_timing({
     decompress_time:
       decompress_end && body_read_end ? decompress_end - body_read_end : 0,
     deserialize_time:
-      deserialize_end && (isRuntimeFullyNodeCompatible ? decompress_end : body_read_end)
-        ? deserialize_end - (isRuntimeFullyNodeCompatible ? decompress_end : body_read_end)
-        : 0,
+      deserialize_end && deserialize_start ? deserialize_end - deserialize_start : 0,
   };
 }
 

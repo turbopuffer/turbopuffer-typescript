@@ -119,15 +119,6 @@ export interface RequestTiming {
   deserialize_time: number;
 }
 
-export interface MakeRequestTiming {
-  request_start: number;
-  response_start: number;
-  body_read_end?: number;
-  decompress_end?: number;
-  deserialize_end?: number;
-  requestCompressionDuration?: number;
-}
-
 export type RequestResponse<T> = Promise<{
   body?: T;
   headers: Record<string, string>;
