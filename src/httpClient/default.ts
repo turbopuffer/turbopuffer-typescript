@@ -169,6 +169,7 @@ export default class DefaultHTTPClient implements HTTPClient {
     }
 
     const body_text = await response.text();
+    const body_read_end = performance.now();
 
     const json = JSON.parse(body_text);
     const deserialize_end = performance.now();
@@ -185,6 +186,7 @@ export default class DefaultHTTPClient implements HTTPClient {
       request_timing: make_request_timing({
         request_start,
         response_start,
+        body_read_end,
         deserialize_end,
         requestCompressionDuration,
       }),

@@ -46,7 +46,9 @@ export function make_request_timing({
     decompress_time:
       decompress_end && body_read_end ? decompress_end - body_read_end : 0,
     deserialize_time:
-      deserialize_end && decompress_end ? deserialize_end - decompress_end : 0,
+      deserialize_end && (isRuntimeFullyNodeCompatible ? decompress_end : body_read_end)
+        ? deserialize_end - decompress_end
+        : 0,
   };
 }
 
