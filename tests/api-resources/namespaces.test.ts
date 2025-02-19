@@ -89,8 +89,8 @@ describe('resource namespaces', () => {
   });
 
   // skipped: tests are disabled for the time being
-  test.skip('upsert', async () => {
-    const responsePromise = client.namespaces.upsert('namespace');
+  test.skip('upsert: only required params', async () => {
+    const responsePromise = client.namespaces.upsert('namespace', { distance_metric: 'cosine_distance' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -101,20 +101,13 @@ describe('resource namespaces', () => {
   });
 
   // skipped: tests are disabled for the time being
-  test.skip('upsert: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.namespaces.upsert(
-        'namespace',
-        {
-          attributes: { foo: [{ filterable: true, full_text_search: true, type: 'string' }] },
-          distance_metric: 'cosine_distance',
-          ids: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
-          schema: { foo: [{ filterable: true, full_text_search: true, type: 'string' }] },
-          vectors: [[0]],
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Turbopuffer.NotFoundError);
+  test.skip('upsert: required and optional params', async () => {
+    const response = await client.namespaces.upsert('namespace', {
+      distance_metric: 'cosine_distance',
+      attributes: { foo: [{}] },
+      ids: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
+      schema: { foo: [{ filterable: true, full_text_search: true, type: 'string' }] },
+      vectors: [[0]],
+    });
   });
 });

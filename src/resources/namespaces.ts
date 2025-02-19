@@ -44,7 +44,7 @@ export class Namespaces extends APIResource {
    */
   upsert(
     namespace: string,
-    body: NamespaceUpsertParams | null | undefined = {},
+    body: NamespaceUpsertParams,
     options?: RequestOptions,
   ): APIPromise<NamespaceUpsertResponse> {
     return this._client.post(path`/v1/namespaces/${namespace}`, { body, ...options });
@@ -92,7 +92,7 @@ export interface DocumentColumns {
   /**
    * The attributes attached to each of the documents.
    */
-  attributes?: Record<string, Array<AttributeSchema>>;
+  attributes?: Record<string, Array<unknown>>;
 
   /**
    * The IDs of the documents.
@@ -117,7 +117,7 @@ export interface DocumentRow {
   /**
    * The attributes attached to the document.
    */
-  attributes?: Record<string, AttributeSchema>;
+  attributes?: unknown;
 
   /**
    * A vector describing the document.
@@ -281,14 +281,14 @@ export type NamespaceUpsertParams =
 export declare namespace NamespaceUpsertParams {
   export interface UpsertColumnar {
     /**
-     * The attributes attached to each of the documents.
-     */
-    attributes?: Record<string, Array<AttributeSchema>>;
-
-    /**
      * A function used to calculate vector similarity.
      */
-    distance_metric?: DistanceMetric;
+    distance_metric: DistanceMetric;
+
+    /**
+     * The attributes attached to each of the documents.
+     */
+    attributes?: Record<string, Array<unknown>>;
 
     /**
      * The IDs of the documents.
@@ -310,25 +310,25 @@ export declare namespace NamespaceUpsertParams {
     /**
      * A function used to calculate vector similarity.
      */
-    distance_metric?: DistanceMetric;
+    distance_metric: DistanceMetric;
+
+    upserts: Array<DocumentRow>;
 
     /**
      * The schema of the attributes attached to the documents.
      */
     schema?: Record<string, Array<AttributeSchema>>;
-
-    upserts?: Array<DocumentRow>;
   }
 
   export interface CopyFromNamespace {
     /**
      * The namespace to copy documents from.
      */
-    copy_from_namespace?: string;
+    copy_from_namespace: string;
   }
 
   export interface DeleteByFilter {
-    delete_by_filter?: unknown;
+    delete_by_filter: unknown;
   }
 }
 
