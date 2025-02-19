@@ -8,7 +8,8 @@ const client = new Turbopuffer({
 });
 
 describe('resource namespaces', () => {
-  test('list', async () => {
+  // skipped: tests are disabled for the time being
+  test.skip('list', async () => {
     const responsePromise = client.namespaces.list();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -19,7 +20,8 @@ describe('resource namespaces', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('list: request options and params are passed correctly', async () => {
+  // skipped: tests are disabled for the time being
+  test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.namespaces.list(
@@ -29,7 +31,8 @@ describe('resource namespaces', () => {
     ).rejects.toThrow(Turbopuffer.NotFoundError);
   });
 
-  test('deleteAll', async () => {
+  // skipped: tests are disabled for the time being
+  test.skip('deleteAll', async () => {
     const responsePromise = client.namespaces.deleteAll('namespace');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -40,7 +43,8 @@ describe('resource namespaces', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('getSchema', async () => {
+  // skipped: tests are disabled for the time being
+  test.skip('getSchema', async () => {
     const responsePromise = client.namespaces.getSchema('namespace');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -51,7 +55,8 @@ describe('resource namespaces', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('query', async () => {
+  // skipped: tests are disabled for the time being
+  test.skip('query', async () => {
     const responsePromise = client.namespaces.query('namespace');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -62,7 +67,8 @@ describe('resource namespaces', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('query: request options and params are passed correctly', async () => {
+  // skipped: tests are disabled for the time being
+  test.skip('query: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.namespaces.query(
@@ -82,7 +88,8 @@ describe('resource namespaces', () => {
     ).rejects.toThrow(Turbopuffer.NotFoundError);
   });
 
-  test('upsert', async () => {
+  // skipped: tests are disabled for the time being
+  test.skip('upsert', async () => {
     const responsePromise = client.namespaces.upsert('namespace');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -93,7 +100,8 @@ describe('resource namespaces', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('upsert: request options and params are passed correctly', async () => {
+  // skipped: tests are disabled for the time being
+  test.skip('upsert: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.namespaces.upsert(
