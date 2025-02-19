@@ -6,6 +6,7 @@ export {
   type DistanceMetric,
   type DocumentColumns,
   type DocumentRow,
+  type DocumentRowWithScore,
   type FullTextSearchConfig,
   type ID,
   type NamespaceSummary,

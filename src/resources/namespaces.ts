@@ -139,6 +139,18 @@ export interface DocumentRow {
 }
 
 /**
+ * A single document, in a row-based format.
+ */
+export interface DocumentRowWithScore extends DocumentRow {
+  /**
+   * For vector search, the distance between the query vector and the document
+   * vector. For BM25 full-text search, the score of the document. Not present for
+   * other types of queries.
+   */
+  dist?: number;
+}
+
+/**
  * Detailed configuration options for BM25 full-text search.
  */
 export interface FullTextSearchConfig {
@@ -217,21 +229,7 @@ export type NamespaceGetSchemaResponse = Record<string, Array<AttributeSchema>>;
 /**
  * The response to a successful query request.
  */
-export type NamespaceQueryResponse = Array<NamespaceQueryResponse.NamespaceQueryResponseItem>;
-
-export namespace NamespaceQueryResponse {
-  /**
-   * A single document, in a row-based format.
-   */
-  export interface NamespaceQueryResponseItem extends NamespacesAPI.DocumentRow {
-    /**
-     * For vector search, the distance between the query vector and the document
-     * vector. For BM25 full-text search, the score of the document. Not present for
-     * other types of queries.
-     */
-    dist?: number;
-  }
-}
+export type NamespaceQueryResponse = Array<DocumentRowWithScore>;
 
 /**
  * The response to a successful upsert request.
@@ -388,6 +386,7 @@ export declare namespace Namespaces {
     type DistanceMetric as DistanceMetric,
     type DocumentColumns as DocumentColumns,
     type DocumentRow as DocumentRow,
+    type DocumentRowWithScore as DocumentRowWithScore,
     type FullTextSearchConfig as FullTextSearchConfig,
     type ID as ID,
     type NamespaceSummary as NamespaceSummary,
