@@ -205,7 +205,21 @@ export namespace NamespaceGetSchemaResponse {
   }
 }
 
-export type NamespaceQueryResponse = Array<DocumentRow>;
+export type NamespaceQueryResponse = Array<NamespaceQueryResponse.NamespaceQueryResponseItem>;
+
+export namespace NamespaceQueryResponse {
+  /**
+   * A single document, in a row-based format.
+   */
+  export interface NamespaceQueryResponseItem extends NamespacesAPI.DocumentRow {
+    /**
+     * For vector search, the distance between the query vector and the document
+     * vector. For BM25 full-text search, the score of the document. Not present for
+     * other types of queries.
+     */
+    dist?: number;
+  }
+}
 
 export interface NamespaceUpsertResponse {
   /**
