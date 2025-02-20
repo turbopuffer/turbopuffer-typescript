@@ -375,9 +375,13 @@ test("sanity", async () => {
   expect(metrics.processing_time).toBeGreaterThan(10);
   expect(metrics.response_time).toBeGreaterThan(10);
   expect(metrics.body_read_time).toBeGreaterThan(0);
-  expect(metrics.decompress_time).toEqual(0); // response was too small to compress
   expect(metrics.compress_time).toBeGreaterThan(0);
   expect(metrics.deserialize_time).toBeGreaterThan(0);
+  if (isRuntimeFullyNodeCompatible) {
+    expect(metrics.decompress_time).toEqual(0); // response was too small to compress
+  } else {
+    expect(metrics.decompress_time).toBeNull;
+  }
 
   const results2 = await ns.query({
     vector: [1, 1],
@@ -601,10 +605,12 @@ test("compression", async () => {
 
   const metrics = resultsWithMetrics.metrics;
   expect(metrics.compress_time).toBeGreaterThan(0);
+  expect(metrics.body_read_time).toBeGreaterThan(0);
+  expect(metrics.deserialize_time).toBeGreaterThan(0);
   if (isRuntimeFullyNodeCompatible) {
     expect(metrics.decompress_time).toBeGreaterThan(0); // Response should be compressed
-    expect(metrics.body_read_time).toBeGreaterThan(0);
-    expect(metrics.deserialize_time).toBeGreaterThan(0);
+  } else {
+    expect(metrics.decompress_time).toBeNull;
   }
 });
 
@@ -646,10 +652,12 @@ test("disable_compression", async () => {
   });
 
   const metrics = resultsWithMetrics.metrics;
-  expect(metrics.compress_time).toEqual(0);
-  expect(metrics.decompress_time).toEqual(0);
+  expect(metrics.compress_time).toBeNull;
+  expect(metrics.body_read_time).toBeGreaterThan(0);
+  expect(metrics.deserialize_time).toBeGreaterThan(0);
   if (isRuntimeFullyNodeCompatible) {
-    expect(metrics.body_read_time).toBeGreaterThan(0);
-    expect(metrics.deserialize_time).toBeGreaterThan(0);
+    expect(metrics.decompress_time).toEqual(0);
+  } else {
+    expect(metrics.decompress_time).toBeNull;
   }
 });

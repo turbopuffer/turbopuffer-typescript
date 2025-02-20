@@ -90,12 +90,17 @@ export function make_request_timing({
   const deserialize_start = decompress_end ?? body_read_end;
   return {
     response_time: response_start - request_start,
-    body_read_time: body_read_end ? body_read_end - response_start : 0,
-    compress_time: requestCompressionDuration ? requestCompressionDuration : 0,
+    // `!= null` checks for both null and undefined
+    body_read_time: body_read_end != null ? body_read_end - response_start : null,
+    compress_time: requestCompressionDuration ?? null,
     decompress_time:
-      decompress_end && body_read_end ? decompress_end - body_read_end : 0,
+      decompress_end != null && body_read_end != null
+        ? decompress_end - body_read_end
+        : null,
     deserialize_time:
-      deserialize_end && deserialize_start ? deserialize_end - deserialize_start : 0,
+      deserialize_end != null && deserialize_start != null
+        ? deserialize_end - deserialize_start
+        : null,
   };
 }
 

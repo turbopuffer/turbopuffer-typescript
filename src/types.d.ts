@@ -65,43 +65,6 @@ export type FilterValue = AttributeType;
 export type FilterCondition = [string, FilterOperator, FilterValue];
 export type Filters = [FilterConnective, Filters[]] | FilterCondition;
 
-export type QueryResults = {
-  id: Id;
-  vector?: number[];
-  attributes?: Attributes;
-  dist?: number;
-  rank_by?: RankBy;
-}[];
-
-export interface QueryMetrics {
-  approx_namespace_size: number;
-  cache_hit_ratio: number;
-  cache_temperature: string;
-  processing_time: number;
-  exhaustive_search_count: number;
-  response_time: number;
-  body_read_time: number;
-  deserialize_time: number;
-  decompress_time: number;
-  compress_time: number;
-}
-
-export interface NamespaceMetadata {
-  id: string;
-  approx_count: number;
-  dimensions: number;
-  created_at: Date;
-}
-export interface NamespacesListResult {
-  namespaces: { id: string }[];
-  next_cursor?: string;
-}
-export interface RecallMeasurement {
-  avg_recall: number;
-  avg_exhaustive_count: number;
-  avg_ann_count: number;
-}
-
 export interface RequestParams {
   method: string;
   path: string;
@@ -113,10 +76,10 @@ export interface RequestParams {
 
 export interface RequestTiming {
   response_time: number;
-  body_read_time: number;
-  decompress_time: number;
-  compress_time: number;
-  deserialize_time: number;
+  body_read_time: number | null;
+  decompress_time: number | null;
+  compress_time: number | null;
+  deserialize_time: number | null;
 }
 
 export type RequestResponse<T> = Promise<{
@@ -133,6 +96,38 @@ export interface TpufResponseWithMetadata {
   body_text: string;
   body_read_end: number;
   decompress_end: number;
+}
+
+export type QueryResults = {
+  id: Id;
+  vector?: number[];
+  attributes?: Attributes;
+  dist?: number;
+  rank_by?: RankBy;
+}[];
+
+export interface QueryMetrics extends RequestTiming {
+  approx_namespace_size: number;
+  cache_hit_ratio: number;
+  cache_temperature: string;
+  processing_time: number;
+  exhaustive_search_count: number;
+}
+
+export interface NamespaceMetadata {
+  id: string;
+  approx_count: number;
+  dimensions: number;
+  created_at: Date;
+}
+export interface NamespacesListResult {
+  namespaces: { id: string }[];
+  next_cursor?: string;
+}
+export interface RecallMeasurement {
+  avg_recall: number;
+  avg_exhaustive_count: number;
+  avg_ann_count: number;
 }
 
 export type ColumnarAttributes = Record<string, AttributeType[]>;
