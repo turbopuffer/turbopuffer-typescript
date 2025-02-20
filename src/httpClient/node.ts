@@ -1,71 +1,63 @@
-import type { Dispatcher } from "undici";
 import { fetch, Agent } from "undici";
-import { version } from "../package.json";
-import { gunzip, gzip } from "node:zlib";
+import { gzip, gunzip } from "node:zlib";
 import { promisify } from "node:util";
+import type { Dispatcher } from "undici";
 
-const gunzipAsync = promisify(gunzip);
+import { version } from "../../package.json";
+import type {
+  RequestParams,
+  RequestResponse,
+  HTTPClient,
+  TpufResponseWithMetadata,
+} from "../types";
+import {
+  TurbopufferError,
+  statusCodeShouldRetry,
+  delay,
+  make_request_timing,
+} from "../helpers";
+
 const gzipAsync = promisify(gzip);
+const gunzipAsync = promisify(gunzip);
 
-export interface RequestParams {
-  method: string;
-  path: string;
-  query?: Record<string, string | undefined>;
-  body?: unknown;
-  compress?: boolean;
-  retryable?: boolean;
+function convertHeadersType(
+  headers: Record<string, string | string[] | undefined>,
+): Record<string, string> {
+  for (const key in headers) {
+    const v = headers[key];
+    if (v === undefined) {
+      delete headers[key];
+    } else if (Array.isArray(v)) {
+      headers[key] = v[0];
+    }
+  }
+  return headers as Record<string, string>;
 }
 
-export interface RequestTiming {
-  response_time: number;
-  body_read_time: number;
-  decompress_time: number;
-  compress_time: number;
-  deserialize_time: number;
+async function consumeResponseText(
+  response: Dispatcher.ResponseData,
+): Promise<TpufResponseWithMetadata> {
+  if (response.headers["content-encoding"] === "gzip") {
+    const body_buffer = await response.body.arrayBuffer();
+    const body_read_end = performance.now();
+
+    const gunzip_buffer = await gunzipAsync(body_buffer);
+    const body_text = gunzip_buffer.toString(); // is there a better way?
+    const decompress_end = performance.now();
+    return { body_text, body_read_end, decompress_end };
+  } else {
+    const body_text = await response.body.text();
+    const body_read_end = performance.now();
+    return { body_text, body_read_end, decompress_end: body_read_end };
+  }
 }
 
-export type RequestResponse<T> = Promise<{
-  body?: T;
-  headers: Record<string, string>;
-  request_timing: RequestTiming;
-}>;
-
-export interface HTTPClient {
-  doRequest<T>(_: RequestParams): RequestResponse<T>;
-}
-
-/**
- * This a helper function that returns a class for making fetch requests
- * against the API.
- *
- * @param baseUrl The base URL of the API endpoint.
- * @param apiKey The API key to use for authentication.
- *
- * @returns An HTTPClient to make requests against the API.
- */
-export const createHTTPClient = (
-  baseUrl: string,
-  apiKey: string,
-  connectTimeout: number,
-  idleTimeout: number,
-  warmConnections: number,
-  compression: boolean,
-) =>
-  new DefaultHTTPClient(
-    baseUrl,
-    apiKey,
-    connectTimeout,
-    idleTimeout,
-    warmConnections,
-    compression,
-  );
-
-class DefaultHTTPClient implements HTTPClient {
+export default class NodeHTTPClient implements HTTPClient {
   private agent: Agent;
   private baseUrl: string;
   private origin: URL;
   private apiKey: string;
-  readonly userAgent = `tpuf-typescript/${version}`;
+  readonly userAgent = `tpuf-typescript/${version}/node`;
   private compression: boolean;
 
   constructor(
@@ -123,9 +115,7 @@ class DefaultHTTPClient implements HTTPClient {
     }
 
     const headers: Record<string, string> = {
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       Authorization: `Bearer ${this.apiKey}`,
-      // eslint-disable-next-line @typescript-eslint/naming-convention
       "User-Agent": this.userAgent,
     };
 
@@ -212,7 +202,7 @@ class DefaultHTTPClient implements HTTPClient {
       if (
         error &&
         statusCodeShouldRetry(error.status) &&
-        attempt + 1 != maxAttempts
+        attempt + 1 !== maxAttempts
       ) {
         await delay(150 * (attempt + 1)); // 150ms, 300ms, 450ms
         continue;
@@ -226,7 +216,7 @@ class DefaultHTTPClient implements HTTPClient {
     if (method === "HEAD" || !response.body) {
       return {
         headers: convertHeadersType(response.headers),
-        request_timing: make_request_timing(request_start, response_start),
+        request_timing: make_request_timing({ request_start, response_start }),
       };
     }
 
@@ -245,89 +235,14 @@ class DefaultHTTPClient implements HTTPClient {
     return {
       body: json as T,
       headers: convertHeadersType(response.headers),
-      request_timing: make_request_timing(
+      request_timing: make_request_timing({
         request_start,
         response_start,
         body_read_end,
         decompress_end,
         deserialize_end,
         requestCompressionDuration,
-      ),
+      }),
     };
-  }
-}
-
-/** An error class for errors returned by the turbopuffer API. */
-export class TurbopufferError extends Error {
-  status?: number;
-  constructor(
-    public error: string,
-    { status, cause }: { status?: number; cause?: Error },
-  ) {
-    super(error, { cause: cause });
-    this.status = status;
-  }
-}
-
-/** A helper function to determine if a status code should be retried. */
-function statusCodeShouldRetry(statusCode?: number): boolean {
-  return !statusCode || statusCode === 408 || statusCode === 429 || statusCode >= 500;
-}
-
-/** A helper function to delay for a given number of milliseconds. */
-function delay(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-function make_request_timing(
-  request_start: number,
-  response_start: number,
-  body_read_end?: number,
-  decompress_end?: number,
-  deserialize_end?: number,
-  requestCompressionDuration?: number,
-): RequestTiming {
-  return {
-    response_time: response_start - request_start,
-    body_read_time: body_read_end ? body_read_end - response_start : 0,
-    compress_time: requestCompressionDuration ? requestCompressionDuration : 0,
-    decompress_time:
-      decompress_end && body_read_end ? decompress_end - body_read_end : 0,
-    deserialize_time:
-      deserialize_end && decompress_end ? deserialize_end - decompress_end : 0,
-  };
-}
-
-function convertHeadersType(
-  headers: Record<string, string | string[] | undefined>,
-): Record<string, string> {
-  for (const key in headers) {
-    const v = headers[key];
-    if (v === undefined) {
-      delete headers[key];
-    } else if (Array.isArray(v)) {
-      headers[key] = v[0];
-    }
-  }
-  return headers as Record<string, string>;
-}
-
-async function consumeResponseText(response: Dispatcher.ResponseData): Promise<{
-  body_text: string;
-  body_read_end: number;
-  decompress_end: number;
-}> {
-  if (response.headers["content-encoding"] == "gzip") {
-    const body_buffer = await response.body.arrayBuffer();
-    const body_read_end = performance.now();
-
-    const gunzip_buffer = await gunzipAsync(body_buffer);
-    const body_text = gunzip_buffer.toString(); // is there a better way?
-    const decompress_end = performance.now();
-    return { body_text, body_read_end, decompress_end };
-  } else {
-    const body_text = await response.body.text();
-    const body_read_end = performance.now();
-    return { body_text, body_read_end, decompress_end: body_read_end };
   }
 }
