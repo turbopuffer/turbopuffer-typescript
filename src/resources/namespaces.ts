@@ -48,10 +48,10 @@ export class Namespaces extends APIResource {
    */
   upsert(
     namespace: string,
-    params: NamespaceUpsertParams,
+    params: NamespaceUpsertParams | null | undefined = undefined,
     options?: RequestOptions,
   ): APIPromise<NamespaceUpsertResponse> {
-    const { documents } = params;
+    const { documents } = params ?? {};
     return this._client.post(path`/v1/namespaces/${namespace}`, { body: documents, ...options });
   }
 }
@@ -319,7 +319,7 @@ export interface NamespaceUpsertParams {
   /**
    * Upsert documents in columnar format.
    */
-  documents:
+  documents?:
     | NamespaceUpsertParams.UpsertColumnar
     | NamespaceUpsertParams.UpsertRowBased
     | NamespaceUpsertParams.CopyFromNamespace
