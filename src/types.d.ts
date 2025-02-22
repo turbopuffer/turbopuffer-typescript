@@ -18,12 +18,13 @@ export interface FTSParams {
   case_sensitive: boolean;
   tokenizer: string;
 }
+export type SchemaType = "string" | "uint" | "uuid" | "bool" | "[]string" | "[]uint" | "[]uuid";
 // TODO: index signature is a better fit here imo.
 // also look into eslint config to allow for usage of index signatures
 export type Schema = Record<
   string,
   {
-    type?: string;
+    type?: SchemaType;
     filterable?: boolean;
     bm25?: boolean | Partial<FTSParams>;
     full_text_search?: boolean | Partial<FTSParams>;

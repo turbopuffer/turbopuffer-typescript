@@ -1,5 +1,6 @@
 import { Turbopuffer } from "./turbopuffer";
 import { isRuntimeFullyNodeCompatible, TurbopufferError } from "./helpers";
+import { Schema } from "./types";
 
 const tpuf = new Turbopuffer({
   apiKey: process.env.TURBOPUFFER_API_KEY!,
@@ -18,9 +19,9 @@ test("bm25_with_custom_schema_and_sum_query", async () => {
     /* empty */
   }
 
-  const schema = {
+  const schema: Schema = {
     text: {
-      type: "?string",
+      type: "string",
       bm25: {
         language: "english",
         stemming: true,
@@ -168,9 +169,9 @@ test("bm25_with_default_schema_and_simple_query", async () => {
     /* empty */
   }
 
-  const schema = {
+  const schema: Schema = {
     text: {
-      type: "?string",
+      type: "string",
       bm25: true,
     },
   };
