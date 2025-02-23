@@ -354,3 +354,6 @@ export class Namespace {
     ).body!;
   }
 }
+
+// Re-export all types in types.ts for consumers
+export * from './types';
