@@ -1,6 +1,6 @@
 {
   "name": "@turbopuffer/turbopuffer",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Official Typescript API client library for turbopuffer.com",
   "scripts": {
     "build": "rm -rf dist && tsc",
@@ -14,7 +14,6 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
-  "types": "./dist/types.d.ts",
   "homepage": "https://turbopuffer.com",
   "repository": {
     "type": "git",
@@ -37,6 +36,7 @@
     "LICENSE"
   ],
   "main": "./dist/turbopuffer.js",
+  "types": "./dist/turbopuffer.d.ts",
   "devDependencies": {
     "@types/jest": "^29.5.12",
     "@types/pako": "^2.0.3",
