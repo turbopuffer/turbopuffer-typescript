@@ -76,7 +76,7 @@ export class Turbopuffer {
     cursor?: string;
     prefix?: string;
     page_size?: number;
-  }): Promise<NamespacesListResult> {
+  } = {}): Promise<NamespacesListResult> {
     return (
       await this.http.doRequest<NamespacesListResult>({
         method: "GET",
