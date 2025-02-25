@@ -16,6 +16,7 @@ import type {
   ColumnarVectors,
   Consistency,
   DistanceMetric,
+  Encryption,
   Filters,
   HTTPClient,
   Id,
@@ -119,11 +120,14 @@ export class Namespace {
     vectors,
     distance_metric,
     schema,
+    encryption,
     batchSize = 10000,
   }: {
     vectors: Vector[];
     distance_metric: DistanceMetric;
     schema?: Schema;
+    /** Only available as part of our enterprise offerings. */
+    encryption?: Encryption;
     batchSize?: number;
   }): Promise<void> {
     for (let i = 0; i < vectors.length; i += batchSize) {
@@ -136,6 +140,7 @@ export class Namespace {
           upserts: batch,
           distance_metric,
           schema,
+          encryption,
         },
         retryable: true, // Upserts are idempotent
       });

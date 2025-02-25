@@ -514,6 +514,34 @@ test("empty_namespace", async () => {
   await ns.export();
 });
 
+test("no_cmek", async () => {
+  const ns = tpuf.namespace(testNamespacePrefix + "no_cmek");
+
+  let error: any = null;
+  try {
+    await ns.upsert({
+      vectors: [
+        {
+          id: 1,
+          vector: [0.1, 0.1],
+        },
+      ],
+      distance_metric: "cosine_distance",
+      encryption: {
+        cmek: {
+          key_name: "mykey",
+        }
+      }
+    });
+  } catch (e: any) {
+    error = e;
+  }
+
+  expect(error).toStrictEqual(
+    new TurbopufferError("💔 CMEK is not currently enabled in this cluster", {}),
+  );
+});
+
 test("delete_by_filter", async () => {
   const ns = tpuf.namespace(
     testNamespacePrefix + "delete_by_filter",
