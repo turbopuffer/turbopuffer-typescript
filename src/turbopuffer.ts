@@ -358,6 +358,22 @@ export class Namespace {
       })
     ).body!;
   }
+
+  /**
+   * Copies all documents from another namespace to this namespace.
+   * See: https://turbopuffer.com/docs/upsert#parameters `copy_from_namespace`
+   * for specifics on how this works.
+   */
+  async copyFromNamespace(sourceNamespace: string) {
+    await this.client.http.doRequest<Schema>({
+      method: "POST",
+      path: `/v1/namespaces/${this.id}`,
+      body: {
+        copy_from_namespace: sourceNamespace,
+      },
+      retryable: true,
+    })
+  }
 }
 
 // Re-export all types in types.ts for consumers
