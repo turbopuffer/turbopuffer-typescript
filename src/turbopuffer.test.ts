@@ -514,6 +514,84 @@ test("empty_namespace", async () => {
   await ns.export();
 });
 
+test("no_cmek", async () => {
+  const ns = tpuf.namespace(testNamespacePrefix + "no_cmek");
+
+  let error: any = null;
+  try {
+    await ns.upsert({
+      vectors: [
+        {
+          id: 1,
+          vector: [0.1, 0.1],
+        },
+      ],
+      distance_metric: "cosine_distance",
+      encryption: {
+        cmek: {
+          key_name: "mykey",
+        }
+      }
+    });
+  } catch (e: any) {
+    error = e;
+  }
+
+  expect(error).toStrictEqual(
+    new TurbopufferError("💔 CMEK is not currently enabled in this cluster", {}),
+  );
+});
+
+test("copy_from_namespace", async () => {
+  const ns1Name = testNamespacePrefix + "copy_from_namespace_1";
+  const ns1 = tpuf.namespace(ns1Name);
+  const ns2 = tpuf.namespace(testNamespacePrefix + "copy_from_namespace_2");
+
+  try {
+    await ns1.deleteAll();
+    await ns2.deleteAll();
+  } catch (_: unknown) {
+    /* empty */
+  }
+
+  await ns1.upsert({
+    vectors: [
+      {
+        id: 1,
+        vector: [0.1, 0.1],
+        attributes: {
+          tags: ["a"]
+        }
+      },
+      {
+        id: 2,
+        vector: [0.2, 0.2],
+        attributes: {
+          tags: ["b"]
+        }
+      },
+      {
+        id: 3,
+        vector: [0.3, 0.3],
+        attributes: {
+          tags: ["c"]
+        }
+      },
+    ],
+    distance_metric: "cosine_distance",
+  });
+
+  await ns2.copyFromNamespace(ns1Name);
+
+  const res = await ns2.query({
+    vector: [0.1, 0.1],
+    include_vectors: true,
+    include_attributes: true,
+  });
+
+  expect(res.length).toEqual(3);
+});
+
 test("delete_by_filter", async () => {
   const ns = tpuf.namespace(
     testNamespacePrefix + "delete_by_filter",

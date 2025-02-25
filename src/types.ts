@@ -64,6 +64,12 @@ export type FilterConnective = "And" | "Or";
 export type FilterValue = AttributeType;
 export type FilterCondition = [string, FilterOperator, FilterValue];
 export type Filters = [FilterConnective, Filters[]] | FilterCondition;
+export interface Cmek {
+  key_name: string;
+}
+export interface Encryption {
+  cmek: Cmek;
+}
 
 export interface RequestParams {
   method: string;
