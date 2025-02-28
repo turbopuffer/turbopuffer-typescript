@@ -245,6 +245,21 @@ test("bm25_with_default_schema_and_simple_query", async () => {
   expect(results[0].id).toEqual(2);
 });
 
+test("namespaces", async () => {
+  const namespaces0 = await tpuf.namespaces({ page_size: 5 });
+  const cursor0 = namespaces0.next_cursor;
+
+  const namespaces1 = await tpuf.namespaces({
+    cursor: cursor0,
+    page_size: 5,
+  });
+  const cursor1 = namespaces1.next_cursor;
+
+  expect(namespaces0.namespaces.length).toEqual(5);
+  expect(namespaces0.namespaces.length).toEqual(5);
+  expect(cursor0).not.toEqual(cursor1);
+})
+
 test("schema", async () => {
   const ns = tpuf.namespace(testNamespacePrefix + "schema");
 
