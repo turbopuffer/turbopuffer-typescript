@@ -7,6 +7,47 @@ const tpuf = new Turbopuffer({
 
 const testNamespacePrefix = "typescript_sdk_";
 
+test("trailing_slashes_in_url", async () => {
+  const tpuf = new Turbopuffer({
+    apiKey: process.env.TURBOPUFFER_API_KEY!,
+    baseUrl: "https://gcp-us-east4.turbopuffer.com/",
+  });
+
+  const ns = tpuf.namespace(testNamespacePrefix + "trailing_slashes_in_url");
+
+  await ns.upsert({
+    vectors: [
+      {
+        id: 1,
+        vector: [0.1, 0.1],
+        attributes: {
+          text: "Walruses are large marine mammals with long tusks and whiskers",
+        },
+      },
+      {
+        id: 2,
+        vector: [0.2, 0.2],
+        attributes: { text: "They primarily inhabit the cold Arctic regions" },
+      },
+    ],
+    distance_metric: "cosine_distance",
+  });
+
+  const schema = await ns.schema();
+  expect(schema).toEqual({
+    id: {
+      type: 'uint',
+      filterable: null,
+      full_text_search: null,
+    },
+    text: {
+      type: 'string',
+      filterable: true,
+      full_text_search: null,
+    },
+  });
+});
+
 test("bm25_with_custom_schema_and_sum_query", async () => {
   const ns = tpuf.namespace(
     testNamespacePrefix + "bm25_with_custom_schema_and_sum_query",
