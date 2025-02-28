@@ -111,7 +111,7 @@ export default class NodeHTTPClient implements HTTPClient {
     }
     path = url.pathname;
     if (query) {
-      path += "?" + url.search;
+      path += url.search;
     }
 
     const headers: Record<string, string> = {

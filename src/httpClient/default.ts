@@ -69,7 +69,7 @@ export default class DefaultHTTPClient implements HTTPClient {
     }
     path = url.pathname;
     if (query) {
-      path += "?" + url.search;
+      path += url.search;
     }
 
     const headers: Record<string, string> = {
