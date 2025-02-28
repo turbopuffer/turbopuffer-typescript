@@ -7,13 +7,13 @@ const tpuf = new Turbopuffer({
 
 const testNamespacePrefix = "typescript_sdk_";
 
-test("trailing_slashes_in_url", async () => {
+test("trailing_slashes_in_base_url", async () => {
   const tpuf = new Turbopuffer({
     apiKey: process.env.TURBOPUFFER_API_KEY!,
-    baseUrl: "https://gcp-us-east4.turbopuffer.com/",
+    baseUrl: "https://gcp-us-east4.turbopuffer.com//",
   });
 
-  const ns = tpuf.namespace(testNamespacePrefix + "trailing_slashes_in_url");
+  const ns = tpuf.namespace(testNamespacePrefix + "trailing_slashes_in_base_url");
 
   await ns.upsert({
     vectors: [
