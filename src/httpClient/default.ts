@@ -58,7 +58,7 @@ export default class DefaultHTTPClient implements HTTPClient {
     compress,
     retryable,
   }: RequestParams): RequestResponse<T> {
-    const url = new URL(`${this.baseUrl}${path}`);
+    const url = new URL(path, this.baseUrl);
     if (query) {
       Object.keys(query).forEach((key) => {
         const value = query[key];
