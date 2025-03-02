@@ -7,6 +7,47 @@ const tpuf = new Turbopuffer({
 
 const testNamespacePrefix = "typescript_sdk_";
 
+test("trailing_slashes_in_base_url", async () => {
+  const tpuf = new Turbopuffer({
+    apiKey: process.env.TURBOPUFFER_API_KEY!,
+    baseUrl: "https://gcp-us-east4.turbopuffer.com//",
+  });
+
+  const ns = tpuf.namespace(testNamespacePrefix + "trailing_slashes_in_base_url");
+
+  await ns.upsert({
+    vectors: [
+      {
+        id: 1,
+        vector: [0.1, 0.1],
+        attributes: {
+          text: "Walruses are large marine mammals with long tusks and whiskers",
+        },
+      },
+      {
+        id: 2,
+        vector: [0.2, 0.2],
+        attributes: { text: "They primarily inhabit the cold Arctic regions" },
+      },
+    ],
+    distance_metric: "cosine_distance",
+  });
+
+  const schema = await ns.schema();
+  expect(schema).toEqual({
+    id: {
+      type: 'uint',
+      filterable: null,
+      full_text_search: null,
+    },
+    text: {
+      type: 'string',
+      filterable: true,
+      full_text_search: null,
+    },
+  });
+});
+
 test("bm25_with_custom_schema_and_sum_query", async () => {
   const ns = tpuf.namespace(
     testNamespacePrefix + "bm25_with_custom_schema_and_sum_query",
@@ -203,6 +244,21 @@ test("bm25_with_default_schema_and_simple_query", async () => {
   expect(results.length).toEqual(1);
   expect(results[0].id).toEqual(2);
 });
+
+test("namespaces", async () => {
+  const namespaces0 = await tpuf.namespaces({ page_size: 5 });
+  const cursor0 = namespaces0.next_cursor;
+
+  const namespaces1 = await tpuf.namespaces({
+    cursor: cursor0,
+    page_size: 5,
+  });
+  const cursor1 = namespaces1.next_cursor;
+
+  expect(namespaces0.namespaces.length).toEqual(5);
+  expect(namespaces0.namespaces.length).toEqual(5);
+  expect(cursor0).not.toEqual(cursor1);
+})
 
 test("schema", async () => {
   const ns = tpuf.namespace(testNamespacePrefix + "schema");
