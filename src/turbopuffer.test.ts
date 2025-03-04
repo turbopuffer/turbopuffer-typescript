@@ -1,4 +1,4 @@
-import { Turbopuffer } from "./turbopuffer";
+import { RankBy, Turbopuffer } from "./turbopuffer";
 import { isRuntimeFullyNodeCompatible, TurbopufferError } from "./helpers";
 
 const tpuf = new Turbopuffer({
@@ -795,3 +795,78 @@ test("disable_compression", async () => {
     expect(metrics.decompress_time).toBeNull;
   }
 });
+
+test("product_operator", async () => {
+  const ns = tpuf.namespace(
+    testNamespacePrefix + "product_operator",
+  );
+
+  try {
+    await ns.deleteAll();
+  } catch (_: unknown) {
+    /* empty */
+  }
+
+  const schema = {
+    title: {
+      type: "string",
+      full_text_search: true,
+    },
+    content: {
+      type: "string",
+      full_text_search: true,
+    }
+  };
+
+  await ns.upsert({
+    vectors: [
+      {
+        id: 1,
+        vector: [0.1, 0.1],
+        attributes: {
+          title: "one",
+          content: "foo bar baz",
+        },
+      },
+      {
+        id: 2,
+        vector: [0.2, 0.2],
+        attributes: {
+          title: "two",
+          content: "foo bar",
+        },
+      },
+      {
+        id: 3,
+        vector: [0.3, 0.3],
+        attributes: {
+          title: "three",
+          content: "bar baz",
+        },
+      },
+    ],
+    distance_metric: "euclidean_squared",
+    schema: schema,
+  });
+
+  const queries: RankBy[] = [
+    ["Product", [2, ["title", "BM25", "one"]]],
+    ["Product", [["title", "BM25", "one"], 2]],
+    ["Sum", [
+      ["Product", [2, ["title", "BM25", "one"]]],
+      ["content", "BM25", "foo"],
+    ]],
+    ["Product", [
+      2,
+      ["Sum", [
+        ["Product", [2, ["title", "BM25", "one"]]],
+        ["content", "BM25", "foo"],
+      ]],
+    ]],
+  ];
+
+  for (const query of queries) {
+    const results = await ns.query({ rank_by: query });
+    expect(results.length).toBeGreaterThan(0);
+  }
+})
