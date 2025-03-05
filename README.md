@@ -14,6 +14,8 @@ Usage:
 // We recommend creating a single instance and reusing it for all calls
 const tpuf = new Turbopuffer({
   apiKey: process.env.TURBOPUFFER_API_KEY as string,
+  // see https://turbopuffer.com/docs/regions for available regions
+  baseUrl: "https://gcp-us-east4.turbopuffer.com",
 });
 
 // Instantiate an object to work with a namespace

@@ -1,4 +1,4 @@
-import { Turbopuffer } from "./turbopuffer";
+import { RankBy, Turbopuffer } from "./turbopuffer";
 import { isRuntimeFullyNodeCompatible, TurbopufferError } from "./helpers";
 import { Schema } from "./types";
 
@@ -7,6 +7,47 @@ const tpuf = new Turbopuffer({
 });
 
 const testNamespacePrefix = "typescript_sdk_";
+
+test("trailing_slashes_in_base_url", async () => {
+  const tpuf = new Turbopuffer({
+    apiKey: process.env.TURBOPUFFER_API_KEY!,
+    baseUrl: "https://gcp-us-east4.turbopuffer.com//",
+  });
+
+  const ns = tpuf.namespace(testNamespacePrefix + "trailing_slashes_in_base_url");
+
+  await ns.upsert({
+    vectors: [
+      {
+        id: 1,
+        vector: [0.1, 0.1],
+        attributes: {
+          text: "Walruses are large marine mammals with long tusks and whiskers",
+        },
+      },
+      {
+        id: 2,
+        vector: [0.2, 0.2],
+        attributes: { text: "They primarily inhabit the cold Arctic regions" },
+      },
+    ],
+    distance_metric: "cosine_distance",
+  });
+
+  const schema = await ns.schema();
+  expect(schema).toEqual({
+    id: {
+      type: 'uint',
+      filterable: null,
+      full_text_search: null,
+    },
+    text: {
+      type: 'string',
+      filterable: true,
+      full_text_search: null,
+    },
+  });
+});
 
 test("bm25_with_custom_schema_and_sum_query", async () => {
   const ns = tpuf.namespace(
@@ -204,6 +245,21 @@ test("bm25_with_default_schema_and_simple_query", async () => {
   expect(results.length).toEqual(1);
   expect(results[0].id).toEqual(2);
 });
+
+test("namespaces", async () => {
+  const namespaces0 = await tpuf.namespaces({ page_size: 5 });
+  const cursor0 = namespaces0.next_cursor;
+
+  const namespaces1 = await tpuf.namespaces({
+    cursor: cursor0,
+    page_size: 5,
+  });
+  const cursor1 = namespaces1.next_cursor;
+
+  expect(namespaces0.namespaces.length).toEqual(5);
+  expect(namespaces0.namespaces.length).toEqual(5);
+  expect(cursor0).not.toEqual(cursor1);
+})
 
 test("schema", async () => {
   const ns = tpuf.namespace(testNamespacePrefix + "schema");
@@ -515,6 +571,84 @@ test("empty_namespace", async () => {
   await ns.export();
 });
 
+test("no_cmek", async () => {
+  const ns = tpuf.namespace(testNamespacePrefix + "no_cmek");
+
+  let error: any = null;
+  try {
+    await ns.upsert({
+      vectors: [
+        {
+          id: 1,
+          vector: [0.1, 0.1],
+        },
+      ],
+      distance_metric: "cosine_distance",
+      encryption: {
+        cmek: {
+          key_name: "mykey",
+        }
+      }
+    });
+  } catch (e: any) {
+    error = e;
+  }
+
+  expect(error).toStrictEqual(
+    new TurbopufferError("💔 CMEK is not currently enabled in this cluster", {}),
+  );
+});
+
+test("copy_from_namespace", async () => {
+  const ns1Name = testNamespacePrefix + "copy_from_namespace_1";
+  const ns1 = tpuf.namespace(ns1Name);
+  const ns2 = tpuf.namespace(testNamespacePrefix + "copy_from_namespace_2");
+
+  try {
+    await ns1.deleteAll();
+    await ns2.deleteAll();
+  } catch (_: unknown) {
+    /* empty */
+  }
+
+  await ns1.upsert({
+    vectors: [
+      {
+        id: 1,
+        vector: [0.1, 0.1],
+        attributes: {
+          tags: ["a"]
+        }
+      },
+      {
+        id: 2,
+        vector: [0.2, 0.2],
+        attributes: {
+          tags: ["b"]
+        }
+      },
+      {
+        id: 3,
+        vector: [0.3, 0.3],
+        attributes: {
+          tags: ["c"]
+        }
+      },
+    ],
+    distance_metric: "cosine_distance",
+  });
+
+  await ns2.copyFromNamespace(ns1Name);
+
+  const res = await ns2.query({
+    vector: [0.1, 0.1],
+    include_vectors: true,
+    include_attributes: true,
+  });
+
+  expect(res.length).toEqual(3);
+});
+
 test("delete_by_filter", async () => {
   const ns = tpuf.namespace(
     testNamespacePrefix + "delete_by_filter",
@@ -662,3 +796,78 @@ test("disable_compression", async () => {
     expect(metrics.decompress_time).toBeNull;
   }
 });
+
+test("product_operator", async () => {
+  const ns = tpuf.namespace(
+    testNamespacePrefix + "product_operator",
+  );
+
+  try {
+    await ns.deleteAll();
+  } catch (_: unknown) {
+    /* empty */
+  }
+
+  const schema = {
+    title: {
+      type: "string",
+      full_text_search: true,
+    },
+    content: {
+      type: "string",
+      full_text_search: true,
+    }
+  };
+
+  await ns.upsert({
+    vectors: [
+      {
+        id: 1,
+        vector: [0.1, 0.1],
+        attributes: {
+          title: "one",
+          content: "foo bar baz",
+        },
+      },
+      {
+        id: 2,
+        vector: [0.2, 0.2],
+        attributes: {
+          title: "two",
+          content: "foo bar",
+        },
+      },
+      {
+        id: 3,
+        vector: [0.3, 0.3],
+        attributes: {
+          title: "three",
+          content: "bar baz",
+        },
+      },
+    ],
+    distance_metric: "euclidean_squared",
+    schema: schema,
+  });
+
+  const queries: RankBy[] = [
+    ["Product", [2, ["title", "BM25", "one"]]],
+    ["Product", [["title", "BM25", "one"], 2]],
+    ["Sum", [
+      ["Product", [2, ["title", "BM25", "one"]]],
+      ["content", "BM25", "foo"],
+    ]],
+    ["Product", [
+      2,
+      ["Sum", [
+        ["Product", [2, ["title", "BM25", "one"]]],
+        ["content", "BM25", "foo"],
+      ]],
+    ]],
+  ];
+
+  for (const query of queries) {
+    const results = await ns.query({ rank_by: query });
+    expect(results.length).toBeGreaterThan(0);
+  }
+})

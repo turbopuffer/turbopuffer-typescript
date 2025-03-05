@@ -30,12 +30,15 @@ export type Schema = Record<
     full_text_search?: boolean | Partial<FTSParams>;
   }
 >;
-export type RankBySingleField = [string, "BM25", string];
-export type OrderByAttribute = [string, "asc" | "desc"];
-export type RankBy =
-  | RankBySingleField
-  | ["Sum", RankBySingleField[]]
-  | OrderByAttribute;
+
+export type RankBy_OrderByAttribute = [string, "asc" | "desc"];
+export type RankBy_Text =
+  | [string, "BM25", string]
+  | ["Sum", RankBy_Text[]]
+  | ["Product", [RankBy_Text, number]]
+  | ["Product", [number, RankBy_Text]];
+export type RankBy = RankBy_Text | RankBy_OrderByAttribute;
+
 export interface Consistency {
   level: "strong" | "eventual";
 }
@@ -65,6 +68,12 @@ export type FilterConnective = "And" | "Or";
 export type FilterValue = AttributeType;
 export type FilterCondition = [string, FilterOperator, FilterValue];
 export type Filters = [FilterConnective, Filters[]] | FilterCondition;
+export interface Cmek {
+  key_name: string;
+}
+export interface Encryption {
+  cmek: Cmek;
+}
 
 export interface RequestParams {
   method: string;
