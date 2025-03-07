@@ -947,4 +947,28 @@ test("test_getUpdatedUrlPath", () => {
       "v1/namespaces",
     ),
   ).toEqual("/my-cool-path/v1/namespaces");
+
+  expect(
+    getUpdatedUrlPath(
+      "https://gcp-us-east4.turbopuffer.com/my-cool-path/",
+      "v1/namespaces/",
+      {
+        cursor: 'next_cursor',
+        prefix: 'my_prefix',
+        page_size: '15',
+      },
+    ),
+  ).toEqual("/my-cool-path/v1/namespaces/?cursor=next_cursor&prefix=my_prefix&page_size=15");
+
+  expect(
+    getUpdatedUrlPath(
+      "https://gcp-us-east4.turbopuffer.com/my-cool-path//",
+      "v1/namespaces",
+      {
+        cursor: 'next_cursor',
+        prefix: 'my_prefix',
+        page_size: '15',
+      },
+    ),
+  ).toEqual("/my-cool-path/v1/namespaces?cursor=next_cursor&prefix=my_prefix&page_size=15");
 });
