@@ -1,6 +1,5 @@
-import { RankBy, Turbopuffer } from "./turbopuffer";
+import { Turbopuffer, RankBy, Schema } from "./index";
 import { isRuntimeFullyNodeCompatible, TurbopufferError } from "./helpers";
-import { Schema } from "./types";
 
 const tpuf = new Turbopuffer({
   apiKey: process.env.TURBOPUFFER_API_KEY!,
@@ -808,7 +807,7 @@ test("product_operator", async () => {
     /* empty */
   }
 
-  const schema = {
+  const schema: Schema = {
     title: {
       type: "string",
       full_text_search: true,
