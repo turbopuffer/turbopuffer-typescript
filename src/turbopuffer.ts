@@ -377,4 +377,4 @@ export class Namespace {
 }
 
 // Re-export all types in types.ts for consumers
-export * from './types';
+export * from "./types";
