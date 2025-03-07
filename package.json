@@ -35,8 +35,8 @@
     "README.md",
     "LICENSE"
   ],
-  "main": "./dist/turbopuffer.js",
-  "types": "./dist/turbopuffer.d.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "devDependencies": {
     "@types/jest": "^29.5.12",
     "@types/pako": "^2.0.3",
