@@ -1,5 +1,5 @@
-import { Turbopuffer, RankBy, Schema } from "./index";
-import { isRuntimeFullyNodeCompatible, TurbopufferError } from "./helpers";
+import { Turbopuffer, RankBy, Schema, TurbopufferError } from "./index";
+import { isRuntimeFullyNodeCompatible } from "./helpers";
 
 const tpuf = new Turbopuffer({
   apiKey: process.env.TURBOPUFFER_API_KEY!,
