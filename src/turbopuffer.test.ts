@@ -13,7 +13,9 @@ test("trailing_slashes_in_base_url", async () => {
     baseUrl: "https://gcp-us-east4.turbopuffer.com//",
   });
 
-  const ns = tpuf.namespace(testNamespacePrefix + "trailing_slashes_in_base_url");
+  const ns = tpuf.namespace(
+    testNamespacePrefix + "trailing_slashes_in_base_url",
+  );
 
   await ns.upsert({
     vectors: [
@@ -36,12 +38,12 @@ test("trailing_slashes_in_base_url", async () => {
   const schema = await ns.schema();
   expect(schema).toEqual({
     id: {
-      type: 'uint',
+      type: "uint",
       filterable: null,
       full_text_search: null,
     },
     text: {
-      type: 'string',
+      type: "string",
       filterable: true,
       full_text_search: null,
     },
@@ -258,7 +260,7 @@ test("namespaces", async () => {
   expect(namespaces0.namespaces.length).toEqual(5);
   expect(namespaces0.namespaces.length).toEqual(5);
   expect(cursor0).not.toEqual(cursor1);
-})
+});
 
 test("schema", async () => {
   const ns = tpuf.namespace(testNamespacePrefix + "schema");
@@ -586,15 +588,18 @@ test("no_cmek", async () => {
       encryption: {
         cmek: {
           key_name: "mykey",
-        }
-      }
+        },
+      },
     });
   } catch (e: any) {
     error = e;
   }
 
   expect(error).toStrictEqual(
-    new TurbopufferError("💔 CMEK is not currently enabled in this cluster", {}),
+    new TurbopufferError(
+      "💔 CMEK is not currently enabled in this cluster",
+      {},
+    ),
   );
 });
 
@@ -616,22 +621,22 @@ test("copy_from_namespace", async () => {
         id: 1,
         vector: [0.1, 0.1],
         attributes: {
-          tags: ["a"]
-        }
+          tags: ["a"],
+        },
       },
       {
         id: 2,
         vector: [0.2, 0.2],
         attributes: {
-          tags: ["b"]
-        }
+          tags: ["b"],
+        },
       },
       {
         id: 3,
         vector: [0.3, 0.3],
         attributes: {
-          tags: ["c"]
-        }
+          tags: ["c"],
+        },
       },
     ],
     distance_metric: "cosine_distance",
@@ -649,9 +654,7 @@ test("copy_from_namespace", async () => {
 });
 
 test("delete_by_filter", async () => {
-  const ns = tpuf.namespace(
-    testNamespacePrefix + "delete_by_filter",
-  );
+  const ns = tpuf.namespace(testNamespacePrefix + "delete_by_filter");
 
   try {
     await ns.deleteAll();
@@ -797,9 +800,7 @@ test("disable_compression", async () => {
 });
 
 test("product_operator", async () => {
-  const ns = tpuf.namespace(
-    testNamespacePrefix + "product_operator",
-  );
+  const ns = tpuf.namespace(testNamespacePrefix + "product_operator");
 
   try {
     await ns.deleteAll();
@@ -815,7 +816,7 @@ test("product_operator", async () => {
     content: {
       type: "string",
       full_text_search: true,
-    }
+    },
   };
 
   await ns.upsert({
@@ -852,21 +853,30 @@ test("product_operator", async () => {
   const queries: RankBy[] = [
     ["Product", [2, ["title", "BM25", "one"]]],
     ["Product", [["title", "BM25", "one"], 2]],
-    ["Sum", [
-      ["Product", [2, ["title", "BM25", "one"]]],
-      ["content", "BM25", "foo"],
-    ]],
-    ["Product", [
-      2,
-      ["Sum", [
+    [
+      "Sum",
+      [
         ["Product", [2, ["title", "BM25", "one"]]],
         ["content", "BM25", "foo"],
-      ]],
-    ]],
+      ],
+    ],
+    [
+      "Product",
+      [
+        2,
+        [
+          "Sum",
+          [
+            ["Product", [2, ["title", "BM25", "one"]]],
+            ["content", "BM25", "foo"],
+          ],
+        ],
+      ],
+    ],
   ];
 
   for (const query of queries) {
     const results = await ns.query({ rank_by: query });
     expect(results.length).toBeGreaterThan(0);
   }
-})
+});
