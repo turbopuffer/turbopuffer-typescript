@@ -1,6 +1,6 @@
 {
   "name": "@turbopuffer/turbopuffer",
-  "version": "0.6.7",
+  "version": "0.6.8",
   "description": "Official Typescript API client library for turbopuffer.com",
   "scripts": {
     "build": "rm -rf dist && tsc",
@@ -35,8 +35,8 @@
     "README.md",
     "LICENSE"
   ],
-  "main": "./dist/turbopuffer.js",
-  "types": "./dist/turbopuffer.d.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "devDependencies": {
     "@types/jest": "^29.5.12",
     "@types/pako": "^2.0.3",
