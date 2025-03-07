@@ -1,3 +1,5 @@
+export type { TurbopufferError } from "./helpers";
+
 // Utility Types
 // Note: At the moment, negative numbers aren't supported.
 export type Id = string | number;
