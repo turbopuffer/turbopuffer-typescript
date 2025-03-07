@@ -372,6 +372,6 @@ export class Namespace {
         copy_from_namespace: sourceNamespace,
       },
       retryable: true,
-    })
+    });
   }
 }

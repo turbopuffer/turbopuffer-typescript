@@ -1,8 +1,4 @@
-import type {
-  ColumnarVectors,
-  RequestTiming,
-  Vector,
-} from "./types";
+import type { ColumnarVectors, RequestTiming, Vector } from "./types";
 
 type Runtime =
   | "bun"
@@ -14,12 +10,10 @@ type Runtime =
 
 function detectRuntime(): Runtime {
   // @ts-expect-error can be ignored
-  if (typeof globalThis.Bun !== "undefined")
-    return "bun";
+  if (typeof globalThis.Bun !== "undefined") return "bun";
 
   // @ts-expect-error can be ignored
-  if (typeof globalThis.Deno !== "undefined")
-    return "deno";
+  if (typeof globalThis.Deno !== "undefined") return "deno";
 
   const userAgent = globalThis.navigator?.userAgent;
 
@@ -30,13 +24,12 @@ function detectRuntime(): Runtime {
   if (
     userAgent
       ? userAgent === "Cloudflare-Workers"
-      // @ts-expect-error can be ignored
-      : typeof WebSocketPair !== "undefined"
+      : // @ts-expect-error can be ignored
+        typeof WebSocketPair !== "undefined"
   )
     return "cloudflare-workers";
 
-  if (typeof window !== "undefined")
-    return "browser";
+  if (typeof window !== "undefined") return "browser";
 
   if (
     userAgent
@@ -64,7 +57,9 @@ export class TurbopufferError extends Error {
 
 /** A helper function to determine if a status code should be retried. */
 export function statusCodeShouldRetry(statusCode?: number): boolean {
-  return !statusCode || statusCode === 408 || statusCode === 429 || statusCode >= 500;
+  return (
+    !statusCode || statusCode === 408 || statusCode === 429 || statusCode >= 500
+  );
 }
 
 /** A helper function to delay for a given number of milliseconds. */
@@ -91,7 +86,8 @@ export function make_request_timing({
   return {
     response_time: response_start - request_start,
     // `!= null` checks for both null and undefined
-    body_read_time: body_read_end != null ? body_read_end - response_start : null,
+    body_read_time:
+      body_read_end != null ? body_read_end - response_start : null,
     compress_time: requestCompressionDuration ?? null,
     decompress_time:
       decompress_end != null && body_read_end != null
