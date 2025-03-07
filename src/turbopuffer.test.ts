@@ -947,6 +947,4 @@ test("test_getUpdatedUrlPath", () => {
       "v1/namespaces",
     ),
   ).toEqual("/my-cool-path/v1/namespaces");
-
-  // console.log('updatedPath: ', updatedPath);
 });
