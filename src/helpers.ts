@@ -55,6 +55,32 @@ export class TurbopufferError extends Error {
   }
 }
 
+export function buildUrl(
+  baseUrl: string,
+  path: string,
+  query?: Record<string, string | undefined>,
+) {
+  // https://developer.mozilla.org/en-US/docs/Web/API/URL_API/Resolving_relative_references
+  // if baseUrl doesn't end in /, add one to make it behave
+  // like a directory so the next path part is appended.
+  // if there are multiple / appended, ensure all but one get removed.
+  const updatedBaseUrl = baseUrl.replace(/\/*$/, "/");
+
+  // strip leading slashes from `path` so it's appended rather
+  // than treated as absolute
+  const relativePath = path.replace(/^\/+/, "");
+
+  const url = new URL(relativePath, updatedBaseUrl);
+
+  if (query) {
+    for (const [key, value] of Object.entries(query)) {
+      if (value) url.searchParams.set(key, value);
+    }
+  }
+
+  return url;
+}
+
 /** A helper function to determine if a status code should be retried. */
 export function statusCodeShouldRetry(statusCode?: number): boolean {
   return (

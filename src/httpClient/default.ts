@@ -6,6 +6,7 @@ import {
   statusCodeShouldRetry,
   delay,
   make_request_timing,
+  buildUrl,
 } from "../helpers";
 
 function convertHeadersType(headers: Headers): Record<string, string> {
@@ -58,19 +59,7 @@ export default class DefaultHTTPClient implements HTTPClient {
     compress,
     retryable,
   }: RequestParams): RequestResponse<T> {
-    const url = new URL(path, this.baseUrl);
-    if (query) {
-      Object.keys(query).forEach((key) => {
-        const value = query[key];
-        if (value) {
-          url.searchParams.append(key, value);
-        }
-      });
-    }
-    path = url.pathname;
-    if (query) {
-      path += url.search;
-    }
+    const url = buildUrl(this.baseUrl, path, query);
 
     const headers: Record<string, string> = {
       Authorization: `Bearer ${this.apiKey}`,
@@ -106,7 +95,7 @@ export default class DefaultHTTPClient implements HTTPClient {
       error = null;
       request_start = performance.now();
       try {
-        response = await fetch(new URL(path, this.origin), {
+        response = await fetch(url, {
           method,
           headers,
           body: requestBody,
