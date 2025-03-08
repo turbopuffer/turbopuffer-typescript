@@ -55,7 +55,7 @@ export class TurbopufferError extends Error {
   }
 }
 
-export function getUpdatedUrlPath(
+export function buildUrl(
   baseUrl: string,
   path: string,
   query?: Record<string, string | undefined>,
@@ -64,8 +64,7 @@ export function getUpdatedUrlPath(
   // if baseUrl doesn't end in /, add one to make it behave
   // like a directory so the next path part is appended.
   // if there are multiple / appended, ensure all but one get removed.
-  let updatedBaseUrl = baseUrl.replace(/\/+$/, "");
-  updatedBaseUrl += "/";
+  const updatedBaseUrl = baseUrl.replace(/\/*$/, "/");
 
   // strip leading slashes from `path` so it's appended rather
   // than treated as absolute
@@ -79,11 +78,7 @@ export function getUpdatedUrlPath(
     }
   }
 
-  let updatedPath = url.pathname;
-  if (query && Object.keys(query).length > 0) {
-    updatedPath += url.search;
-  }
-  return updatedPath;
+  return url;
 }
 
 /** A helper function to determine if a status code should be retried. */

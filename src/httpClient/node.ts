@@ -15,7 +15,7 @@ import {
   statusCodeShouldRetry,
   delay,
   make_request_timing,
-  getUpdatedUrlPath,
+  buildUrl,
 } from "../helpers";
 
 const gzipAsync = promisify(gzip);
@@ -101,7 +101,7 @@ export default class NodeHTTPClient implements HTTPClient {
     compress,
     retryable,
   }: RequestParams): RequestResponse<T> {
-    const updatedPath = getUpdatedUrlPath(this.baseUrl, path, query);
+    const url = buildUrl(this.baseUrl, path, query);
 
     const headers: Record<string, string> = {
       Authorization: `Bearer ${this.apiKey}`,
@@ -138,8 +138,8 @@ export default class NodeHTTPClient implements HTTPClient {
       request_start = performance.now();
       try {
         response = await this.agent.request({
-          origin: this.origin,
-          path: updatedPath,
+          origin: url.origin,
+          path: url.pathname,
           method: method as Dispatcher.HttpMethod,
           headers,
           body: requestBody,

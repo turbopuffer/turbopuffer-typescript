@@ -1,5 +1,5 @@
 import { Turbopuffer, RankBy, Schema, TurbopufferError } from "./index";
-import { isRuntimeFullyNodeCompatible, getUpdatedUrlPath } from "./helpers";
+import { isRuntimeFullyNodeCompatible, buildUrl } from "./helpers";
 
 const tpuf = new Turbopuffer({
   apiKey: process.env.TURBOPUFFER_API_KEY!,
@@ -882,90 +882,89 @@ test("product_operator", async () => {
 });
 
 // test helper and utility methods
-test("test_getUpdatedUrlPath", () => {
+test("test_buildUrl", () => {
+  /** baseUrl w/o path **/
+  /* w/o path + w/o query */
   expect(
-    getUpdatedUrlPath("https://gcp-us-east4.turbopuffer.com", ""),
-  ).toEqual("/");
+    buildUrl("https://gcp-us-east4.turbopuffer.com", "").href,
+  ).toEqual("https://gcp-us-east4.turbopuffer.com/");
+
+  /* w/o path + w/ query */
+  expect(
+    buildUrl(
+      "https://gcp-us-east4.turbopuffer.com",
+      "/v1/namespaces",
+      {
+        cursor: 'next_cursor',
+        prefix: 'my_prefix',
+        page_size: '15',
+      }
+    ).href,
+  ).toEqual("https://gcp-us-east4.turbopuffer.com/v1/namespaces?cursor=next_cursor&prefix=my_prefix&page_size=15");
+
+  /* w/ path + w/o query */
+  expect(
+    buildUrl("https://gcp-us-east4.turbopuffer.com", "/v1/namespaces").href,
+  ).toEqual("https://gcp-us-east4.turbopuffer.com/v1/namespaces");
 
   expect(
-    getUpdatedUrlPath("https://gcp-us-east4.turbopuffer.com", "/v1/namespaces"),
-  ).toEqual("/v1/namespaces");
+    buildUrl("https://gcp-us-east4.turbopuffer.com", "v1/namespaces").href,
+  ).toEqual("https://gcp-us-east4.turbopuffer.com/v1/namespaces");
 
   expect(
-    getUpdatedUrlPath("https://gcp-us-east4.turbopuffer.com", "v1/namespaces"),
-  ).toEqual("/v1/namespaces");
+    buildUrl("https://gcp-us-east4.turbopuffer.com", "v1/namespaces/").href,
+  ).toEqual("https://gcp-us-east4.turbopuffer.com/v1/namespaces/");
 
   expect(
-    getUpdatedUrlPath("https://gcp-us-east4.turbopuffer.com", "v1/namespaces/"),
-  ).toEqual("/v1/namespaces/");
-
-  expect(
-    getUpdatedUrlPath(
+    buildUrl(
       "https://gcp-us-east4.turbopuffer.com/",
       "/v1/namespaces",
-    ),
-  ).toEqual("/v1/namespaces");
+    ).href,
+  ).toEqual("https://gcp-us-east4.turbopuffer.com/v1/namespaces");
 
   expect(
-    getUpdatedUrlPath("https://gcp-us-east4.turbopuffer.com/", "v1/namespaces"),
-  ).toEqual("/v1/namespaces");
+    buildUrl("https://gcp-us-east4.turbopuffer.com/", "v1/namespaces").href,
+  ).toEqual("https://gcp-us-east4.turbopuffer.com/v1/namespaces");
 
   expect(
-    getUpdatedUrlPath(
+    buildUrl(
       "https://gcp-us-east4.turbopuffer.com//",
       "/v1/namespaces",
-    ),
-  ).toEqual("/v1/namespaces");
+    ).href,
+  ).toEqual("https://gcp-us-east4.turbopuffer.com/v1/namespaces");
 
   expect(
-    getUpdatedUrlPath(
+    buildUrl(
       "https://gcp-us-east4.turbopuffer.com//",
       "//v1/namespaces",
-    ),
-  ).toEqual("/v1/namespaces");
+    ).href,
+  ).toEqual("https://gcp-us-east4.turbopuffer.com/v1/namespaces");
 
+  /* w/ path + w/ query */
   expect(
-    getUpdatedUrlPath(
-      "https://gcp-us-east4.turbopuffer.com/my-cool-path/",
-      "",
+    buildUrl(
+      "https://gcp-us-east4.turbopuffer.com",
+      "/v1/namespaces",
       {
         cursor: 'next_cursor',
         prefix: 'my_prefix',
         page_size: '15',
-      },
-    ),
-  ).toEqual("/my-cool-path/?cursor=next_cursor&prefix=my_prefix&page_size=15");
+      }
+    ).href,
+  ).toEqual("https://gcp-us-east4.turbopuffer.com/v1/namespaces?cursor=next_cursor&prefix=my_prefix&page_size=15");
 
+  /** baseUrl w/ path **/
+  /* w/o path + w/o query */
   expect(
-    getUpdatedUrlPath(
+    buildUrl(
       "https://gcp-us-east4.turbopuffer.com/my-cool-path",
-      "/v1/namespaces",
-    ),
-  ).toEqual("/my-cool-path/v1/namespaces");
+      "",
+    ).href,
+  ).toEqual("https://gcp-us-east4.turbopuffer.com/my-cool-path/");
 
+  /* w/o path + w/ query */
   expect(
-    getUpdatedUrlPath(
-      "https://gcp-us-east4.turbopuffer.com/my-cool-path/",
-      "/v1/namespaces",
-    ),
-  ).toEqual("/my-cool-path/v1/namespaces");
-
-  expect(
-    getUpdatedUrlPath(
-      "https://gcp-us-east4.turbopuffer.com/my-cool-path//",
-      "/v1/namespaces",
-    ),
-  ).toEqual("/my-cool-path/v1/namespaces");
-
-  expect(
-    getUpdatedUrlPath(
-      "https://gcp-us-east4.turbopuffer.com/my-cool-path//",
-      "v1/namespaces",
-    ),
-  ).toEqual("/my-cool-path/v1/namespaces");
-
-  expect(
-    getUpdatedUrlPath(
+    buildUrl(
       "https://gcp-us-east4.turbopuffer.com/my-cool-path",
       "",
       {
@@ -973,11 +972,53 @@ test("test_getUpdatedUrlPath", () => {
         prefix: 'my_prefix',
         page_size: '15',
       },
-    ),
-  ).toEqual("/my-cool-path/?cursor=next_cursor&prefix=my_prefix&page_size=15");
+    ).href,
+  ).toEqual("https://gcp-us-east4.turbopuffer.com/my-cool-path/?cursor=next_cursor&prefix=my_prefix&page_size=15");
 
   expect(
-    getUpdatedUrlPath(
+    buildUrl(
+      "https://gcp-us-east4.turbopuffer.com/my-cool-path/",
+      "",
+      {
+        cursor: 'next_cursor',
+        prefix: 'my_prefix',
+        page_size: '15',
+      },
+    ).href,
+  ).toEqual("https://gcp-us-east4.turbopuffer.com/my-cool-path/?cursor=next_cursor&prefix=my_prefix&page_size=15");
+
+  /* w/ path + w/o query */
+  expect(
+    buildUrl(
+      "https://gcp-us-east4.turbopuffer.com/my-cool-path",
+      "/v1/namespaces",
+    ).href,
+  ).toEqual("https://gcp-us-east4.turbopuffer.com/my-cool-path/v1/namespaces");
+
+  expect(
+    buildUrl(
+      "https://gcp-us-east4.turbopuffer.com/my-cool-path/",
+      "/v1/namespaces",
+    ).href,
+  ).toEqual("https://gcp-us-east4.turbopuffer.com/my-cool-path/v1/namespaces");
+
+  expect(
+    buildUrl(
+      "https://gcp-us-east4.turbopuffer.com/my-cool-path//",
+      "/v1/namespaces",
+    ).href,
+  ).toEqual("https://gcp-us-east4.turbopuffer.com/my-cool-path/v1/namespaces");
+
+  expect(
+    buildUrl(
+      "https://gcp-us-east4.turbopuffer.com/my-cool-path//",
+      "v1/namespaces",
+    ).href,
+  ).toEqual("https://gcp-us-east4.turbopuffer.com/my-cool-path/v1/namespaces");
+
+  /* w/ path + w/ query */
+  expect(
+    buildUrl(
       "https://gcp-us-east4.turbopuffer.com/my-cool-path//",
       "v1/namespaces",
       {
@@ -985,11 +1026,11 @@ test("test_getUpdatedUrlPath", () => {
         prefix: 'my_prefix',
         page_size: '15',
       },
-    ),
-  ).toEqual("/my-cool-path/v1/namespaces?cursor=next_cursor&prefix=my_prefix&page_size=15");
+    ).href,
+  ).toEqual("https://gcp-us-east4.turbopuffer.com/my-cool-path/v1/namespaces?cursor=next_cursor&prefix=my_prefix&page_size=15");
 
   expect(
-    getUpdatedUrlPath(
+    buildUrl(
       "https://gcp-us-east4.turbopuffer.com/my-cool-path//",
       "v1/namespaces",
       {
@@ -997,18 +1038,19 @@ test("test_getUpdatedUrlPath", () => {
         prefix: 'my_prefix',
         page_size: '15',
       },
-    ),
-  ).toEqual("/my-cool-path/v1/namespaces?cursor=next_cursor&prefix=my_prefix&page_size=15");
+    ).href,
+  ).toEqual("https://gcp-us-east4.turbopuffer.com/my-cool-path/v1/namespaces?cursor=next_cursor&prefix=my_prefix&page_size=15");
 
+  /** baseUrl w/ double path **/
   expect(
-    getUpdatedUrlPath(
+    buildUrl(
       "https://gcp-us-east4.turbopuffer.com/my-cool-path/another-dope-path",
       "",
-    ),
-  ).toEqual("/my-cool-path/another-dope-path/");
+    ).href,
+  ).toEqual("https://gcp-us-east4.turbopuffer.com/my-cool-path/another-dope-path/");
 
   expect(
-    getUpdatedUrlPath(
+    buildUrl(
       "https://gcp-us-east4.turbopuffer.com/my-cool-path/another-dope-path",
       "",
       {
@@ -1016,18 +1058,18 @@ test("test_getUpdatedUrlPath", () => {
         prefix: 'my_prefix',
         page_size: '15',
       },
-    ),
-  ).toEqual("/my-cool-path/another-dope-path/?cursor=next_cursor&prefix=my_prefix&page_size=15");
+    ).href,
+  ).toEqual("https://gcp-us-east4.turbopuffer.com/my-cool-path/another-dope-path/?cursor=next_cursor&prefix=my_prefix&page_size=15");
 
   expect(
-    getUpdatedUrlPath(
+    buildUrl(
       "https://gcp-us-east4.turbopuffer.com/my-cool-path/another-dope-path",
       "/v1/namespaces",
-    ),
-  ).toEqual("/my-cool-path/another-dope-path/v1/namespaces");
+    ).href,
+  ).toEqual("https://gcp-us-east4.turbopuffer.com/my-cool-path/another-dope-path/v1/namespaces");
 
   expect(
-    getUpdatedUrlPath(
+    buildUrl(
       "https://gcp-us-east4.turbopuffer.com/my-cool-path/another-dope-path",
       "/v1/namespaces",
       {
@@ -1035,6 +1077,6 @@ test("test_getUpdatedUrlPath", () => {
         prefix: 'my_prefix',
         page_size: '15',
       },
-    ),
-  ).toEqual("/my-cool-path/another-dope-path/v1/namespaces?cursor=next_cursor&prefix=my_prefix&page_size=15");
+    ).href,
+  ).toEqual("https://gcp-us-east4.turbopuffer.com/my-cool-path/another-dope-path/v1/namespaces?cursor=next_cursor&prefix=my_prefix&page_size=15");
 });
