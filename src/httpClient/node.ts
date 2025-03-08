@@ -139,7 +139,7 @@ export default class NodeHTTPClient implements HTTPClient {
       try {
         response = await this.agent.request({
           origin: url.origin,
-          path: url.pathname,
+          path: url.pathname + url.search,
           method: method as Dispatcher.HttpMethod,
           headers,
           body: requestBody,
