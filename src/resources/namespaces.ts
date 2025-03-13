@@ -268,7 +268,7 @@ export interface NamespaceQueryParams {
    * Exact filters for attributes to refine search results for. Think of it as a SQL
    * WHERE clause.
    */
-  filters?: unknown;
+  filter?: unknown;
 
   /**
    * Whether to include attributes in the response.

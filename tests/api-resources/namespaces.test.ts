@@ -76,7 +76,7 @@ describe('resource namespaces', () => {
         {
           consistency: { level: 'strong' },
           distance_metric: 'cosine_distance',
-          filters: {},
+          filter: {},
           include_attributes: true,
           include_vectors: true,
           rank_by: {},
