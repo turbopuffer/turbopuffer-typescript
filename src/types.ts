@@ -71,6 +71,7 @@ export type FilterOperator =
   | "NotGlob"
   | "IGlob"
   | "NotIGlob"
+  | "ContainsAllTokens"
   | "And"
   | "Or";
 export type FilterConnective = "And" | "Or";
