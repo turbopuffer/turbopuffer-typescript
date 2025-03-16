@@ -390,7 +390,7 @@ test("schema", async () => {
         stemming: true,
         remove_stopwords: true,
         case_sensitive: false,
-        tokenizer: "Word",
+        tokenizer: "word_v1",
       },
     },
     tags: {
@@ -403,7 +403,7 @@ test("schema", async () => {
         stemming: false,
         remove_stopwords: false,
         case_sensitive: true,
-        tokenizer: "Word",
+        tokenizer: "word_v1",
       },
     },
     private: {
