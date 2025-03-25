@@ -483,7 +483,7 @@ test("update_schema", async () => {
   });
 
   // Write an update to the schema making 'tags'
-  // filterable  and 'private' not filterable
+  // filterable and 'private' not filterable
   const updateSchema = await ns.updateSchema({
     tags: {
       type: "[]string",
