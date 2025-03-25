@@ -360,6 +360,22 @@ export class Namespace {
   }
 
   /**
+   * Updates the schema for a namespace.
+   * Returns the final schema after updates are done.
+   * See https://turbopuffer.com/docs/schema for specifics on allowed updates.
+   */
+  async updateSchema(updatedSchema: Schema): Promise<Schema> {
+    return (
+      await this.client.http.doRequest<Schema>({
+        method: "POST",
+        path: `/v1/namespaces/${this.id}/schema`,
+        body: updatedSchema,
+        retryable: true,
+      })
+    ).body!;
+  }
+
+  /**
    * Copies all documents from another namespace to this namespace.
    * See: https://turbopuffer.com/docs/upsert#parameters `copy_from_namespace`
    * for specifics on how this works.

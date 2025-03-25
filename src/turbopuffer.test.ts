@@ -414,6 +414,123 @@ test("schema", async () => {
   });
 });
 
+test("update_schema", async () => {
+  const ns = tpuf.namespace(testNamespacePrefix + "update_schema");
+
+  try {
+    await ns.deleteAll();
+  } catch (_: unknown) {
+    /* empty */
+  }
+
+  await ns.upsert({
+    vectors: [
+      {
+        id: 1,
+        vector: [0.1, 0.1],
+        attributes: {
+          private: true,
+          tags: ["a", "b"],
+        },
+      },
+      {
+        id: 2,
+        vector: [0.2, 0.2],
+        attributes: {
+          private: null,
+          tags: ["b", "d"],
+        },
+      },
+    ],
+    distance_metric: "cosine_distance",
+    schema: {
+      tags: {
+        type: "[]string",
+        full_text_search: {
+          stemming: false,
+          remove_stopwords: false,
+          case_sensitive: true,
+        },
+      },
+    },
+  });
+
+  const schema = await ns.schema();
+  expect(schema).toEqual({
+    id: {
+      type: "uint",
+      filterable: null,
+      full_text_search: null,
+    },
+    tags: {
+      type: "[]string",
+      filterable: false,
+      full_text_search: {
+        k1: 1.2,
+        b: 0.75,
+        language: "english",
+        stemming: false,
+        remove_stopwords: false,
+        case_sensitive: true,
+        tokenizer: "word_v1",
+      },
+    },
+    private: {
+      type: "bool",
+      filterable: true,
+      full_text_search: null,
+    },
+  });
+
+  // Write an update to the schema making 'tags'
+  // filterable  and 'private' not filterable
+  const updateSchema = await ns.updateSchema({
+    tags: {
+      type: "[]string",
+      filterable: true,
+      full_text_search: {
+        k1: 1.2,
+        b: 0.75,
+        language: "english",
+        stemming: false,
+        remove_stopwords: false,
+        case_sensitive: true,
+        tokenizer: "word_v1",
+      },
+    },
+    private: {
+      type: "bool",
+      filterable: false,
+      full_text_search: false,
+    },
+  });
+  expect(updateSchema).toEqual({
+    id: {
+      type: "uint",
+      filterable: null,
+      full_text_search: null,
+    },
+    tags: {
+      type: "[]string",
+      filterable: true,
+      full_text_search: {
+        k1: 1.2,
+        b: 0.75,
+        language: "english",
+        stemming: false,
+        remove_stopwords: false,
+        case_sensitive: true,
+        tokenizer: "word_v1",
+      },
+    },
+    private: {
+      type: "bool",
+      filterable: false,
+      full_text_search: null,
+    },
+  });
+});
+
 test("sanity", async () => {
   const nameSpaceName = testNamespacePrefix + "sanity";
   const ns = tpuf.namespace(nameSpaceName);
