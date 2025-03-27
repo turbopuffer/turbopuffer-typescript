@@ -42,7 +42,7 @@ export type Schema = Record<
 
 export type RankBy_OrderByAttribute = [string, "asc" | "desc"];
 export type RankBy_Text =
-  | [string, "BM25", string]
+  | [string, "BM25", string | [string]]
   | ["Sum", RankBy_Text[]]
   | ["Product", [RankBy_Text, number]]
   | ["Product", [number, RankBy_Text]];

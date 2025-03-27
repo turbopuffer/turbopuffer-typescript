@@ -129,6 +129,64 @@ test("bm25_with_custom_schema_and_sum_query", async () => {
   expect(results[2].id).toEqual(3);
 });
 
+test("bm25_with_tokenizer_pre_tokenized_array", async () => {
+  const ns = tpuf.namespace(
+    testNamespacePrefix + "bm25_with_tokenizer_pre_tokenized_array",
+  );
+  try {
+    await ns.deleteAll();
+  } catch (_: unknown) {
+    /* empty */
+  }
+
+  await ns.upsert({
+    vectors: [
+      {
+        id: 1,
+        vector: [0.1, 0.1],
+        attributes: {
+          "content": ["jumped", "over", "the", "lazy", "dog"],
+        },
+      },
+      {
+        id: 2,
+        vector: [0.2, 0.2],
+        attributes: {
+          "content": ["the", "lazy", "dog", "is", "brown"],
+        },
+      },
+    ],
+    schema: {
+      content: {
+        type: "[]string",
+        full_text_search: {
+          tokenizer: "pre_tokenized_array",
+        },
+      },
+    },
+    distance_metric: "cosine_distance",
+  });
+
+  let results = await ns.query({
+    rank_by: ["content", "BM25", ["jumped"]],
+    top_k: 10,
+  });
+  expect(results.length).toEqual(1);
+  expect(results[0].id).toEqual(1);
+
+
+  results = await ns.query({
+    rank_by: ["content", "BM25", ["dog"]],
+    top_k: 10,
+  });
+  expect(results.length).toEqual(2);
+
+  await expect(ns.query({
+    rank_by: ["content", "BM25", "jumped"],
+    top_k: 10,
+  })).rejects.toThrow("invalid input 'jumped' for rank_by field \"content\", expecting []string");
+});
+
 test("contains_all_tokens", async () => {
   const ns = tpuf.namespace(testNamespacePrefix + "contains_all_tokens");
   try {
