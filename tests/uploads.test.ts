@@ -1,6 +1,6 @@
 import fs from 'fs';
 import type { ResponseLike } from '@turbopuffer/turbopuffer/internal/to-file';
-import { toFile } from '@turbopuffer/turbopuffer/uploads';
+import { toFile } from '@turbopuffer/turbopuffer/core/uploads';
 import { File } from 'node:buffer';
 
 class MyClass {
@@ -97,7 +97,7 @@ describe('missing File error message', () => {
   });
 
   test('is thrown', async () => {
-    const uploads = await import('@turbopuffer/turbopuffer/uploads');
+    const uploads = await import('@turbopuffer/turbopuffer/core/uploads');
     await expect(
       uploads.toFile(mockResponse({ url: 'https://example.com/my/audio.mp3' })),
     ).rejects.toMatchInlineSnapshot(

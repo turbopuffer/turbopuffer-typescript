@@ -1,5 +1,5 @@
 import { multipartFormRequestOptions, createForm } from '@turbopuffer/turbopuffer/internal/uploads';
-import { toFile } from '@turbopuffer/turbopuffer/uploads';
+import { toFile } from '@turbopuffer/turbopuffer/core/uploads';
 
 describe('form data validation', () => {
   test('valid values do not error', async () => {
