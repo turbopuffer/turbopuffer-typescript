@@ -145,14 +145,14 @@ test("bm25_with_tokenizer_pre_tokenized_array", async () => {
         id: 1,
         vector: [0.1, 0.1],
         attributes: {
-          "content": ["jumped", "over", "the", "lazy", "dog"],
+          content: ["jumped", "over", "the", "lazy", "dog"],
         },
       },
       {
         id: 2,
         vector: [0.2, 0.2],
         attributes: {
-          "content": ["the", "lazy", "dog", "is", "brown"],
+          content: ["the", "lazy", "dog", "is", "brown"],
         },
       },
     ],
@@ -174,17 +174,20 @@ test("bm25_with_tokenizer_pre_tokenized_array", async () => {
   expect(results.length).toEqual(1);
   expect(results[0].id).toEqual(1);
 
-
   results = await ns.query({
     rank_by: ["content", "BM25", ["dog"]],
     top_k: 10,
   });
   expect(results.length).toEqual(2);
 
-  await expect(ns.query({
-    rank_by: ["content", "BM25", "jumped"],
-    top_k: 10,
-  })).rejects.toThrow("invalid input 'jumped' for rank_by field \"content\", expecting []string");
+  await expect(
+    ns.query({
+      rank_by: ["content", "BM25", "jumped"],
+      top_k: 10,
+    }),
+  ).rejects.toThrow(
+    "invalid input 'jumped' for rank_by field \"content\", expecting []string",
+  );
 });
 
 test("contains_all_tokens", async () => {
