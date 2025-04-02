@@ -648,6 +648,7 @@ test("sanity", async () => {
   expect(metrics.approx_namespace_size).toEqual(3);
   expect(metrics.exhaustive_search_count).toEqual(3);
   expect(metrics.processing_time).toBeGreaterThan(10);
+  expect(metrics.query_execution_time).toBeGreaterThan(10);
   expect(metrics.response_time).toBeGreaterThan(10);
   expect(metrics.body_read_time).toBeGreaterThan(0);
   expect(metrics.compress_time).toBeGreaterThan(0);

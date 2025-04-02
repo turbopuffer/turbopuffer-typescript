@@ -243,6 +243,9 @@ export class Namespace {
         cache_hit_ratio: parseFloatMetric(serverTiming["cache.hit_ratio"]),
         cache_temperature: serverTiming["cache.temperature"],
         processing_time: parseIntMetric(serverTiming["processing_time.dur"]),
+        query_execution_time: parseIntMetric(
+          serverTiming["query_execution_time.dur"],
+        ),
         exhaustive_search_count: parseIntMetric(
           serverTiming["exhaustive_search.count"],
         ),

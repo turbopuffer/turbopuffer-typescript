@@ -131,6 +131,7 @@ export interface QueryMetrics extends RequestTiming {
   cache_hit_ratio: number;
   cache_temperature: string;
   processing_time: number;
+  query_execution_time: number;
   exhaustive_search_count: number;
 }
 
