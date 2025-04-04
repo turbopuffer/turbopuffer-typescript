@@ -135,19 +135,10 @@ export interface QueryMetrics extends RequestTiming {
   exhaustive_search_count: number;
 }
 
-export type HintCacheWarmResponse =
-  | {
-      message: "cache starting to warm";
-      status: "ACCEPTED";
-    }
-  | {
-      message: "cache is already warming";
-      status: "ACCEPTED";
-    }
-  | {
-      message: "cache warm completed";
-      status: "OK";
-    };
+export interface HintCacheWarmResponse {
+  message: string;
+  status: "ACCEPTED" | "OK";
+}
 
 export interface NamespaceMetadata {
   id: string;
