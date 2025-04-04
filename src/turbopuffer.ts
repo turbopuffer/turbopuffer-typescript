@@ -18,6 +18,7 @@ import type {
   DistanceMetric,
   Encryption,
   Filters,
+  HintCacheWarmResponse,
   HTTPClient,
   Id,
   NamespaceMetadata,
@@ -256,6 +257,19 @@ export class Namespace {
         compress_time: response.request_timing.compress_time,
       },
     };
+  }
+
+  /**
+   * Warm the cache.
+   */
+  async hintCacheWarm(): Promise<HintCacheWarmResponse> {
+    return (
+      await this.client.http.doRequest<HintCacheWarmResponse>({
+        method: "GET",
+        path: `/v1/namespaces/${this.id}/hint_cache_warm`,
+        retryable: true,
+      })
+    ).body!;
   }
 
   /**

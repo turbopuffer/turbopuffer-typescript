@@ -135,6 +135,11 @@ export interface QueryMetrics extends RequestTiming {
   exhaustive_search_count: number;
 }
 
+export interface HintCacheWarmResponse {
+  message: string;
+  status: "ACCEPTED" | "OK";
+}
+
 export interface NamespaceMetadata {
   id: string;
   approx_count: number;
