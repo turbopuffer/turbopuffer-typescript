@@ -365,6 +365,19 @@ test("namespaces", async () => {
   expect(cursor0).not.toEqual(cursor1);
 });
 
+test("hint_cache_warm", async () => {
+  const nsId = (await tpuf.namespaces({ page_size: 1 })).namespaces[0].id;
+  const ns = await tpuf.namespace(nsId);
+
+  const result = await ns.hintCacheWarm();
+
+  expect([
+    { message: "cache starting to warm", status: "ACCEPTED" },
+    { message: "cache is already warming", status: "ACCEPTED" },
+    { message: "cache warm completed", status: "OK" },
+  ]).toContainEqual(result);
+});
+
 test("schema", async () => {
   const ns = tpuf.namespace(testNamespacePrefix + "schema");
 
