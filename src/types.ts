@@ -23,6 +23,7 @@ export type SchemaType =
   | "int"
   | "uint"
   | "uuid"
+  | "datetime"
   | "bool"
   | "[]string"
   | "[]int"
