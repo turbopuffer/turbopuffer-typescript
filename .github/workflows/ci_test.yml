@@ -5,6 +5,9 @@ on:
     branches: [main]
   pull_request:
 
+env:
+  TURBOPUFFER_API_KEY: ${{ secrets.TURBOPUFFER_TEST_API_KEY }}
+
 jobs:
   test-node:
     name: Run Node Tests
@@ -57,8 +60,6 @@ jobs:
         with:
           deno-version: v1.x
 
-      # If your project’s tests can run using Deno’s test runner,
-      # this assumes that you have configured Deno tests appropriately.
       - name: Install Node dependencies (for build/prep)
         run: npm ci
       - name: Build project
