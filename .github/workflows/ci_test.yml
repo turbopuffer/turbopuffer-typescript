@@ -1,0 +1,88 @@
+name: CI Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test-node:
+    name: Run Node Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+      - name: Run Node tests
+        run: npm run test:node
+
+  test-bun:
+    name: Run Tests with Bun
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install Bun
+        run: |
+          curl -fsSL https://bun.sh/install | bash
+          echo "${HOME}/.bun/bin" >> $GITHUB_PATH
+      - name: Install dependencies using Bun
+        run: bun install
+      - name: Build project with Bun
+        run: bun run build
+      - name: Run tests with Bun
+        run: bun run test:node
+
+  test-deno:
+    name: Run Tests with Deno
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+
+      # If your project’s tests can run using Deno’s test runner,
+      # this assumes that you have configured Deno tests appropriately.
+      - name: Install Node dependencies (for build/prep)
+        run: npm ci
+      - name: Build project
+        run: npm run build
+      - name: Run Deno tests
+        run: deno test
+
+  test-browser:
+    name: Run Browser Tests (jsdom)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+      - name: Run Browser tests
+        run: npm run test:browser
