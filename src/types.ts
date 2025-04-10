@@ -29,20 +29,31 @@ export type SchemaType =
   | "[]int"
   | "[]uint"
   | "[]uuid";
-// TODO: index signature is a better fit here imo.
-// also look into eslint config to allow for usage of index signatures
-export type Schema = Record<
-  string,
-  {
-    type?: SchemaType;
-    filterable?: boolean;
-    /**
-     * @deprecated use `full_text_search` instead
-     */
-    bm25?: boolean | Partial<FTSParams>;
-    full_text_search?: boolean | Partial<FTSParams>;
-  }
->;
+
+export type Schema =
+  | {
+      [K in string]: {
+        type?: SchemaType;
+        filterable?: boolean;
+        /**
+         * @deprecated use `full_text_search` instead
+         */
+        bm25?: boolean | Partial<FTSParams>;
+        full_text_search?: boolean | Partial<FTSParams>;
+      };
+    }
+  | {
+      /**
+       * Whether the upserted vectors are of type f16 or f32.
+       *
+       * To use f16 vectors, this field needs to be explicitly specified in
+       * the schema when first creating (i.e. upserting to) a namespace.
+       */
+      vector?: {
+        type: `[${number}]f16` | `[${number}]f32`;
+        ann: boolean;
+      };
+    };
 
 export type RankBy_OrderByAttribute = [string, "asc" | "desc"];
 export type RankBy_Text =
