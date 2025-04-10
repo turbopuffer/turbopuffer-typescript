@@ -47,6 +47,12 @@ test("trailing_slashes_in_base_url", async () => {
       filterable: true,
       full_text_search: null,
     },
+    vector: {
+      type: "[2]f32",
+      ann: true,
+      filterable: null,
+      full_text_search: null,
+    },
   });
 });
 
@@ -441,6 +447,10 @@ test("schema", async () => {
           case_sensitive: true,
         },
       },
+      vector: {
+        type: "[2]f16",
+        ann: true,
+      },
     },
   });
 
@@ -480,6 +490,12 @@ test("schema", async () => {
     private: {
       type: "bool",
       filterable: true,
+      full_text_search: null,
+    },
+    vector: {
+      type: "[2]f16",
+      ann: true,
+      filterable: null,
       full_text_search: null,
     },
   });
@@ -551,6 +567,12 @@ test("update_schema", async () => {
       filterable: true,
       full_text_search: null,
     },
+    vector: {
+      type: "[2]f32",
+      ann: true,
+      filterable: null,
+      full_text_search: null,
+    },
   });
 
   // Write an update to the schema making 'tags'
@@ -597,6 +619,12 @@ test("update_schema", async () => {
     private: {
       type: "bool",
       filterable: false,
+      full_text_search: null,
+    },
+    vector: {
+      type: "[2]f32",
+      ann: true,
+      filterable: null,
       full_text_search: null,
     },
   });
@@ -828,7 +856,7 @@ test("no_cmek", async () => {
 
   expect(error).toStrictEqual(
     new TurbopufferError(
-      "💔 CMEK is not currently enabled in this cluster",
+      "🔐 Encryption error encountered: `Invalid argument. Malformed Cloud KMS crypto key: mykey`",
       {},
     ),
   );
