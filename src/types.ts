@@ -50,7 +50,7 @@ export type Schema =
        * the schema when first creating (i.e. upserting to) a namespace.
        */
       vector?: {
-        type: `[${number}]f16` | `[${number}]f32`;
+        type: `[${number}]${"f16" | "f32"}`;
         ann: boolean;
       };
     };
