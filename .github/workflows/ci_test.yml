@@ -6,7 +6,7 @@ on:
   pull_request:
 
 env:
-  TURBOPUFFER_API_KEY: ${{ secrets.TURBOPUFFER_TEST_API_KEY }}
+  TURBOPUFFER_API_KEY: ${{ secrets.TURBOPUFFER_API_KEY }}
 
 jobs:
   test-node:
