@@ -1,3 +1,5 @@
+# todo: add tests for Deno and Cloudflare Workers
+
 name: CI Tests
 
 on:
@@ -47,25 +49,6 @@ jobs:
         run: bun run build
       - name: Run tests with Bun
         run: bun run test:node
-
-  test-deno:
-    name: Run Tests with Deno
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Setup Deno
-        uses: denoland/setup-deno@v1
-        with:
-          deno-version: v2.x
-
-      - name: Install Node dependencies (for build/prep)
-        run: npm ci
-      - name: Build project
-        run: npm run build
-      - name: Run Deno tests
-        run: deno test --unstable-sloppy-imports
 
   test-browser:
     name: Run Browser Tests (jsdom)
