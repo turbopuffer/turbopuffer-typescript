@@ -58,14 +58,14 @@ jobs:
       - name: Setup Deno
         uses: denoland/setup-deno@v1
         with:
-          deno-version: v1.x
+          deno-version: v2.x
 
       - name: Install Node dependencies (for build/prep)
         run: npm ci
       - name: Build project
         run: npm run build
       - name: Run Deno tests
-        run: deno test
+        run: deno test --unstable-sloppy-imports
 
   test-browser:
     name: Run Browser Tests (jsdom)
