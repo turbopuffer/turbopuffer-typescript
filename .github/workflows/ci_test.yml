@@ -35,6 +35,7 @@ jobs:
   test-bun:
     name: Run Tests with Bun
     runs-on: ubuntu-latest
+    needs: test-node
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -53,6 +54,7 @@ jobs:
   test-browser:
     name: Run Browser Tests (jsdom)
     runs-on: ubuntu-latest
+    needs: test-bun
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
