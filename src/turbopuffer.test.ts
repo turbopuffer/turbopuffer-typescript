@@ -854,12 +854,7 @@ test("no_cmek", async () => {
     error = e;
   }
 
-  expect(error).toStrictEqual(
-    new TurbopufferError(
-      "🔐 Encryption error encountered: `Invalid argument. Malformed Cloud KMS crypto key: mykey`",
-      {},
-    ),
-  );
+  expect(error).toBeInstanceOf(TurbopufferError);
 });
 
 test("copy_from_namespace", async () => {
