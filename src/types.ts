@@ -123,6 +123,61 @@ export interface TpufResponseWithMetadata {
   decompress_end: number;
 }
 
+export type ColumnarAttributes = Record<string, AttributeType[]>;
+export interface ColumnarDocs {
+  id: Id[];
+  /**
+   * Required if the namespace has a vector index.
+   * For non-vector namespaces, this key should be omitted.
+   */
+  vector?: number[][];
+  attributes?: ColumnarAttributes;
+}
+export type UpsertColumns = Omit<ColumnarDocs, "attributes"> &
+  ColumnarAttributes;
+export type PatchColumns = { id: Id[] } & ColumnarAttributes;
+
+type RowAttributes = Record<string, AttributeType>;
+interface RowDoc {
+  id: Id;
+  /**
+   * Required if the namespace has a vector index.
+   * For non-vector namespaces, this key should be omitted.
+   */
+  vector?: number[];
+  attributes?: RowAttributes;
+}
+export type UpsertRows = (Omit<RowDoc, "attributes"> & RowAttributes)[];
+export type PatchRows = ({ id: Id[] } & RowAttributes)[];
+
+export interface WriteParams {
+  /** Upserts documents in a column-based format. */
+  upsert_columns?: UpsertColumns;
+  /** Upserts documents in a row-based format. */
+  upsert_rows?: UpsertRows;
+  /**
+   * Patches documents in a column-based format. Identical to `upsert_columns`, but
+   * instead of overwriting entire documents, only the specified keys are written.
+   */
+  patch_columns?: PatchColumns;
+  /**
+   * Patches documents in a row-based format. Identical to `upsert_rows`, but
+   * instead of overwriting entire documents, only the specified keys are written.
+   */
+  patch_rows?: PatchRows;
+  /** Deletes documents by ID. */
+  deletes?: Id[];
+  /** Deletes documents that match a filter. */
+  delete_by_filter?: Filters;
+  distance_metric?: DistanceMetric;
+  schema?: Schema;
+  /**
+   * Only available as part of enterprise offerings.
+   * See https://turbopuffer.com/pricing.
+   */
+  encryption?: Encryption;
+}
+
 export type QueryResults = {
   id: Id;
   vector?: number[];
@@ -159,11 +214,4 @@ export interface RecallMeasurement {
   avg_recall: number;
   avg_exhaustive_count: number;
   avg_ann_count: number;
-}
-
-export type ColumnarAttributes = Record<string, AttributeType[]>;
-export interface ColumnarVectors {
-  ids: Id[];
-  vectors: number[][];
-  attributes?: ColumnarAttributes;
 }

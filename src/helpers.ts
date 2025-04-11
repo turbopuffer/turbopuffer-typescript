@@ -1,4 +1,4 @@
-import type { ColumnarVectors, RequestTiming, Vector } from "./types";
+import type { RequestTiming, WriteParams } from "./types";
 
 type Runtime =
   | "bun"
@@ -150,44 +150,19 @@ export function parseServerTiming(value: string): Record<string, string> {
   return output;
 }
 
-// Unused atm.
-// function toColumnar(vectors: Vector[]): ColumnarVectors {
-//   if (vectors.length == 0) {
-//     return {
-//       ids: [],
-//       vectors: [],
-//       attributes: {},
-//     };
-//   }
-//   const attributes: ColumnarAttributes = {};
-//   vectors.forEach((vec, i) => {
-//     for (const [key, val] of Object.entries(vec.attributes ?? {})) {
-//       if (!attributes[key]) {
-//         attributes[key] = new Array<AttributeType>(vectors.length).fill(null);
-//       }
-//       attributes[key][i] = val;
-//     }
-//   });
-//   return {
-//     ids: vectors.map((v) => v.id),
-//     vectors: vectors.map((v) => v.vector!),
-//     attributes: attributes,
-//   };
-// }
-
-export function fromColumnar(cv: ColumnarVectors): Vector[] {
-  const res = new Array<Vector>(cv.ids?.length);
-  const attributeEntries = Object.entries(cv.attributes ?? {});
-  for (let i = 0; i < cv.ids?.length; i++) {
-    res[i] = {
-      id: cv.ids[i],
-      vector: cv.vectors[i],
-      attributes: cv.attributes
-        ? Object.fromEntries(
-            attributeEntries.map(([key, values]) => [key, values[i]]),
-          )
-        : undefined,
-    };
-  }
-  return res;
+export function shouldCompressWrite({
+  upsert_columns,
+  upsert_rows,
+  patch_columns,
+  patch_rows,
+  deletes,
+}: WriteParams): boolean {
+  return (
+    (upsert_columns?.id.length ?? 0) > 10 ||
+    (upsert_rows?.length ?? 0) > 10 ||
+    (upsert_rows?.some((row) => (row.vector?.length ?? 0) > 10) ?? false) ||
+    (patch_columns?.id.length ?? 0) > 10 ||
+    (patch_rows?.length ?? 0) > 10 ||
+    (deletes?.length ?? 0) > 500
+  );
 }

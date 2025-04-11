@@ -7,20 +7,17 @@
 
 import { createHTTPClient } from "./createHTTPClient";
 import {
-  fromColumnar,
   parseIntMetric,
   parseFloatMetric,
   parseServerTiming,
+  shouldCompressWrite,
 } from "./helpers";
 import type {
-  ColumnarVectors,
   Consistency,
   DistanceMetric,
-  Encryption,
   Filters,
   HintCacheWarmResponse,
   HTTPClient,
-  Id,
   NamespaceMetadata,
   NamespacesListResult,
   QueryMetrics,
@@ -28,7 +25,7 @@ import type {
   RankBy,
   RecallMeasurement,
   Schema,
-  Vector,
+  WriteParams,
 } from "./types";
 
 /* Base Client */
@@ -111,76 +108,18 @@ export class Namespace {
     this.id = id;
   }
 
-  /**
-   * Creates or updates vectors.
-   * See: https://turbopuffer.com/docs/reference/upsert
-   *
-   * Note: Will automatically batch according to the client's configured batch size.
-   */
-  async upsert({
-    vectors,
-    distance_metric,
-    schema,
-    encryption,
-    batchSize = 10000,
-  }: {
-    vectors: Vector[];
-    distance_metric: DistanceMetric;
-    schema?: Schema;
-    /** Only available as part of our enterprise offerings. */
-    encryption?: Encryption;
-    batchSize?: number;
-  }): Promise<void> {
-    for (let i = 0; i < vectors.length; i += batchSize) {
-      const batch = vectors.slice(i, i + batchSize);
-      await this.client.http.doRequest<{ status: string }>({
-        method: "POST",
-        path: `/v1/namespaces/${this.id}`,
-        compress: batch.length > 10,
-        body: {
-          upserts: batch,
-          distance_metric,
-          schema,
-          encryption,
-        },
-        retryable: true, // Upserts are idempotent
-      });
-    }
-  }
-
-  /**
-   * Deletes vectors (by IDs).
-   */
-  async delete({ ids }: { ids: Id[] }): Promise<void> {
-    await this.client.http.doRequest<{ status: string }>({
-      method: "POST",
-      path: `/v1/namespaces/${this.id}`,
-      compress: ids.length > 500,
-      body: {
-        ids: ids,
-        vectors: new Array(ids.length).fill(null),
-      },
-      retryable: true,
-    });
-  }
-
-  /**
-   * Deletes vectors (by filter).
-   */
-  async deleteByFilter({ filters }: { filters: Filters }): Promise<number> {
+  async write(params: WriteParams): Promise<number> {
     const response = await this.client.http.doRequest<{
       status: string;
       rows_affected: number;
     }>({
       method: "POST",
-      path: `/v1/namespaces/${this.id}`,
-      compress: false,
-      body: {
-        delete_by_filter: filters,
-      },
-      retryable: true,
+      path: `/v2/namespaces/${this.id}`,
+      compress: shouldCompressWrite(params),
+      body: params,
+      retryable: true, // writes are idempotent
     });
-    return response?.body?.rows_affected || 0;
+    return response.body?.rows_affected ?? 0;
   }
 
   /**
