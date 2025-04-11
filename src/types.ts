@@ -36,10 +36,6 @@ export type Schema = Record<
   {
     type?: SchemaType;
     filterable?: boolean;
-    /**
-     * @deprecated use `full_text_search` instead
-     */
-    bm25?: boolean | Partial<FTSParams>;
     full_text_search?: boolean | Partial<FTSParams>;
     ann?: boolean;
   }

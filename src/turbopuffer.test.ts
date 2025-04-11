@@ -97,7 +97,7 @@ test("bm25_with_custom_schema_and_sum_query", async () => {
     schema: {
       text: {
         type: "string",
-        bm25: {
+        full_text_search: {
           language: "english",
           stemming: true,
           case_sensitive: false,
@@ -308,7 +308,7 @@ test("bm25_with_default_schema_and_simple_query", async () => {
     schema: {
       text: {
         type: "string",
-        bm25: true,
+        full_text_search: true,
       },
     },
   });
