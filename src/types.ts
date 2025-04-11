@@ -41,10 +41,6 @@ export type Schema = Record<
      */
     bm25?: boolean | Partial<FTSParams>;
     full_text_search?: boolean | Partial<FTSParams>;
-    /**
-     * Used with the `type` field to specify the upserted vector float type.
-     * See https://turbopuffer.com/docs/schema#param-vector.
-     */
     ann?: boolean;
   }
 >;
