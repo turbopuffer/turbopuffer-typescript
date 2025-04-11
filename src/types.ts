@@ -53,11 +53,6 @@ export interface Consistency {
   level: "strong" | "eventual";
 }
 
-export interface Vector {
-  id: Id;
-  vector?: number[];
-  attributes?: Attributes;
-}
 export type DistanceMetric = "cosine_distance" | "euclidean_squared";
 export type FilterOperator =
   | "Eq"
@@ -200,6 +195,7 @@ export interface ExportResponse {
   ids: Id[];
   vectors: number[][];
   next_cursor: string | null;
+  attributes?: Attributes;
 }
 
 export interface NamespaceMetadata {
