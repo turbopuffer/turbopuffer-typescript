@@ -66,7 +66,7 @@ export class Turbopuffer {
 
   /**
    * List all your namespaces.
-   * See: https://turbopuffer.com/docs/reference/namespaces
+   * See: https://turbopuffer.com/docs/namespaces
    */
   async namespaces({
     cursor,
@@ -125,7 +125,7 @@ export class Namespace {
 
   /**
    * Queries vectors.
-   * See: https://turbopuffer.com/docs/reference/query
+   * See: https://turbopuffer.com/docs/query
    */
   async query({
     ...params
@@ -145,7 +145,7 @@ export class Namespace {
 
   /**
    * Queries vectors and returns performance metrics along with the results.
-   * See: https://turbopuffer.com/docs/reference/query
+   * See: https://turbopuffer.com/docs/query
    */
   async queryWithMetrics({
     ...params
@@ -214,7 +214,7 @@ export class Namespace {
 
   /**
    * Export all vectors at full precision.
-   * See: https://turbopuffer.com/docs/reference/list
+   * See: https://turbopuffer.com/docs/export
    */
   async export(params?: { cursor?: string }): Promise<ExportResponse> {
     const response = await this.client.http.doRequest<ExportResponse>({
@@ -257,7 +257,7 @@ export class Namespace {
 
   /**
    * Delete a namespace fully (all data).
-   * See: https://turbopuffer.com/docs/reference/delete-namespace
+   * See: https://turbopuffer.com/docs/delete-namespace
    */
   async deleteAll(): Promise<void> {
     await this.client.http.doRequest<{ status: string }>({
@@ -269,7 +269,7 @@ export class Namespace {
 
   /**
    * Evaluates the recall performance of ANN queries in a namespace.
-   * See: https://turbopuffer.com/docs/reference/recall
+   * See: https://turbopuffer.com/docs/recall
    */
   async recall({
     num,
