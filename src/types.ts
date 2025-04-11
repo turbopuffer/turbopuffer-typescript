@@ -200,6 +200,12 @@ export interface HintCacheWarmResponse {
   status: "ACCEPTED" | "OK";
 }
 
+export interface ExportResponse {
+  ids: Id[];
+  vectors: number[][];
+  next_cursor: string | null;
+}
+
 export interface NamespaceMetadata {
   id: string;
   approx_count: number;

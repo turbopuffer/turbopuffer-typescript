@@ -782,6 +782,46 @@ test("empty_namespace", async () => {
   await ns.export();
 });
 
+test("export", async () => {
+  const ns = tpuf.namespace(testNamespacePrefix + "export");
+
+  await ns.write({
+    upsert_rows: [
+      {
+        id: 1,
+        vector: [0.1, 0.1],
+        title: "one",
+        private: false,
+      },
+      {
+        id: 2,
+        vector: [0.2, 0.2],
+        title: "two",
+        private: true,
+      },
+    ],
+    schema: {
+      title: {
+        type: "string",
+        full_text_search: true,
+      },
+      private: {
+        type: "bool",
+      },
+    },
+    distance_metric: "cosine_distance",
+  });
+
+  const data = await ns.export();
+  expect(data).toEqual({
+    ids: [1, 2],
+    vectors: [[0.1, 0.1], [0.2, 0.2]],
+    next_cursor: null
+  });
+
+  await ns.deleteAll();
+});
+
 test("no_cmek", async () => {
   const ns = tpuf.namespace(testNamespacePrefix + "no_cmek");
 

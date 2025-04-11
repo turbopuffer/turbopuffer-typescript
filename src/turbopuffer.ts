@@ -15,6 +15,7 @@ import {
 import type {
   Consistency,
   DistanceMetric,
+  ExportResponse,
   Filters,
   HintCacheWarmResponse,
   HTTPClient,
@@ -215,11 +216,8 @@ export class Namespace {
    * Export all vectors at full precision.
    * See: https://turbopuffer.com/docs/reference/list
    */
-  async export(params?: {
-    cursor?: string;
-  }): Promise<{ vectors: Vector[]; next_cursor?: string }> {
-    type ResponseType = ColumnarVectors & { next_cursor: string };
-    const response = await this.client.http.doRequest<ResponseType>({
+  async export(params?: { cursor?: string }): Promise<ExportResponse> {
+    const response = await this.client.http.doRequest<ExportResponse>({
       method: "GET",
       path: `/v1/namespaces/${this.id}`,
       query: { cursor: params?.cursor },
@@ -227,7 +225,8 @@ export class Namespace {
     });
     const body = response.body!;
     return {
-      vectors: fromColumnar(body),
+      ids: body.ids,
+      vectors: body.vectors,
       next_cursor: body.next_cursor,
     };
   }
