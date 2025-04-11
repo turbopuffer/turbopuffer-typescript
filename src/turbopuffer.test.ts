@@ -815,8 +815,11 @@ test("export", async () => {
   const data = await ns.export();
   expect(data).toEqual({
     ids: [1, 2],
-    vectors: [[0.1, 0.1], [0.2, 0.2]],
-    next_cursor: null
+    vectors: [
+      [0.1, 0.1],
+      [0.2, 0.2],
+    ],
+    next_cursor: null,
   });
 
   await ns.deleteAll();
@@ -883,6 +886,68 @@ test("copy_from_namespace", async () => {
   });
 
   expect(res.length).toEqual(3);
+});
+
+test("patch", async () => {
+  const ns = tpuf.namespace(testNamespacePrefix + "patch");
+
+  try {
+    await ns.deleteAll();
+  } catch (_: unknown) {
+    /* empty */
+  }
+
+  await ns.write({
+    upsert_rows: [
+      {
+        id: 1,
+        vector: [1, 1],
+      },
+      {
+        id: 2,
+        vector: [2, 2],
+      },
+    ],
+    distance_metric: "cosine_distance",
+  });
+
+  await ns.write({
+    patch_rows: [
+      { id: 1, a: 1 },
+      { id: 2, b: 2 },
+    ],
+  });
+
+  await ns.write({
+    patch_rows: [
+      { id: 1, b: 1 },
+      { id: 2, a: 2 },
+    ],
+  });
+
+  let results = await ns.query({ include_attributes: true });
+  expect(results.length).toEqual(2);
+  expect(results[0].id).toEqual(1);
+  expect(results[0].attributes).toEqual({ a: 1, b: 1 });
+  expect(results[1].id).toEqual(2);
+  expect(results[1].attributes).toEqual({ a: 2, b: 2 });
+
+  await ns.write({
+    patch_columns: {
+      id: [1, 2],
+      a: [11, 22],
+      c: [1, 2],
+    },
+  });
+
+  results = await ns.query({ include_attributes: true });
+  expect(results.length).toEqual(2);
+  expect(results[0].id).toEqual(1);
+  expect(results[0].attributes).toEqual({ a: 11, b: 1, c: 1 });
+  expect(results[1].id).toEqual(2);
+  expect(results[1].attributes).toEqual({ a: 22, b: 2, c: 2 });
+
+  await ns.deleteAll();
 });
 
 test("delete_by_filter", async () => {

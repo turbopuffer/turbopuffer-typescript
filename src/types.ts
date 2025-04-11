@@ -148,7 +148,7 @@ interface RowDoc {
   attributes?: RowAttributes;
 }
 export type UpsertRows = (Omit<RowDoc, "attributes"> & RowAttributes)[];
-export type PatchRows = ({ id: Id[] } & RowAttributes)[];
+export type PatchRows = ({ id: Id } & RowAttributes)[];
 
 export interface WriteParams {
   /** Upserts documents in a column-based format. */
