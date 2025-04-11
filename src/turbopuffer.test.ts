@@ -17,19 +17,17 @@ test("trailing_slashes_in_base_url", async () => {
     testNamespacePrefix + "trailing_slashes_in_base_url",
   );
 
-  await ns.upsert({
-    vectors: [
+  await ns.write({
+    upsert_rows: [
       {
         id: 1,
         vector: [0.1, 0.1],
-        attributes: {
-          text: "Walruses are large marine mammals with long tusks and whiskers",
-        },
+        text: "Walruses are large marine mammals with long tusks and whiskers",
       },
       {
         id: 2,
         vector: [0.2, 0.2],
-        attributes: { text: "They primarily inhabit the cold Arctic regions" },
+        text: "They primarily inhabit the cold Arctic regions",
       },
     ],
     distance_metric: "cosine_distance",
@@ -67,56 +65,46 @@ test("bm25_with_custom_schema_and_sum_query", async () => {
     /* empty */
   }
 
-  const schema: Schema = {
-    text: {
-      type: "string",
-      bm25: {
-        language: "english",
-        stemming: true,
-        case_sensitive: false,
-        remove_stopwords: true,
-      },
-    },
-  };
-
-  await ns.upsert({
-    vectors: [
+  await ns.write({
+    upsert_rows: [
       {
         id: 1,
         vector: [0.1, 0.1],
-        attributes: {
-          text: "Walruses are large marine mammals with long tusks and whiskers",
-        },
+        text: "Walruses are large marine mammals with long tusks and whiskers",
       },
       {
         id: 2,
         vector: [0.2, 0.2],
-        attributes: { text: "They primarily inhabit the cold Arctic regions" },
+        text: "They primarily inhabit the cold Arctic regions",
       },
       {
         id: 3,
         vector: [0.3, 0.3],
-        attributes: {
-          text: "Walruses use their tusks to help haul themselves onto ice",
-        },
+        text: "Walruses use their tusks to help haul themselves onto ice",
       },
       {
         id: 4,
         vector: [0.4, 0.4],
-        attributes: {
-          text: "Their diet mainly consists of mollusks and other sea creatures",
-        },
+        text: "Their diet mainly consists of mollusks and other sea creatures",
       },
       {
         id: 5,
         vector: [0.5, 0.5],
-        attributes: {
-          text: "Walrus populations are affected by climate change and melting ice",
-        },
+        text: "Walrus populations are affected by climate change and melting ice",
       },
     ],
     distance_metric: "cosine_distance",
-    schema: schema,
+    schema: {
+      text: {
+        type: "string",
+        bm25: {
+          language: "english",
+          stemming: true,
+          case_sensitive: false,
+          remove_stopwords: true,
+        },
+      },
+    },
   });
 
   const results = await ns.query({
@@ -145,23 +133,19 @@ test("bm25_with_tokenizer_pre_tokenized_array", async () => {
     /* empty */
   }
 
-  await ns.upsert({
-    vectors: [
-      {
-        id: 1,
-        vector: [0.1, 0.1],
-        attributes: {
-          content: ["jumped", "over", "the", "lazy", "dog"],
-        },
-      },
-      {
-        id: 2,
-        vector: [0.2, 0.2],
-        attributes: {
-          content: ["the", "lazy", "dog", "is", "brown"],
-        },
-      },
-    ],
+  // let's test with a columnar write
+  await ns.write({
+    upsert_columns: {
+      id: [1, 2],
+      vector: [
+        [0.1, 0.1],
+        [0.2, 0.2],
+      ],
+      content: [
+        ["jumped", "over", "the", "lazy", "dog"],
+        ["the", "lazy", "dog", "is", "brown"],
+      ],
+    },
     schema: {
       content: {
         type: "[]string",
@@ -204,16 +188,13 @@ test("contains_all_tokens", async () => {
     /* empty */
   }
 
-  await ns.upsert({
-    vectors: [
-      {
-        id: 1,
-        vector: [0.1, 0.1],
-        attributes: {
-          text: "Walruses are large marine mammals with long tusks and whiskers",
-        },
-      },
-    ],
+  // let's test with a columnar write
+  await ns.write({
+    upsert_columns: {
+      id: [1],
+      vector: [[0.1, 0.1]],
+      text: ["Walruses are large marine mammals with long tusks and whiskers"],
+    },
     schema: {
       text: {
         type: "string",
@@ -247,42 +228,32 @@ test("order_by_attribute", async () => {
     /* empty */
   }
 
-  await ns.upsert({
-    vectors: [
+  await ns.write({
+    upsert_rows: [
       {
         id: 1,
         vector: [0.1, 0.1],
-        attributes: {
-          a: "5",
-        },
+        a: "5",
       },
       {
         id: 2,
         vector: [0.2, 0.2],
-        attributes: {
-          a: "4",
-        },
+        a: "4",
       },
       {
         id: 3,
         vector: [0.3, 0.3],
-        attributes: {
-          a: "3",
-        },
+        a: "3",
       },
       {
         id: 4,
         vector: [0.4, 0.4],
-        attributes: {
-          a: "2",
-        },
+        a: "2",
       },
       {
         id: 5,
         vector: [0.5, 0.5],
-        attributes: {
-          a: "1",
-        },
+        a: "1",
       },
     ],
     distance_metric: "euclidean_squared",
@@ -320,32 +291,26 @@ test("bm25_with_default_schema_and_simple_query", async () => {
     /* empty */
   }
 
-  const schema: Schema = {
-    text: {
-      type: "string",
-      bm25: true,
-    },
-  };
-
-  await ns.upsert({
-    vectors: [
+  await ns.write({
+    upsert_rows: [
       {
         id: 1,
         vector: [0.1, 0.1],
-        attributes: {
-          text: "Walruses can produce a variety of funny sounds, including whistles, grunts, and bell-like noises.",
-        },
+        text: "Walruses can produce a variety of funny sounds, including whistles, grunts, and bell-like noises.",
       },
       {
         id: 2,
         vector: [0.2, 0.2],
-        attributes: {
-          text: "They sometimes use their tusks as a tool to break through ice or to scratch their bodies.",
-        },
+        text: "They sometimes use their tusks as a tool to break through ice or to scratch their bodies.",
       },
     ],
     distance_metric: "cosine_distance",
-    schema: schema,
+    schema: {
+      text: {
+        type: "string",
+        bm25: true,
+      },
+    },
   });
 
   const results = await ns.query({
@@ -390,43 +355,35 @@ test("schema", async () => {
     /* empty */
   }
 
-  await ns.upsert({
-    vectors: [
+  await ns.write({
+    upsert_rows: [
       {
         id: 1,
         vector: [0.1, 0.1],
-        attributes: {
-          title: "one",
-          private: true,
-          tags: ["a", "b"],
-        },
+        title: "one",
+        private: true,
+        tags: ["a", "b"],
       },
       {
         id: 2,
         vector: [0.2, 0.2],
-        attributes: {
-          title: null,
-          private: null,
-          tags: ["b", "d"],
-        },
+        title: null,
+        private: null,
+        tags: ["b", "d"],
       },
       {
         id: 3,
         vector: [0.3, 0.3],
-        attributes: {
-          title: "three",
-          private: false,
-          tags: [],
-        },
+        title: "three",
+        private: false,
+        tags: [],
       },
       {
         id: 4,
         vector: [0.4, 0.4],
-        attributes: {
-          title: "four",
-          private: true,
-          tags: ["c"],
-        },
+        title: "four",
+        private: true,
+        tags: ["c"],
       },
     ],
     distance_metric: "cosine_distance",
@@ -510,23 +467,19 @@ test("update_schema", async () => {
     /* empty */
   }
 
-  await ns.upsert({
-    vectors: [
+  await ns.write({
+    upsert_rows: [
       {
         id: 1,
         vector: [0.1, 0.1],
-        attributes: {
-          private: true,
-          tags: ["a", "b"],
-        },
+        private: true,
+        tags: ["a", "b"],
       },
       {
         id: 2,
         vector: [0.2, 0.2],
-        attributes: {
-          private: null,
-          tags: ["b", "d"],
-        },
+        private: null,
+        tags: ["b", "d"],
       },
     ],
     distance_metric: "cosine_distance",
@@ -640,37 +593,31 @@ test("sanity", async () => {
     /* empty */
   }
 
-  await ns.upsert({
-    vectors: [
+  await ns.write({
+    upsert_rows: [
       {
         id: 1,
         vector: [1, 2],
-        attributes: {
-          foo: "bar",
-          numbers: [1, 2, 3],
-          maybeNull: null,
-          bool: true,
-        },
+        foo: "bar",
+        numbers: [1, 2, 3],
+        maybeNull: null,
+        bool: true,
       },
       {
         id: 2,
         vector: [3, 4],
-        attributes: {
-          foo: "baz",
-          numbers: [2, 3, 4],
-          maybeNull: null,
-          bool: true,
-        },
+        foo: "baz",
+        numbers: [2, 3, 4],
+        maybeNull: null,
+        bool: true,
       },
       {
         id: 3,
         vector: [3, 4],
-        attributes: {
-          foo: "baz",
-          numbers: [17],
-          maybeNull: "oh boy!",
-          bool: true,
-        },
+        foo: "baz",
+        numbers: [17],
+        maybeNull: "oh boy!",
+        bool: true,
       },
     ],
     distance_metric: "cosine_distance",
@@ -738,7 +685,9 @@ test("sanity", async () => {
   expect(recall.avg_ann_count).toEqual(2);
 
   // Delete the second vector.
-  await ns.delete({ ids: [1] });
+  await ns.write({
+    deletes: [1],
+  });
 
   // If we query now, we should only get one result.
   results = await ns.query({
@@ -816,8 +765,8 @@ test("empty_namespace", async () => {
 
   const ns = tpuf.namespace(testNamespacePrefix + "empty_namespace");
 
-  await ns.upsert({
-    vectors: [
+  await ns.write({
+    upsert_rows: [
       {
         id: 1,
         vector: [0.1, 0.1],
@@ -826,7 +775,9 @@ test("empty_namespace", async () => {
     distance_metric: "cosine_distance",
   });
 
-  await ns.delete({ ids: [1] });
+  await ns.write({
+    deletes: [1],
+  });
 
   await ns.export();
 });
@@ -836,8 +787,8 @@ test("no_cmek", async () => {
 
   let error: any = null;
   try {
-    await ns.upsert({
-      vectors: [
+    await ns.write({
+      upsert_rows: [
         {
           id: 1,
           vector: [0.1, 0.1],
@@ -869,30 +820,17 @@ test("copy_from_namespace", async () => {
     /* empty */
   }
 
-  await ns1.upsert({
-    vectors: [
-      {
-        id: 1,
-        vector: [0.1, 0.1],
-        attributes: {
-          tags: ["a"],
-        },
-      },
-      {
-        id: 2,
-        vector: [0.2, 0.2],
-        attributes: {
-          tags: ["b"],
-        },
-      },
-      {
-        id: 3,
-        vector: [0.3, 0.3],
-        attributes: {
-          tags: ["c"],
-        },
-      },
-    ],
+  // let's test with a columnar write
+  await ns1.write({
+    upsert_columns: {
+      id: [1, 2, 3],
+      vector: [
+        [0.1, 0.1],
+        [0.2, 0.2],
+        [0.3, 0.3],
+      ],
+      tags: [["a"], ["b"], ["c"]],
+    },
     distance_metric: "cosine_distance",
   });
 
@@ -916,28 +854,22 @@ test("delete_by_filter", async () => {
     /* empty */
   }
 
-  await ns.upsert({
-    vectors: [
+  await ns.write({
+    upsert_rows: [
       {
         id: 1,
         vector: [1, 2],
-        attributes: {
-          foo: "bar",
-        },
+        foo: "bar",
       },
       {
         id: 2,
         vector: [3, 4],
-        attributes: {
-          foo: "baz",
-        },
+        foo: "baz",
       },
       {
         id: 3,
         vector: [3, 4],
-        attributes: {
-          foo: "baz",
-        },
+        foo: "baz",
       },
     ],
     distance_metric: "cosine_distance",
@@ -946,8 +878,8 @@ test("delete_by_filter", async () => {
   let results = await ns.query({});
   expect(results.length).toEqual(3);
 
-  const rowsAffected = await ns.deleteByFilter({
-    filters: ["foo", "Eq", "baz"],
+  const rowsAffected = await ns.write({
+    delete_by_filter: ["foo", "Eq", "baz"],
   });
   expect(rowsAffected).toEqual(2);
 
@@ -974,16 +906,12 @@ test("compression", async () => {
   }
 
   // Insert a large number of vectors to trigger compression
-  const vectors = Array.from({ length: 10 }, (_, i) => ({
-    id: i + 1,
-    vector: randomVector(1024),
-    attributes: {
+  await ns.write({
+    upsert_rows: Array.from({ length: 10 }, (_, i) => ({
+      id: i + 1,
+      vector: randomVector(1024),
       text: "b".repeat(1024),
-    },
-  }));
-
-  await ns.upsert({
-    vectors: vectors,
+    })),
     distance_metric: "cosine_distance",
   });
 
@@ -1022,16 +950,12 @@ test("disable_compression", async () => {
   }
 
   // Insert a large number of vectors to trigger compression
-  const vectors = Array.from({ length: 10 }, (_, i) => ({
-    id: i + 1,
-    vector: randomVector(1024),
-    attributes: {
+  await ns.write({
+    upsert_rows: Array.from({ length: 10 }, (_, i) => ({
+      id: i + 1,
+      vector: randomVector(1024),
       text: "b".repeat(1024),
-    },
-  }));
-
-  await ns.upsert({
-    vectors: vectors,
+    })),
     distance_metric: "cosine_distance",
   });
 
@@ -1073,31 +997,25 @@ test("product_operator", async () => {
     },
   };
 
-  await ns.upsert({
-    vectors: [
+  await ns.write({
+    upsert_rows: [
       {
         id: 1,
         vector: [0.1, 0.1],
-        attributes: {
-          title: "one",
-          content: "foo bar baz",
-        },
+        title: "one",
+        content: "foo bar baz",
       },
       {
         id: 2,
         vector: [0.2, 0.2],
-        attributes: {
-          title: "two",
-          content: "foo bar",
-        },
+        title: "two",
+        content: "foo bar",
       },
       {
         id: 3,
         vector: [0.3, 0.3],
-        attributes: {
-          title: "three",
-          content: "bar baz",
-        },
+        title: "three",
+        content: "bar baz",
       },
     ],
     distance_metric: "euclidean_squared",
