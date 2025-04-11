@@ -1158,6 +1158,47 @@ test("product_operator", async () => {
   }
 });
 
+test("readme", async () => {
+  const ns = tpuf.namespace(testNamespacePrefix + "readme");
+
+  try {
+    await ns.deleteAll();
+  } catch (_: unknown) {
+    /* empty */
+  }
+
+  await ns.write({
+    upsert_rows: [
+      {
+        id: 1,
+        vector: [1, 2],
+        foo: "bar",
+        numbers: [1, 2, 3],
+      },
+      {
+        id: 2,
+        vector: [3, 4],
+        foo: "baz",
+        numbers: [2, 3, 4],
+      },
+    ],
+    distance_metric: "cosine_distance",
+  });
+
+  const results = await ns.query({
+    vector: [1, 1],
+    filters: ["numbers", "In", [2, 4]],
+  });
+
+  expect(results.length).toEqual(2);
+  expect(results[0].id).toEqual(2);
+  expect(results[0].dist).toBeGreaterThanOrEqual(0);
+  expect(results[1].id).toEqual(1);
+  expect(results[1].dist).toBeGreaterThanOrEqual(0);
+
+  await ns.deleteAll();
+});
+
 // test helper and utility methods
 test("test_buildUrl", () => {
   /** baseUrl w/o path **/
