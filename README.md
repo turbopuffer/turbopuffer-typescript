@@ -1,4 +1,4 @@
-The **official TypeScript SDK** for Turbopuffer.
+The **official TypeScript SDK** for turbopuffer.
 
 To install,
 
@@ -19,38 +19,36 @@ const tpuf = new Turbopuffer({
 });
 
 // Instantiate an object to work with a namespace
-const ns = tpuf.namespace("my-cool-namespace");
+const ns = tpuf.namespace("readme");
 
-// Upsert some vectors
-await ns.upsert({
-  vectors: [
+await ns.write({
+  upsert_rows: [
     {
       id: 1,
       vector: [1, 2],
-      attributes: {
-        foo: "bar",
-        numbers: [1, 2, 3],
-      },
+      foo: "bar",
+      numbers: [1, 2, 3],
     },
     {
       id: 2,
       vector: [3, 4],
-      attributes: {
-        foo: "baz",
-        numbers: [2, 3, 4],
-      },
+      foo: "baz",
+      numbers: [2, 3, 4],
     },
   ],
   distance_metric: "cosine_distance",
 });
 
-// Query
-let results = await ns.query({
+const results = await ns.query({
   vector: [1, 1],
-  filters: {
-    numbers: ["In", [2, 4]],
-  },
+  filters: ["numbers", "In", [2, 4]],
 });
+
+// results:
+// [
+//   { id: 2, dist: 0.010050535 },
+//   { id: 1, dist: 0.051316738 },
+// ]
 ```
 
 To run the tests,
