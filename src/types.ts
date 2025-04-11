@@ -28,9 +28,9 @@ export type SchemaType =
   | "[]string"
   | "[]int"
   | "[]uint"
-  | "[]uuid";
-// TODO: index signature is a better fit here imo.
-// also look into eslint config to allow for usage of index signatures
+  | "[]uuid"
+  | `[${number}]${"f16" | "f32"}`;
+
 export type Schema = Record<
   string,
   {
@@ -41,6 +41,7 @@ export type Schema = Record<
      */
     bm25?: boolean | Partial<FTSParams>;
     full_text_search?: boolean | Partial<FTSParams>;
+    ann?: boolean;
   }
 >;
 

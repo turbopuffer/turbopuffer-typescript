@@ -1,0 +1,68 @@
+# todo: add tests for Deno and Cloudflare Workers
+
+name: CI Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+env:
+  TURBOPUFFER_API_KEY: ${{ secrets.TURBOPUFFER_API_KEY }}
+
+jobs:
+  test-node:
+    name: Node
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Node tests
+        run: npm run test:node
+
+  test-bun:
+    name: Bun
+    runs-on: ubuntu-latest
+    needs: test-node
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install Bun
+        run: |
+          curl -fsSL https://bun.sh/install | bash
+          echo "${HOME}/.bun/bin" >> $GITHUB_PATH
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Run Bun tests
+        run: bun run test:node
+
+  test-browser:
+    name: Browser (jsdom)
+    runs-on: ubuntu-latest
+    needs: test-bun
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Browser (jsdom) tests
+        run: npm run test:browser
