@@ -11,6 +11,7 @@ import {
   parseIntMetric,
   parseFloatMetric,
   parseServerTiming,
+  TurbopufferError,
 } from "./helpers";
 import type {
   ColumnarVectors,
@@ -315,6 +316,21 @@ export class Namespace {
       dimensions: parseInt(response.headers["x-turbopuffer-dimensions"]),
       created_at: new Date(response.headers["x-turbopuffer-created-at"]),
     };
+  }
+
+  /**
+   * Checks if a namespace exists.
+   */
+  async exists(): Promise<boolean> {
+    try {
+      await this.metadata();
+      return true;
+    } catch (e) {
+      if (e instanceof TurbopufferError && e.status === 404) {
+        return false;
+      }
+      throw e;
+    }
   }
 
   /**
