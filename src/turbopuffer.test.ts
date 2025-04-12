@@ -708,9 +708,9 @@ test("sanity", async () => {
   // time. We know it was created today as the test deletes the namespace in the
   // beginning. When we compare against the current time, ensure it's UTC.
   const now = new Date();
-  expect(metadata.created_at.getFullYear()).toEqual(now.getUTCFullYear());
-  expect(metadata.created_at.getMonth()).toEqual(now.getUTCMonth());
-  expect(metadata.created_at.getDate()).toEqual(now.getUTCDate());
+  expect(metadata.created_at.getUTCFullYear()).toEqual(now.getUTCFullYear());
+  expect(metadata.created_at.getUTCMonth()).toEqual(now.getUTCMonth());
+  expect(metadata.created_at.getUTCDate()).toEqual(now.getUTCDate());
 
   // Delete the entire namespace.
   await ns.deleteAll();
