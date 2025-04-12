@@ -819,6 +819,10 @@ test("export", async () => {
       [0.1, 0.1],
       [0.2, 0.2],
     ],
+    attributes: {
+      private: [false, true],
+      title: ["one", "two"],
+    },
     next_cursor: null,
   });
 

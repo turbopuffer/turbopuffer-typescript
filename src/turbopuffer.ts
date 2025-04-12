@@ -223,11 +223,12 @@ export class Namespace {
       query: { cursor: params?.cursor },
       retryable: true,
     });
-    const body = response.body!;
+    const { ids, vectors, attributes, next_cursor } = response.body!;
     return {
-      ids: body.ids,
-      vectors: body.vectors,
-      next_cursor: body.next_cursor,
+      ids,
+      vectors,
+      attributes,
+      next_cursor,
     };
   }
 
