@@ -1,6 +1,7 @@
 // Utility Types
 // Note: At the moment, negative numbers aren't supported.
 export type Id = string | number;
+
 export type AttributeType =
   | null
   | string
@@ -8,7 +9,7 @@ export type AttributeType =
   | string[]
   | number[]
   | boolean;
-export type Attributes = Record<string, AttributeType>;
+
 export interface FTSParams {
   k1: number;
   b: number;
@@ -114,7 +115,6 @@ export interface TpufResponseWithMetadata {
   decompress_end: number;
 }
 
-export type ColumnarAttributes = Record<string, AttributeType[]>;
 export interface ColumnarDocs {
   id: Id[];
   /**
@@ -122,13 +122,12 @@ export interface ColumnarDocs {
    * For non-vector namespaces, this key should be omitted.
    */
   vector?: number[][];
-  attributes?: ColumnarAttributes;
 }
-export type UpsertColumns = Omit<ColumnarDocs, "attributes"> &
-  ColumnarAttributes;
+export type ColumnarAttributes = Record<string, AttributeType[]>;
+
+export type UpsertColumns = ColumnarDocs & ColumnarAttributes;
 export type PatchColumns = { id: Id[] } & ColumnarAttributes;
 
-type RowAttributes = Record<string, AttributeType>;
 interface RowDoc {
   id: Id;
   /**
@@ -136,9 +135,10 @@ interface RowDoc {
    * For non-vector namespaces, this key should be omitted.
    */
   vector?: number[];
-  attributes?: RowAttributes;
 }
-export type UpsertRows = (Omit<RowDoc, "attributes"> & RowAttributes)[];
+type RowAttributes = Record<string, AttributeType>;
+
+export type UpsertRows = (RowDoc & RowAttributes)[];
 export type PatchRows = ({ id: Id } & RowAttributes)[];
 
 export interface WriteParams {
@@ -162,17 +162,14 @@ export interface WriteParams {
   delete_by_filter?: Filters;
   distance_metric?: DistanceMetric;
   schema?: Schema;
-  /**
-   * Only available as part of enterprise offerings.
-   * See https://turbopuffer.com/pricing.
-   */
+  /** See https://turbopuffer.com/docs/upsert#param-encryption. */
   encryption?: Encryption;
 }
 
 export type QueryResults = {
   id: Id;
   vector?: number[];
-  attributes?: Attributes;
+  attributes?: RowAttributes;
   dist?: number;
   rank_by?: RankBy;
 }[];
@@ -194,8 +191,8 @@ export interface HintCacheWarmResponse {
 export interface ExportResponse {
   ids: Id[];
   vectors: number[][];
+  attributes?: ColumnarAttributes;
   next_cursor: string | null;
-  attributes?: Attributes;
 }
 
 export interface NamespaceMetadata {
