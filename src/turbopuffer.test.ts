@@ -732,6 +732,38 @@ test("sanity", async () => {
   );
 }, 10_000);
 
+test("exists", async () => {
+  let ns = tpuf.namespace(testNamespacePrefix + "exists");
+
+  try {
+    await ns.deleteAll();
+  } catch (_: unknown) {
+    /* empty */
+  }
+
+  await ns.upsert({
+    vectors: [
+      {
+        id: 1,
+        vector: [0.1, 0.1],
+        attributes: {
+          private: true,
+          tags: ["a", "b"],
+        },
+      },
+    ],
+    distance_metric: "cosine_distance",
+  });
+
+  let exists = await ns.exists();
+  expect(exists).toEqual(true);
+  await ns.deleteAll();
+
+  ns = tpuf.namespace("non_existent_ns");
+  exists = await ns.exists();
+  expect(exists).toEqual(false);
+});
+
 const t = isRuntimeFullyNodeCompatible ? it : it.skip;
 t("connection_errors_are_wrapped", async () => {
   const tpuf = new Turbopuffer({
