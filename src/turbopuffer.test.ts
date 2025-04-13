@@ -741,17 +741,13 @@ test("exists", async () => {
     /* empty */
   }
 
-  await ns.upsert({
-    vectors: [
-      {
-        id: 1,
-        vector: [0.1, 0.1],
-        attributes: {
-          private: true,
-          tags: ["a", "b"],
-        },
-      },
-    ],
+  await ns.write({
+    upsert_columns: {
+      id: [1],
+      vector: [[0.1, 0.1]],
+      private: [true],
+      tags: [["a", "b"]],
+    },
     distance_metric: "cosine_distance",
   });
 
