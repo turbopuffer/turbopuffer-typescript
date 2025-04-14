@@ -1,6 +1,7 @@
 // Utility Types
 // Note: At the moment, negative numbers aren't supported.
 export type Id = string | number;
+
 export type AttributeType =
   | null
   | string
@@ -8,7 +9,7 @@ export type AttributeType =
   | string[]
   | number[]
   | boolean;
-export type Attributes = Record<string, AttributeType>;
+
 export interface FTSParams {
   k1: number;
   b: number;
@@ -36,10 +37,6 @@ export type Schema = Record<
   {
     type?: SchemaType;
     filterable?: boolean;
-    /**
-     * @deprecated use `full_text_search` instead
-     */
-    bm25?: boolean | Partial<FTSParams>;
     full_text_search?: boolean | Partial<FTSParams>;
     ann?: boolean;
   }
@@ -57,11 +54,6 @@ export interface Consistency {
   level: "strong" | "eventual";
 }
 
-export interface Vector {
-  id: Id;
-  vector?: number[];
-  attributes?: Attributes;
-}
 export type DistanceMetric = "cosine_distance" | "euclidean_squared";
 export type FilterOperator =
   | "Eq"
@@ -123,10 +115,61 @@ export interface TpufResponseWithMetadata {
   decompress_end: number;
 }
 
+export interface ColumnarDocs {
+  id: Id[];
+  /**
+   * Required if the namespace has a vector index.
+   * For non-vector namespaces, this key should be omitted.
+   */
+  vector?: number[][];
+}
+export type ColumnarAttributes = Record<string, AttributeType[]>;
+
+export type UpsertColumns = ColumnarDocs & ColumnarAttributes;
+export type PatchColumns = { id: Id[] } & ColumnarAttributes;
+
+interface RowDoc {
+  id: Id;
+  /**
+   * Required if the namespace has a vector index.
+   * For non-vector namespaces, this key should be omitted.
+   */
+  vector?: number[];
+}
+type RowAttributes = Record<string, AttributeType>;
+
+export type UpsertRows = (RowDoc & RowAttributes)[];
+export type PatchRows = ({ id: Id } & RowAttributes)[];
+
+export interface WriteParams {
+  /** Upserts documents in a column-based format. */
+  upsert_columns?: UpsertColumns;
+  /** Upserts documents in a row-based format. */
+  upsert_rows?: UpsertRows;
+  /**
+   * Patches documents in a column-based format. Identical to `upsert_columns`, but
+   * instead of overwriting entire documents, only the specified keys are written.
+   */
+  patch_columns?: PatchColumns;
+  /**
+   * Patches documents in a row-based format. Identical to `upsert_rows`, but
+   * instead of overwriting entire documents, only the specified keys are written.
+   */
+  patch_rows?: PatchRows;
+  /** Deletes documents by ID. */
+  deletes?: Id[];
+  /** Deletes documents that match a filter. */
+  delete_by_filter?: Filters;
+  distance_metric?: DistanceMetric;
+  schema?: Schema;
+  /** See https://turbopuffer.com/docs/upsert#param-encryption. */
+  encryption?: Encryption;
+}
+
 export type QueryResults = {
   id: Id;
   vector?: number[];
-  attributes?: Attributes;
+  attributes?: RowAttributes;
   dist?: number;
   rank_by?: RankBy;
 }[];
@@ -145,6 +188,13 @@ export interface HintCacheWarmResponse {
   status: "ACCEPTED" | "OK";
 }
 
+export interface ExportResponse {
+  ids: Id[];
+  vectors: number[][];
+  attributes?: ColumnarAttributes;
+  next_cursor: string | null;
+}
+
 export interface NamespaceMetadata {
   id: string;
   approx_count: number;
@@ -159,11 +209,4 @@ export interface RecallMeasurement {
   avg_recall: number;
   avg_exhaustive_count: number;
   avg_ann_count: number;
-}
-
-export type ColumnarAttributes = Record<string, AttributeType[]>;
-export interface ColumnarVectors {
-  ids: Id[];
-  vectors: number[][];
-  attributes?: ColumnarAttributes;
 }

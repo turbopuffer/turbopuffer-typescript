@@ -7,21 +7,19 @@
 
 import { createHTTPClient } from "./createHTTPClient";
 import {
-  fromColumnar,
   parseIntMetric,
   parseFloatMetric,
   parseServerTiming,
+  shouldCompressWrite,
   TurbopufferError,
 } from "./helpers";
 import type {
-  ColumnarVectors,
   Consistency,
   DistanceMetric,
-  Encryption,
+  ExportResponse,
   Filters,
   HintCacheWarmResponse,
   HTTPClient,
-  Id,
   NamespaceMetadata,
   NamespacesListResult,
   QueryMetrics,
@@ -29,7 +27,7 @@ import type {
   RankBy,
   RecallMeasurement,
   Schema,
-  Vector,
+  WriteParams,
 } from "./types";
 
 /* Base Client */
@@ -69,7 +67,7 @@ export class Turbopuffer {
 
   /**
    * List all your namespaces.
-   * See: https://turbopuffer.com/docs/reference/namespaces
+   * See: https://turbopuffer.com/docs/namespaces
    */
   async namespaces({
     cursor,
@@ -112,81 +110,23 @@ export class Namespace {
     this.id = id;
   }
 
-  /**
-   * Creates or updates vectors.
-   * See: https://turbopuffer.com/docs/reference/upsert
-   *
-   * Note: Will automatically batch according to the client's configured batch size.
-   */
-  async upsert({
-    vectors,
-    distance_metric,
-    schema,
-    encryption,
-    batchSize = 10000,
-  }: {
-    vectors: Vector[];
-    distance_metric: DistanceMetric;
-    schema?: Schema;
-    /** Only available as part of our enterprise offerings. */
-    encryption?: Encryption;
-    batchSize?: number;
-  }): Promise<void> {
-    for (let i = 0; i < vectors.length; i += batchSize) {
-      const batch = vectors.slice(i, i + batchSize);
-      await this.client.http.doRequest<{ status: string }>({
-        method: "POST",
-        path: `/v1/namespaces/${this.id}`,
-        compress: batch.length > 10,
-        body: {
-          upserts: batch,
-          distance_metric,
-          schema,
-          encryption,
-        },
-        retryable: true, // Upserts are idempotent
-      });
-    }
-  }
-
-  /**
-   * Deletes vectors (by IDs).
-   */
-  async delete({ ids }: { ids: Id[] }): Promise<void> {
-    await this.client.http.doRequest<{ status: string }>({
-      method: "POST",
-      path: `/v1/namespaces/${this.id}`,
-      compress: ids.length > 500,
-      body: {
-        ids: ids,
-        vectors: new Array(ids.length).fill(null),
-      },
-      retryable: true,
-    });
-  }
-
-  /**
-   * Deletes vectors (by filter).
-   */
-  async deleteByFilter({ filters }: { filters: Filters }): Promise<number> {
+  async write(params: WriteParams): Promise<number> {
     const response = await this.client.http.doRequest<{
       status: string;
       rows_affected: number;
     }>({
       method: "POST",
-      path: `/v1/namespaces/${this.id}`,
-      compress: false,
-      body: {
-        delete_by_filter: filters,
-      },
-      retryable: true,
+      path: `/v2/namespaces/${this.id}`,
+      compress: shouldCompressWrite(params),
+      body: params,
+      retryable: true, // writes are idempotent
     });
-    return response?.body?.rows_affected || 0;
+    return response.body?.rows_affected ?? 0;
   }
 
   /**
    * Queries vectors.
-   * See: https://turbopuffer.com/docs/reference/query
+   * See: https://turbopuffer.com/docs/query
    */
   async query({
     ...params
@@ -206,7 +146,7 @@ export class Namespace {
 
   /**
    * Queries vectors and returns performance metrics along with the results.
-   * See: https://turbopuffer.com/docs/reference/query
+   * See: https://turbopuffer.com/docs/query
    */
   async queryWithMetrics({
     ...params
@@ -275,22 +215,21 @@ export class Namespace {
 
   /**
    * Export all vectors at full precision.
-   * See: https://turbopuffer.com/docs/reference/list
+   * See: https://turbopuffer.com/docs/export
    */
-  async export(params?: {
-    cursor?: string;
-  }): Promise<{ vectors: Vector[]; next_cursor?: string }> {
-    type ResponseType = ColumnarVectors & { next_cursor: string };
-    const response = await this.client.http.doRequest<ResponseType>({
+  async export(params?: { cursor?: string }): Promise<ExportResponse> {
+    const response = await this.client.http.doRequest<ExportResponse>({
       method: "GET",
       path: `/v1/namespaces/${this.id}`,
       query: { cursor: params?.cursor },
       retryable: true,
     });
-    const body = response.body!;
+    const { ids, vectors, attributes, next_cursor } = response.body!;
     return {
-      vectors: fromColumnar(body),
-      next_cursor: body.next_cursor,
+      ids,
+      vectors,
+      attributes,
+      next_cursor,
     };
   }
 
@@ -335,7 +274,7 @@ export class Namespace {
 
   /**
    * Delete a namespace fully (all data).
-   * See: https://turbopuffer.com/docs/reference/delete-namespace
+   * See: https://turbopuffer.com/docs/delete-namespace
    */
   async deleteAll(): Promise<void> {
     await this.client.http.doRequest<{ status: string }>({
@@ -347,7 +286,7 @@ export class Namespace {
 
   /**
    * Evaluates the recall performance of ANN queries in a namespace.
-   * See: https://turbopuffer.com/docs/reference/recall
+   * See: https://turbopuffer.com/docs/recall
    */
   async recall({
     num,
