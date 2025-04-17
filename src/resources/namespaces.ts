@@ -99,23 +99,18 @@ export interface AttributeSchema {
 export type DistanceMetric = 'cosine_distance' | 'euclidean_squared';
 
 /**
- * A list of documents in columnar format.
+ * A list of documents in columnar format. The keys are the column names.
  */
 export interface DocumentColumns {
   /**
-   * The attributes attached to each of the documents.
-   */
-  attributes?: Record<string, Array<Record<string, unknown>>>;
-
-  /**
    * The IDs of the documents.
    */
-  ids?: Array<ID>;
+  id?: Array<ID>;
 
   /**
-   * Vectors describing each of the documents.
+   * The attributes attached to each of the documents.
    */
-  vectors?: Array<Array<number> | null>;
+  additionalProperties?: Array<Record<string, unknown>>;
 }
 
 /**
@@ -130,12 +125,12 @@ export interface DocumentRow {
   /**
    * The attributes attached to the document.
    */
-  attributes?: Record<string, unknown>;
+  additionalProperties?: unknown;
 
   /**
    * A vector describing the document.
    */
-  vector?: Array<number> | null;
+  vector?: Array<number> | string | null;
 }
 
 /**
@@ -317,46 +312,36 @@ export namespace NamespaceQueryParams {
 
 export interface NamespaceUpsertParams {
   /**
-   * Upsert documents in columnar format.
+   * Write documents.
    */
   documents?:
-    | NamespaceUpsertParams.UpsertColumnar
-    | NamespaceUpsertParams.UpsertRowBased
+    | NamespaceUpsertParams.Write
+    | unknown
     | NamespaceUpsertParams.CopyFromNamespace
     | NamespaceUpsertParams.DeleteByFilter;
 }
 
 export namespace NamespaceUpsertParams {
   /**
-   * Upsert documents in columnar format.
+   * Write documents.
    */
-  export interface UpsertColumnar extends NamespacesAPI.DocumentColumns {
+  export interface Write {
     /**
      * A function used to calculate vector similarity.
      */
-    distance_metric: NamespacesAPI.DistanceMetric;
+    distance_metric?: NamespacesAPI.DistanceMetric;
 
     /**
      * The schema of the attributes attached to the documents.
      */
     schema?: Record<string, Array<NamespacesAPI.AttributeSchema>>;
-  }
-
-  /**
-   * Upsert documents in row-based format.
-   */
-  export interface UpsertRowBased {
-    /**
-     * A function used to calculate vector similarity.
-     */
-    distance_metric: NamespacesAPI.DistanceMetric;
-
-    upserts: Array<NamespacesAPI.DocumentRow>;
 
     /**
-     * The schema of the attributes attached to the documents.
+     * A list of documents in columnar format. The keys are the column names.
      */
-    schema?: Record<string, Array<NamespacesAPI.AttributeSchema>>;
+    upsert_columns?: NamespacesAPI.DocumentColumns;
+
+    upsert_rows?: Array<NamespacesAPI.DocumentRow>;
   }
 
   /**
