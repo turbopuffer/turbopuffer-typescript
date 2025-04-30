@@ -10,7 +10,6 @@ export {
   type FullTextSearchConfig,
   type ID,
   type NamespaceSummary,
-  type NamespaceDeleteAllResponse,
   type NamespaceGetSchemaResponse,
   type NamespaceQueryResponse,
   type NamespaceUpsertResponse,

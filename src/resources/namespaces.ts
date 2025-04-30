@@ -19,13 +19,6 @@ export class Namespaces extends APIResource {
   }
 
   /**
-   * Delete namespace.
-   */
-  deleteAll(namespace: string, options?: RequestOptions): APIPromise<NamespaceDeleteAllResponse> {
-    return this._client.delete(path`/v1/namespaces/${namespace}`, options);
-  }
-
-  /**
    * Get namespace schema.
    */
   getSchema(namespace: string, options?: RequestOptions): APIPromise<NamespaceGetSchemaResponse> {
@@ -212,16 +205,6 @@ export interface NamespaceSummary {
 }
 
 /**
- * The response to a successful namespace deletion request.
- */
-export interface NamespaceDeleteAllResponse {
-  /**
-   * The status of the request.
-   */
-  status: 'ok';
-}
-
-/**
  * The response to a successful namespace schema request.
  */
 export type NamespaceGetSchemaResponse = Record<string, Array<AttributeSchema>>;
@@ -390,7 +373,6 @@ export declare namespace Namespaces {
     type FullTextSearchConfig as FullTextSearchConfig,
     type ID as ID,
     type NamespaceSummary as NamespaceSummary,
-    type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
     type NamespaceGetSchemaResponse as NamespaceGetSchemaResponse,
     type NamespaceQueryResponse as NamespaceQueryResponse,
     type NamespaceUpsertResponse as NamespaceUpsertResponse,

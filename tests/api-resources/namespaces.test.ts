@@ -32,18 +32,6 @@ describe('resource namespaces', () => {
   });
 
   // skipped: tests are disabled for the time being
-  test.skip('deleteAll', async () => {
-    const responsePromise = client.namespaces.deleteAll('namespace');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // skipped: tests are disabled for the time being
   test.skip('getSchema', async () => {
     const responsePromise = client.namespaces.getSchema('namespace');
     const rawResponse = await responsePromise.asResponse();
