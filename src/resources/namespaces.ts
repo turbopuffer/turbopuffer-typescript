@@ -22,7 +22,7 @@ export class Namespaces extends APIResource {
    * Delete namespace.
    */
   deleteAll(namespace: string, options?: RequestOptions): APIPromise<NamespaceDeleteAllResponse> {
-    return this._client.delete(path`/v2/namespaces/${namespace}`, options);
+    return this._client.delete(path`/v1/namespaces/${namespace}`, options);
   }
 
   /**
