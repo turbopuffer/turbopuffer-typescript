@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as NamespacesAPI from './namespaces';
 import { APIPromise } from '../core/api-promise';
 import { ListNamespaces, type ListNamespacesParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
@@ -15,13 +16,6 @@ export class Namespaces extends APIResource {
     options?: RequestOptions,
   ): PagePromise<NamespaceSummariesListNamespaces, NamespaceSummary> {
     return this._client.getAPIList('/v1/namespaces', ListNamespaces<NamespaceSummary>, { query, ...options });
-  }
-
-  /**
-   * Delete namespace.
-   */
-  deleteAll(namespace: string, options?: RequestOptions): APIPromise<NamespaceDeleteAllResponse> {
-    return this._client.delete(path`/v2/namespaces/${namespace}`, options);
   }
 
   /**
@@ -45,12 +39,13 @@ export class Namespaces extends APIResource {
   /**
    * Create, update, or delete documents.
    */
-  write(
+  upsert(
     namespace: string,
-    body: NamespaceWriteParams | null | undefined = {},
+    params: NamespaceUpsertParams | null | undefined = undefined,
     options?: RequestOptions,
-  ): APIPromise<NamespaceWriteResponse> {
-    return this._client.post(path`/v2/namespaces/${namespace}`, { body, ...options });
+  ): APIPromise<NamespaceUpsertResponse> {
+    const { documents } = params ?? {};
+    return this._client.post(path`/v1/namespaces/${namespace}`, { body: documents, ...options });
   }
 }
 
@@ -97,15 +92,23 @@ export interface AttributeSchema {
 export type DistanceMetric = 'cosine_distance' | 'euclidean_squared';
 
 /**
- * A list of documents in columnar format. The keys are the column names.
+ * A list of documents in columnar format.
  */
 export interface DocumentColumns {
   /**
+   * The attributes attached to each of the documents.
+   */
+  attributes?: Record<string, Array<Record<string, unknown>>>;
+
+  /**
    * The IDs of the documents.
    */
-  id?: Array<ID>;
+  ids?: Array<ID>;
 
-  [k: string]: Array<Record<string, unknown>> | Array<ID> | undefined;
+  /**
+   * Vectors describing each of the documents.
+   */
+  vectors?: Array<Array<number> | null>;
 }
 
 /**
@@ -118,11 +121,14 @@ export interface DocumentRow {
   id?: ID;
 
   /**
+   * The attributes attached to the document.
+   */
+  attributes?: Record<string, unknown>;
+
+  /**
    * A vector describing the document.
    */
-  vector?: Array<number> | string | null;
-
-  [k: string]: unknown;
+  vector?: Array<number> | null;
 }
 
 /**
@@ -199,16 +205,6 @@ export interface NamespaceSummary {
 }
 
 /**
- * The response to a successful namespace deletion request.
- */
-export interface NamespaceDeleteAllResponse {
-  /**
-   * The status of the request.
-   */
-  status: 'OK';
-}
-
-/**
  * The response to a successful namespace schema request.
  */
 export type NamespaceGetSchemaResponse = Record<string, Array<AttributeSchema>>;
@@ -221,7 +217,7 @@ export type NamespaceQueryResponse = Array<DocumentRowWithScore>;
 /**
  * The response to a successful upsert request.
  */
-export interface NamespaceWriteResponse {
+export interface NamespaceUpsertResponse {
   /**
    * The status of the request.
    */
@@ -302,38 +298,53 @@ export namespace NamespaceQueryParams {
   }
 }
 
-export type NamespaceWriteParams =
-  | NamespaceWriteParams.WriteDocuments
-  | NamespaceWriteParams.CopyFromNamespace
-  | NamespaceWriteParams.DeleteByFilter;
+export interface NamespaceUpsertParams {
+  /**
+   * Upsert documents in columnar format.
+   */
+  documents?:
+    | NamespaceUpsertParams.UpsertColumnar
+    | NamespaceUpsertParams.UpsertRowBased
+    | NamespaceUpsertParams.CopyFromNamespace
+    | NamespaceUpsertParams.DeleteByFilter;
+}
 
-export declare namespace NamespaceWriteParams {
-  export interface WriteDocuments {
+export namespace NamespaceUpsertParams {
+  /**
+   * Upsert documents in columnar format.
+   */
+  export interface UpsertColumnar extends NamespacesAPI.DocumentColumns {
     /**
      * A function used to calculate vector similarity.
      */
-    distance_metric?: DistanceMetric;
-
-    /**
-     * A list of documents in columnar format. The keys are the column names.
-     */
-    patch_columns?: DocumentColumns;
-
-    patch_rows?: Array<DocumentRow>;
+    distance_metric: NamespacesAPI.DistanceMetric;
 
     /**
      * The schema of the attributes attached to the documents.
      */
-    schema?: Record<string, Array<AttributeSchema>>;
-
-    /**
-     * A list of documents in columnar format. The keys are the column names.
-     */
-    upsert_columns?: DocumentColumns;
-
-    upsert_rows?: Array<DocumentRow>;
+    schema?: Record<string, Array<NamespacesAPI.AttributeSchema>>;
   }
 
+  /**
+   * Upsert documents in row-based format.
+   */
+  export interface UpsertRowBased {
+    /**
+     * A function used to calculate vector similarity.
+     */
+    distance_metric: NamespacesAPI.DistanceMetric;
+
+    upserts: Array<NamespacesAPI.DocumentRow>;
+
+    /**
+     * The schema of the attributes attached to the documents.
+     */
+    schema?: Record<string, Array<NamespacesAPI.AttributeSchema>>;
+  }
+
+  /**
+   * Copy documents from another namespace.
+   */
   export interface CopyFromNamespace {
     /**
      * The namespace to copy documents from.
@@ -341,6 +352,9 @@ export declare namespace NamespaceWriteParams {
     copy_from_namespace: string;
   }
 
+  /**
+   * Delete documents by filter.
+   */
   export interface DeleteByFilter {
     /**
      * The filter specifying which documents to delete.
@@ -359,13 +373,12 @@ export declare namespace Namespaces {
     type FullTextSearchConfig as FullTextSearchConfig,
     type ID as ID,
     type NamespaceSummary as NamespaceSummary,
-    type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
     type NamespaceGetSchemaResponse as NamespaceGetSchemaResponse,
     type NamespaceQueryResponse as NamespaceQueryResponse,
-    type NamespaceWriteResponse as NamespaceWriteResponse,
+    type NamespaceUpsertResponse as NamespaceUpsertResponse,
     type NamespaceSummariesListNamespaces as NamespaceSummariesListNamespaces,
     type NamespaceListParams as NamespaceListParams,
     type NamespaceQueryParams as NamespaceQueryParams,
-    type NamespaceWriteParams as NamespaceWriteParams,
+    type NamespaceUpsertParams as NamespaceUpsertParams,
   };
 }
