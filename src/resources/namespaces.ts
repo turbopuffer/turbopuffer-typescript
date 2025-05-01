@@ -107,7 +107,10 @@ export interface DocumentColumns {
    */
   id?: Array<ID>;
 
-  [k: string]: Array<Record<string, unknown>> | Array<ID> | undefined;
+  /**
+   * The attributes attached to each of the documents.
+   */
+  additionalProperties?: Array<Record<string, unknown>>;
 }
 
 /**
