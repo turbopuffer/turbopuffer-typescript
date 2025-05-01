@@ -41,6 +41,17 @@ export class Namespaces extends APIResource {
   ): APIPromise<NamespaceQueryResponse> {
     return this._client.post(path`/v1/namespaces/${namespace}/query`, { body, ...options });
   }
+
+  /**
+   * Create, update, or delete documents.
+   */
+  write(
+    namespace: string,
+    body: NamespaceWriteParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<NamespaceWriteResponse> {
+    return this._client.post(path`/v2/namespaces/${namespace}`, { body, ...options });
+  }
 }
 
 // Namespace pagination.
@@ -207,6 +218,16 @@ export type NamespaceGetSchemaResponse = Record<string, Array<AttributeSchema>>;
  */
 export type NamespaceQueryResponse = Array<DocumentRowWithScore>;
 
+/**
+ * The response to a successful upsert request.
+ */
+export interface NamespaceWriteResponse {
+  /**
+   * The status of the request.
+   */
+  status: 'OK';
+}
+
 export interface NamespaceListParams extends ListNamespacesParams {
   /**
    * Limit the number of results per page.
@@ -281,6 +302,53 @@ export namespace NamespaceQueryParams {
   }
 }
 
+export type NamespaceWriteParams =
+  | NamespaceWriteParams.WriteDocuments
+  | NamespaceWriteParams.CopyFromNamespace
+  | NamespaceWriteParams.DeleteByFilter;
+
+export declare namespace NamespaceWriteParams {
+  export interface WriteDocuments {
+    /**
+     * A function used to calculate vector similarity.
+     */
+    distance_metric?: DistanceMetric;
+
+    /**
+     * A list of documents in columnar format. The keys are the column names.
+     */
+    patch_columns?: DocumentColumns;
+
+    patch_rows?: Array<DocumentRow>;
+
+    /**
+     * The schema of the attributes attached to the documents.
+     */
+    schema?: Record<string, Array<AttributeSchema>>;
+
+    /**
+     * A list of documents in columnar format. The keys are the column names.
+     */
+    upsert_columns?: DocumentColumns;
+
+    upsert_rows?: Array<DocumentRow>;
+  }
+
+  export interface CopyFromNamespace {
+    /**
+     * The namespace to copy documents from.
+     */
+    copy_from_namespace: string;
+  }
+
+  export interface DeleteByFilter {
+    /**
+     * The filter specifying which documents to delete.
+     */
+    delete_by_filter: unknown;
+  }
+}
+
 export declare namespace Namespaces {
   export {
     type AttributeSchema as AttributeSchema,
@@ -294,8 +362,10 @@ export declare namespace Namespaces {
     type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
     type NamespaceGetSchemaResponse as NamespaceGetSchemaResponse,
     type NamespaceQueryResponse as NamespaceQueryResponse,
+    type NamespaceWriteResponse as NamespaceWriteResponse,
     type NamespaceSummariesListNamespaces as NamespaceSummariesListNamespaces,
     type NamespaceListParams as NamespaceListParams,
     type NamespaceQueryParams as NamespaceQueryParams,
+    type NamespaceWriteParams as NamespaceWriteParams,
   };
 }

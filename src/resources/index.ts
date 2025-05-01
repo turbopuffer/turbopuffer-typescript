@@ -13,7 +13,9 @@ export {
   type NamespaceDeleteAllResponse,
   type NamespaceGetSchemaResponse,
   type NamespaceQueryResponse,
+  type NamespaceWriteResponse,
   type NamespaceListParams,
   type NamespaceQueryParams,
+  type NamespaceWriteParams,
   type NamespaceSummariesListNamespaces,
 } from './namespaces';
