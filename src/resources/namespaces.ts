@@ -309,7 +309,7 @@ export interface NamespaceWriteParams {
    * Write documents.
    */
   write?:
-    | NamespaceWriteParams.Write
+    | NamespaceWriteParams.WriteDocuments
     | NamespaceWriteParams.CopyFromNamespace
     | NamespaceWriteParams.DeleteByFilter;
 }
@@ -318,7 +318,7 @@ export namespace NamespaceWriteParams {
   /**
    * Write documents.
    */
-  export interface Write {
+  export interface WriteDocuments {
     /**
      * A function used to calculate vector similarity.
      */
