@@ -30,9 +30,7 @@ const client = new Turbopuffer({
 });
 
 async function main() {
-  const response = await client.namespaces.write('products');
-
-  console.log(response.status);
+  const documentRowWithScores = await client.namespaces.query('products');
 }
 
 main();

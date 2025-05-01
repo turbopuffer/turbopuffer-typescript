@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
-import * as NamespacesAPI from './namespaces';
 import { APIPromise } from '../core/api-promise';
 import { ListNamespaces, type ListNamespacesParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
@@ -41,18 +40,6 @@ export class Namespaces extends APIResource {
     options?: RequestOptions,
   ): APIPromise<NamespaceQueryResponse> {
     return this._client.post(path`/v1/namespaces/${namespace}/query`, { body, ...options });
-  }
-
-  /**
-   * Create, update, or delete documents.
-   */
-  write(
-    namespace: string,
-    params: NamespaceWriteParams | null | undefined = undefined,
-    options?: RequestOptions,
-  ): APIPromise<NamespaceWriteResponse> {
-    const { write } = params ?? {};
-    return this._client.post(path`/v1/namespaces/${namespace}`, { body: write, ...options });
   }
 }
 
@@ -220,16 +207,6 @@ export type NamespaceGetSchemaResponse = Record<string, Array<AttributeSchema>>;
  */
 export type NamespaceQueryResponse = Array<DocumentRowWithScore>;
 
-/**
- * The response to a successful upsert request.
- */
-export interface NamespaceWriteResponse {
-  /**
-   * The status of the request.
-   */
-  status: 'OK';
-}
-
 export interface NamespaceListParams extends ListNamespacesParams {
   /**
    * Limit the number of results per page.
@@ -304,67 +281,6 @@ export namespace NamespaceQueryParams {
   }
 }
 
-export interface NamespaceWriteParams {
-  /**
-   * Write documents.
-   */
-  write?:
-    | NamespaceWriteParams.WriteDocuments
-    | NamespaceWriteParams.CopyFromNamespace
-    | NamespaceWriteParams.DeleteByFilter;
-}
-
-export namespace NamespaceWriteParams {
-  /**
-   * Write documents.
-   */
-  export interface WriteDocuments {
-    /**
-     * A function used to calculate vector similarity.
-     */
-    distance_metric?: NamespacesAPI.DistanceMetric;
-
-    /**
-     * A list of documents in columnar format. The keys are the column names.
-     */
-    patch_columns?: NamespacesAPI.DocumentColumns;
-
-    patch_rows?: Array<NamespacesAPI.DocumentRow>;
-
-    /**
-     * The schema of the attributes attached to the documents.
-     */
-    schema?: Record<string, Array<NamespacesAPI.AttributeSchema>>;
-
-    /**
-     * A list of documents in columnar format. The keys are the column names.
-     */
-    upsert_columns?: NamespacesAPI.DocumentColumns;
-
-    upsert_rows?: Array<NamespacesAPI.DocumentRow>;
-  }
-
-  /**
-   * Copy documents from another namespace.
-   */
-  export interface CopyFromNamespace {
-    /**
-     * The namespace to copy documents from.
-     */
-    copy_from_namespace: string;
-  }
-
-  /**
-   * Delete documents by filter.
-   */
-  export interface DeleteByFilter {
-    /**
-     * The filter specifying which documents to delete.
-     */
-    delete_by_filter: unknown;
-  }
-}
-
 export declare namespace Namespaces {
   export {
     type AttributeSchema as AttributeSchema,
@@ -378,10 +294,8 @@ export declare namespace Namespaces {
     type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
     type NamespaceGetSchemaResponse as NamespaceGetSchemaResponse,
     type NamespaceQueryResponse as NamespaceQueryResponse,
-    type NamespaceWriteResponse as NamespaceWriteResponse,
     type NamespaceSummariesListNamespaces as NamespaceSummariesListNamespaces,
     type NamespaceListParams as NamespaceListParams,
     type NamespaceQueryParams as NamespaceQueryParams,
-    type NamespaceWriteParams as NamespaceWriteParams,
   };
 }

@@ -37,8 +37,6 @@ import {
   NamespaceQueryResponse,
   NamespaceSummariesListNamespaces,
   NamespaceSummary,
-  NamespaceWriteParams,
-  NamespaceWriteResponse,
   Namespaces,
 } from './resources/namespaces';
 import { readEnv } from './internal/utils/env';
@@ -738,10 +736,8 @@ export declare namespace Turbopuffer {
     type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
     type NamespaceGetSchemaResponse as NamespaceGetSchemaResponse,
     type NamespaceQueryResponse as NamespaceQueryResponse,
-    type NamespaceWriteResponse as NamespaceWriteResponse,
     type NamespaceSummariesListNamespaces as NamespaceSummariesListNamespaces,
     type NamespaceListParams as NamespaceListParams,
     type NamespaceQueryParams as NamespaceQueryParams,
-    type NamespaceWriteParams as NamespaceWriteParams,
   };
 }
