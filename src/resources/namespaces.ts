@@ -107,10 +107,7 @@ export interface DocumentColumns {
    */
   id?: Array<ID>;
 
-  /**
-   * The attributes attached to each of the documents.
-   */
-  additionalProperties?: Array<Record<string, unknown>>;
+  [k: string]: Array<Record<string, unknown>> | Array<ID> | undefined;
 }
 
 /**
@@ -123,14 +120,11 @@ export interface DocumentRow {
   id?: ID;
 
   /**
-   * The attributes attached to the document.
-   */
-  additionalProperties?: unknown;
-
-  /**
    * A vector describing the document.
    */
   vector?: Array<number> | string | null;
+
+  [k: string]: unknown;
 }
 
 /**
