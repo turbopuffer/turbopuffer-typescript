@@ -89,8 +89,8 @@ describe('resource namespaces', () => {
   });
 
   // skipped: tests are disabled for the time being
-  test.skip('upsert', async () => {
-    const responsePromise = client.namespaces.upsert('namespace');
+  test.skip('write', async () => {
+    const responsePromise = client.namespaces.write('namespace');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -101,13 +101,13 @@ describe('resource namespaces', () => {
   });
 
   // skipped: tests are disabled for the time being
-  test.skip('upsert: request options and params are passed correctly', async () => {
+  test.skip('write: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.namespaces.upsert(
+      client.namespaces.write(
         'namespace',
         {
-          documents: {
+          write: {
             distance_metric: 'cosine_distance',
             patch_columns: { id: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'] },
             patch_rows: [{ id: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', vector: [0] }],

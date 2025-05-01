@@ -46,13 +46,13 @@ export class Namespaces extends APIResource {
   /**
    * Create, update, or delete documents.
    */
-  upsert(
+  write(
     namespace: string,
-    params: NamespaceUpsertParams | null | undefined = undefined,
+    params: NamespaceWriteParams | null | undefined = undefined,
     options?: RequestOptions,
-  ): APIPromise<NamespaceUpsertResponse> {
-    const { documents } = params ?? {};
-    return this._client.post(path`/v1/namespaces/${namespace}`, { body: documents, ...options });
+  ): APIPromise<NamespaceWriteResponse> {
+    const { write } = params ?? {};
+    return this._client.post(path`/v1/namespaces/${namespace}`, { body: write, ...options });
   }
 }
 
@@ -223,7 +223,7 @@ export type NamespaceQueryResponse = Array<DocumentRowWithScore>;
 /**
  * The response to a successful upsert request.
  */
-export interface NamespaceUpsertResponse {
+export interface NamespaceWriteResponse {
   /**
    * The status of the request.
    */
@@ -304,21 +304,21 @@ export namespace NamespaceQueryParams {
   }
 }
 
-export interface NamespaceUpsertParams {
+export interface NamespaceWriteParams {
   /**
    * Write documents.
    */
-  documents?:
-    | NamespaceUpsertParams.Write
-    | NamespaceUpsertParams.CopyFromNamespace
-    | NamespaceUpsertParams.DeleteByFilter;
+  write?:
+    | NamespaceWriteParams.WriteDocuments
+    | NamespaceWriteParams.CopyFromNamespace
+    | NamespaceWriteParams.DeleteByFilter;
 }
 
-export namespace NamespaceUpsertParams {
+export namespace NamespaceWriteParams {
   /**
    * Write documents.
    */
-  export interface Write {
+  export interface WriteDocuments {
     /**
      * A function used to calculate vector similarity.
      */
@@ -378,10 +378,10 @@ export declare namespace Namespaces {
     type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
     type NamespaceGetSchemaResponse as NamespaceGetSchemaResponse,
     type NamespaceQueryResponse as NamespaceQueryResponse,
-    type NamespaceUpsertResponse as NamespaceUpsertResponse,
+    type NamespaceWriteResponse as NamespaceWriteResponse,
     type NamespaceSummariesListNamespaces as NamespaceSummariesListNamespaces,
     type NamespaceListParams as NamespaceListParams,
     type NamespaceQueryParams as NamespaceQueryParams,
-    type NamespaceUpsertParams as NamespaceUpsertParams,
+    type NamespaceWriteParams as NamespaceWriteParams,
   };
 }
