@@ -51,8 +51,8 @@ export class Namespaces extends APIResource {
     params: NamespaceWriteParams | null | undefined = undefined,
     options?: RequestOptions,
   ): APIPromise<NamespaceWriteResponse> {
-    const { write_operation } = params ?? {};
-    return this._client.post(path`/v2/namespaces/${namespace}`, { body: write_operation, ...options });
+    const { operation } = params ?? {};
+    return this._client.post(path`/v2/namespaces/${namespace}`, { body: operation, ...options });
   }
 }
 
@@ -308,7 +308,7 @@ export interface NamespaceWriteParams {
   /**
    * Write documents.
    */
-  write_operation?:
+  operation?:
     | NamespaceWriteParams.WriteDocuments
     | NamespaceWriteParams.CopyFromNamespace
     | NamespaceWriteParams.DeleteByFilter;

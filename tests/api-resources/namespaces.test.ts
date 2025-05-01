@@ -107,7 +107,7 @@ describe('resource namespaces', () => {
       client.namespaces.write(
         'namespace',
         {
-          write_operation: {
+          operation: {
             distance_metric: 'cosine_distance',
             patch_columns: { id: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'] },
             patch_rows: [{ id: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', vector: [0] }],
