@@ -316,7 +316,6 @@ export interface NamespaceUpsertParams {
    */
   documents?:
     | NamespaceUpsertParams.Write
-    | unknown
     | NamespaceUpsertParams.CopyFromNamespace
     | NamespaceUpsertParams.DeleteByFilter;
 }
@@ -330,6 +329,13 @@ export namespace NamespaceUpsertParams {
      * A function used to calculate vector similarity.
      */
     distance_metric?: NamespacesAPI.DistanceMetric;
+
+    /**
+     * A list of documents in columnar format. The keys are the column names.
+     */
+    patch_columns?: NamespacesAPI.DocumentColumns;
+
+    patch_rows?: Array<NamespacesAPI.DocumentRow>;
 
     /**
      * The schema of the attributes attached to the documents.
