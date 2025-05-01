@@ -19,13 +19,6 @@ export class Namespaces extends APIResource {
   }
 
   /**
-   * Delete namespace.
-   */
-  deleteAll(namespace: string, options?: RequestOptions): APIPromise<NamespaceDeleteAllResponse> {
-    return this._client.delete(path`/v2/namespaces/${namespace}`, options);
-  }
-
-  /**
    * Get namespace schema.
    */
   getSchema(namespace: string, options?: RequestOptions): APIPromise<NamespaceGetSchemaResponse> {
@@ -46,13 +39,13 @@ export class Namespaces extends APIResource {
   /**
    * Create, update, or delete documents.
    */
-  write(
+  upsert(
     namespace: string,
-    params: NamespaceWriteParams | null | undefined = undefined,
+    params: NamespaceUpsertParams | null | undefined = undefined,
     options?: RequestOptions,
-  ): APIPromise<NamespaceWriteResponse> {
-    const { operation } = params ?? {};
-    return this._client.post(path`/v2/namespaces/${namespace}`, { body: operation, ...options });
+  ): APIPromise<NamespaceUpsertResponse> {
+    const { documents } = params ?? {};
+    return this._client.post(path`/v1/namespaces/${namespace}`, { body: documents, ...options });
   }
 }
 
@@ -99,15 +92,23 @@ export interface AttributeSchema {
 export type DistanceMetric = 'cosine_distance' | 'euclidean_squared';
 
 /**
- * A list of documents in columnar format. The keys are the column names.
+ * A list of documents in columnar format.
  */
 export interface DocumentColumns {
   /**
+   * The attributes attached to each of the documents.
+   */
+  attributes?: Record<string, Array<Record<string, unknown>>>;
+
+  /**
    * The IDs of the documents.
    */
-  id?: Array<ID>;
+  ids?: Array<ID>;
 
-  [k: string]: Array<Record<string, unknown>> | Array<ID> | undefined;
+  /**
+   * Vectors describing each of the documents.
+   */
+  vectors?: Array<Array<number> | null>;
 }
 
 /**
@@ -120,11 +121,14 @@ export interface DocumentRow {
   id?: ID;
 
   /**
+   * The attributes attached to the document.
+   */
+  attributes?: Record<string, unknown>;
+
+  /**
    * A vector describing the document.
    */
-  vector?: Array<number> | string | null;
-
-  [k: string]: unknown;
+  vector?: Array<number> | null;
 }
 
 /**
@@ -201,16 +205,6 @@ export interface NamespaceSummary {
 }
 
 /**
- * The response to a successful namespace deletion request.
- */
-export interface NamespaceDeleteAllResponse {
-  /**
-   * The status of the request.
-   */
-  status: 'OK';
-}
-
-/**
  * The response to a successful namespace schema request.
  */
 export type NamespaceGetSchemaResponse = Record<string, Array<AttributeSchema>>;
@@ -223,7 +217,7 @@ export type NamespaceQueryResponse = Array<DocumentRowWithScore>;
 /**
  * The response to a successful upsert request.
  */
-export interface NamespaceWriteResponse {
+export interface NamespaceUpsertResponse {
   /**
    * The status of the request.
    */
@@ -304,44 +298,48 @@ export namespace NamespaceQueryParams {
   }
 }
 
-export interface NamespaceWriteParams {
+export interface NamespaceUpsertParams {
   /**
-   * Write documents.
+   * Upsert documents in columnar format.
    */
-  operation?:
-    | NamespaceWriteParams.WriteDocuments
-    | NamespaceWriteParams.CopyFromNamespace
-    | NamespaceWriteParams.DeleteByFilter;
+  documents?:
+    | NamespaceUpsertParams.UpsertColumnar
+    | NamespaceUpsertParams.UpsertRowBased
+    | NamespaceUpsertParams.CopyFromNamespace
+    | NamespaceUpsertParams.DeleteByFilter;
 }
 
-export namespace NamespaceWriteParams {
+export namespace NamespaceUpsertParams {
   /**
-   * Write documents.
+   * Upsert documents in columnar format.
    */
-  export interface WriteDocuments {
+  export interface UpsertColumnar extends NamespacesAPI.DocumentColumns {
     /**
      * A function used to calculate vector similarity.
      */
-    distance_metric?: NamespacesAPI.DistanceMetric;
-
-    /**
-     * A list of documents in columnar format. The keys are the column names.
-     */
-    patch_columns?: NamespacesAPI.DocumentColumns;
-
-    patch_rows?: Array<NamespacesAPI.DocumentRow>;
+    distance_metric: NamespacesAPI.DistanceMetric;
 
     /**
      * The schema of the attributes attached to the documents.
      */
     schema?: Record<string, Array<NamespacesAPI.AttributeSchema>>;
+  }
+
+  /**
+   * Upsert documents in row-based format.
+   */
+  export interface UpsertRowBased {
+    /**
+     * A function used to calculate vector similarity.
+     */
+    distance_metric: NamespacesAPI.DistanceMetric;
+
+    upserts: Array<NamespacesAPI.DocumentRow>;
 
     /**
-     * A list of documents in columnar format. The keys are the column names.
+     * The schema of the attributes attached to the documents.
      */
-    upsert_columns?: NamespacesAPI.DocumentColumns;
-
-    upsert_rows?: Array<NamespacesAPI.DocumentRow>;
+    schema?: Record<string, Array<NamespacesAPI.AttributeSchema>>;
   }
 
   /**
@@ -375,13 +373,12 @@ export declare namespace Namespaces {
     type FullTextSearchConfig as FullTextSearchConfig,
     type ID as ID,
     type NamespaceSummary as NamespaceSummary,
-    type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
     type NamespaceGetSchemaResponse as NamespaceGetSchemaResponse,
     type NamespaceQueryResponse as NamespaceQueryResponse,
-    type NamespaceWriteResponse as NamespaceWriteResponse,
+    type NamespaceUpsertResponse as NamespaceUpsertResponse,
     type NamespaceSummariesListNamespaces as NamespaceSummariesListNamespaces,
     type NamespaceListParams as NamespaceListParams,
     type NamespaceQueryParams as NamespaceQueryParams,
-    type NamespaceWriteParams as NamespaceWriteParams,
+    type NamespaceUpsertParams as NamespaceUpsertParams,
   };
 }

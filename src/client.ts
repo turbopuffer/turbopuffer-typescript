@@ -30,15 +30,14 @@ import {
   DocumentRowWithScore,
   FullTextSearchConfig,
   ID,
-  NamespaceDeleteAllResponse,
   NamespaceGetSchemaResponse,
   NamespaceListParams,
   NamespaceQueryParams,
   NamespaceQueryResponse,
   NamespaceSummariesListNamespaces,
   NamespaceSummary,
-  NamespaceWriteParams,
-  NamespaceWriteResponse,
+  NamespaceUpsertParams,
+  NamespaceUpsertResponse,
   Namespaces,
 } from './resources/namespaces';
 import { readEnv } from './internal/utils/env';
@@ -735,13 +734,12 @@ export declare namespace Turbopuffer {
     type FullTextSearchConfig as FullTextSearchConfig,
     type ID as ID,
     type NamespaceSummary as NamespaceSummary,
-    type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
     type NamespaceGetSchemaResponse as NamespaceGetSchemaResponse,
     type NamespaceQueryResponse as NamespaceQueryResponse,
-    type NamespaceWriteResponse as NamespaceWriteResponse,
+    type NamespaceUpsertResponse as NamespaceUpsertResponse,
     type NamespaceSummariesListNamespaces as NamespaceSummariesListNamespaces,
     type NamespaceListParams as NamespaceListParams,
     type NamespaceQueryParams as NamespaceQueryParams,
-    type NamespaceWriteParams as NamespaceWriteParams,
+    type NamespaceUpsertParams as NamespaceUpsertParams,
   };
 }
