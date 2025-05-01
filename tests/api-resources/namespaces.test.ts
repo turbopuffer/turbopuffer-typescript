@@ -32,6 +32,18 @@ describe('resource namespaces', () => {
   });
 
   // skipped: tests are disabled for the time being
+  test.skip('deleteAll', async () => {
+    const responsePromise = client.namespaces.deleteAll('namespace');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // skipped: tests are disabled for the time being
   test.skip('getSchema', async () => {
     const responsePromise = client.namespaces.getSchema('namespace');
     const rawResponse = await responsePromise.asResponse();
@@ -77,8 +89,8 @@ describe('resource namespaces', () => {
   });
 
   // skipped: tests are disabled for the time being
-  test.skip('upsert', async () => {
-    const responsePromise = client.namespaces.upsert('namespace');
+  test.skip('write', async () => {
+    const responsePromise = client.namespaces.write('namespace');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -89,18 +101,19 @@ describe('resource namespaces', () => {
   });
 
   // skipped: tests are disabled for the time being
-  test.skip('upsert: request options and params are passed correctly', async () => {
+  test.skip('write: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.namespaces.upsert(
+      client.namespaces.write(
         'namespace',
         {
-          documents: {
-            attributes: { foo: [{ foo: 'bar' }] },
-            ids: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
-            vectors: [[0]],
+          write_operation: {
             distance_metric: 'cosine_distance',
+            patch_columns: { id: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'] },
+            patch_rows: [{ id: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', vector: [0] }],
             schema: { foo: [{ filterable: true, full_text_search: true, type: 'string' }] },
+            upsert_columns: { id: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'] },
+            upsert_rows: [{ id: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', vector: [0] }],
           },
         },
         { path: '/_stainless_unknown_path' },
