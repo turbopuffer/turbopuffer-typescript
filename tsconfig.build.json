@@ -6,7 +6,7 @@
     "rootDir": "./dist/src",
     "paths": {
       "@turbopuffer/turbopuffer/*": ["dist/src/*"],
-      "@turbopuffer/turbopuffer": ["dist/src/index.ts"],
+      "@turbopuffer/turbopuffer": ["dist/src/index.ts"]
     },
     "noEmit": false,
     "declaration": true,
