@@ -158,7 +158,7 @@ test("bm25_with_tokenizer_pre_tokenized_array", async () => {
   });
 
   let results = await ns.query({
-    rank_by: ["content", "BM25", ["jumped"]],
+    rank_by: ["content", "BM25", ["jumped", "over"]],
     top_k: 10,
   });
   expect(results.length).toEqual(1);
