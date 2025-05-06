@@ -1174,7 +1174,7 @@ test("product_operator", async () => {
       [
         2,
         [
-          "Sum",
+          "Max",
           [
             ["Product", [2, ["title", "BM25", "one"]]],
             ["content", "BM25", "foo"],
