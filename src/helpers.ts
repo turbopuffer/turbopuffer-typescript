@@ -25,7 +25,7 @@ function detectRuntime(): Runtime {
     userAgent
       ? userAgent === "Cloudflare-Workers"
       : // @ts-expect-error can be ignored
-        typeof WebSocketPair !== "undefined"
+      typeof WebSocketPair !== "undefined"
   )
     return "cloudflare-workers";
 
@@ -124,30 +124,6 @@ export function make_request_timing({
         ? deserialize_end - deserialize_start
         : null,
   };
-}
-
-export function parseIntMetric(value: string | null): number {
-  return value ? parseInt(value) : 0;
-}
-
-export function parseFloatMetric(value: string | null): number {
-  return value ? parseFloat(value) : 0;
-}
-
-export function parseServerTiming(value: string): Record<string, string> {
-  const output: Record<string, string> = {};
-  const sections = value.split(", ");
-  for (const section of sections) {
-    const tokens = section.split(";");
-    const base_key = tokens.shift();
-    for (const token of tokens) {
-      const components = token.split("=");
-      const key = base_key + "." + components[0];
-      const value = components[1];
-      output[key] = value;
-    }
-  }
-  return output;
 }
 
 export function shouldCompressWrite({

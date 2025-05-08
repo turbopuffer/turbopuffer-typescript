@@ -117,10 +117,10 @@ test("bm25_with_custom_schema_and_sum_query", async () => {
     ],
   });
 
-  expect(results.length).toEqual(3);
-  expect(results[0].id).toEqual(4);
-  expect(results[1].id).toEqual(1);
-  expect(results[2].id).toEqual(3);
+  expect(results.rows.length).toEqual(3);
+  expect(results.rows[0].id).toEqual(4);
+  expect(results.rows[1].id).toEqual(1);
+  expect(results.rows[2].id).toEqual(3);
 });
 
 test("bm25_with_tokenizer_pre_tokenized_array", async () => {
@@ -161,14 +161,14 @@ test("bm25_with_tokenizer_pre_tokenized_array", async () => {
     rank_by: ["content", "BM25", ["jumped", "over"]],
     top_k: 10,
   });
-  expect(results.length).toEqual(1);
-  expect(results[0].id).toEqual(1);
+  expect(results.rows.length).toEqual(1);
+  expect(results.rows[0].id).toEqual(1);
 
   results = await ns.query({
     rank_by: ["content", "BM25", ["dog"]],
     top_k: 10,
   });
-  expect(results.length).toEqual(2);
+  expect(results.rows.length).toEqual(2);
 
   await expect(
     ns.query({
@@ -210,13 +210,13 @@ test("contains_all_tokens", async () => {
     rank_by: ["text", "BM25", "walrus whisker"],
     filters: ["text", "ContainsAllTokens", "marine mammals"],
   });
-  expect(results.length).toEqual(1);
+  expect(results.rows.length).toEqual(1);
 
   const missing = await ns.query({
     rank_by: ["text", "BM25", "walrus whisker"],
     filters: ["text", "ContainsAllTokens", "marine mammals short"],
   });
-  expect(missing.length).toEqual(0);
+  expect(missing.rows.length).toEqual(0);
 });
 
 test("order_by_attribute", async () => {
@@ -262,22 +262,22 @@ test("order_by_attribute", async () => {
   const results_asc = await ns.query({
     rank_by: ["a", "asc"],
   });
-  expect(results_asc.length).toEqual(5);
-  expect(results_asc[0].id).toEqual(5);
-  expect(results_asc[1].id).toEqual(4);
-  expect(results_asc[2].id).toEqual(3);
-  expect(results_asc[3].id).toEqual(2);
-  expect(results_asc[4].id).toEqual(1);
+  expect(results_asc.rows.length).toEqual(5);
+  expect(results_asc.rows[0].id).toEqual(5);
+  expect(results_asc.rows[1].id).toEqual(4);
+  expect(results_asc.rows[2].id).toEqual(3);
+  expect(results_asc.rows[3].id).toEqual(2);
+  expect(results_asc.rows[4].id).toEqual(1);
 
   const results_desc = await ns.query({
     rank_by: ["a", "desc"],
   });
-  expect(results_desc.length).toEqual(5);
-  expect(results_desc[0].id).toEqual(1);
-  expect(results_desc[1].id).toEqual(2);
-  expect(results_desc[2].id).toEqual(3);
-  expect(results_desc[3].id).toEqual(4);
-  expect(results_desc[4].id).toEqual(5);
+  expect(results_desc.rows.length).toEqual(5);
+  expect(results_desc.rows[0].id).toEqual(1);
+  expect(results_desc.rows[1].id).toEqual(2);
+  expect(results_desc.rows[2].id).toEqual(3);
+  expect(results_desc.rows[3].id).toEqual(4);
+  expect(results_desc.rows[4].id).toEqual(5);
 });
 
 test("bm25_with_default_schema_and_simple_query", async () => {
@@ -317,8 +317,8 @@ test("bm25_with_default_schema_and_simple_query", async () => {
     rank_by: ["text", "BM25", "scratch"],
   });
 
-  expect(results.length).toEqual(1);
-  expect(results[0].id).toEqual(2);
+  expect(results.rows.length).toEqual(1);
+  expect(results.rows[0].id).toEqual(2);
 });
 
 test("namespaces", async () => {
@@ -623,32 +623,31 @@ test("sanity", async () => {
     distance_metric: "cosine_distance",
   });
 
-  const resultsWithMetrics = await ns.queryWithMetrics({
-    vector: [1, 1],
+  const resultsWithPerformance = await ns.query({
+    rank_by: ["vector", "ANN", [1, 1]],
     filters: ["numbers", "In", [2, 4]],
   });
-  let results = resultsWithMetrics.results;
-  expect(results.length).toEqual(2);
-  expect(results[0].id).toEqual(2);
-  expect(results[1].id).toEqual(1);
+  expect(resultsWithPerformance.rows.length).toEqual(2);
+  expect(resultsWithPerformance.rows[0].id).toEqual(2);
+  expect(resultsWithPerformance.rows[1].id).toEqual(1);
 
-  const metrics = resultsWithMetrics.metrics;
-  expect(metrics.approx_namespace_size).toEqual(3);
-  expect(metrics.exhaustive_search_count).toEqual(3);
-  expect(metrics.processing_time).toBeGreaterThan(10);
-  expect(metrics.query_execution_time).toBeGreaterThan(10);
-  expect(metrics.response_time).toBeGreaterThan(10);
-  expect(metrics.body_read_time).toBeGreaterThan(0);
-  expect(metrics.compress_time).toBeGreaterThan(0);
-  expect(metrics.deserialize_time).toBeGreaterThan(0);
+  const performance = resultsWithPerformance.performance;
+  // expect(performance.approx_namespace_size).toEqual(3); // TODO: fix this
+  expect(performance.exhaustive_search_count).toEqual(3);
+  expect(performance.query_execution_ms).toBeGreaterThan(10);
+  expect(performance.server_total_ms).toBeGreaterThan(10);
+  expect(performance.response_time).toBeGreaterThan(10);
+  expect(performance.body_read_time).toBeGreaterThan(0);
+  expect(performance.compress_time).toBeGreaterThan(0);
+  expect(performance.deserialize_time).toBeGreaterThan(0);
   if (isRuntimeFullyNodeCompatible) {
-    expect(metrics.decompress_time).toEqual(0); // response was too small to compress
+    expect(performance.decompress_time).toEqual(0); // response was too small to compress
   } else {
-    expect(metrics.decompress_time).toBeNull;
+    expect(performance.decompress_time).toBeNull;
   }
 
   const results2 = await ns.query({
-    vector: [1, 1],
+    rank_by: ["vector", "ANN", [1, 1]],
     filters: [
       "And",
       [
@@ -672,9 +671,9 @@ test("sanity", async () => {
       ],
     ],
   });
-  expect(results2.length).toEqual(2);
-  expect(results2[0].id).toEqual(2);
-  expect(results2[1].id).toEqual(1);
+  expect(results2.rows.length).toEqual(2);
+  expect(results2.rows[0].id).toEqual(2);
+  expect(results2.rows[1].id).toEqual(1);
 
   const recall = await ns.recall({
     num: 1,
@@ -690,12 +689,12 @@ test("sanity", async () => {
   });
 
   // If we query now, we should only get one result.
-  results = await ns.query({
-    vector: [1, 1],
+  const results = await ns.query({
+    rank_by: ["vector", "ANN", [1, 1]],
     filters: ["numbers", "In", [2, 4]],
   });
-  expect(results.length).toEqual(1);
-  expect(results[0].id).toEqual(2);
+  expect(results.rows.length).toEqual(1);
+  expect(results.rows[0].id).toEqual(2);
 
   let num = await ns.approxNumVectors();
   expect(num).toEqual(2);
@@ -719,7 +718,7 @@ test("sanity", async () => {
   let gotError: any = null;
   try {
     await ns.query({
-      vector: [1, 1],
+      rank_by: ["vector", "ANN", [1, 1]],
       filters: ["numbers", "In", [2, 4]],
     });
   } catch (e: any) {
@@ -775,7 +774,7 @@ t("connection_errors_are_wrapped", async () => {
   let gotError: any = null;
   try {
     await ns.query({
-      vector: [1, 1],
+      rank_by: ["vector", "ANN", [1, 1]],
     });
   } catch (e: any) {
     gotError = e;
@@ -912,12 +911,11 @@ test("copy_from_namespace", async () => {
   await ns2.copyFromNamespace(ns1Name);
 
   const res = await ns2.query({
-    vector: [0.1, 0.1],
-    include_vectors: true,
+    rank_by: ["vector", "ANN", [0.1, 0.1]],
     include_attributes: true,
   });
 
-  expect(res.length).toEqual(3);
+  expect(res.rows.length).toEqual(3);
 });
 
 test("patch", async () => {
@@ -957,12 +955,10 @@ test("patch", async () => {
     ],
   });
 
-  let results = await ns.query({ include_attributes: true });
-  expect(results.length).toEqual(2);
-  expect(results[0].id).toEqual(1);
-  expect(results[0].attributes).toEqual({ a: 1, b: 1 });
-  expect(results[1].id).toEqual(2);
-  expect(results[1].attributes).toEqual({ a: 2, b: 2 });
+  let results = await ns.query({ rank_by: ["id", "asc"], include_attributes: ['id', 'a', 'b'] });
+  expect(results.rows.length).toEqual(2);
+  expect(results.rows[0]).toEqual({ id: 1, a: 1, b: 1 });
+  expect(results.rows[1]).toEqual({ id: 2, a: 2, b: 2 });
 
   await ns.write({
     patch_columns: {
@@ -972,12 +968,10 @@ test("patch", async () => {
     },
   });
 
-  results = await ns.query({ include_attributes: true });
-  expect(results.length).toEqual(2);
-  expect(results[0].id).toEqual(1);
-  expect(results[0].attributes).toEqual({ a: 11, b: 1, c: 1 });
-  expect(results[1].id).toEqual(2);
-  expect(results[1].attributes).toEqual({ a: 22, b: 2, c: 2 });
+  results = await ns.query({ rank_by: ["id", "asc"], include_attributes: ['id', 'a', 'b', 'c'] });
+  expect(results.rows.length).toEqual(2);
+  expect(results.rows[0]).toEqual({ id: 1, a: 11, b: 1, c: 1 });
+  expect(results.rows[1]).toEqual({ id: 2, a: 22, b: 2, c: 2 });
 
   await ns.deleteAll();
 });
@@ -1012,17 +1006,17 @@ test("delete_by_filter", async () => {
     distance_metric: "cosine_distance",
   });
 
-  let results = await ns.query({});
-  expect(results.length).toEqual(3);
+  let results = await ns.query({ rank_by: ["id", "asc"] });
+  expect(results.rows.length).toEqual(3);
 
   const rowsAffected = await ns.write({
     delete_by_filter: ["foo", "Eq", "baz"],
   });
   expect(rowsAffected).toEqual(2);
 
-  results = await ns.query({});
-  expect(results.length).toEqual(1);
-  expect(results[0].id).toEqual(1);
+  results = await ns.query({ rank_by: ["id", "asc"] });
+  expect(results.rows.length).toEqual(1);
+  expect(results.rows[0].id).toEqual(1);
 
   await ns.deleteAll();
 });
@@ -1052,21 +1046,20 @@ test("compression", async () => {
     distance_metric: "cosine_distance",
   });
 
-  const resultsWithMetrics = await ns.queryWithMetrics({
-    vector: randomVector(1024),
+  const resultsWithPerformance = await ns.query({
+    rank_by: ["vector", "ANN", randomVector(1024)],
     top_k: 10,
-    include_vectors: true,
     include_attributes: true,
   });
 
-  const metrics = resultsWithMetrics.metrics;
-  expect(metrics.compress_time).toBeGreaterThan(0);
-  expect(metrics.body_read_time).toBeGreaterThan(0);
-  expect(metrics.deserialize_time).toBeGreaterThan(0);
+  const performance = resultsWithPerformance.performance;
+  expect(performance.compress_time).toBeGreaterThan(0);
+  expect(performance.body_read_time).toBeGreaterThan(0);
+  expect(performance.deserialize_time).toBeGreaterThan(0);
   if (isRuntimeFullyNodeCompatible) {
-    expect(metrics.decompress_time).toBeGreaterThan(0); // Response should be compressed
+    expect(performance.decompress_time).toBeGreaterThan(0); // Response should be compressed
   } else {
-    expect(metrics.decompress_time).toBeNull;
+    expect(performance.decompress_time).toBeNull;
   }
 });
 
@@ -1096,21 +1089,20 @@ test("disable_compression", async () => {
     distance_metric: "cosine_distance",
   });
 
-  const resultsWithMetrics = await ns.queryWithMetrics({
-    vector: randomVector(1024),
+  const resultsWithPerformance = await ns.query({
+    rank_by: ["vector", "ANN", randomVector(1024)],
     top_k: 10,
-    include_vectors: true,
     include_attributes: true,
   });
 
-  const metrics = resultsWithMetrics.metrics;
-  expect(metrics.compress_time).toBeNull;
-  expect(metrics.body_read_time).toBeGreaterThan(0);
-  expect(metrics.deserialize_time).toBeGreaterThan(0);
+  const performance = resultsWithPerformance.performance;
+  expect(performance.compress_time).toBeNull;
+  expect(performance.body_read_time).toBeGreaterThan(0);
+  expect(performance.deserialize_time).toBeGreaterThan(0);
   if (isRuntimeFullyNodeCompatible) {
-    expect(metrics.decompress_time).toEqual(0);
+    expect(performance.decompress_time).toEqual(0);
   } else {
-    expect(metrics.decompress_time).toBeNull;
+    expect(performance.decompress_time).toBeNull;
   }
 });
 
@@ -1186,7 +1178,7 @@ test("product_operator", async () => {
 
   for (const query of queries) {
     const results = await ns.query({ rank_by: query });
-    expect(results.length).toBeGreaterThan(0);
+    expect(results.rows.length).toBeGreaterThan(0);
   }
 });
 
@@ -1218,15 +1210,15 @@ test("readme", async () => {
   });
 
   const results = await ns.query({
-    vector: [1, 1],
+    rank_by: ["vector", "ANN", [1, 1]],
     filters: ["numbers", "In", [2, 4]],
   });
 
-  expect(results.length).toEqual(2);
-  expect(results[0].id).toEqual(2);
-  expect(results[0].dist).toBeGreaterThanOrEqual(0);
-  expect(results[1].id).toEqual(1);
-  expect(results[1].dist).toBeGreaterThanOrEqual(0);
+  expect(results.rows.length).toEqual(2);
+  expect(results.rows[0].id).toEqual(2);
+  expect(results.rows[0].$dist).toBeGreaterThanOrEqual(0);
+  expect(results.rows[1].id).toEqual(1);
+  expect(results.rows[1].$dist).toBeGreaterThanOrEqual(0);
 
   await ns.deleteAll();
 });

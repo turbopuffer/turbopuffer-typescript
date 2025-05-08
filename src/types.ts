@@ -42,13 +42,14 @@ export type Schema = Record<
   }
 >;
 
+export type RankBy_Vector = ["vector", "ANN", number[]];
 export type RankBy_OrderByAttribute = [string, "asc" | "desc"];
 export type RankBy_Text =
   | [string, "BM25", string | string[]]
   | ["Sum" | "Max", RankBy_Text[]]
   | ["Product", [RankBy_Text, number]]
   | ["Product", [number, RankBy_Text]];
-export type RankBy = RankBy_Text | RankBy_OrderByAttribute;
+export type RankBy = RankBy_Vector | RankBy_Text | RankBy_OrderByAttribute;
 
 export interface Consistency {
   level: "strong" | "eventual";
@@ -166,20 +167,21 @@ export interface WriteParams {
   encryption?: Encryption;
 }
 
-export type QueryResults = {
-  id: Id;
-  vector?: number[];
-  attributes?: RowAttributes;
-  dist?: number;
-  rank_by?: RankBy;
-}[];
+export type QueryRow = RowDoc & RowAttributes & {
+  $dist?: number;
+}
 
-export interface QueryMetrics extends RequestTiming {
+export type QueryResults = {
+  rows: QueryRow[];
+  performance: QueryPerformance;
+};
+
+export interface QueryPerformance extends RequestTiming {
   approx_namespace_size: number;
   cache_hit_ratio: number;
   cache_temperature: string;
-  processing_time: number;
-  query_execution_time: number;
+  server_total_ms: number;
+  query_execution_ms: number;
   exhaustive_search_count: number;
 }
 

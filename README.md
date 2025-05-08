@@ -40,15 +40,19 @@ await ns.write({
 });
 
 const results = await ns.query({
-  vector: [1, 1],
+  rank_by: ["vector", "ANN", [1, 1]],
   filters: ["numbers", "In", [2, 4]],
 });
 
 // results:
-// [
-//   { id: 2, dist: 0.010050535 },
-//   { id: 1, dist: 0.051316738 },
-// ]
+// {
+//   rows: [
+//     { id: 2, dist: 0.010050535 },
+//     { id: 1, dist: 0.051316738 },
+//   ],
+//   billing: {...},
+//   performance: {...}
+// }
 ```
 
 To run the tests,

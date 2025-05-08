@@ -7,22 +7,17 @@
 
 import { createHTTPClient } from "./createHTTPClient";
 import {
-  parseIntMetric,
-  parseFloatMetric,
-  parseServerTiming,
   shouldCompressWrite,
   TurbopufferError,
 } from "./helpers";
 import type {
   Consistency,
-  DistanceMetric,
   ExportResponse,
   Filters,
   HintCacheWarmResponse,
   HTTPClient,
   NamespaceMetadata,
   NamespacesListResult,
-  QueryMetrics,
   QueryResults,
   RankBy,
   RecallMeasurement,
@@ -131,73 +126,27 @@ export class Namespace {
   async query({
     ...params
   }: {
-    vector?: number[];
-    distance_metric?: DistanceMetric;
     top_k?: number;
-    include_vectors?: boolean;
     include_attributes?: boolean | string[];
     filters?: Filters;
     rank_by?: RankBy;
     consistency?: Consistency;
   }): Promise<QueryResults> {
-    const resultsWithMetrics = await this.queryWithMetrics(params);
-    return resultsWithMetrics.results;
-  }
-
-  /**
-   * Queries vectors and returns performance metrics along with the results.
-   * See: https://turbopuffer.com/docs/query
-   */
-  async queryWithMetrics({
-    ...params
-  }: {
-    vector?: number[];
-    distance_metric?: DistanceMetric;
-    top_k?: number;
-    include_vectors?: boolean;
-    include_attributes?: boolean | string[];
-    filters?: Filters;
-    rank_by?: RankBy;
-    consistency?: Consistency;
-  }): Promise<{
-    results: QueryResults;
-    metrics: QueryMetrics;
-  }> {
     const response = await this.client.http.doRequest<QueryResults>({
       method: "POST",
-      path: `/v1/namespaces/${this.id}/query`,
+      path: `/v2/namespaces/${this.id}/query`,
       body: params,
       retryable: true,
       compress: true,
     });
 
-    const serverTimingStr = response.headers["server-timing"];
-    const serverTiming = serverTimingStr
-      ? parseServerTiming(serverTimingStr)
-      : {};
-
-    return {
-      results: response.body!,
-      metrics: {
-        approx_namespace_size: parseIntMetric(
-          response.headers["x-turbopuffer-approx-namespace-size"],
-        ),
-        cache_hit_ratio: parseFloatMetric(serverTiming["cache.hit_ratio"]),
-        cache_temperature: serverTiming["cache.temperature"],
-        processing_time: parseIntMetric(serverTiming["processing_time.dur"]),
-        query_execution_time: parseIntMetric(
-          serverTiming["query_execution_time.dur"],
-        ),
-        exhaustive_search_count: parseIntMetric(
-          serverTiming["exhaustive_search.count"],
-        ),
-        response_time: response.request_timing.response_time,
-        body_read_time: response.request_timing.body_read_time,
-        decompress_time: response.request_timing.decompress_time,
-        deserialize_time: response.request_timing.deserialize_time,
-        compress_time: response.request_timing.compress_time,
-      },
+    const results = response.body!;
+    results.performance = {
+      ...results.performance,
+      ...response.request_timing,
     };
+
+    return results;
   }
 
   /**
