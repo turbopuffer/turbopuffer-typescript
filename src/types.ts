@@ -174,6 +174,7 @@ export type QueryRow = RowDoc & RowAttributes & {
 export type QueryResults = {
   rows: QueryRow[];
   performance: QueryPerformance;
+  billing: QueryBilling;
 };
 
 export interface QueryPerformance extends RequestTiming {
@@ -183,6 +184,11 @@ export interface QueryPerformance extends RequestTiming {
   server_total_ms: number;
   query_execution_ms: number;
   exhaustive_search_count: number;
+}
+
+export interface QueryBilling {
+  billable_logical_bytes_queried: number;
+  billable_logical_bytes_returned: number;
 }
 
 export interface HintCacheWarmResponse {

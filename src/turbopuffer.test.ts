@@ -632,7 +632,7 @@ test("sanity", async () => {
   expect(resultsWithPerformance.rows[1].id).toEqual(1);
 
   const performance = resultsWithPerformance.performance;
-  // expect(performance.approx_namespace_size).toEqual(3); // TODO: fix this
+  expect(performance.approx_namespace_size).toEqual(3);
   expect(performance.exhaustive_search_count).toEqual(3);
   expect(performance.query_execution_ms).toBeGreaterThan(10);
   expect(performance.server_total_ms).toBeGreaterThan(10);
@@ -645,6 +645,12 @@ test("sanity", async () => {
   } else {
     expect(performance.decompress_time).toBeNull;
   }
+
+  const billing = resultsWithPerformance.billing;
+  expect(billing).toEqual({
+    billable_logical_bytes_queried: 256000000,
+    billable_logical_bytes_returned: 24,
+  });
 
   const results2 = await ns.query({
     rank_by: ["vector", "ANN", [1, 1]],
