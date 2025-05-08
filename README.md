@@ -47,8 +47,8 @@ const results = await ns.query({
 // results:
 // {
 //   rows: [
-//     { id: 2, dist: 0.010050535 },
-//     { id: 1, dist: 0.051316738 },
+//     { id: 2, $dist: 0.010050535 },
+//     { id: 1, $dist: 0.051316738 },
 //   ],
 //   billing: {...},
 //   performance: {...}
