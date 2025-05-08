@@ -84,7 +84,7 @@ export function buildUrl(
 /** A helper function to determine if a status code should be retried. */
 export function statusCodeShouldRetry(statusCode?: number): boolean {
   return (
-    !statusCode || statusCode === 408 || statusCode === 429 || statusCode >= 500
+    !statusCode || statusCode === 408 || statusCode === 409 || statusCode === 429 || statusCode >= 500
   );
 }
 
