@@ -129,7 +129,7 @@ export class Namespace {
     top_k?: number;
     include_attributes?: boolean | string[];
     filters?: Filters;
-    rank_by?: RankBy;
+    rank_by: RankBy;
     consistency?: Consistency;
   }): Promise<QueryResults> {
     const response = await this.client.http.doRequest<QueryResults>({
