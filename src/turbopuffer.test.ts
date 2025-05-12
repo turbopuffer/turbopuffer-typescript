@@ -1219,11 +1219,17 @@ test("not", async () => {
   });
   expect(results.rows.length).toEqual(1);
 
-  const resultsNot = await ns.query({
+  const resultsNot0 = await ns.query({
     rank_by: ["text", "BM25", "walrus whisker"],
     filters: ["Not", ["text", "ContainsAllTokens", "marine mammals"]],
   });
-  expect(resultsNot.rows.length).toEqual(0);
+  expect(resultsNot0.rows.length).toEqual(0);
+
+  const resultsNot1 = await ns.query({
+    rank_by: ["text", "BM25", "walrus whisker"],
+    filters: ["Not", ["Not", ["text", "ContainsAllTokens", "marine mammals"]]],
+  });
+  expect(resultsNot1.rows.length).toEqual(1);
 });
 
 test("readme", async () => {
