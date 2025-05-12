@@ -72,7 +72,7 @@ export type FilterOperator =
   | "ContainsAllTokens"
   | "And"
   | "Or";
-export type FilterConnective = "And" | "Or";
+export type FilterConnective = "And" | "Or" | "Not";
 export type FilterValue = AttributeType;
 export type FilterCondition = [string, FilterOperator, FilterValue];
 export type Filters = [FilterConnective, Filters[]] | FilterCondition;
