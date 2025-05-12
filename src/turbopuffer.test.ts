@@ -1188,6 +1188,44 @@ test("product_operator", async () => {
   }
 });
 
+test("not", async () => {
+  const ns = tpuf.namespace(testNamespacePrefix + "not");
+  try {
+    await ns.deleteAll();
+  } catch (_: unknown) {
+    /* empty */
+  }
+
+  await ns.write({
+    upsert_columns: {
+      id: [1],
+      vector: [[0.1, 0.1]],
+      text: ["Walruses are large marine mammals with long tusks and whiskers"],
+    },
+    schema: {
+      text: {
+        type: "string",
+        full_text_search: {
+          stemming: true,
+        },
+      },
+    },
+    distance_metric: "cosine_distance",
+  });
+
+  const results = await ns.query({
+    rank_by: ["text", "BM25", "walrus whisker"],
+    filters: ["text", "ContainsAllTokens", "marine mammals"],
+  });
+  expect(results.rows.length).toEqual(1);
+
+  const resultsNot = await ns.query({
+    rank_by: ["text", "BM25", "walrus whisker"],
+    filters: ["Not", ["text", "ContainsAllTokens", "marine mammals"]],
+  });
+  expect(resultsNot.rows.length).toEqual(0);
+});
+
 test("readme", async () => {
   const ns = tpuf.namespace(testNamespacePrefix + "readme");
 
