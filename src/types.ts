@@ -69,16 +69,14 @@ export type FilterOperator =
   | "NotGlob"
   | "IGlob"
   | "NotIGlob"
-  | "ContainsAllTokens"
-  | "And"
-  | "Or";
+  | "ContainsAllTokens";
 export type FilterConnective = "And" | "Or";
 export type Not = "Not";
 export type FilterValue = AttributeType;
 export type FilterCondition = [string, FilterOperator, FilterValue];
 export type Filters =
   | [FilterConnective, Filters[]]
-  | [Not, FilterCondition]
+  | [Not, Filters]
   | FilterCondition;
 export interface Cmek {
   key_name: string;
