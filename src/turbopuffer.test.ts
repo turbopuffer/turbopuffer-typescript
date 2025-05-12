@@ -1230,6 +1230,35 @@ test("not", async () => {
     filters: ["Not", ["Not", ["text", "ContainsAllTokens", "marine mammals"]]],
   });
   expect(resultsNot1.rows.length).toEqual(1);
+
+  const resultsNot2 = await ns.query({
+    rank_by: ["text", "BM25", "walrus whisker"],
+    filters: [
+      "Or",
+      [
+        ["text", "ContainsAllTokens", "marine things"],
+        [
+          "Or",
+          [
+            [
+              "Not",
+              [
+                "Not",
+                [
+                  "And",
+                  [
+                    ["text", "ContainsAllTokens", "marine mammals"],
+                    ["id", "In", [0, 1, 2]],
+                  ],
+                ],
+              ],
+            ],
+          ],
+        ],
+      ],
+    ],
+  });
+  expect(resultsNot2.rows.length).toEqual(1);
 });
 
 test("readme", async () => {
