@@ -72,10 +72,14 @@ export type FilterOperator =
   | "ContainsAllTokens"
   | "And"
   | "Or";
-export type FilterConnective = "And" | "Or" | "Not";
+export type FilterConnective = "And" | "Or";
+export type Not = "Not";
 export type FilterValue = AttributeType;
 export type FilterCondition = [string, FilterOperator, FilterValue];
-export type Filters = [FilterConnective, Filters[]] | FilterCondition;
+export type Filters =
+  | [FilterConnective, Filters[]]
+  | [Not, FilterCondition]
+  | FilterCondition;
 export interface Cmek {
   key_name: string;
 }
@@ -167,9 +171,10 @@ export interface WriteParams {
   encryption?: Encryption;
 }
 
-export type QueryRow = RowDoc & RowAttributes & {
-  $dist?: number;
-}
+export type QueryRow = RowDoc &
+  RowAttributes & {
+    $dist?: number;
+  };
 
 export type QueryResults = {
   rows: QueryRow[];
