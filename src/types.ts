@@ -69,9 +69,7 @@ export type FilterOperator =
   | "NotGlob"
   | "IGlob"
   | "NotIGlob"
-  | "ContainsAllTokens"
-  | "And"
-  | "Or";
+  | "ContainsAllTokens";
 export type FilterConnective = "And" | "Or";
 export type Not = "Not";
 export type FilterValue = AttributeType;
