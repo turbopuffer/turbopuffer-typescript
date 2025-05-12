@@ -77,9 +77,9 @@ export type Not = "Not";
 export type FilterValue = AttributeType;
 export type FilterCondition = [string, FilterOperator, FilterValue];
 export type Filters =
-  | FilterCondition
+  | [FilterConnective, Filters[]]
   | [Not, Filters]
-  | [FilterConnective, Filters[]];
+  | FilterCondition;
 export interface Cmek {
   key_name: string;
 }
