@@ -126,7 +126,7 @@ export class Namespace {
   async query({
     ...params
   }: {
-    top_k?: number;
+    top_k: number;
     include_attributes?: boolean | string[];
     filters?: Filters;
     rank_by: RankBy;
