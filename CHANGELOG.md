@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.9.0-alpha.2 (2025-05-13)
+
+Full Changelog: [v0.9.0-alpha.1...v0.9.0-alpha.2](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.9.0-alpha.1...v0.9.0-alpha.2)
+
+### Chores
+
+* **package:** remove engines ([b256e5a](https://github.com/turbopuffer/turbopuffer-typescript/commit/b256e5a46544d538cae262bccb3c2daaf10c8d63))
+
 ## 0.9.0-alpha.1 (2025-05-13)
 
 Full Changelog: [v0.8.0...v0.9.0-alpha.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.8.0...v0.9.0-alpha.1)
