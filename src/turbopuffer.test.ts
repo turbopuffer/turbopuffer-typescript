@@ -1322,16 +1322,23 @@ test("readme", async () => {
 // test helper and utility methods
 
 test("test_buildBaseUrl", () => {
+  // if no protocol, add https://
   expect(buildBaseUrl("gcp-us-east4.turbopuffer.com")).toEqual(
     "https://gcp-us-east4.turbopuffer.com",
   );
-  expect(buildBaseUrl("gcp-us-east4.turbopuffer.com")).not.toEqual(
-    "https://gcp-us-east4.turbopuffer.com/",
-  );
 
+  // if any protocol (or protocol-looking string) exists, do nothing
   expect(buildBaseUrl("https://gcp-us-east4.turbopuffer.com")).toEqual(
     "https://gcp-us-east4.turbopuffer.com",
   );
+  expect(buildBaseUrl("http://gcp-us-east4.turbopuffer.com")).toEqual(
+    "http://gcp-us-east4.turbopuffer.com",
+  );
+  expect(buildBaseUrl("admin://gcp-us-east4.turbopuffer.com")).toEqual(
+    "admin://gcp-us-east4.turbopuffer.com",
+  );
+
+  // do not add trailing /
   expect(buildBaseUrl("https://gcp-us-east4.turbopuffer.com")).not.toEqual(
     "https://gcp-us-east4.turbopuffer.com/",
   );
