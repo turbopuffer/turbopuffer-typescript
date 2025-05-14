@@ -1,5 +1,5 @@
 import { Turbopuffer, RankBy, Schema, TurbopufferError } from "./index";
-import { isRuntimeFullyNodeCompatible, buildUrl } from "./helpers";
+import { isRuntimeFullyNodeCompatible, buildBaseUrl, buildUrl } from "./helpers";
 
 const tpuf = new Turbopuffer({
   apiKey: process.env.TURBOPUFFER_API_KEY!,
@@ -1320,6 +1320,23 @@ test("readme", async () => {
 });
 
 // test helper and utility methods
+
+test("test_buildBaseUrl", () => {
+  expect(buildBaseUrl("gcp-us-east4.turbopuffer.com")).toEqual(
+    "https://gcp-us-east4.turbopuffer.com",
+  );
+  expect(buildBaseUrl("gcp-us-east4.turbopuffer.com")).not.toEqual(
+    "https://gcp-us-east4.turbopuffer.com/",
+  );
+
+  expect(buildBaseUrl("https://gcp-us-east4.turbopuffer.com")).toEqual(
+    "https://gcp-us-east4.turbopuffer.com",
+  );
+  expect(buildBaseUrl("https://gcp-us-east4.turbopuffer.com")).not.toEqual(
+    "https://gcp-us-east4.turbopuffer.com/",
+  );
+});
+
 test("test_buildUrl", () => {
   /** baseUrl w/o path **/
   /* w/o path + w/o query */
