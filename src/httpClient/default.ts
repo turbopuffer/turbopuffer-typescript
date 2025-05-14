@@ -6,6 +6,7 @@ import {
   statusCodeShouldRetry,
   delay,
   make_request_timing,
+  buildBaseUrl,
   buildUrl,
 } from "../helpers";
 
@@ -36,7 +37,7 @@ export default class DefaultHTTPClient implements HTTPClient {
     warmConnections: number,
     compression: boolean,
   ) {
-    this.baseUrl = baseUrl;
+    this.baseUrl = buildBaseUrl(baseUrl);
     this.origin = new URL(baseUrl);
     this.origin.pathname = "";
     this.apiKey = apiKey;
