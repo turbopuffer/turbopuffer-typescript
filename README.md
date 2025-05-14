@@ -42,6 +42,7 @@ await ns.write({
 const results = await ns.query({
   rank_by: ["vector", "ANN", [1, 1]],
   filters: ["numbers", "In", [2, 4]],
+  top_k: 10,
 });
 
 // results:
