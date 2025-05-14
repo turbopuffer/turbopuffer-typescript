@@ -55,6 +55,12 @@ export class TurbopufferError extends Error {
   }
 }
 
+export function buildBaseUrl(baseUrl: string) {
+  const url = baseUrl.trim();
+  const hasProtocol = url.includes("://");
+  return hasProtocol ? url : `https://${url}`;
+}
+
 export function buildUrl(
   baseUrl: string,
   path: string,

@@ -15,6 +15,7 @@ import {
   statusCodeShouldRetry,
   delay,
   make_request_timing,
+  buildBaseUrl,
   buildUrl,
 } from "../helpers";
 
@@ -22,7 +23,7 @@ const gzipAsync = promisify(gzip);
 const gunzipAsync = promisify(gunzip);
 
 function convertHeadersType(
-  headers: Record<string, string | string[] | undefined>,
+  headers: Record<string, string | string[] | undefined>
 ): Record<string, string> {
   for (const key in headers) {
     const v = headers[key];
@@ -36,7 +37,7 @@ function convertHeadersType(
 }
 
 async function consumeResponseText(
-  response: Dispatcher.ResponseData,
+  response: Dispatcher.ResponseData
 ): Promise<TpufResponseWithMetadata> {
   if (response.headers["content-encoding"] === "gzip") {
     const body_buffer = await response.body.arrayBuffer();
@@ -67,10 +68,10 @@ export default class NodeHTTPClient implements HTTPClient {
     connectTimeout: number,
     idleTimeout: number,
     warmConnections: number,
-    compression: boolean,
+    compression: boolean
   ) {
-    this.baseUrl = baseUrl;
-    this.origin = new URL(baseUrl);
+    this.baseUrl = buildBaseUrl(baseUrl);
+    this.origin = new URL(this.baseUrl);
     this.origin.pathname = "";
     this.apiKey = apiKey;
     this.compression = compression;
@@ -185,7 +186,7 @@ export default class NodeHTTPClient implements HTTPClient {
           message ?? `http error ${response.statusCode}`,
           {
             status: response.statusCode,
-          },
+          }
         );
       }
       if (
