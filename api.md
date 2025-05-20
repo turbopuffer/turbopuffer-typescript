@@ -19,6 +19,7 @@ Types:
 - <code><a href="./src/resources/namespaces.ts">FullTextSearchConfig</a></code>
 - <code><a href="./src/resources/namespaces.ts">ID</a></code>
 - <code><a href="./src/resources/namespaces.ts">NamespaceDeleteAllResponse</a></code>
+- <code><a href="./src/resources/namespaces.ts">NamespaceExportResponse</a></code>
 - <code><a href="./src/resources/namespaces.ts">NamespaceGetSchemaResponse</a></code>
 - <code><a href="./src/resources/namespaces.ts">NamespaceMultiQueryResponse</a></code>
 - <code><a href="./src/resources/namespaces.ts">NamespaceQueryResponse</a></code>
@@ -28,6 +29,7 @@ Types:
 Methods:
 
 - <code title="delete /v2/namespaces/{namespace}">client.namespaces.<a href="./src/resources/namespaces.ts">deleteAll</a>({ ...params }) -> NamespaceDeleteAllResponse</code>
+- <code title="get /v1/namespaces/{namespace}">client.namespaces.<a href="./src/resources/namespaces.ts">export</a>({ ...params }) -> NamespaceExportResponse</code>
 - <code title="get /v1/namespaces/{namespace}/schema">client.namespaces.<a href="./src/resources/namespaces.ts">getSchema</a>({ ...params }) -> NamespaceGetSchemaResponse</code>
 - <code title="post /v2/namespaces/{namespace}/query?overload=multi">client.namespaces.<a href="./src/resources/namespaces.ts">multiQuery</a>({ ...params }) -> NamespaceMultiQueryResponse</code>
 - <code title="post /v2/namespaces/{namespace}/query">client.namespaces.<a href="./src/resources/namespaces.ts">query</a>({ ...params }) -> NamespaceQueryResponse</code>
