@@ -301,7 +301,14 @@ export namespace NamespaceMultiQueryParams {
      */
     include_attributes?: boolean | Array<string>;
 
-    rank_by?: unknown;
+    rank_by?:
+      | Array<unknown>
+      | Array<unknown>
+      | Array<unknown>
+      | Array<unknown>
+      | Array<unknown>
+      | Array<unknown>
+      | Array<unknown>;
 
     /**
      * The number of results to return.
@@ -339,7 +346,14 @@ export interface NamespaceQueryParams {
   /**
    * Body param:
    */
-  rank_by?: unknown;
+  rank_by?:
+    | Array<unknown>
+    | Array<unknown>
+    | Array<unknown>
+    | Array<unknown>
+    | Array<unknown>
+    | Array<unknown>
+    | Array<unknown>;
 
   /**
    * Body param: The number of results to return.

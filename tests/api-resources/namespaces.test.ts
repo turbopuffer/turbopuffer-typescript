@@ -54,7 +54,13 @@ describe('resource namespaces', () => {
       namespace: 'namespace',
       consistency: { level: 'strong' },
       queries: [
-        { distance_metric: 'cosine_distance', filters: {}, include_attributes: true, rank_by: {}, top_k: 0 },
+        {
+          distance_metric: 'cosine_distance',
+          filters: {},
+          include_attributes: true,
+          rank_by: [{}],
+          top_k: 0,
+        },
       ],
       vector_encoding: 'float',
     });
@@ -78,7 +84,7 @@ describe('resource namespaces', () => {
       distance_metric: 'cosine_distance',
       filters: {},
       include_attributes: true,
-      rank_by: {},
+      rank_by: [{}],
       top_k: 0,
       vector_encoding: 'float',
     });
