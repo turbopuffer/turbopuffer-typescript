@@ -27,8 +27,7 @@ import * as API from './resources/index';
 import * as TopLevelAPI from './resources/top-level';
 import {
   ListNamespacesParams as TopLevelAPIListNamespacesParams,
-  ListNamespacesResponse as TopLevelAPIListNamespacesResponse,
-  ListNamespacesResponsesExport,
+  NamespaceSummariesListNamespaces,
   NamespaceSummary,
 } from './resources/top-level';
 import { APIPromise } from './core/api-promise';
@@ -44,8 +43,6 @@ import {
   ID,
   NamespaceDeleteAllParams,
   NamespaceDeleteAllResponse,
-  NamespaceExportParams,
-  NamespaceExportResponse,
   NamespaceGetSchemaParams,
   NamespaceGetSchemaResponse,
   NamespaceMultiQueryParams,
@@ -233,8 +230,8 @@ export class Turbopuffer {
   listNamespaces(
     query: TopLevelAPI.ListNamespacesParams | null | undefined = {},
     options?: RequestOptions,
-  ): Pagination.PagePromise<ListNamespacesResponsesExport, TopLevelAPI.ListNamespacesResponse> {
-    return this.getAPIList('/v1/namespaces', Pagination.Export<TopLevelAPI.ListNamespacesResponse>, {
+  ): Pagination.PagePromise<NamespaceSummariesListNamespaces, TopLevelAPI.NamespaceSummary> {
+    return this.getAPIList('/v1/namespaces', Pagination.ListNamespaces<TopLevelAPI.NamespaceSummary>, {
       query,
       ...options,
     });
@@ -785,8 +782,7 @@ export declare namespace Turbopuffer {
 
   export {
     type NamespaceSummary as NamespaceSummary,
-    type TopLevelAPIListNamespacesResponse as ListNamespacesResponse,
-    type ListNamespacesResponsesExport as ListNamespacesResponsesExport,
+    type NamespaceSummariesListNamespaces as NamespaceSummariesListNamespaces,
     type TopLevelAPIListNamespacesParams as ListNamespacesParams,
   };
 
@@ -799,14 +795,12 @@ export declare namespace Turbopuffer {
     type FullTextSearchConfig as FullTextSearchConfig,
     type ID as ID,
     type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
-    type NamespaceExportResponse as NamespaceExportResponse,
     type NamespaceGetSchemaResponse as NamespaceGetSchemaResponse,
     type NamespaceMultiQueryResponse as NamespaceMultiQueryResponse,
     type NamespaceQueryResponse as NamespaceQueryResponse,
     type NamespaceUpdateSchemaResponse as NamespaceUpdateSchemaResponse,
     type NamespaceWriteResponse as NamespaceWriteResponse,
     type NamespaceDeleteAllParams as NamespaceDeleteAllParams,
-    type NamespaceExportParams as NamespaceExportParams,
     type NamespaceGetSchemaParams as NamespaceGetSchemaParams,
     type NamespaceMultiQueryParams as NamespaceMultiQueryParams,
     type NamespaceQueryParams as NamespaceQueryParams,
