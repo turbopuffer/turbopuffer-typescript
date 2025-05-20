@@ -18,6 +18,12 @@ import * as Pagination from './core/pagination';
 import { AbstractPage, type ListNamespacesParams, ListNamespacesResponse } from './core/pagination';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
+import * as TopLevelAPI from './resources/top-level';
+import {
+  ListNamespacesParams as TopLevelAPIListNamespacesParams,
+  NamespaceSummariesListNamespaces,
+  NamespaceSummary,
+} from './resources/top-level';
 import { APIPromise } from './core/api-promise';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
@@ -27,16 +33,16 @@ import {
   DistanceMetric,
   DocumentColumns,
   DocumentRow,
-  DocumentRowWithScore,
   FullTextSearchConfig,
   ID,
+  NamespaceDeleteAllParams,
   NamespaceDeleteAllResponse,
+  NamespaceGetSchemaParams,
   NamespaceGetSchemaResponse,
-  NamespaceListParams,
+  NamespaceMultiQueryParams,
+  NamespaceMultiQueryResponse,
   NamespaceQueryParams,
   NamespaceQueryResponse,
-  NamespaceSummariesListNamespaces,
-  NamespaceSummary,
   NamespaceWriteParams,
   NamespaceWriteResponse,
   Namespaces,
@@ -50,6 +56,8 @@ export interface ClientOptions {
    * API key used for authentication
    */
   apiKey?: string | undefined;
+
+  defaultNamespace?: string | null | undefined;
 
   /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
@@ -123,6 +131,7 @@ export interface ClientOptions {
  */
 export class Turbopuffer {
   apiKey: string;
+  defaultNamespace: string | null;
 
   baseURL: string;
   maxRetries: number;
@@ -140,6 +149,7 @@ export class Turbopuffer {
    * API Client for interfacing with the Turbopuffer API.
    *
    * @param {string | undefined} [opts.apiKey=process.env['TURBOPUFFER_API_KEY'] ?? undefined]
+   * @param {string | null | undefined} [opts.defaultNamespace]
    * @param {string} [opts.baseURL=process.env['TURBOPUFFER_BASE_URL'] ?? https://api.turbopuffer.com] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
@@ -151,6 +161,7 @@ export class Turbopuffer {
   constructor({
     baseURL = readEnv('TURBOPUFFER_BASE_URL'),
     apiKey = readEnv('TURBOPUFFER_API_KEY'),
+    defaultNamespace = null,
     ...opts
   }: ClientOptions = {}) {
     if (apiKey === undefined) {
@@ -161,6 +172,7 @@ export class Turbopuffer {
 
     const options: ClientOptions = {
       apiKey,
+      defaultNamespace,
       ...opts,
       baseURL: baseURL || `https://api.turbopuffer.com`,
     };
@@ -183,6 +195,7 @@ export class Turbopuffer {
     this._options = options;
 
     this.apiKey = apiKey;
+    this.defaultNamespace = defaultNamespace;
   }
 
   /**
@@ -198,6 +211,20 @@ export class Turbopuffer {
       logLevel: this.logLevel,
       fetchOptions: this.fetchOptions,
       apiKey: this.apiKey,
+      defaultNamespace: this.defaultNamespace,
+      ...options,
+    });
+  }
+
+  /**
+   * List namespaces.
+   */
+  listNamespaces(
+    query: TopLevelAPI.ListNamespacesParams | null | undefined = {},
+    options?: RequestOptions,
+  ): Pagination.PagePromise<NamespaceSummariesListNamespaces, TopLevelAPI.NamespaceSummary> {
+    return this.getAPIList('/v1/namespaces', Pagination.ListNamespaces<TopLevelAPI.NamespaceSummary>, {
+      query,
       ...options,
     });
   }
@@ -743,21 +770,27 @@ export declare namespace Turbopuffer {
   };
 
   export {
+    type NamespaceSummary as NamespaceSummary,
+    type NamespaceSummariesListNamespaces as NamespaceSummariesListNamespaces,
+    type TopLevelAPIListNamespacesParams as ListNamespacesParams,
+  };
+
+  export {
     Namespaces as Namespaces,
     type AttributeSchema as AttributeSchema,
     type DistanceMetric as DistanceMetric,
     type DocumentColumns as DocumentColumns,
     type DocumentRow as DocumentRow,
-    type DocumentRowWithScore as DocumentRowWithScore,
     type FullTextSearchConfig as FullTextSearchConfig,
     type ID as ID,
-    type NamespaceSummary as NamespaceSummary,
     type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
     type NamespaceGetSchemaResponse as NamespaceGetSchemaResponse,
+    type NamespaceMultiQueryResponse as NamespaceMultiQueryResponse,
     type NamespaceQueryResponse as NamespaceQueryResponse,
     type NamespaceWriteResponse as NamespaceWriteResponse,
-    type NamespaceSummariesListNamespaces as NamespaceSummariesListNamespaces,
-    type NamespaceListParams as NamespaceListParams,
+    type NamespaceDeleteAllParams as NamespaceDeleteAllParams,
+    type NamespaceGetSchemaParams as NamespaceGetSchemaParams,
+    type NamespaceMultiQueryParams as NamespaceMultiQueryParams,
     type NamespaceQueryParams as NamespaceQueryParams,
     type NamespaceWriteParams as NamespaceWriteParams,
   };

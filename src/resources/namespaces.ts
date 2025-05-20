@@ -3,61 +3,65 @@
 import { APIResource } from '../core/resource';
 import * as NamespacesAPI from './namespaces';
 import { APIPromise } from '../core/api-promise';
-import { ListNamespaces, type ListNamespacesParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
 export class Namespaces extends APIResource {
   /**
-   * List namespaces.
-   */
-  list(
-    query: NamespaceListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): PagePromise<NamespaceSummariesListNamespaces, NamespaceSummary> {
-    return this._client.getAPIList('/v1/namespaces', ListNamespaces<NamespaceSummary>, { query, ...options });
-  }
-
-  /**
    * Delete namespace.
    */
-  deleteAll(namespace: string, options?: RequestOptions): APIPromise<NamespaceDeleteAllResponse> {
+  deleteAll(
+    params: NamespaceDeleteAllParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<NamespaceDeleteAllResponse> {
+    const { namespace = this._client.defaultNamespace } = params ?? {};
     return this._client.delete(path`/v2/namespaces/${namespace}`, options);
   }
 
   /**
    * Get namespace schema.
    */
-  getSchema(namespace: string, options?: RequestOptions): APIPromise<NamespaceGetSchemaResponse> {
+  getSchema(
+    params: NamespaceGetSchemaParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<NamespaceGetSchemaResponse> {
+    const { namespace = this._client.defaultNamespace } = params ?? {};
     return this._client.get(path`/v1/namespaces/${namespace}/schema`, options);
+  }
+
+  /**
+   * Send multiple queries at once.
+   */
+  multiQuery(
+    params: NamespaceMultiQueryParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<NamespaceMultiQueryResponse> {
+    const { namespace = this._client.defaultNamespace, ...body } = params ?? {};
+    return this._client.post(path`/v2/namespaces/${namespace}/query?overload=multi`, { body, ...options });
   }
 
   /**
    * Query, filter, full-text search and vector search documents.
    */
   query(
-    namespace: string,
-    body: NamespaceQueryParams | null | undefined = {},
+    params: NamespaceQueryParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<NamespaceQueryResponse> {
-    return this._client.post(path`/v1/namespaces/${namespace}/query`, { body, ...options });
+    const { namespace = this._client.defaultNamespace, ...body } = params ?? {};
+    return this._client.post(path`/v2/namespaces/${namespace}/query`, { body, ...options });
   }
 
   /**
    * Create, update, or delete documents.
    */
   write(
-    namespace: string,
-    params: NamespaceWriteParams | null | undefined = undefined,
+    params: NamespaceWriteParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<NamespaceWriteResponse> {
-    const { operation } = params ?? {};
-    return this._client.post(path`/v2/namespaces/${namespace}`, { body: operation, ...options });
+    const { namespace = this._client.defaultNamespace, ...body } = params ?? {};
+    return this._client.post(path`/v2/namespaces/${namespace}`, { body, ...options });
   }
 }
-
-// Namespace pagination.
-export type NamespaceSummariesListNamespaces = ListNamespaces<NamespaceSummary>;
 
 /**
  * The schema for an attribute attached to a document.
@@ -82,11 +86,13 @@ export interface AttributeSchema {
    * - `uint` - An unsigned integer.
    * - `uuid` - A UUID.
    * - `bool` - A boolean.
+   * - `datetime` - A date and time.
    * - `[]string` - An array of strings.
    * - `[]uint` - An array of unsigned integers.
    * - `[]uuid` - An array of UUIDs.
+   * - `[]datetime` - An array of date and time values.
    */
-  type?: 'string' | 'uint' | 'uuid' | 'bool' | '[]string' | '[]uint' | '[]uuid';
+  type?: 'string' | 'uint' | 'uuid' | 'bool' | 'datetime' | '[]string' | '[]uint' | '[]uuid' | '[]datetime';
 }
 
 /**
@@ -107,7 +113,7 @@ export interface DocumentColumns {
    */
   id?: Array<ID>;
 
-  [k: string]: Array<Record<string, unknown>> | Array<ID> | undefined;
+  [k: string]: Array<unknown> | Array<ID> | undefined;
 }
 
 /**
@@ -125,18 +131,6 @@ export interface DocumentRow {
   vector?: Array<number> | string | null;
 
   [k: string]: unknown;
-}
-
-/**
- * A single document, in a row-based format.
- */
-export interface DocumentRowWithScore extends DocumentRow {
-  /**
-   * For vector search, the distance between the query vector and the document
-   * vector. For BM25 full-text search, the score of the document. Not present for
-   * other types of queries.
-   */
-  dist?: number;
 }
 
 /**
@@ -191,16 +185,6 @@ export interface FullTextSearchConfig {
 export type ID = string | number;
 
 /**
- * A summary of a namespace.
- */
-export interface NamespaceSummary {
-  /**
-   * The namespace ID.
-   */
-  id: string;
-}
-
-/**
  * The response to a successful namespace deletion request.
  */
 export interface NamespaceDeleteAllResponse {
@@ -213,12 +197,31 @@ export interface NamespaceDeleteAllResponse {
 /**
  * The response to a successful namespace schema request.
  */
-export type NamespaceGetSchemaResponse = Record<string, Array<AttributeSchema>>;
+export type NamespaceGetSchemaResponse = Record<string, AttributeSchema>;
+
+export interface NamespaceMultiQueryResponse {
+  results: Array<NamespaceMultiQueryResponse.Result>;
+}
+
+export namespace NamespaceMultiQueryResponse {
+  /**
+   * The result of a query.
+   */
+  export interface Result {
+    aggregations?: Array<Record<string, unknown>>;
+
+    rows?: Array<NamespacesAPI.DocumentRow>;
+  }
+}
 
 /**
- * The response to a successful query request.
+ * The result of a query.
  */
-export type NamespaceQueryResponse = Array<DocumentRowWithScore>;
+export interface NamespaceQueryResponse {
+  aggregations?: Array<Record<string, unknown>>;
+
+  rows?: Array<DocumentRow>;
+}
 
 /**
  * The response to a successful upsert request.
@@ -230,61 +233,123 @@ export interface NamespaceWriteResponse {
   status: 'OK';
 }
 
-export interface NamespaceListParams extends ListNamespacesParams {
+export interface NamespaceDeleteAllParams {
   /**
-   * Limit the number of results per page.
+   * The name of the namespace.
    */
-  page_size?: number;
+  namespace?: string;
+}
+
+export interface NamespaceGetSchemaParams {
+  /**
+   * The name of the namespace.
+   */
+  namespace?: string;
+}
+
+export interface NamespaceMultiQueryParams {
+  /**
+   * Path param: The name of the namespace.
+   */
+  namespace?: string;
 
   /**
-   * Retrieve only the namespaces that match the prefix.
+   * Body param: The consistency level for a query.
    */
-  prefix?: string;
+  consistency?: NamespaceMultiQueryParams.Consistency;
+
+  /**
+   * Body param:
+   */
+  queries?: Array<NamespaceMultiQueryParams.Query>;
+
+  /**
+   * Body param: The encoding to use for vectors in the response.
+   */
+  vector_encoding?: 'float' | 'base64';
+}
+
+export namespace NamespaceMultiQueryParams {
+  /**
+   * The consistency level for a query.
+   */
+  export interface Consistency {
+    /**
+     * The query's consistency level.
+     *
+     * - `strong` - Strong consistency. Requires a round-trip to object storage to
+     *   fetch the latest writes.
+     * - `eventual` - Eventual consistency. Does not require a round-trip to object
+     *   storage, but may not see the latest writes.
+     */
+    level?: 'strong' | 'eventual';
+  }
+
+  /**
+   * Query, filter, full-text search and vector search documents.
+   */
+  export interface Query {
+    /**
+     * A function used to calculate vector similarity.
+     */
+    distance_metric?: NamespacesAPI.DistanceMetric;
+
+    filters?: unknown;
+
+    /**
+     * Whether to include attributes in the response.
+     */
+    include_attributes?: boolean | Array<string>;
+
+    rank_by?: unknown;
+
+    /**
+     * The number of results to return.
+     */
+    top_k?: number;
+  }
 }
 
 export interface NamespaceQueryParams {
   /**
-   * The consistency level for a query.
+   * Path param: The name of the namespace.
+   */
+  namespace?: string;
+
+  /**
+   * Body param: The consistency level for a query.
    */
   consistency?: NamespaceQueryParams.Consistency;
 
   /**
-   * A function used to calculate vector similarity.
+   * Body param: A function used to calculate vector similarity.
    */
   distance_metric?: DistanceMetric;
 
   /**
-   * Exact filters for attributes to refine search results for. Think of it as a SQL
-   * WHERE clause.
+   * Body param:
    */
   filters?: unknown;
 
   /**
-   * Whether to include attributes in the response.
+   * Body param: Whether to include attributes in the response.
    */
   include_attributes?: boolean | Array<string>;
 
   /**
-   * Whether to return vectors for the search results. Vectors are large and slow to
-   * deserialize on the client, so use this option only if you need them.
-   */
-  include_vectors?: boolean;
-
-  /**
-   * The attribute to rank the results by. Cannot be specified with `vector`.
+   * Body param:
    */
   rank_by?: unknown;
 
   /**
-   * The number of results to return.
+   * Body param: The number of results to return.
    */
   top_k?: number;
 
   /**
-   * A vector to search for. It must have the same number of dimensions as the
-   * vectors in the namespace. Cannot be specified with `rank_by`.
+   * Body param: The encoding to use for vectors in the response.
    */
-  vector?: Array<number>;
+  vector_encoding?: 'float' | 'base64';
 }
 
 export namespace NamespaceQueryParams {
@@ -306,63 +371,56 @@ export namespace NamespaceQueryParams {
 
 export interface NamespaceWriteParams {
   /**
-   * Write documents.
+   * Path param: The name of the namespace.
    */
-  operation?:
-    | NamespaceWriteParams.WriteDocuments
-    | NamespaceWriteParams.CopyFromNamespace
-    | NamespaceWriteParams.DeleteByFilter;
-}
-
-export namespace NamespaceWriteParams {
-  /**
-   * Write documents.
-   */
-  export interface WriteDocuments {
-    /**
-     * A function used to calculate vector similarity.
-     */
-    distance_metric?: NamespacesAPI.DistanceMetric;
-
-    /**
-     * A list of documents in columnar format. The keys are the column names.
-     */
-    patch_columns?: NamespacesAPI.DocumentColumns;
-
-    patch_rows?: Array<NamespacesAPI.DocumentRow>;
-
-    /**
-     * The schema of the attributes attached to the documents.
-     */
-    schema?: Record<string, Array<NamespacesAPI.AttributeSchema>>;
-
-    /**
-     * A list of documents in columnar format. The keys are the column names.
-     */
-    upsert_columns?: NamespacesAPI.DocumentColumns;
-
-    upsert_rows?: Array<NamespacesAPI.DocumentRow>;
-  }
+  namespace?: string;
 
   /**
-   * Copy documents from another namespace.
+   * Body param: The namespace to copy documents from.
    */
-  export interface CopyFromNamespace {
-    /**
-     * The namespace to copy documents from.
-     */
-    copy_from_namespace: string;
-  }
+  copy_from_namespace?: string;
 
   /**
-   * Delete documents by filter.
+   * Body param: The filter specifying which documents to delete.
    */
-  export interface DeleteByFilter {
-    /**
-     * The filter specifying which documents to delete.
-     */
-    delete_by_filter: unknown;
-  }
+  delete_by_filter?: unknown;
+
+  /**
+   * Body param:
+   */
+  deletes?: Array<ID>;
+
+  /**
+   * Body param: A function used to calculate vector similarity.
+   */
+  distance_metric?: DistanceMetric;
+
+  /**
+   * Body param: A list of documents in columnar format. The keys are the column
+   * names.
+   */
+  patch_columns?: DocumentColumns;
+
+  /**
+   * Body param:
+   */
+  patch_rows?: Array<DocumentRow>;
+
+  /**
+   * Body param: The schema of the attributes attached to the documents.
+   */
+  schema?: Record<string, AttributeSchema>;
+
+  /**
+   * Body param: A list of documents in columnar format. The keys are the column
+   * names.
+   */
+  upsert_columns?: DocumentColumns;
+
+  /**
+   * Body param:
+   */
+  upsert_rows?: Array<DocumentRow>;
 }
 
 export declare namespace Namespaces {
@@ -371,16 +429,16 @@ export declare namespace Namespaces {
     type DistanceMetric as DistanceMetric,
     type DocumentColumns as DocumentColumns,
     type DocumentRow as DocumentRow,
-    type DocumentRowWithScore as DocumentRowWithScore,
     type FullTextSearchConfig as FullTextSearchConfig,
     type ID as ID,
-    type NamespaceSummary as NamespaceSummary,
     type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
     type NamespaceGetSchemaResponse as NamespaceGetSchemaResponse,
+    type NamespaceMultiQueryResponse as NamespaceMultiQueryResponse,
     type NamespaceQueryResponse as NamespaceQueryResponse,
     type NamespaceWriteResponse as NamespaceWriteResponse,
-    type NamespaceSummariesListNamespaces as NamespaceSummariesListNamespaces,
-    type NamespaceListParams as NamespaceListParams,
+    type NamespaceDeleteAllParams as NamespaceDeleteAllParams,
+    type NamespaceGetSchemaParams as NamespaceGetSchemaParams,
+    type NamespaceMultiQueryParams as NamespaceMultiQueryParams,
     type NamespaceQueryParams as NamespaceQueryParams,
     type NamespaceWriteParams as NamespaceWriteParams,
   };
