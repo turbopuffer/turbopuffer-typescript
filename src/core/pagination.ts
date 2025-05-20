@@ -108,6 +108,8 @@ export class PagePromise<
 }
 
 export interface ExportResponse<Item> {
+  ids: Array<Item>;
+
   next_cursor: string;
 }
 
@@ -119,6 +121,8 @@ export interface ExportParams {
  * Document pagination.
  */
 export class Export<Item> extends AbstractPage<Item> implements ExportResponse<Item> {
+  ids: Array<Item>;
+
   next_cursor: string;
 
   constructor(
@@ -129,11 +133,12 @@ export class Export<Item> extends AbstractPage<Item> implements ExportResponse<I
   ) {
     super(client, response, body, options);
 
+    this.ids = body.ids || [];
     this.next_cursor = body.next_cursor || '';
   }
 
   getPaginatedItems(): Item[] {
-    return this.data;
+    return this.ids ?? [];
   }
 
   nextPageRequestOptions(): PageRequestOptions | null {
