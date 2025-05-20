@@ -23,21 +23,6 @@ describe('resource namespaces', () => {
     const response = await client.namespaces.deleteAll({ namespace: 'namespace' });
   });
 
-  test('export: only required params', async () => {
-    const responsePromise = client.namespaces.export({ namespace: 'namespace' });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  test('export: required and optional params', async () => {
-    const response = await client.namespaces.export({ namespace: 'namespace', cursor: 'cursor' });
-  });
-
   test('getSchema: only required params', async () => {
     const responsePromise = client.namespaces.getSchema({ namespace: 'namespace' });
     const rawResponse = await responsePromise.asResponse();
