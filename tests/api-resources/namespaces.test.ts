@@ -23,6 +23,21 @@ describe('resource namespaces', () => {
     const response = await client.namespaces.deleteAll({ namespace: 'namespace' });
   });
 
+  test('export: only required params', async () => {
+    const responsePromise = client.namespaces.export({ namespace: 'namespace' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('export: required and optional params', async () => {
+    const response = await client.namespaces.export({ namespace: 'namespace', cursor: 'cursor' });
+  });
+
   test('getSchema: only required params', async () => {
     const responsePromise = client.namespaces.getSchema({ namespace: 'namespace' });
     const rawResponse = await responsePromise.asResponse();
@@ -56,7 +71,7 @@ describe('resource namespaces', () => {
       queries: [
         {
           distance_metric: 'cosine_distance',
-          filters: {},
+          filters: [{}],
           include_attributes: true,
           rank_by: [{}],
           top_k: 0,
@@ -82,11 +97,29 @@ describe('resource namespaces', () => {
       namespace: 'namespace',
       consistency: { level: 'strong' },
       distance_metric: 'cosine_distance',
-      filters: {},
+      filters: [{}],
       include_attributes: true,
       rank_by: [{}],
       top_k: 0,
       vector_encoding: 'float',
+    });
+  });
+
+  test('updateSchema: only required params', async () => {
+    const responsePromise = client.namespaces.updateSchema({ namespace: 'namespace' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  test('updateSchema: required and optional params', async () => {
+    const response = await client.namespaces.updateSchema({
+      namespace: 'namespace',
+      body: { foo: { filterable: true, full_text_search: true, type: 'string' } },
     });
   });
 
