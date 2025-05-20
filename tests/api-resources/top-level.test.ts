@@ -8,8 +8,7 @@ const client = new Turbopuffer({
 });
 
 describe('top level methods', () => {
-  // skipped: tests are disabled for the time being
-  test.skip('listNamespaces', async () => {
+  test('listNamespaces', async () => {
     const responsePromise = client.listNamespaces();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -20,8 +19,7 @@ describe('top level methods', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // skipped: tests are disabled for the time being
-  test.skip('listNamespaces: request options and params are passed correctly', async () => {
+  test('listNamespaces: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.listNamespaces(
