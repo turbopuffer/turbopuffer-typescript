@@ -15,13 +15,20 @@ import * as Opts from './internal/request-options';
 import { VERSION } from './version';
 import * as Errors from './core/error';
 import * as Pagination from './core/pagination';
-import { AbstractPage, type ListNamespacesParams, ListNamespacesResponse } from './core/pagination';
+import {
+  AbstractPage,
+  type ExportParams,
+  ExportResponse,
+  type ListNamespacesParams,
+  ListNamespacesResponse,
+} from './core/pagination';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import * as TopLevelAPI from './resources/top-level';
 import {
   ListNamespacesParams as TopLevelAPIListNamespacesParams,
-  NamespaceSummariesListNamespaces,
+  ListNamespacesResponse as TopLevelAPIListNamespacesResponse,
+  ListNamespacesResponsesExport,
   NamespaceSummary,
 } from './resources/top-level';
 import { APIPromise } from './core/api-promise';
@@ -222,8 +229,8 @@ export class Turbopuffer {
   listNamespaces(
     query: TopLevelAPI.ListNamespacesParams | null | undefined = {},
     options?: RequestOptions,
-  ): Pagination.PagePromise<NamespaceSummariesListNamespaces, TopLevelAPI.NamespaceSummary> {
-    return this.getAPIList('/v1/namespaces', Pagination.ListNamespaces<TopLevelAPI.NamespaceSummary>, {
+  ): Pagination.PagePromise<ListNamespacesResponsesExport, TopLevelAPI.ListNamespacesResponse> {
+    return this.getAPIList('/v1/namespaces', Pagination.Export<TopLevelAPI.ListNamespacesResponse>, {
       query,
       ...options,
     });
@@ -763,6 +770,9 @@ Turbopuffer.Namespaces = Namespaces;
 export declare namespace Turbopuffer {
   export type RequestOptions = Opts.RequestOptions;
 
+  export import Export = Pagination.Export;
+  export { type ExportParams as ExportParams, type ExportResponse as ExportResponse };
+
   export import ListNamespaces = Pagination.ListNamespaces;
   export {
     type ListNamespacesParams as ListNamespacesParams,
@@ -771,7 +781,8 @@ export declare namespace Turbopuffer {
 
   export {
     type NamespaceSummary as NamespaceSummary,
-    type NamespaceSummariesListNamespaces as NamespaceSummariesListNamespaces,
+    type TopLevelAPIListNamespacesResponse as ListNamespacesResponse,
+    type ListNamespacesResponsesExport as ListNamespacesResponsesExport,
     type TopLevelAPIListNamespacesParams as ListNamespacesParams,
   };
 

@@ -21,6 +21,7 @@ export {
 } from './namespaces';
 export {
   type NamespaceSummary,
+  type ListNamespacesResponse,
   type ListNamespacesParams,
-  type NamespaceSummariesListNamespaces,
+  type ListNamespacesResponsesExport,
 } from './top-level';
