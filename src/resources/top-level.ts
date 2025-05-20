@@ -1,9 +1,12 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { Export, type ExportParams } from '../core/pagination';
+import {
+  ListNamespaces,
+  type ListNamespacesParams as PaginationListNamespacesParams,
+} from '../core/pagination';
 
-// Document pagination.
-export type ListNamespacesResponsesExport = Export<ListNamespacesResponse>;
+// Namespace pagination.
+export type NamespaceSummariesListNamespaces = ListNamespaces<NamespaceSummary>;
 
 /**
  * A summary of a namespace.
@@ -15,19 +18,7 @@ export interface NamespaceSummary {
   id: string;
 }
 
-export interface ListNamespacesResponse {
-  /**
-   * The list of namespaces.
-   */
-  namespaces?: Array<NamespaceSummary>;
-
-  /**
-   * The cursor to use to retrieve the next page of results.
-   */
-  next_cursor?: string;
-}
-
-export interface ListNamespacesParams extends ExportParams {
+export interface ListNamespacesParams extends PaginationListNamespacesParams {
   /**
    * Limit the number of results per page.
    */
@@ -42,8 +33,7 @@ export interface ListNamespacesParams extends ExportParams {
 export declare namespace TopLevel {
   export {
     type NamespaceSummary as NamespaceSummary,
-    type ListNamespacesResponse as ListNamespacesResponse,
-    type ListNamespacesResponsesExport as ListNamespacesResponsesExport,
+    type NamespaceSummariesListNamespaces as NamespaceSummariesListNamespaces,
     type ListNamespacesParams as ListNamespacesParams,
   };
 }

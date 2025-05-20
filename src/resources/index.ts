@@ -9,14 +9,12 @@ export {
   type FullTextSearchConfig,
   type ID,
   type NamespaceDeleteAllResponse,
-  type NamespaceExportResponse,
   type NamespaceGetSchemaResponse,
   type NamespaceMultiQueryResponse,
   type NamespaceQueryResponse,
   type NamespaceUpdateSchemaResponse,
   type NamespaceWriteResponse,
   type NamespaceDeleteAllParams,
-  type NamespaceExportParams,
   type NamespaceGetSchemaParams,
   type NamespaceMultiQueryParams,
   type NamespaceQueryParams,
@@ -25,7 +23,6 @@ export {
 } from './namespaces';
 export {
   type NamespaceSummary,
-  type ListNamespacesResponse,
   type ListNamespacesParams,
-  type ListNamespacesResponsesExport,
+  type NamespaceSummariesListNamespaces,
 } from './top-level';

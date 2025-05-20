@@ -147,8 +147,8 @@ You can use the `for await … of` syntax to iterate through items across all pa
 async function fetchAllClients(params) {
   const allClients = [];
   // Automatically fetches more pages as needed.
-  for await (const listNamespacesResponse of client.listNamespaces({ prefix: 'products' })) {
-    allClients.push(listNamespacesResponse);
+  for await (const namespaceSummary of client.listNamespaces({ prefix: 'products' })) {
+    allClients.push(namespaceSummary);
   }
   return allClients;
 }
@@ -158,8 +158,8 @@ Alternatively, you can request a single page at a time:
 
 ```ts
 let page = await client.listNamespaces({ prefix: 'products' });
-for (const listNamespacesResponse of page.data) {
-  console.log(listNamespacesResponse);
+for (const namespaceSummary of page.namespaces) {
+  console.log(namespaceSummary);
 }
 
 // Convenience methods are provided for manually paginating:
