@@ -19,17 +19,6 @@ export class Namespaces extends APIResource {
   }
 
   /**
-   * Export documents.
-   */
-  export(
-    params: NamespaceExportParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<NamespaceExportResponse> {
-    const { namespace = this._client.defaultNamespace, ...query } = params ?? {};
-    return this._client.get(path`/v1/namespaces/${namespace}`, { query, ...options });
-  }
-
-  /**
    * Get namespace schema.
    */
   getSchema(
@@ -217,16 +206,6 @@ export interface NamespaceDeleteAllResponse {
 }
 
 /**
- * A list of documents in columnar format. The keys are the column names.
- */
-export interface NamespaceExportResponse extends DocumentColumns {
-  /**
-   * The cursor to use to retrieve the next page of results.
-   */
-  next_cursor?: string;
-}
-
-/**
  * The response to a successful namespace schema request.
  */
 export type NamespaceGetSchemaResponse = Record<string, AttributeSchema>;
@@ -275,18 +254,6 @@ export interface NamespaceDeleteAllParams {
    * The name of the namespace.
    */
   namespace?: string;
-}
-
-export interface NamespaceExportParams {
-  /**
-   * Path param: The name of the namespace.
-   */
-  namespace?: string;
-
-  /**
-   * Query param: Retrieve the next page of results.
-   */
-  cursor?: string;
 }
 
 export interface NamespaceGetSchemaParams {
@@ -507,14 +474,12 @@ export declare namespace Namespaces {
     type FullTextSearchConfig as FullTextSearchConfig,
     type ID as ID,
     type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
-    type NamespaceExportResponse as NamespaceExportResponse,
     type NamespaceGetSchemaResponse as NamespaceGetSchemaResponse,
     type NamespaceMultiQueryResponse as NamespaceMultiQueryResponse,
     type NamespaceQueryResponse as NamespaceQueryResponse,
     type NamespaceUpdateSchemaResponse as NamespaceUpdateSchemaResponse,
     type NamespaceWriteResponse as NamespaceWriteResponse,
     type NamespaceDeleteAllParams as NamespaceDeleteAllParams,
-    type NamespaceExportParams as NamespaceExportParams,
     type NamespaceGetSchemaParams as NamespaceGetSchemaParams,
     type NamespaceMultiQueryParams as NamespaceMultiQueryParams,
     type NamespaceQueryParams as NamespaceQueryParams,

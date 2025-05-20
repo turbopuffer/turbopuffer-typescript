@@ -107,56 +107,6 @@ export class PagePromise<
   }
 }
 
-export interface ExportResponse<Item> {
-  ids: Array<Item>;
-
-  next_cursor: string;
-}
-
-export interface ExportParams {
-  cursor?: string;
-}
-
-/**
- * Document pagination.
- */
-export class Export<Item> extends AbstractPage<Item> implements ExportResponse<Item> {
-  ids: Array<Item>;
-
-  next_cursor: string;
-
-  constructor(
-    client: Turbopuffer,
-    response: Response,
-    body: ExportResponse<Item>,
-    options: FinalRequestOptions,
-  ) {
-    super(client, response, body, options);
-
-    this.ids = body.ids || [];
-    this.next_cursor = body.next_cursor || '';
-  }
-
-  getPaginatedItems(): Item[] {
-    return this.ids ?? [];
-  }
-
-  nextPageRequestOptions(): PageRequestOptions | null {
-    const cursor = this.next_cursor;
-    if (!cursor) {
-      return null;
-    }
-
-    return {
-      ...this.options,
-      query: {
-        ...maybeObj(this.options.query),
-        cursor,
-      },
-    };
-  }
-}
-
 export interface ListNamespacesResponse<Item> {
   namespaces: Array<Item>;
 
