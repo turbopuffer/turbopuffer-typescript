@@ -2,6 +2,7 @@
 
 import { APIResource } from '../core/resource';
 import * as NamespacesAPI from './namespaces';
+import * as Shared from './shared';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
@@ -321,7 +322,7 @@ export namespace NamespaceMultiQueryParams {
      */
     distance_metric?: NamespacesAPI.DistanceMetric;
 
-    filters?: Array<unknown> | Array<unknown> | Array<unknown> | Array<unknown>;
+    filters?: Shared.Filter;
 
     /**
      * Whether to include attributes in the response.
@@ -366,7 +367,7 @@ export interface NamespaceQueryParams {
   /**
    * Body param:
    */
-  filters?: Array<unknown> | Array<unknown> | Array<unknown> | Array<unknown>;
+  filters?: Shared.Filter;
 
   /**
    * Body param: Whether to include attributes in the response.

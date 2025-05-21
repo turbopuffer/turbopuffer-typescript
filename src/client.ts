@@ -798,4 +798,6 @@ export declare namespace Turbopuffer {
     type NamespaceUpdateSchemaParams as NamespaceUpdateSchemaParams,
     type NamespaceWriteParams as NamespaceWriteParams,
   };
+
+  export type Filter = API.Filter;
 }

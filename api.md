@@ -8,6 +8,12 @@ Methods:
 
 - <code title="get /v1/namespaces">client.<a href="./src/index.ts">listNamespaces</a>({ ...params }) -> NamespaceSummariesListNamespaces</code>
 
+# Shared
+
+Types:
+
+- <code><a href="./src/resources/shared.ts">Filter</a></code>
+
 # Namespaces
 
 Types:
