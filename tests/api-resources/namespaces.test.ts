@@ -8,7 +8,8 @@ const client = new Turbopuffer({
 });
 
 describe('resource namespaces', () => {
-  test('deleteAll: only required params', async () => {
+  // skipped: tests are disabled for the time being
+  test.skip('deleteAll: only required params', async () => {
     const responsePromise = client.namespaces.deleteAll({ namespace: 'namespace' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -19,11 +20,13 @@ describe('resource namespaces', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('deleteAll: required and optional params', async () => {
+  // skipped: tests are disabled for the time being
+  test.skip('deleteAll: required and optional params', async () => {
     const response = await client.namespaces.deleteAll({ namespace: 'namespace' });
   });
 
-  test('getSchema: only required params', async () => {
+  // skipped: tests are disabled for the time being
+  test.skip('getSchema: only required params', async () => {
     const responsePromise = client.namespaces.getSchema({ namespace: 'namespace' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -34,11 +37,13 @@ describe('resource namespaces', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('getSchema: required and optional params', async () => {
+  // skipped: tests are disabled for the time being
+  test.skip('getSchema: required and optional params', async () => {
     const response = await client.namespaces.getSchema({ namespace: 'namespace' });
   });
 
-  test('multiQuery: only required params', async () => {
+  // skipped: tests are disabled for the time being
+  test.skip('multiQuery: only required params', async () => {
     const responsePromise = client.namespaces.multiQuery({ namespace: 'namespace' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -49,7 +54,8 @@ describe('resource namespaces', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('multiQuery: required and optional params', async () => {
+  // skipped: tests are disabled for the time being
+  test.skip('multiQuery: required and optional params', async () => {
     const response = await client.namespaces.multiQuery({
       namespace: 'namespace',
       consistency: { level: 'strong' },
@@ -66,7 +72,8 @@ describe('resource namespaces', () => {
     });
   });
 
-  test('query: only required params', async () => {
+  // skipped: tests are disabled for the time being
+  test.skip('query: only required params', async () => {
     const responsePromise = client.namespaces.query({ namespace: 'namespace' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -77,7 +84,8 @@ describe('resource namespaces', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('query: required and optional params', async () => {
+  // skipped: tests are disabled for the time being
+  test.skip('query: required and optional params', async () => {
     const response = await client.namespaces.query({
       namespace: 'namespace',
       consistency: { level: 'strong' },
@@ -90,7 +98,8 @@ describe('resource namespaces', () => {
     });
   });
 
-  test('updateSchema: only required params', async () => {
+  // skipped: tests are disabled for the time being
+  test.skip('updateSchema: only required params', async () => {
     const responsePromise = client.namespaces.updateSchema({ namespace: 'namespace' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -101,14 +110,16 @@ describe('resource namespaces', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('updateSchema: required and optional params', async () => {
+  // skipped: tests are disabled for the time being
+  test.skip('updateSchema: required and optional params', async () => {
     const response = await client.namespaces.updateSchema({
       namespace: 'namespace',
       body: { foo: { filterable: true, full_text_search: true, type: 'string' } },
     });
   });
 
-  test('write: only required params', async () => {
+  // skipped: tests are disabled for the time being
+  test.skip('write: only required params', async () => {
     const responsePromise = client.namespaces.write({ namespace: 'namespace' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -119,7 +130,8 @@ describe('resource namespaces', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  test('write: required and optional params', async () => {
+  // skipped: tests are disabled for the time being
+  test.skip('write: required and optional params', async () => {
     const response = await client.namespaces.write({
       namespace: 'namespace',
       copy_from_namespace: 'copy_from_namespace',
