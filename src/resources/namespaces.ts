@@ -43,11 +43,8 @@ export class Namespaces extends APIResource {
   /**
    * Query, filter, full-text search and vector search documents.
    */
-  query(
-    params: NamespaceQueryParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<NamespaceQueryResponse> {
-    const { namespace = this._client.defaultNamespace, ...body } = params ?? {};
+  query(params: NamespaceQueryParams, options?: RequestOptions): APIPromise<NamespaceQueryResponse> {
+    const { namespace = this._client.defaultNamespace, ...body } = params;
     return this._client.post(path`/v2/namespaces/${namespace}/query`, { body, ...options });
   }
 
@@ -305,19 +302,7 @@ export namespace NamespaceMultiQueryParams {
    * Query, filter, full-text search and vector search documents.
    */
   export interface Query {
-    /**
-     * A function used to calculate vector similarity.
-     */
-    distance_metric?: NamespacesAPI.DistanceMetric;
-
-    filters?: Array<unknown> | Array<unknown> | Array<unknown> | Array<unknown>;
-
-    /**
-     * Whether to include attributes in the response.
-     */
-    include_attributes?: boolean | Array<string>;
-
-    rank_by?:
+    rank_by:
       | Array<unknown>
       | Array<unknown>
       | Array<unknown>
@@ -329,7 +314,19 @@ export namespace NamespaceMultiQueryParams {
     /**
      * The number of results to return.
      */
-    top_k?: number;
+    top_k: number;
+
+    /**
+     * A function used to calculate vector similarity.
+     */
+    distance_metric?: NamespacesAPI.DistanceMetric;
+
+    filters?: Array<unknown> | Array<unknown> | Array<unknown> | Array<unknown>;
+
+    /**
+     * Whether to include attributes in the response.
+     */
+    include_attributes?: boolean | Array<string>;
   }
 }
 
@@ -338,6 +335,23 @@ export interface NamespaceQueryParams {
    * Path param: The name of the namespace.
    */
   namespace?: string;
+
+  /**
+   * Body param:
+   */
+  rank_by:
+    | Array<unknown>
+    | Array<unknown>
+    | Array<unknown>
+    | Array<unknown>
+    | Array<unknown>
+    | Array<unknown>
+    | Array<unknown>;
+
+  /**
+   * Body param: The number of results to return.
+   */
+  top_k: number;
 
   /**
    * Body param: The consistency level for a query.
@@ -358,23 +372,6 @@ export interface NamespaceQueryParams {
    * Body param: Whether to include attributes in the response.
    */
   include_attributes?: boolean | Array<string>;
-
-  /**
-   * Body param:
-   */
-  rank_by?:
-    | Array<unknown>
-    | Array<unknown>
-    | Array<unknown>
-    | Array<unknown>
-    | Array<unknown>
-    | Array<unknown>
-    | Array<unknown>;
-
-  /**
-   * Body param: The number of results to return.
-   */
-  top_k?: number;
 
   /**
    * Body param: The encoding to use for vectors in the response.
