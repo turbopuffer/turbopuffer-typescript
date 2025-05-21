@@ -61,7 +61,7 @@ describe('resource namespaces', () => {
       consistency: { level: 'strong' },
       queries: [
         {
-          rank_by: [{}],
+          rank_by: [{}, {}, {}],
           top_k: 0,
           distance_metric: 'cosine_distance',
           filters: [{}],
@@ -74,7 +74,11 @@ describe('resource namespaces', () => {
 
   // skipped: tests are disabled for the time being
   test.skip('query: only required params', async () => {
-    const responsePromise = client.namespaces.query({ namespace: 'namespace', rank_by: [{}], top_k: 0 });
+    const responsePromise = client.namespaces.query({
+      namespace: 'namespace',
+      rank_by: [{}, {}, {}],
+      top_k: 0,
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -88,7 +92,7 @@ describe('resource namespaces', () => {
   test.skip('query: required and optional params', async () => {
     const response = await client.namespaces.query({
       namespace: 'namespace',
-      rank_by: [{}],
+      rank_by: [{}, {}, {}],
       top_k: 0,
       consistency: { level: 'strong' },
       distance_metric: 'cosine_distance',
