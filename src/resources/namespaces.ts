@@ -129,7 +129,7 @@ export interface DocumentColumns {
   /**
    * The IDs of the documents.
    */
-  id?: Array<ID>;
+  id: Array<ID>;
 
   /**
    * The vector embeddings of the documents.
