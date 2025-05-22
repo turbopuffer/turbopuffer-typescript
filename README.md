@@ -32,7 +32,7 @@ const client = new Turbopuffer({
 async function main() {
   const response = await client.namespaces.write({ namespace: 'products' });
 
-  console.log(response.status);
+  console.log(response.rows_affected);
 }
 
 main();
@@ -51,7 +51,11 @@ const client = new Turbopuffer({
 });
 
 async function main() {
-  const params: Turbopuffer.NamespaceQueryParams = { namespace: 'products', rank_by: {}, top_k: 0 };
+  const params: Turbopuffer.NamespaceQueryParams = {
+    namespace: 'products',
+    rank_by: ['vector', 'ANN', [0.2, 0.3]],
+    top_k: 10,
+  };
   const response: Turbopuffer.NamespaceQueryResponse = await client.namespaces.query(params);
 }
 
@@ -70,7 +74,7 @@ a subclass of `APIError` will be thrown:
 ```ts
 async function main() {
   const response = await client.namespaces
-    .query({ namespace: 'products', rank_by: {}, top_k: 0 })
+    .query({ namespace: 'products', rank_by: ['vector', 'ANN', [0.2, 0.3]], top_k: 10 })
     .catch(async (err) => {
       if (err instanceof Turbopuffer.APIError) {
         console.log(err.status); // 400
@@ -114,7 +118,7 @@ const client = new Turbopuffer({
 });
 
 // Or, configure per-request:
-await client.namespaces.query({ namespace: 'products', rank_by: {}, top_k: 0 }, {
+await client.namespaces.query({ namespace: 'products', rank_by: ['vector', 'ANN', [0.2, 0.3]], top_k: 10 }, {
   maxRetries: 5,
 });
 ```
@@ -131,7 +135,7 @@ const client = new Turbopuffer({
 });
 
 // Override per-request:
-await client.namespaces.query({ namespace: 'products', rank_by: {}, top_k: 0 }, {
+await client.namespaces.query({ namespace: 'products', rank_by: ['vector', 'ANN', [0.2, 0.3]], top_k: 10 }, {
   timeout: 5 * 1000,
 });
 ```
@@ -185,12 +189,14 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new Turbopuffer();
 
-const response = await client.namespaces.query({ namespace: 'products', rank_by: {}, top_k: 0 }).asResponse();
+const response = await client.namespaces
+  .query({ namespace: 'products', rank_by: ['vector', 'ANN', [0.2, 0.3]], top_k: 10 })
+  .asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
 const { data: response, response: raw } = await client.namespaces
-  .query({ namespace: 'products', rank_by: {}, top_k: 0 })
+  .query({ namespace: 'products', rank_by: ['vector', 'ANN', [0.2, 0.3]], top_k: 10 })
   .withResponse();
 console.log(raw.headers.get('X-My-Header'));
 console.log(response.aggregations);
