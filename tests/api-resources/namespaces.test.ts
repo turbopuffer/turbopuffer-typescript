@@ -87,7 +87,7 @@ describe('resource namespaces', () => {
       namespace: 'namespace',
       filters: {},
       num: 0,
-      queries: [{}],
+      queries: [0],
       top_k: 0,
     });
   });
