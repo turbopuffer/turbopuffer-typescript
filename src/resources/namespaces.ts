@@ -1,8 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
-import * as NamespacesAPI from './namespaces';
-import * as Shared from './shared';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
@@ -31,22 +29,22 @@ export class Namespaces extends APIResource {
   }
 
   /**
-   * Send multiple queries at once.
-   */
-  multiQuery(
-    params: NamespaceMultiQueryParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<NamespaceMultiQueryResponse> {
-    const { namespace = this._client.defaultNamespace, ...body } = params ?? {};
-    return this._client.post(path`/v2/namespaces/${namespace}/query?overload=multi`, { body, ...options });
-  }
-
-  /**
    * Query, filter, full-text search and vector search documents.
    */
   query(params: NamespaceQueryParams, options?: RequestOptions): APIPromise<NamespaceQueryResponse> {
     const { namespace = this._client.defaultNamespace, ...body } = params;
     return this._client.post(path`/v2/namespaces/${namespace}/query`, { body, ...options });
+  }
+
+  /**
+   * Evaluate recall.
+   */
+  recall(
+    params: NamespaceRecallParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<NamespaceRecallResponse> {
+    const { namespace = this._client.defaultNamespace } = params ?? {};
+    return this._client.get(path`/v1/namespaces/${namespace}/_debug/recall`, options);
   }
 
   /**
@@ -58,6 +56,17 @@ export class Namespaces extends APIResource {
   ): APIPromise<NamespaceUpdateSchemaResponse> {
     const { namespace = this._client.defaultNamespace, body } = params ?? {};
     return this._client.post(path`/v1/namespaces/${namespace}/schema`, { body: body, ...options });
+  }
+
+  /**
+   * Warm the cache for a namespace.
+   */
+  warmCache(
+    params: NamespaceWarmCacheParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<NamespaceWarmCacheResponse> {
+    const { namespace = this._client.defaultNamespace } = params ?? {};
+    return this._client.get(path`/v1/namespaces/${namespace}/hint_cache_warm`, options);
   }
 
   /**
@@ -208,21 +217,6 @@ export interface NamespaceDeleteAllResponse {
  */
 export type NamespaceGetSchemaResponse = Record<string, AttributeSchema>;
 
-export interface NamespaceMultiQueryResponse {
-  results: Array<NamespaceMultiQueryResponse.Result>;
-}
-
-export namespace NamespaceMultiQueryResponse {
-  /**
-   * The result of a query.
-   */
-  export interface Result {
-    aggregations?: Array<Record<string, unknown>>;
-
-    rows?: Array<NamespacesAPI.DocumentRow>;
-  }
-}
-
 /**
  * The result of a query.
  */
@@ -233,9 +227,42 @@ export interface NamespaceQueryResponse {
 }
 
 /**
+ * The response to a successful cache warm request.
+ */
+export interface NamespaceRecallResponse {
+  /**
+   * The average number of documents retrieved by the approximate nearest neighbor
+   * searches.
+   */
+  avg_ann_count: number;
+
+  /**
+   * The average number of documents retrieved by the exhaustive searches.
+   */
+  avg_exhaustive_count: number;
+
+  /**
+   * The average recall of the queries.
+   */
+  avg_recall: number;
+}
+
+/**
  * The updated schema for the namespace.
  */
 export type NamespaceUpdateSchemaResponse = Record<string, AttributeSchema>;
+
+/**
+ * The response to a successful cache warm request.
+ */
+export interface NamespaceWarmCacheResponse {
+  /**
+   * The status of the request.
+   */
+  status: 'OK';
+
+  message?: string;
+}
 
 /**
  * The response to a successful upsert request.
@@ -261,76 +288,6 @@ export interface NamespaceGetSchemaParams {
   namespace?: string;
 }
 
-export interface NamespaceMultiQueryParams {
-  /**
-   * Path param: The name of the namespace.
-   */
-  namespace?: string;
-
-  /**
-   * Body param: The consistency level for a query.
-   */
-  consistency?: NamespaceMultiQueryParams.Consistency;
-
-  /**
-   * Body param:
-   */
-  queries?: Array<NamespaceMultiQueryParams.Query>;
-
-  /**
-   * Body param: The encoding to use for vectors in the response.
-   */
-  vector_encoding?: 'float' | 'base64';
-}
-
-export namespace NamespaceMultiQueryParams {
-  /**
-   * The consistency level for a query.
-   */
-  export interface Consistency {
-    /**
-     * The query's consistency level.
-     *
-     * - `strong` - Strong consistency. Requires a round-trip to object storage to
-     *   fetch the latest writes.
-     * - `eventual` - Eventual consistency. Does not require a round-trip to object
-     *   storage, but may not see the latest writes.
-     */
-    level?: 'strong' | 'eventual';
-  }
-
-  /**
-   * Query, filter, full-text search and vector search documents.
-   */
-  export interface Query {
-    rank_by:
-      | Array<unknown>
-      | Array<unknown>
-      | Array<unknown>
-      | Array<unknown>
-      | Array<unknown>
-      | Array<unknown>
-      | Array<unknown>;
-
-    /**
-     * The number of results to return.
-     */
-    top_k: number;
-
-    /**
-     * A function used to calculate vector similarity.
-     */
-    distance_metric?: NamespacesAPI.DistanceMetric;
-
-    filters?: Shared.Filter;
-
-    /**
-     * Whether to include attributes in the response.
-     */
-    include_attributes?: boolean | Array<string>;
-  }
-}
-
 export interface NamespaceQueryParams {
   /**
    * Path param: The name of the namespace.
@@ -338,16 +295,9 @@ export interface NamespaceQueryParams {
   namespace?: string;
 
   /**
-   * Body param:
+   * Body param: How to rank the documents in the namespace.
    */
-  rank_by:
-    | Array<unknown>
-    | Array<unknown>
-    | Array<unknown>
-    | Array<unknown>
-    | Array<unknown>
-    | Array<unknown>
-    | Array<unknown>;
+  rank_by: unknown;
 
   /**
    * Body param: The number of results to return.
@@ -365,9 +315,10 @@ export interface NamespaceQueryParams {
   distance_metric?: DistanceMetric;
 
   /**
-   * Body param:
+   * Body param: Exact filters for attributes to refine search results for. Think of
+   * it as a SQL WHERE clause.
    */
-  filters?: Shared.Filter;
+  filters?: unknown;
 
   /**
    * Body param: Whether to include attributes in the response.
@@ -397,6 +348,13 @@ export namespace NamespaceQueryParams {
   }
 }
 
+export interface NamespaceRecallParams {
+  /**
+   * The name of the namespace.
+   */
+  namespace?: string;
+}
+
 export interface NamespaceUpdateSchemaParams {
   /**
    * Path param: The name of the namespace.
@@ -407,6 +365,13 @@ export interface NamespaceUpdateSchemaParams {
    * Body param: The desired schema for the namespace.
    */
   body?: Record<string, AttributeSchema>;
+}
+
+export interface NamespaceWarmCacheParams {
+  /**
+   * The name of the namespace.
+   */
+  namespace?: string;
 }
 
 export interface NamespaceWriteParams {
@@ -473,15 +438,17 @@ export declare namespace Namespaces {
     type ID as ID,
     type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
     type NamespaceGetSchemaResponse as NamespaceGetSchemaResponse,
-    type NamespaceMultiQueryResponse as NamespaceMultiQueryResponse,
     type NamespaceQueryResponse as NamespaceQueryResponse,
+    type NamespaceRecallResponse as NamespaceRecallResponse,
     type NamespaceUpdateSchemaResponse as NamespaceUpdateSchemaResponse,
+    type NamespaceWarmCacheResponse as NamespaceWarmCacheResponse,
     type NamespaceWriteResponse as NamespaceWriteResponse,
     type NamespaceDeleteAllParams as NamespaceDeleteAllParams,
     type NamespaceGetSchemaParams as NamespaceGetSchemaParams,
-    type NamespaceMultiQueryParams as NamespaceMultiQueryParams,
     type NamespaceQueryParams as NamespaceQueryParams,
+    type NamespaceRecallParams as NamespaceRecallParams,
     type NamespaceUpdateSchemaParams as NamespaceUpdateSchemaParams,
+    type NamespaceWarmCacheParams as NamespaceWarmCacheParams,
     type NamespaceWriteParams as NamespaceWriteParams,
   };
 }

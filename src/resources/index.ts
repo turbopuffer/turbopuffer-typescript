@@ -1,6 +1,5 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-export * from './shared';
 export {
   Namespaces,
   type AttributeSchema,
@@ -11,15 +10,17 @@ export {
   type ID,
   type NamespaceDeleteAllResponse,
   type NamespaceGetSchemaResponse,
-  type NamespaceMultiQueryResponse,
   type NamespaceQueryResponse,
+  type NamespaceRecallResponse,
   type NamespaceUpdateSchemaResponse,
+  type NamespaceWarmCacheResponse,
   type NamespaceWriteResponse,
   type NamespaceDeleteAllParams,
   type NamespaceGetSchemaParams,
-  type NamespaceMultiQueryParams,
   type NamespaceQueryParams,
+  type NamespaceRecallParams,
   type NamespaceUpdateSchemaParams,
+  type NamespaceWarmCacheParams,
   type NamespaceWriteParams,
 } from './namespaces';
 export {
