@@ -1,13 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+export * from './shared';
 export {
   Namespaces,
-  type AttributeSchema,
-  type DistanceMetric,
-  type DocumentColumns,
-  type DocumentRow,
-  type FullTextSearchConfig,
-  type ID,
   type NamespaceDeleteAllResponse,
   type NamespaceGetSchemaResponse,
   type NamespaceQueryResponse,

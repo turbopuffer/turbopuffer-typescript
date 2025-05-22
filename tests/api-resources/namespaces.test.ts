@@ -82,7 +82,13 @@ describe('resource namespaces', () => {
 
   // skipped: tests are disabled for the time being
   test.skip('recall: required and optional params', async () => {
-    const response = await client.namespaces.recall({ namespace: 'namespace' });
+    const response = await client.namespaces.recall({
+      namespace: 'namespace',
+      filters: {},
+      num: 0,
+      queries: [{}],
+      top_k: 0,
+    });
   });
 
   // skipped: tests are disabled for the time being
@@ -101,7 +107,7 @@ describe('resource namespaces', () => {
   test.skip('updateSchema: required and optional params', async () => {
     const response = await client.namespaces.updateSchema({
       namespace: 'namespace',
-      body: { foo: { filterable: true, full_text_search: true, type: 'string' } },
+      schema: { foo: { filterable: true, full_text_search: true, type: 'string' } },
     });
   });
 

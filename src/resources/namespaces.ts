@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as Shared from './shared';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
@@ -43,8 +44,8 @@ export class Namespaces extends APIResource {
     params: NamespaceRecallParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<NamespaceRecallResponse> {
-    const { namespace = this._client.defaultNamespace } = params ?? {};
-    return this._client.get(path`/v1/namespaces/${namespace}/_debug/recall`, options);
+    const { namespace = this._client.defaultNamespace, ...body } = params ?? {};
+    return this._client.post(path`/v1/namespaces/${namespace}/_debug/recall`, { body, ...options });
   }
 
   /**
@@ -54,8 +55,8 @@ export class Namespaces extends APIResource {
     params: NamespaceUpdateSchemaParams | null | undefined = undefined,
     options?: RequestOptions,
   ): APIPromise<NamespaceUpdateSchemaResponse> {
-    const { namespace = this._client.defaultNamespace, body } = params ?? {};
-    return this._client.post(path`/v1/namespaces/${namespace}/schema`, { body: body, ...options });
+    const { namespace = this._client.defaultNamespace, schema } = params ?? {};
+    return this._client.post(path`/v1/namespaces/${namespace}/schema`, { body: schema, ...options });
   }
 
   /**
@@ -82,127 +83,6 @@ export class Namespaces extends APIResource {
 }
 
 /**
- * The schema for an attribute attached to a document.
- */
-export interface AttributeSchema {
-  /**
-   * Whether or not the attributes can be used in filters/WHERE clauses.
-   */
-  filterable?: boolean;
-
-  /**
-   * Whether this attribute can be used as part of a BM25 full-text search. Requires
-   * the `string` or `[]string` type, and by default, BM25-enabled attributes are not
-   * filterable. You can override this by setting `filterable: true`.
-   */
-  full_text_search?: boolean | FullTextSearchConfig;
-
-  /**
-   * The data type of the attribute.
-   *
-   * - `string` - A string.
-   * - `uint` - An unsigned integer.
-   * - `uuid` - A UUID.
-   * - `bool` - A boolean.
-   * - `datetime` - A date and time.
-   * - `[]string` - An array of strings.
-   * - `[]uint` - An array of unsigned integers.
-   * - `[]uuid` - An array of UUIDs.
-   * - `[]datetime` - An array of date and time values.
-   */
-  type?: 'string' | 'uint' | 'uuid' | 'bool' | 'datetime' | '[]string' | '[]uint' | '[]uuid' | '[]datetime';
-}
-
-/**
- * A function used to calculate vector similarity.
- *
- * - `cosine_distance` - Defined as `1 - cosine_similarity` and ranges from 0 to 2.
- *   Lower is better.
- * - `euclidean_squared` - Defined as `sum((x - y)^2)`. Lower is better.
- */
-export type DistanceMetric = 'cosine_distance' | 'euclidean_squared';
-
-/**
- * A list of documents in columnar format. The keys are the column names.
- */
-export interface DocumentColumns {
-  /**
-   * The IDs of the documents.
-   */
-  id?: Array<ID>;
-
-  [k: string]: Array<unknown> | Array<ID> | undefined;
-}
-
-/**
- * A single document, in a row-based format.
- */
-export interface DocumentRow {
-  /**
-   * An identifier for a document.
-   */
-  id?: ID;
-
-  /**
-   * A vector describing the document.
-   */
-  vector?: Array<number> | string | null;
-
-  [k: string]: unknown;
-}
-
-/**
- * Detailed configuration options for BM25 full-text search.
- */
-export interface FullTextSearchConfig {
-  /**
-   * Whether searching is case-sensitive. Defaults to `false` (i.e.
-   * case-insensitive).
-   */
-  case_sensitive?: boolean;
-
-  /**
-   * The language of the text. Defaults to `english`.
-   */
-  language?:
-    | 'arabic'
-    | 'danish'
-    | 'dutch'
-    | 'english'
-    | 'finnish'
-    | 'french'
-    | 'german'
-    | 'greek'
-    | 'hungarian'
-    | 'italian'
-    | 'norwegian'
-    | 'portuguese'
-    | 'romanian'
-    | 'russian'
-    | 'spanish'
-    | 'swedish'
-    | 'tamil'
-    | 'turkish';
-
-  /**
-   * Removes common words from the text based on language. Defaults to `true` (i.e.
-   * remove common words).
-   */
-  remove_stopwords?: boolean;
-
-  /**
-   * Language-specific stemming for the text. Defaults to `false` (i.e., do not
-   * stem).
-   */
-  stemming?: boolean;
-}
-
-/**
- * An identifier for a document.
- */
-export type ID = string | number;
-
-/**
  * The response to a successful namespace deletion request.
  */
 export interface NamespaceDeleteAllResponse {
@@ -215,7 +95,7 @@ export interface NamespaceDeleteAllResponse {
 /**
  * The response to a successful namespace schema request.
  */
-export type NamespaceGetSchemaResponse = Record<string, AttributeSchema>;
+export type NamespaceGetSchemaResponse = Record<string, Shared.AttributeSchema>;
 
 /**
  * The result of a query.
@@ -223,7 +103,71 @@ export type NamespaceGetSchemaResponse = Record<string, AttributeSchema>;
 export interface NamespaceQueryResponse {
   aggregations?: Array<Record<string, unknown>>;
 
-  rows?: Array<DocumentRow>;
+  /**
+   * The billing information for a query.
+   */
+  billing?: NamespaceQueryResponse.Billing;
+
+  /**
+   * The performance information for a query.
+   */
+  performance?: NamespaceQueryResponse.Performance;
+
+  rows?: Array<Shared.DocumentRow>;
+}
+
+export namespace NamespaceQueryResponse {
+  /**
+   * The billing information for a query.
+   */
+  export interface Billing {
+    /**
+     * The number of billable logical bytes queried from the namespace.
+     */
+    billable_logical_bytes_queried: number;
+
+    /**
+     * The number of billable logical bytes returned from the query.
+     */
+    billable_logical_bytes_returned: number;
+  }
+
+  /**
+   * The performance information for a query.
+   */
+  export interface Performance {
+    /**
+     * the approximate number of documents in the namespace.
+     */
+    approx_namespace_size: number;
+
+    /**
+     * The ratio of cache hits to total cache lookups.
+     */
+    cache_hit_ratio: number;
+
+    /**
+     * A qualitative description of the cache hit ratio (`hot`, `warm`, or `cold`).
+     */
+    cache_temperature: string;
+
+    /**
+     * The number of unindexed documents processed by the query.
+     */
+    exhaustive_search_count: number;
+
+    /**
+     * Request time measured on the server, excluding time spent waiting due to the
+     * namespace concurrency limit.
+     */
+    query_execution_ms: number;
+
+    /**
+     * Request time measured on the server, including time spent waiting for other
+     * queries to complete if the namespace was at its concurrency limit.
+     */
+    server_total_ms: number;
+  }
 }
 
 /**
@@ -250,7 +194,7 @@ export interface NamespaceRecallResponse {
 /**
  * The updated schema for the namespace.
  */
-export type NamespaceUpdateSchemaResponse = Record<string, AttributeSchema>;
+export type NamespaceUpdateSchemaResponse = Record<string, Shared.AttributeSchema>;
 
 /**
  * The response to a successful cache warm request.
@@ -265,13 +209,56 @@ export interface NamespaceWarmCacheResponse {
 }
 
 /**
- * The response to a successful upsert request.
+ * The response to a successful write request.
  */
 export interface NamespaceWriteResponse {
+  billing: NamespaceWriteResponse.Billing;
+
+  /**
+   * A message describing the result of the write request.
+   */
+  message: string;
+
+  /**
+   * The number of rows affected by the write request.
+   */
+  rows_affected: number;
+
   /**
    * The status of the request.
    */
   status: 'OK';
+}
+
+export namespace NamespaceWriteResponse {
+  export interface Billing {
+    /**
+     * The number of billable logical bytes written to the namespace.
+     */
+    billable_logical_bytes_written: number;
+
+    /**
+     * The billing information for a query.
+     */
+    query?: Billing.Query;
+  }
+
+  export namespace Billing {
+    /**
+     * The billing information for a query.
+     */
+    export interface Query {
+      /**
+       * The number of billable logical bytes queried from the namespace.
+       */
+      billable_logical_bytes_queried: number;
+
+      /**
+       * The number of billable logical bytes returned from the query.
+       */
+      billable_logical_bytes_returned: number;
+    }
+  }
 }
 
 export interface NamespaceDeleteAllParams {
@@ -312,7 +299,7 @@ export interface NamespaceQueryParams {
   /**
    * Body param: A function used to calculate vector similarity.
    */
-  distance_metric?: DistanceMetric;
+  distance_metric?: Shared.DistanceMetric;
 
   /**
    * Body param: Exact filters for attributes to refine search results for. Think of
@@ -350,9 +337,30 @@ export namespace NamespaceQueryParams {
 
 export interface NamespaceRecallParams {
   /**
-   * The name of the namespace.
+   * Path param: The name of the namespace.
    */
   namespace?: string;
+
+  /**
+   * Body param: Filter by attributes. Same syntax as the query endpoint.
+   */
+  filters?: unknown;
+
+  /**
+   * Body param: The number of searches to run.
+   */
+  num?: number;
+
+  /**
+   * Body param: Use specific query vectors for the measurement. If omitted, sampled
+   * from the index.
+   */
+  queries?: Array<unknown>;
+
+  /**
+   * Body param: Search for `top_k` nearest neighbors.
+   */
+  top_k?: number;
 }
 
 export interface NamespaceUpdateSchemaParams {
@@ -364,7 +372,7 @@ export interface NamespaceUpdateSchemaParams {
   /**
    * Body param: The desired schema for the namespace.
    */
-  body?: Record<string, AttributeSchema>;
+  schema?: Record<string, Shared.AttributeSchema>;
 }
 
 export interface NamespaceWarmCacheParams {
@@ -393,49 +401,43 @@ export interface NamespaceWriteParams {
   /**
    * Body param:
    */
-  deletes?: Array<ID>;
+  deletes?: Array<Shared.ID>;
 
   /**
    * Body param: A function used to calculate vector similarity.
    */
-  distance_metric?: DistanceMetric;
+  distance_metric?: Shared.DistanceMetric;
 
   /**
    * Body param: A list of documents in columnar format. The keys are the column
    * names.
    */
-  patch_columns?: DocumentColumns;
+  patch_columns?: Shared.DocumentColumns;
 
   /**
    * Body param:
    */
-  patch_rows?: Array<DocumentRow>;
+  patch_rows?: Array<Shared.DocumentRow>;
 
   /**
    * Body param: The schema of the attributes attached to the documents.
    */
-  schema?: Record<string, AttributeSchema>;
+  schema?: Record<string, Shared.AttributeSchema>;
 
   /**
    * Body param: A list of documents in columnar format. The keys are the column
    * names.
    */
-  upsert_columns?: DocumentColumns;
+  upsert_columns?: Shared.DocumentColumns;
 
   /**
    * Body param:
    */
-  upsert_rows?: Array<DocumentRow>;
+  upsert_rows?: Array<Shared.DocumentRow>;
 }
 
 export declare namespace Namespaces {
   export {
-    type AttributeSchema as AttributeSchema,
-    type DistanceMetric as DistanceMetric,
-    type DocumentColumns as DocumentColumns,
-    type DocumentRow as DocumentRow,
-    type FullTextSearchConfig as FullTextSearchConfig,
-    type ID as ID,
     type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
     type NamespaceGetSchemaResponse as NamespaceGetSchemaResponse,
     type NamespaceQueryResponse as NamespaceQueryResponse,
