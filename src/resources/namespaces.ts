@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
-import * as Shared from './shared';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
@@ -83,6 +82,127 @@ export class Namespaces extends APIResource {
 }
 
 /**
+ * The schema for an attribute attached to a document.
+ */
+export interface AttributeSchema {
+  /**
+   * Whether or not the attributes can be used in filters/WHERE clauses.
+   */
+  filterable?: boolean;
+
+  /**
+   * Whether this attribute can be used as part of a BM25 full-text search. Requires
+   * the `string` or `[]string` type, and by default, BM25-enabled attributes are not
+   * filterable. You can override this by setting `filterable: true`.
+   */
+  full_text_search?: boolean | FullTextSearchConfig;
+
+  /**
+   * The data type of the attribute.
+   *
+   * - `string` - A string.
+   * - `uint` - An unsigned integer.
+   * - `uuid` - A UUID.
+   * - `bool` - A boolean.
+   * - `datetime` - A date and time.
+   * - `[]string` - An array of strings.
+   * - `[]uint` - An array of unsigned integers.
+   * - `[]uuid` - An array of UUIDs.
+   * - `[]datetime` - An array of date and time values.
+   */
+  type?: 'string' | 'uint' | 'uuid' | 'bool' | 'datetime' | '[]string' | '[]uint' | '[]uuid' | '[]datetime';
+}
+
+/**
+ * A function used to calculate vector similarity.
+ *
+ * - `cosine_distance` - Defined as `1 - cosine_similarity` and ranges from 0 to 2.
+ *   Lower is better.
+ * - `euclidean_squared` - Defined as `sum((x - y)^2)`. Lower is better.
+ */
+export type DistanceMetric = 'cosine_distance' | 'euclidean_squared';
+
+/**
+ * A list of documents in columnar format. The keys are the column names.
+ */
+export interface DocumentColumns {
+  /**
+   * The IDs of the documents.
+   */
+  id?: Array<ID>;
+
+  [k: string]: Array<unknown> | Array<ID> | undefined;
+}
+
+/**
+ * A single document, in a row-based format.
+ */
+export interface DocumentRow {
+  /**
+   * An identifier for a document.
+   */
+  id?: ID;
+
+  /**
+   * A vector describing the document.
+   */
+  vector?: Array<number> | string | null;
+
+  [k: string]: unknown;
+}
+
+/**
+ * Detailed configuration options for BM25 full-text search.
+ */
+export interface FullTextSearchConfig {
+  /**
+   * Whether searching is case-sensitive. Defaults to `false` (i.e.
+   * case-insensitive).
+   */
+  case_sensitive?: boolean;
+
+  /**
+   * The language of the text. Defaults to `english`.
+   */
+  language?:
+    | 'arabic'
+    | 'danish'
+    | 'dutch'
+    | 'english'
+    | 'finnish'
+    | 'french'
+    | 'german'
+    | 'greek'
+    | 'hungarian'
+    | 'italian'
+    | 'norwegian'
+    | 'portuguese'
+    | 'romanian'
+    | 'russian'
+    | 'spanish'
+    | 'swedish'
+    | 'tamil'
+    | 'turkish';
+
+  /**
+   * Removes common words from the text based on language. Defaults to `true` (i.e.
+   * remove common words).
+   */
+  remove_stopwords?: boolean;
+
+  /**
+   * Language-specific stemming for the text. Defaults to `false` (i.e., do not
+   * stem).
+   */
+  stemming?: boolean;
+}
+
+/**
+ * An identifier for a document.
+ */
+export type ID = string | number;
+
+/**
  * The response to a successful namespace deletion request.
  */
 export interface NamespaceDeleteAllResponse {
@@ -95,7 +215,7 @@ export interface NamespaceDeleteAllResponse {
 /**
  * The response to a successful namespace schema request.
  */
-export type NamespaceGetSchemaResponse = Record<string, Shared.AttributeSchema>;
+export type NamespaceGetSchemaResponse = Record<string, AttributeSchema>;
 
 /**
  * The result of a query.
@@ -113,7 +233,7 @@ export interface NamespaceQueryResponse {
    */
   performance?: NamespaceQueryResponse.Performance;
 
-  rows?: Array<Shared.DocumentRow>;
+  rows?: Array<DocumentRow>;
 }
 
 export namespace NamespaceQueryResponse {
@@ -194,7 +314,7 @@ export interface NamespaceRecallResponse {
 /**
  * The updated schema for the namespace.
  */
-export type NamespaceUpdateSchemaResponse = Record<string, Shared.AttributeSchema>;
+export type NamespaceUpdateSchemaResponse = Record<string, AttributeSchema>;
 
 /**
  * The response to a successful cache warm request.
@@ -299,7 +419,7 @@ export interface NamespaceQueryParams {
   /**
    * Body param: A function used to calculate vector similarity.
    */
-  distance_metric?: Shared.DistanceMetric;
+  distance_metric?: DistanceMetric;
 
   /**
    * Body param: Exact filters for attributes to refine search results for. Think of
@@ -372,7 +492,7 @@ export interface NamespaceUpdateSchemaParams {
   /**
    * Body param: The desired schema for the namespace.
    */
-  schema?: Record<string, Shared.AttributeSchema>;
+  schema?: Record<string, AttributeSchema>;
 }
 
 export interface NamespaceWarmCacheParams {
@@ -401,43 +521,49 @@ export interface NamespaceWriteParams {
   /**
    * Body param:
    */
-  deletes?: Array<Shared.ID>;
+  deletes?: Array<ID>;
 
   /**
    * Body param: A function used to calculate vector similarity.
    */
-  distance_metric?: Shared.DistanceMetric;
+  distance_metric?: DistanceMetric;
 
   /**
    * Body param: A list of documents in columnar format. The keys are the column
    * names.
    */
-  patch_columns?: Shared.DocumentColumns;
+  patch_columns?: DocumentColumns;
 
   /**
    * Body param:
    */
-  patch_rows?: Array<Shared.DocumentRow>;
+  patch_rows?: Array<DocumentRow>;
 
   /**
    * Body param: The schema of the attributes attached to the documents.
    */
-  schema?: Record<string, Shared.AttributeSchema>;
+  schema?: Record<string, AttributeSchema>;
 
   /**
    * Body param: A list of documents in columnar format. The keys are the column
    * names.
    */
-  upsert_columns?: Shared.DocumentColumns;
+  upsert_columns?: DocumentColumns;
 
   /**
    * Body param:
    */
-  upsert_rows?: Array<Shared.DocumentRow>;
+  upsert_rows?: Array<DocumentRow>;
 }
 
 export declare namespace Namespaces {
   export {
+    type AttributeSchema as AttributeSchema,
+    type DistanceMetric as DistanceMetric,
+    type DocumentColumns as DocumentColumns,
+    type DocumentRow as DocumentRow,
+    type FullTextSearchConfig as FullTextSearchConfig,
+    type ID as ID,
     type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
     type NamespaceGetSchemaResponse as NamespaceGetSchemaResponse,
     type NamespaceQueryResponse as NamespaceQueryResponse,

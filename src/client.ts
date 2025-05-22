@@ -29,6 +29,12 @@ import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
 import {
+  AttributeSchema,
+  DistanceMetric,
+  DocumentColumns,
+  DocumentRow,
+  FullTextSearchConfig,
+  ID,
   NamespaceDeleteAllParams,
   NamespaceDeleteAllResponse,
   NamespaceGetSchemaParams,
@@ -791,6 +797,12 @@ export declare namespace Turbopuffer {
 
   export {
     Namespaces as Namespaces,
+    type AttributeSchema as AttributeSchema,
+    type DistanceMetric as DistanceMetric,
+    type DocumentColumns as DocumentColumns,
+    type DocumentRow as DocumentRow,
+    type FullTextSearchConfig as FullTextSearchConfig,
+    type ID as ID,
     type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
     type NamespaceGetSchemaResponse as NamespaceGetSchemaResponse,
     type NamespaceQueryResponse as NamespaceQueryResponse,
@@ -806,11 +818,4 @@ export declare namespace Turbopuffer {
     type NamespaceWarmCacheParams as NamespaceWarmCacheParams,
     type NamespaceWriteParams as NamespaceWriteParams,
   };
-
-  export type AttributeSchema = API.AttributeSchema;
-  export type DistanceMetric = API.DistanceMetric;
-  export type DocumentColumns = API.DocumentColumns;
-  export type DocumentRow = API.DocumentRow;
-  export type FullTextSearchConfig = API.FullTextSearchConfig;
-  export type ID = API.ID;
 }
