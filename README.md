@@ -26,13 +26,24 @@ The full API of this library can be found in [api.md](api.md).
 import Turbopuffer from '@turbopuffer/turbopuffer';
 
 const client = new Turbopuffer({
+  region: 'gcp-us-central1',
   apiKey: process.env['TURBOPUFFER_API_KEY'], // This is the default and can be omitted
 });
 
 async function main() {
-  const response = await client.namespaces.write('products');
+  const response = await client.namespaces.write({
+    namespace: 'products',
+    distance_metric: 'cosine_distance',
+    upsert_rows: [
+      {
+        id: '2108ed60-6851-49a0-9016-8325434f3845',
+        vector: [0.1, 0.2],
+        attributes: { name: 'Red boots', price: 34.99 },
+      },
+    ],
+  });
 
-  console.log(response.status);
+  console.log(response.rows_affected);
 }
 
 main();
@@ -47,11 +58,17 @@ This library includes TypeScript definitions for all request params and response
 import Turbopuffer from '@turbopuffer/turbopuffer';
 
 const client = new Turbopuffer({
+  region: 'gcp-us-central1',
   apiKey: process.env['TURBOPUFFER_API_KEY'], // This is the default and can be omitted
 });
 
 async function main() {
-  const documentRowWithScores: Turbopuffer.NamespaceQueryResponse = await client.namespaces.query('products');
+  const params: Turbopuffer.NamespaceQueryParams = {
+    namespace: 'products',
+    rank_by: ['vector', 'ANN', [0.2, 0.3]],
+    top_k: 10,
+  };
+  const response: Turbopuffer.NamespaceQueryResponse = await client.namespaces.query(params);
 }
 
 main();
@@ -68,15 +85,17 @@ a subclass of `APIError` will be thrown:
 <!-- prettier-ignore -->
 ```ts
 async function main() {
-  const documentRowWithScores = await client.namespaces.query('products').catch(async (err) => {
-    if (err instanceof Turbopuffer.APIError) {
-      console.log(err.status); // 400
-      console.log(err.name); // BadRequestError
-      console.log(err.headers); // {server: 'nginx', ...}
-    } else {
-      throw err;
-    }
-  });
+  const response = await client.namespaces
+    .query({ namespace: 'products', rank_by: ['vector', 'ANN', [0.2, 0.3]], top_k: 10 })
+    .catch(async (err) => {
+      if (err instanceof Turbopuffer.APIError) {
+        console.log(err.status); // 400
+        console.log(err.name); // BadRequestError
+        console.log(err.headers); // {server: 'nginx', ...}
+      } else {
+        throw err;
+      }
+    });
 }
 
 main();
@@ -107,11 +126,12 @@ You can use the `maxRetries` option to configure or disable this:
 ```js
 // Configure the default for all requests:
 const client = new Turbopuffer({
+  region: 'gcp-us-central1',
   maxRetries: 0, // default is 2
 });
 
 // Or, configure per-request:
-await client.namespaces.query('products', {
+await client.namespaces.query({ namespace: 'products', rank_by: ['vector', 'ANN', [0.2, 0.3]], top_k: 10 }, {
   maxRetries: 5,
 });
 ```
@@ -124,11 +144,12 @@ Requests time out after 1 minute by default. You can configure this with a `time
 ```ts
 // Configure the default for all requests:
 const client = new Turbopuffer({
+  region: 'gcp-us-central1',
   timeout: 20 * 1000, // 20 seconds (default is 1 minute)
 });
 
 // Override per-request:
-await client.namespaces.query('products', {
+await client.namespaces.query({ namespace: 'products', rank_by: ['vector', 'ANN', [0.2, 0.3]], top_k: 10 }, {
   timeout: 5 * 1000,
 });
 ```
@@ -143,20 +164,20 @@ List methods in the Turbopuffer API are paginated.
 You can use the `for await … of` syntax to iterate through items across all pages:
 
 ```ts
-async function fetchAllNamespaces(params) {
-  const allNamespaces = [];
+async function fetchAllClients(params) {
+  const allClients = [];
   // Automatically fetches more pages as needed.
-  for await (const namespaceSummary of client.namespaces.list({ prefix: 'products' })) {
-    allNamespaces.push(namespaceSummary);
+  for await (const namespaceSummary of client.listNamespaces({ prefix: 'products' })) {
+    allClients.push(namespaceSummary);
   }
-  return allNamespaces;
+  return allClients;
 }
 ```
 
 Alternatively, you can request a single page at a time:
 
 ```ts
-let page = await client.namespaces.list({ prefix: 'products' });
+let page = await client.listNamespaces({ prefix: 'products' });
 for (const namespaceSummary of page.namespaces) {
   console.log(namespaceSummary);
 }
@@ -182,15 +203,17 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new Turbopuffer();
 
-const response = await client.namespaces.query('products').asResponse();
+const response = await client.namespaces
+  .query({ namespace: 'products', rank_by: ['vector', 'ANN', [0.2, 0.3]], top_k: 10 })
+  .asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: documentRowWithScores, response: raw } = await client.namespaces
-  .query('products')
+const { data: response, response: raw } = await client.namespaces
+  .query({ namespace: 'products', rank_by: ['vector', 'ANN', [0.2, 0.3]], top_k: 10 })
   .withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(documentRowWithScores);
+console.log(response.aggregations);
 ```
 
 ### Logging
