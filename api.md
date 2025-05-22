@@ -8,21 +8,16 @@ Methods:
 
 - <code title="get /v1/namespaces">client.<a href="./src/index.ts">listNamespaces</a>({ ...params }) -> NamespaceSummariesListNamespaces</code>
 
-# Shared
-
-Types:
-
-- <code><a href="./src/resources/shared.ts">AttributeSchema</a></code>
-- <code><a href="./src/resources/shared.ts">DistanceMetric</a></code>
-- <code><a href="./src/resources/shared.ts">DocumentColumns</a></code>
-- <code><a href="./src/resources/shared.ts">DocumentRow</a></code>
-- <code><a href="./src/resources/shared.ts">FullTextSearchConfig</a></code>
-- <code><a href="./src/resources/shared.ts">ID</a></code>
-
 # Namespaces
 
 Types:
 
+- <code><a href="./src/resources/namespaces.ts">AttributeSchema</a></code>
+- <code><a href="./src/resources/namespaces.ts">DistanceMetric</a></code>
+- <code><a href="./src/resources/namespaces.ts">DocumentColumns</a></code>
+- <code><a href="./src/resources/namespaces.ts">DocumentRow</a></code>
+- <code><a href="./src/resources/namespaces.ts">FullTextSearchConfig</a></code>
+- <code><a href="./src/resources/namespaces.ts">ID</a></code>
 - <code><a href="./src/resources/namespaces.ts">NamespaceDeleteAllResponse</a></code>
 - <code><a href="./src/resources/namespaces.ts">NamespaceGetSchemaResponse</a></code>
 - <code><a href="./src/resources/namespaces.ts">NamespaceQueryResponse</a></code>
