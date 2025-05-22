@@ -131,7 +131,18 @@ export interface DocumentColumns {
    */
   id?: Array<ID>;
 
-  [k: string]: Array<unknown> | Array<ID> | undefined;
+  /**
+   * The vector embeddings of the documents.
+   */
+  vector?: Array<Array<number> | string> | Array<number> | string;
+
+  [k: string]:
+    | Array<unknown>
+    | Array<ID>
+    | Array<Array<number> | string>
+    | Array<number>
+    | string
+    | undefined;
 }
 
 /**
@@ -141,12 +152,12 @@ export interface DocumentRow {
   /**
    * An identifier for a document.
    */
-  id?: ID;
+  id: ID;
 
   /**
-   * A vector describing the document.
+   * A vector embedding associated with a document.
    */
-  vector?: Array<number> | string | null;
+  vector?: Array<number> | string;
 
   [k: string]: unknown;
 }
