@@ -355,7 +355,7 @@ export interface NamespaceRecallParams {
    * Body param: Use specific query vectors for the measurement. If omitted, sampled
    * from the index.
    */
-  queries?: Array<unknown>;
+  queries?: Array<number>;
 
   /**
    * Body param: Search for `top_k` nearest neighbors.
