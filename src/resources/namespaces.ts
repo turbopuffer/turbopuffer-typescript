@@ -134,15 +134,9 @@ export interface DocumentColumns {
   /**
    * The vector embeddings of the documents.
    */
-  vector?: Array<Array<number> | string> | Array<number> | string;
+  vector?: Array<Vector> | Array<number> | string;
 
-  [k: string]:
-    | Array<unknown>
-    | Array<ID>
-    | Array<Array<number> | string>
-    | Array<number>
-    | string
-    | undefined;
+  [k: string]: Array<unknown> | Array<ID> | Array<Vector> | Array<number> | string | undefined;
 }
 
 /**
@@ -157,7 +151,7 @@ export interface DocumentRow {
   /**
    * A vector embedding associated with a document.
    */
-  vector?: Array<number> | string;
+  vector?: Vector;
 
   [k: string]: unknown;
 }
@@ -212,6 +206,11 @@ export interface FullTextSearchConfig {
  * An identifier for a document.
  */
 export type ID = string | number;
+
+/**
+ * A vector embedding associated with a document.
+ */
+export type Vector = Array<number> | string;
 
 /**
  * The response to a successful namespace deletion request.
@@ -575,6 +574,7 @@ export declare namespace Namespaces {
     type DocumentRow as DocumentRow,
     type FullTextSearchConfig as FullTextSearchConfig,
     type ID as ID,
+    type Vector as Vector,
     type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
     type NamespaceGetSchemaResponse as NamespaceGetSchemaResponse,
     type NamespaceQueryResponse as NamespaceQueryResponse,

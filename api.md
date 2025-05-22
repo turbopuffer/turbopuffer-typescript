@@ -18,6 +18,7 @@ Types:
 - <code><a href="./src/resources/namespaces.ts">DocumentRow</a></code>
 - <code><a href="./src/resources/namespaces.ts">FullTextSearchConfig</a></code>
 - <code><a href="./src/resources/namespaces.ts">ID</a></code>
+- <code><a href="./src/resources/namespaces.ts">Vector</a></code>
 - <code><a href="./src/resources/namespaces.ts">NamespaceDeleteAllResponse</a></code>
 - <code><a href="./src/resources/namespaces.ts">NamespaceGetSchemaResponse</a></code>
 - <code><a href="./src/resources/namespaces.ts">NamespaceQueryResponse</a></code>
