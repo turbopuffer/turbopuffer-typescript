@@ -8,6 +8,7 @@ export {
   type DocumentRow,
   type FullTextSearchConfig,
   type ID,
+  type IncludeAttributes,
   type Vector,
   type NamespaceDeleteAllResponse,
   type NamespaceGetSchemaResponse,

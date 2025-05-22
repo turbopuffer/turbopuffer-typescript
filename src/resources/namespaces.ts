@@ -208,6 +208,11 @@ export interface FullTextSearchConfig {
 export type ID = string | number;
 
 /**
+ * Whether to include attributes in the response.
+ */
+export type IncludeAttributes = boolean | Array<string>;
+
+/**
  * A vector embedding associated with a document.
  */
 export type Vector = Array<number> | string;
@@ -440,7 +445,7 @@ export interface NamespaceQueryParams {
   /**
    * Body param: Whether to include attributes in the response.
    */
-  include_attributes?: boolean | Array<string>;
+  include_attributes?: IncludeAttributes;
 
   /**
    * Body param: The encoding to use for vectors in the response.
@@ -574,6 +579,7 @@ export declare namespace Namespaces {
     type DocumentRow as DocumentRow,
     type FullTextSearchConfig as FullTextSearchConfig,
     type ID as ID,
+    type IncludeAttributes as IncludeAttributes,
     type Vector as Vector,
     type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
     type NamespaceGetSchemaResponse as NamespaceGetSchemaResponse,
