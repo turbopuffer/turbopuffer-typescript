@@ -30,7 +30,17 @@ const client = new Turbopuffer({
 });
 
 async function main() {
-  const response = await client.namespaces.write({ namespace: 'products' });
+  const response = await client.namespaces.write({
+    namespace: 'products',
+    distance_metric: 'cosine_distance',
+    upsert_rows: [
+      {
+        id: '2108ed60-6851-49a0-9016-8325434f3845',
+        vector: [0.1, 0.2],
+        attributes: { name: 'Red boots', price: 34.99 },
+      },
+    ],
+  });
 
   console.log(response.rows_affected);
 }
