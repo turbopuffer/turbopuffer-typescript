@@ -55,6 +55,11 @@ export interface ClientOptions {
    */
   apiKey?: string | undefined;
 
+  /**
+   * The turbopuffer region to use.
+   */
+  region?: string | undefined;
+
   defaultNamespace?: string | null | undefined;
 
   /**
@@ -129,6 +134,7 @@ export interface ClientOptions {
  */
 export class Turbopuffer {
   apiKey: string;
+  region: string;
   defaultNamespace: string | null;
 
   baseURL: string;
@@ -147,8 +153,9 @@ export class Turbopuffer {
    * API Client for interfacing with the Turbopuffer API.
    *
    * @param {string | undefined} [opts.apiKey=process.env['TURBOPUFFER_API_KEY'] ?? undefined]
+   * @param {string | undefined} [opts.region=process.env['TURBOPUFFER_REGION'] ?? undefined]
    * @param {string | null | undefined} [opts.defaultNamespace]
-   * @param {string} [opts.baseURL=process.env['TURBOPUFFER_BASE_URL'] ?? https://api.turbopuffer.com] - Override the default base URL for the API.
+   * @param {string} [opts.baseURL=process.env['TURBOPUFFER_BASE_URL'] ?? https://{region}.turbopuffer.com] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
    * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
@@ -159,6 +166,7 @@ export class Turbopuffer {
   constructor({
     baseURL = readEnv('TURBOPUFFER_BASE_URL'),
     apiKey = readEnv('TURBOPUFFER_API_KEY'),
+    region = readEnv('TURBOPUFFER_REGION'),
     defaultNamespace = null,
     ...opts
   }: ClientOptions = {}) {
@@ -167,12 +175,18 @@ export class Turbopuffer {
         "The TURBOPUFFER_API_KEY environment variable is missing or empty; either provide it, or instantiate the Turbopuffer client with an apiKey option, like new Turbopuffer({ apiKey: 'My API Key' }).",
       );
     }
+    if (region === undefined) {
+      throw new Errors.TurbopufferError(
+        "The TURBOPUFFER_REGION environment variable is missing or empty; either provide it, or instantiate the Turbopuffer client with an region option, like new Turbopuffer({ region: 'My-Region' }).",
+      );
+    }
 
     const options: ClientOptions = {
       apiKey,
+      region,
       defaultNamespace,
       ...opts,
-      baseURL: baseURL || `https://api.turbopuffer.com`,
+      baseURL: baseURL || `https://${region}.turbopuffer.com`,
     };
 
     this.baseURL = options.baseURL!;
@@ -193,6 +207,7 @@ export class Turbopuffer {
     this._options = options;
 
     this.apiKey = apiKey;
+    this.region = region;
     this.defaultNamespace = defaultNamespace;
   }
 
@@ -209,6 +224,7 @@ export class Turbopuffer {
       logLevel: this.logLevel,
       fetchOptions: this.fetchOptions,
       apiKey: this.apiKey,
+      region: this.region,
       defaultNamespace: this.defaultNamespace,
       ...options,
     });
