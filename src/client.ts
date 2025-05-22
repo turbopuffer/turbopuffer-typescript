@@ -50,6 +50,7 @@ import {
   NamespaceWriteParams,
   NamespaceWriteResponse,
   Namespaces,
+  Vector,
 } from './resources/namespaces';
 import { readEnv } from './internal/utils/env';
 import { formatRequestDetails, loggerFor } from './internal/utils/log';
@@ -803,6 +804,7 @@ export declare namespace Turbopuffer {
     type DocumentRow as DocumentRow,
     type FullTextSearchConfig as FullTextSearchConfig,
     type ID as ID,
+    type Vector as Vector,
     type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
     type NamespaceGetSchemaResponse as NamespaceGetSchemaResponse,
     type NamespaceQueryResponse as NamespaceQueryResponse,
