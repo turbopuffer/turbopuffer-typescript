@@ -172,12 +172,12 @@ export class Turbopuffer {
   }: ClientOptions = {}) {
     if (apiKey === undefined) {
       throw new Errors.TurbopufferError(
-        "The TURBOPUFFER_API_KEY environment variable is missing or empty; either provide it, or instantiate the Turbopuffer client with an apiKey option, like new Turbopuffer({ apiKey: 'My API Key' }).",
+        "The TURBOPUFFER_API_KEY environment variable is missing or empty; either provide it, or instantiate the Turbopuffer client with an apiKey option, like new Turbopuffer({ apiKey: 'tpuf_A1...' }).",
       );
     }
     if (region === undefined) {
       throw new Errors.TurbopufferError(
-        "The TURBOPUFFER_REGION environment variable is missing or empty; either provide it, or instantiate the Turbopuffer client with an region option, like new Turbopuffer({ region: 'My-Region' }).",
+        "The TURBOPUFFER_REGION environment variable is missing or empty; either provide it, or instantiate the Turbopuffer client with an region option, like new Turbopuffer({ region: 'gcp-us-central1' }).",
       );
     }
 

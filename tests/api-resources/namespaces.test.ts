@@ -3,8 +3,8 @@
 import Turbopuffer from '@turbopuffer/turbopuffer';
 
 const client = new Turbopuffer({
-  apiKey: 'My API Key',
-  region: 'My-Region',
+  apiKey: 'tpuf_A1...',
+  region: 'gcp-us-central1',
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
