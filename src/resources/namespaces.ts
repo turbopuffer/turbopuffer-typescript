@@ -95,7 +95,7 @@ export interface AttributeSchema {
    * the `string` or `[]string` type, and by default, BM25-enabled attributes are not
    * filterable. You can override this by setting `filterable: true`.
    */
-  full_text_search?: boolean | FullTextSearchConfig;
+  full_text_search?: FullTextSearchConfig;
 
   /**
    * The data type of the attribute.
@@ -157,49 +157,55 @@ export interface DocumentRow {
 }
 
 /**
- * Detailed configuration options for BM25 full-text search.
+ * Whether this attribute can be used as part of a BM25 full-text search. Requires
+ * the `string` or `[]string` type, and by default, BM25-enabled attributes are not
+ * filterable. You can override this by setting `filterable: true`.
  */
-export interface FullTextSearchConfig {
-  /**
-   * Whether searching is case-sensitive. Defaults to `false` (i.e.
-   * case-insensitive).
-   */
-  case_sensitive?: boolean;
+export type FullTextSearchConfig = boolean | FullTextSearchConfig.UnionMember1;
 
-  /**
-   * The language of the text. Defaults to `english`.
-   */
-  language?:
-    | 'arabic'
-    | 'danish'
-    | 'dutch'
-    | 'english'
-    | 'finnish'
-    | 'french'
-    | 'german'
-    | 'greek'
-    | 'hungarian'
-    | 'italian'
-    | 'norwegian'
-    | 'portuguese'
-    | 'romanian'
-    | 'russian'
-    | 'spanish'
-    | 'swedish'
-    | 'tamil'
-    | 'turkish';
+export namespace FullTextSearchConfig {
+  export interface UnionMember1 {
+    /**
+     * Whether searching is case-sensitive. Defaults to `false` (i.e.
+     * case-insensitive).
+     */
+    case_sensitive?: boolean;
 
-  /**
-   * Removes common words from the text based on language. Defaults to `true` (i.e.
-   * remove common words).
-   */
-  remove_stopwords?: boolean;
+    /**
+     * The language of the text. Defaults to `english`.
+     */
+    language?:
+      | 'arabic'
+      | 'danish'
+      | 'dutch'
+      | 'english'
+      | 'finnish'
+      | 'french'
+      | 'german'
+      | 'greek'
+      | 'hungarian'
+      | 'italian'
+      | 'norwegian'
+      | 'portuguese'
+      | 'romanian'
+      | 'russian'
+      | 'spanish'
+      | 'swedish'
+      | 'tamil'
+      | 'turkish';
 
-  /**
-   * Language-specific stemming for the text. Defaults to `false` (i.e., do not
-   * stem).
-   */
-  stemming?: boolean;
+    /**
+     * Removes common words from the text based on language. Defaults to `true` (i.e.
+     * remove common words).
+     */
+    remove_stopwords?: boolean;
+
+    /**
+     * Language-specific stemming for the text. Defaults to `false` (i.e., do not
+     * stem).
+     */
+    stemming?: boolean;
+  }
 }
 
 /**
