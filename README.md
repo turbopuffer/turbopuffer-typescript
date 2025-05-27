@@ -63,12 +63,8 @@ const client = new Turbopuffer({
 });
 
 async function main() {
-  const params: Turbopuffer.NamespaceQueryParams = {
-    namespace: 'products',
-    rank_by: ['vector', 'ANN', [0.2, 0.3]],
-    top_k: 10,
-  };
-  const response: Turbopuffer.NamespaceQueryResponse = await client.namespaces.query(params);
+  const params: Turbopuffer.ListNamespacesParams = { prefix: 'foo' };
+  const [namespaceSummary]: [Turbopuffer.NamespaceSummary] = await client.listNamespaces(params);
 }
 
 main();
@@ -85,17 +81,15 @@ a subclass of `APIError` will be thrown:
 <!-- prettier-ignore -->
 ```ts
 async function main() {
-  const response = await client.namespaces
-    .query({ namespace: 'products', rank_by: ['vector', 'ANN', [0.2, 0.3]], top_k: 10 })
-    .catch(async (err) => {
-      if (err instanceof Turbopuffer.APIError) {
-        console.log(err.status); // 400
-        console.log(err.name); // BadRequestError
-        console.log(err.headers); // {server: 'nginx', ...}
-      } else {
-        throw err;
-      }
-    });
+  const namespaces = await client.listNamespaces({ prefix: 'foo' }).catch(async (err) => {
+    if (err instanceof Turbopuffer.APIError) {
+      console.log(err.status); // 400
+      console.log(err.name); // BadRequestError
+      console.log(err.headers); // {server: 'nginx', ...}
+    } else {
+      throw err;
+    }
+  });
 }
 
 main();
@@ -131,7 +125,7 @@ const client = new Turbopuffer({
 });
 
 // Or, configure per-request:
-await client.namespaces.query({ namespace: 'products', rank_by: ['vector', 'ANN', [0.2, 0.3]], top_k: 10 }, {
+await client.listNamespaces({ prefix: 'foo' }, {
   maxRetries: 5,
 });
 ```
@@ -149,7 +143,7 @@ const client = new Turbopuffer({
 });
 
 // Override per-request:
-await client.namespaces.query({ namespace: 'products', rank_by: ['vector', 'ANN', [0.2, 0.3]], top_k: 10 }, {
+await client.listNamespaces({ prefix: 'foo' }, {
   timeout: 5 * 1000,
 });
 ```
@@ -203,17 +197,15 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new Turbopuffer();
 
-const response = await client.namespaces
-  .query({ namespace: 'products', rank_by: ['vector', 'ANN', [0.2, 0.3]], top_k: 10 })
-  .asResponse();
+const response = await client.listNamespaces({ prefix: 'foo' }).asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: response, response: raw } = await client.namespaces
-  .query({ namespace: 'products', rank_by: ['vector', 'ANN', [0.2, 0.3]], top_k: 10 })
-  .withResponse();
+const { data: namespaces, response: raw } = await client.listNamespaces({ prefix: 'foo' }).withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(response.aggregations);
+for await (const namespaceSummary of namespaces) {
+  console.log(namespaceSummary.id);
+}
 ```
 
 ### Logging
