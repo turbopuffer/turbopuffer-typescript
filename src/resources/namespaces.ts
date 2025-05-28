@@ -284,17 +284,17 @@ export interface NamespaceHintCacheWarmResponse {
  * The result of a query.
  */
 export interface NamespaceQueryResponse {
-  aggregations?: Array<Record<string, unknown>>;
-
   /**
    * The billing information for a query.
    */
-  billing?: NamespaceQueryResponse.Billing;
+  billing: NamespaceQueryResponse.Billing;
 
   /**
    * The performance information for a query.
    */
-  performance?: NamespaceQueryResponse.Performance;
+  performance: NamespaceQueryResponse.Performance;
+
+  aggregations?: Array<Record<string, unknown>>;
 
   rows?: Array<DocumentRow>;
 }
