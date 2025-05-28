@@ -161,10 +161,10 @@ export interface DocumentRow {
  * the `string` or `[]string` type, and by default, BM25-enabled attributes are not
  * filterable. You can override this by setting `filterable: true`.
  */
-export type FullTextSearchConfig = boolean | FullTextSearchConfig.UnionMember1;
+export type FullTextSearchConfig = boolean | FullTextSearchConfig.FullTextSearchDetailedConfig;
 
 export namespace FullTextSearchConfig {
-  export interface UnionMember1 {
+  export interface FullTextSearchDetailedConfig {
     /**
      * Whether searching is case-sensitive. Defaults to `false` (i.e.
      * case-insensitive).
