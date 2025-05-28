@@ -54,6 +54,7 @@ import {
   NamespaceWriteParams,
   NamespaceWriteResponse,
   Namespaces,
+  Tokenizer,
   Vector,
 } from './resources/namespaces';
 import { readEnv } from './internal/utils/env';
@@ -812,6 +813,7 @@ export declare namespace Turbopuffer {
     type ID as ID,
     type IncludeAttributes as IncludeAttributes,
     type Language as Language,
+    type Tokenizer as Tokenizer,
     type Vector as Vector,
     type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
     type NamespaceGetSchemaResponse as NamespaceGetSchemaResponse,

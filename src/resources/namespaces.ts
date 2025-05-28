@@ -203,6 +203,11 @@ export interface FullTextSearchConfig {
    * stem).
    */
   stemming?: boolean;
+
+  /**
+   * The tokenizer to use for full-text search on an attribute.
+   */
+  tokenizer?: Tokenizer;
 }
 
 /**
@@ -237,6 +242,11 @@ export type Language =
   | 'swedish'
   | 'tamil'
   | 'turkish';
+
+/**
+ * The tokenizer to use for full-text search on an attribute.
+ */
+export type Tokenizer = 'pre_tokenized_array' | 'word_v0' | 'word_v1';
 
 /**
  * A vector embedding associated with a document.
@@ -609,6 +619,7 @@ export declare namespace Namespaces {
     type ID as ID,
     type IncludeAttributes as IncludeAttributes,
     type Language as Language,
+    type Tokenizer as Tokenizer,
     type Vector as Vector,
     type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
     type NamespaceGetSchemaResponse as NamespaceGetSchemaResponse,
