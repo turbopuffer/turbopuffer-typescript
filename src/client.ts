@@ -54,8 +54,11 @@ import {
   NamespaceWriteParams,
   NamespaceWriteResponse,
   Namespaces,
+  QueryBilling,
+  QueryPerformance,
   Tokenizer,
   Vector,
+  WriteBilling,
 } from './resources/namespaces';
 import { readEnv } from './internal/utils/env';
 import { formatRequestDetails, loggerFor } from './internal/utils/log';
@@ -813,8 +816,11 @@ export declare namespace Turbopuffer {
     type ID as ID,
     type IncludeAttributes as IncludeAttributes,
     type Language as Language,
+    type QueryBilling as QueryBilling,
+    type QueryPerformance as QueryPerformance,
     type Tokenizer as Tokenizer,
     type Vector as Vector,
+    type WriteBilling as WriteBilling,
     type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
     type NamespaceGetSchemaResponse as NamespaceGetSchemaResponse,
     type NamespaceHintCacheWarmResponse as NamespaceHintCacheWarmResponse,
