@@ -580,6 +580,11 @@ export interface NamespaceWriteParams {
   distance_metric?: DistanceMetric;
 
   /**
+   * Body param: The encryption configuration for a namespace.
+   */
+  encryption?: NamespaceWriteParams.Encryption;
+
+  /**
    * Body param: A list of documents in columnar format. The keys are the column
    * names.
    */
@@ -605,6 +610,25 @@ export interface NamespaceWriteParams {
    * Body param:
    */
   upsert_rows?: Array<DocumentRow>;
+}
+
+export namespace NamespaceWriteParams {
+  /**
+   * The encryption configuration for a namespace.
+   */
+  export interface Encryption {
+    cmek?: Encryption.Cmek;
+  }
+
+  export namespace Encryption {
+    export interface Cmek {
+      /**
+       * The identifier of the CMEK key to use for encryption. For GCP, the
+       * fully-qualified resource name of the key. For AWS, the ARN of the key.
+       */
+      key_name: string;
+    }
+  }
 }
 
 export declare namespace Namespaces {
