@@ -44,6 +44,23 @@ describe('resource namespaces', () => {
   });
 
   // skipped: tests are disabled for the time being
+  test.skip('hintCacheWarm: only required params', async () => {
+    const responsePromise = client.namespaces.hintCacheWarm({ namespace: 'namespace' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // skipped: tests are disabled for the time being
+  test.skip('hintCacheWarm: required and optional params', async () => {
+    const response = await client.namespaces.hintCacheWarm({ namespace: 'namespace' });
+  });
+
+  // skipped: tests are disabled for the time being
   test.skip('query: only required params', async () => {
     const responsePromise = client.namespaces.query({ namespace: 'namespace', rank_by: {}, top_k: 0 });
     const rawResponse = await responsePromise.asResponse();
@@ -110,23 +127,6 @@ describe('resource namespaces', () => {
       namespace: 'namespace',
       schema: { foo: { filterable: true, full_text_search: true, type: 'string' } },
     });
-  });
-
-  // skipped: tests are disabled for the time being
-  test.skip('warmCache: only required params', async () => {
-    const responsePromise = client.namespaces.warmCache({ namespace: 'namespace' });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // skipped: tests are disabled for the time being
-  test.skip('warmCache: required and optional params', async () => {
-    const response = await client.namespaces.warmCache({ namespace: 'namespace' });
   });
 
   // skipped: tests are disabled for the time being
