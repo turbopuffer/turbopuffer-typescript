@@ -12,6 +12,7 @@ export {
   type ID,
   type IncludeAttributes,
   type Language,
+  type Tokenizer,
   type Vector,
   type NamespaceDeleteAllResponse,
   type NamespaceGetSchemaResponse,
