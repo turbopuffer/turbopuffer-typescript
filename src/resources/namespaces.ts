@@ -91,9 +91,11 @@ export interface AttributeSchema {
   filterable?: boolean;
 
   /**
-   * Configuration options for full-text search.
+   * Whether this attribute can be used as part of a BM25 full-text search. Requires
+   * the `string` or `[]string` type, and by default, BM25-enabled attributes are not
+   * filterable. You can override this by setting `filterable: true`.
    */
-  full_text_search?: FullTextSearchConfig;
+  full_text_search?: FullTextSearch;
 
   /**
    * The data type of the attribute.
