@@ -58,6 +58,7 @@ import {
   QueryPerformance,
   Tokenizer,
   Vector,
+  VectorEncoding,
   WriteBilling,
 } from './resources/namespaces';
 import { readEnv } from './internal/utils/env';
@@ -820,6 +821,7 @@ export declare namespace Turbopuffer {
     type QueryPerformance as QueryPerformance,
     type Tokenizer as Tokenizer,
     type Vector as Vector,
+    type VectorEncoding as VectorEncoding,
     type WriteBilling as WriteBilling,
     type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
     type NamespaceGetSchemaResponse as NamespaceGetSchemaResponse,
