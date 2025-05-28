@@ -26,6 +26,7 @@ Types:
 - <code><a href="./src/resources/namespaces.ts">QueryPerformance</a></code>
 - <code><a href="./src/resources/namespaces.ts">Tokenizer</a></code>
 - <code><a href="./src/resources/namespaces.ts">Vector</a></code>
+- <code><a href="./src/resources/namespaces.ts">VectorEncoding</a></code>
 - <code><a href="./src/resources/namespaces.ts">WriteBilling</a></code>
 - <code><a href="./src/resources/namespaces.ts">NamespaceDeleteAllResponse</a></code>
 - <code><a href="./src/resources/namespaces.ts">NamespaceGetSchemaResponse</a></code>

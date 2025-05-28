@@ -16,6 +16,7 @@ export {
   type QueryPerformance,
   type Tokenizer,
   type Vector,
+  type VectorEncoding,
   type WriteBilling,
   type NamespaceDeleteAllResponse,
   type NamespaceGetSchemaResponse,

@@ -306,6 +306,11 @@ export type Tokenizer = 'pre_tokenized_array' | 'word_v0' | 'word_v1';
 export type Vector = Array<number> | string;
 
 /**
+ * The encoding to use for vectors in the response.
+ */
+export type VectorEncoding = 'float' | 'base64';
+
+/**
  * The billing information for a write request.
  */
 export interface WriteBilling {
@@ -478,7 +483,7 @@ export interface NamespaceQueryParams {
   /**
    * Body param: The encoding to use for vectors in the response.
    */
-  vector_encoding?: 'float' | 'base64';
+  vector_encoding?: VectorEncoding;
 }
 
 export namespace NamespaceQueryParams {
@@ -632,6 +637,7 @@ export declare namespace Namespaces {
     type QueryPerformance as QueryPerformance,
     type Tokenizer as Tokenizer,
     type Vector as Vector,
+    type VectorEncoding as VectorEncoding,
     type WriteBilling as WriteBilling,
     type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
     type NamespaceGetSchemaResponse as NamespaceGetSchemaResponse,
