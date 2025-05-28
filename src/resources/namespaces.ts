@@ -91,27 +91,39 @@ export interface AttributeSchema {
   filterable?: boolean;
 
   /**
-   * Whether this attribute can be used as part of a BM25 full-text search. Requires
-   * the `string` or `[]string` type, and by default, BM25-enabled attributes are not
-   * filterable. You can override this by setting `filterable: true`.
+   * Configuration options for full-text search.
    */
   full_text_search?: FullTextSearchConfig;
 
   /**
    * The data type of the attribute.
-   *
-   * - `string` - A string.
-   * - `uint` - An unsigned integer.
-   * - `uuid` - A UUID.
-   * - `bool` - A boolean.
-   * - `datetime` - A date and time.
-   * - `[]string` - An array of strings.
-   * - `[]uint` - An array of unsigned integers.
-   * - `[]uuid` - An array of UUIDs.
-   * - `[]datetime` - An array of date and time values.
    */
-  type?: 'string' | 'uint' | 'uuid' | 'bool' | 'datetime' | '[]string' | '[]uint' | '[]uuid' | '[]datetime';
+  type?: AttributeType;
 }
+
+/**
+ * The data type of the attribute.
+ *
+ * - `string` - A string.
+ * - `uint` - An unsigned integer.
+ * - `uuid` - A UUID.
+ * - `bool` - A boolean.
+ * - `datetime` - A date and time.
+ * - `[]string` - An array of strings.
+ * - `[]uint` - An array of unsigned integers.
+ * - `[]uuid` - An array of UUIDs.
+ * - `[]datetime` - An array of date and time values.
+ */
+export type AttributeType =
+  | 'string'
+  | 'uint'
+  | 'uuid'
+  | 'bool'
+  | 'datetime'
+  | '[]string'
+  | '[]uint'
+  | '[]uuid'
+  | '[]datetime';
 
 /**
  * A function used to calculate vector similarity.
@@ -161,51 +173,34 @@ export interface DocumentRow {
  * the `string` or `[]string` type, and by default, BM25-enabled attributes are not
  * filterable. You can override this by setting `filterable: true`.
  */
-export type FullTextSearchConfig = boolean | FullTextSearchConfig.Detailed;
+export type FullTextSearch = boolean | FullTextSearchConfig;
 
-export namespace FullTextSearchConfig {
-  export interface Detailed {
-    /**
-     * Whether searching is case-sensitive. Defaults to `false` (i.e.
-     * case-insensitive).
-     */
-    case_sensitive?: boolean;
+/**
+ * Configuration options for full-text search.
+ */
+export interface FullTextSearchConfig {
+  /**
+   * Whether searching is case-sensitive. Defaults to `false` (i.e.
+   * case-insensitive).
+   */
+  case_sensitive?: boolean;
 
-    /**
-     * The language of the text. Defaults to `english`.
-     */
-    language?:
-      | 'arabic'
-      | 'danish'
-      | 'dutch'
-      | 'english'
-      | 'finnish'
-      | 'french'
-      | 'german'
-      | 'greek'
-      | 'hungarian'
-      | 'italian'
-      | 'norwegian'
-      | 'portuguese'
-      | 'romanian'
-      | 'russian'
-      | 'spanish'
-      | 'swedish'
-      | 'tamil'
-      | 'turkish';
+  /**
+   * Describes the language of a text attribute. Defaults to `english`.
+   */
+  language?: Language;
 
-    /**
-     * Removes common words from the text based on language. Defaults to `true` (i.e.
-     * remove common words).
-     */
-    remove_stopwords?: boolean;
+  /**
+   * Removes common words from the text based on language. Defaults to `true` (i.e.
+   * remove common words).
+   */
+  remove_stopwords?: boolean;
 
-    /**
-     * Language-specific stemming for the text. Defaults to `false` (i.e., do not
-     * stem).
-     */
-    stemming?: boolean;
-  }
+  /**
+   * Language-specific stemming for the text. Defaults to `false` (i.e., do not
+   * stem).
+   */
+  stemming?: boolean;
 }
 
 /**
@@ -217,6 +212,29 @@ export type ID = string | number;
  * Whether to include attributes in the response.
  */
 export type IncludeAttributes = boolean | Array<string>;
+
+/**
+ * Describes the language of a text attribute. Defaults to `english`.
+ */
+export type Language =
+  | 'arabic'
+  | 'danish'
+  | 'dutch'
+  | 'english'
+  | 'finnish'
+  | 'french'
+  | 'german'
+  | 'greek'
+  | 'hungarian'
+  | 'italian'
+  | 'norwegian'
+  | 'portuguese'
+  | 'romanian'
+  | 'russian'
+  | 'spanish'
+  | 'swedish'
+  | 'tamil'
+  | 'turkish';
 
 /**
  * A vector embedding associated with a document.
@@ -580,12 +598,15 @@ export interface NamespaceWriteParams {
 export declare namespace Namespaces {
   export {
     type AttributeSchema as AttributeSchema,
+    type AttributeType as AttributeType,
     type DistanceMetric as DistanceMetric,
     type DocumentColumns as DocumentColumns,
     type DocumentRow as DocumentRow,
+    type FullTextSearch as FullTextSearch,
     type FullTextSearchConfig as FullTextSearchConfig,
     type ID as ID,
     type IncludeAttributes as IncludeAttributes,
+    type Language as Language,
     type Vector as Vector,
     type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
     type NamespaceGetSchemaResponse as NamespaceGetSchemaResponse,
