@@ -29,6 +29,17 @@ export class Namespaces extends APIResource {
   }
 
   /**
+   * Warm the cache for a namespace.
+   */
+  hintCacheWarm(
+    params: NamespaceHintCacheWarmParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<NamespaceHintCacheWarmResponse> {
+    const { namespace = this._client.defaultNamespace } = params ?? {};
+    return this._client.get(path`/v1/namespaces/${namespace}/hint_cache_warm`, options);
+  }
+
+  /**
    * Query, filter, full-text search and vector search documents.
    */
   query(params: NamespaceQueryParams, options?: RequestOptions): APIPromise<NamespaceQueryResponse> {
@@ -56,17 +67,6 @@ export class Namespaces extends APIResource {
   ): APIPromise<NamespaceUpdateSchemaResponse> {
     const { namespace = this._client.defaultNamespace, schema } = params ?? {};
     return this._client.post(path`/v1/namespaces/${namespace}/schema`, { body: schema, ...options });
-  }
-
-  /**
-   * Warm the cache for a namespace.
-   */
-  warmCache(
-    params: NamespaceWarmCacheParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<NamespaceWarmCacheResponse> {
-    const { namespace = this._client.defaultNamespace } = params ?? {};
-    return this._client.get(path`/v1/namespaces/${namespace}/hint_cache_warm`, options);
   }
 
   /**
@@ -269,6 +269,18 @@ export interface NamespaceDeleteAllResponse {
 export type NamespaceGetSchemaResponse = Record<string, AttributeSchema>;
 
 /**
+ * The response to a successful cache warm request.
+ */
+export interface NamespaceHintCacheWarmResponse {
+  /**
+   * The status of the request.
+   */
+  status: 'OK';
+
+  message?: string;
+}
+
+/**
  * The result of a query.
  */
 export interface NamespaceQueryResponse {
@@ -368,18 +380,6 @@ export interface NamespaceRecallResponse {
 export type NamespaceUpdateSchemaResponse = Record<string, AttributeSchema>;
 
 /**
- * The response to a successful cache warm request.
- */
-export interface NamespaceWarmCacheResponse {
-  /**
-   * The status of the request.
-   */
-  status: 'OK';
-
-  message?: string;
-}
-
-/**
  * The response to a successful write request.
  */
 export interface NamespaceWriteResponse {
@@ -440,6 +440,13 @@ export interface NamespaceDeleteAllParams {
 }
 
 export interface NamespaceGetSchemaParams {
+  /**
+   * The name of the namespace.
+   */
+  namespace?: string;
+}
+
+export interface NamespaceHintCacheWarmParams {
   /**
    * The name of the namespace.
    */
@@ -546,13 +553,6 @@ export interface NamespaceUpdateSchemaParams {
   schema?: Record<string, AttributeSchema>;
 }
 
-export interface NamespaceWarmCacheParams {
-  /**
-   * The name of the namespace.
-   */
-  namespace?: string;
-}
-
 export interface NamespaceWriteParams {
   /**
    * Path param: The name of the namespace.
@@ -623,17 +623,17 @@ export declare namespace Namespaces {
     type Vector as Vector,
     type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
     type NamespaceGetSchemaResponse as NamespaceGetSchemaResponse,
+    type NamespaceHintCacheWarmResponse as NamespaceHintCacheWarmResponse,
     type NamespaceQueryResponse as NamespaceQueryResponse,
     type NamespaceRecallResponse as NamespaceRecallResponse,
     type NamespaceUpdateSchemaResponse as NamespaceUpdateSchemaResponse,
-    type NamespaceWarmCacheResponse as NamespaceWarmCacheResponse,
     type NamespaceWriteResponse as NamespaceWriteResponse,
     type NamespaceDeleteAllParams as NamespaceDeleteAllParams,
     type NamespaceGetSchemaParams as NamespaceGetSchemaParams,
+    type NamespaceHintCacheWarmParams as NamespaceHintCacheWarmParams,
     type NamespaceQueryParams as NamespaceQueryParams,
     type NamespaceRecallParams as NamespaceRecallParams,
     type NamespaceUpdateSchemaParams as NamespaceUpdateSchemaParams,
-    type NamespaceWarmCacheParams as NamespaceWarmCacheParams,
     type NamespaceWriteParams as NamespaceWriteParams,
   };
 }
