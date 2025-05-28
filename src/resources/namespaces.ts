@@ -244,6 +244,58 @@ export type Language =
   | 'turkish';
 
 /**
+ * The billing information for a query.
+ */
+export interface QueryBilling {
+  /**
+   * The number of billable logical bytes queried from the namespace.
+   */
+  billable_logical_bytes_queried: number;
+
+  /**
+   * The number of billable logical bytes returned from the query.
+   */
+  billable_logical_bytes_returned: number;
+}
+
+/**
+ * The performance information for a query.
+ */
+export interface QueryPerformance {
+  /**
+   * the approximate number of documents in the namespace.
+   */
+  approx_namespace_size: number;
+
+  /**
+   * The ratio of cache hits to total cache lookups.
+   */
+  cache_hit_ratio: number;
+
+  /**
+   * A qualitative description of the cache hit ratio (`hot`, `warm`, or `cold`).
+   */
+  cache_temperature: string;
+
+  /**
+   * The number of unindexed documents processed by the query.
+   */
+  exhaustive_search_count: number;
+
+  /**
+   * Request time measured on the server, excluding time spent waiting due to the
+   * namespace concurrency limit.
+   */
+  query_execution_ms: number;
+
+  /**
+   * Request time measured on the server, including time spent waiting for other
+   * queries to complete if the namespace was at its concurrency limit.
+   */
+  server_total_ms: number;
+}
+
+/**
  * The tokenizer to use for full-text search on an attribute.
  */
 export type Tokenizer = 'pre_tokenized_array' | 'word_v0' | 'word_v1';
@@ -252,6 +304,21 @@ export type Tokenizer = 'pre_tokenized_array' | 'word_v0' | 'word_v1';
  * A vector embedding associated with a document.
  */
 export type Vector = Array<number> | string;
+
+/**
+ * The billing information for a write request.
+ */
+export interface WriteBilling {
+  /**
+   * The number of billable logical bytes written to the namespace.
+   */
+  billable_logical_bytes_written: number;
+
+  /**
+   * The billing information for a query.
+   */
+  query?: QueryBilling;
+}
 
 /**
  * The response to a successful namespace deletion request.
@@ -287,70 +354,16 @@ export interface NamespaceQueryResponse {
   /**
    * The billing information for a query.
    */
-  billing: NamespaceQueryResponse.Billing;
+  billing: QueryBilling;
 
   /**
    * The performance information for a query.
    */
-  performance: NamespaceQueryResponse.Performance;
+  performance: QueryPerformance;
 
   aggregations?: Array<Record<string, unknown>>;
 
   rows?: Array<DocumentRow>;
-}
-
-export namespace NamespaceQueryResponse {
-  /**
-   * The billing information for a query.
-   */
-  export interface Billing {
-    /**
-     * The number of billable logical bytes queried from the namespace.
-     */
-    billable_logical_bytes_queried: number;
-
-    /**
-     * The number of billable logical bytes returned from the query.
-     */
-    billable_logical_bytes_returned: number;
-  }
-
-  /**
-   * The performance information for a query.
-   */
-  export interface Performance {
-    /**
-     * the approximate number of documents in the namespace.
-     */
-    approx_namespace_size: number;
-
-    /**
-     * The ratio of cache hits to total cache lookups.
-     */
-    cache_hit_ratio: number;
-
-    /**
-     * A qualitative description of the cache hit ratio (`hot`, `warm`, or `cold`).
-     */
-    cache_temperature: string;
-
-    /**
-     * The number of unindexed documents processed by the query.
-     */
-    exhaustive_search_count: number;
-
-    /**
-     * Request time measured on the server, excluding time spent waiting due to the
-     * namespace concurrency limit.
-     */
-    query_execution_ms: number;
-
-    /**
-     * Request time measured on the server, including time spent waiting for other
-     * queries to complete if the namespace was at its concurrency limit.
-     */
-    server_total_ms: number;
-  }
 }
 
 /**
@@ -383,7 +396,10 @@ export type NamespaceUpdateSchemaResponse = Record<string, AttributeSchema>;
  * The response to a successful write request.
  */
 export interface NamespaceWriteResponse {
-  billing: NamespaceWriteResponse.Billing;
+  /**
+   * The billing information for a write request.
+   */
+  billing: WriteBilling;
 
   /**
    * A message describing the result of the write request.
@@ -399,37 +415,6 @@ export interface NamespaceWriteResponse {
    * The status of the request.
    */
   status: 'OK';
-}
-
-export namespace NamespaceWriteResponse {
-  export interface Billing {
-    /**
-     * The number of billable logical bytes written to the namespace.
-     */
-    billable_logical_bytes_written: number;
-
-    /**
-     * The billing information for a query.
-     */
-    query?: Billing.Query;
-  }
-
-  export namespace Billing {
-    /**
-     * The billing information for a query.
-     */
-    export interface Query {
-      /**
-       * The number of billable logical bytes queried from the namespace.
-       */
-      billable_logical_bytes_queried: number;
-
-      /**
-       * The number of billable logical bytes returned from the query.
-       */
-      billable_logical_bytes_returned: number;
-    }
-  }
 }
 
 export interface NamespaceDeleteAllParams {
@@ -643,8 +628,11 @@ export declare namespace Namespaces {
     type ID as ID,
     type IncludeAttributes as IncludeAttributes,
     type Language as Language,
+    type QueryBilling as QueryBilling,
+    type QueryPerformance as QueryPerformance,
     type Tokenizer as Tokenizer,
     type Vector as Vector,
+    type WriteBilling as WriteBilling,
     type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
     type NamespaceGetSchemaResponse as NamespaceGetSchemaResponse,
     type NamespaceHintCacheWarmResponse as NamespaceHintCacheWarmResponse,

@@ -22,8 +22,11 @@ Types:
 - <code><a href="./src/resources/namespaces.ts">ID</a></code>
 - <code><a href="./src/resources/namespaces.ts">IncludeAttributes</a></code>
 - <code><a href="./src/resources/namespaces.ts">Language</a></code>
+- <code><a href="./src/resources/namespaces.ts">QueryBilling</a></code>
+- <code><a href="./src/resources/namespaces.ts">QueryPerformance</a></code>
 - <code><a href="./src/resources/namespaces.ts">Tokenizer</a></code>
 - <code><a href="./src/resources/namespaces.ts">Vector</a></code>
+- <code><a href="./src/resources/namespaces.ts">WriteBilling</a></code>
 - <code><a href="./src/resources/namespaces.ts">NamespaceDeleteAllResponse</a></code>
 - <code><a href="./src/resources/namespaces.ts">NamespaceGetSchemaResponse</a></code>
 - <code><a href="./src/resources/namespaces.ts">NamespaceHintCacheWarmResponse</a></code>
