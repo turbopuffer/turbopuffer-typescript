@@ -42,8 +42,11 @@ export class Namespaces extends APIResource {
   /**
    * Query, filter, full-text search and vector search documents.
    */
-  query(params: NamespaceQueryParams, options?: RequestOptions): APIPromise<NamespaceQueryResponse> {
-    const { namespace = this._client.defaultNamespace, ...body } = params;
+  query(
+    params: NamespaceQueryParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<NamespaceQueryResponse> {
+    const { namespace = this._client.defaultNamespace, ...body } = params ?? {};
     return this._client.post(path`/v2/namespaces/${namespace}/query`, { body, ...options });
   }
 
@@ -456,16 +459,6 @@ export interface NamespaceQueryParams {
   namespace?: string;
 
   /**
-   * Body param: How to rank the documents in the namespace.
-   */
-  rank_by: unknown;
-
-  /**
-   * Body param: The number of results to return.
-   */
-  top_k: number;
-
-  /**
    * Body param: Aggregations to compute over all documents in the namespace that
    * match the filters.
    */
@@ -491,6 +484,16 @@ export interface NamespaceQueryParams {
    * Body param: Whether to include attributes in the response.
    */
   include_attributes?: IncludeAttributes;
+
+  /**
+   * Body param: How to rank the documents in the namespace.
+   */
+  rank_by?: unknown;
+
+  /**
+   * Body param: The number of results to return.
+   */
+  top_k?: number;
 
   /**
    * Body param: The encoding to use for vectors in the response.
