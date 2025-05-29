@@ -2,7 +2,7 @@
 
 export {
   Namespaces,
-  type Aggregation,
+  type Aggregate,
   type AttributeSchema,
   type AttributeType,
   type DistanceMetric,
