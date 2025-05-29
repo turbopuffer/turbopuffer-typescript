@@ -29,7 +29,7 @@ import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
 import {
-  Aggregation,
+  Aggregate,
   AttributeSchema,
   AttributeType,
   DistanceMetric,
@@ -808,7 +808,7 @@ export declare namespace Turbopuffer {
 
   export {
     Namespaces as Namespaces,
-    type Aggregation as Aggregation,
+    type Aggregate as Aggregate,
     type AttributeSchema as AttributeSchema,
     type AttributeType as AttributeType,
     type DistanceMetric as DistanceMetric,
