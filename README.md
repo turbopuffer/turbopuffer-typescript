@@ -1,12 +1,18 @@
-# Turbopuffer TypeScript API Library
+# Turbopuffer TypeScript API Library <a href="https://turbopuffer.com"><img src="https://github.com/user-attachments/assets/8d6cca4c-10b7-4d3a-9782-696053baf44e" align="right"></a>
 
-[![NPM version](https://img.shields.io/npm/v/@turbopuffer/turbopuffer.svg)](https://npmjs.org/package/@turbopuffer/turbopuffer) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/@turbopuffer/turbopuffer)
+<a href="https://npmjs.org/package/@turbopuffer/turbopuffer"><img src="https://img.shields.io/npm/v/@turbopuffer/turbopuffer.svg" alt="NPM version" align="right"></a> <img src="https://img.shields.io/bundlephobia/minzip/@turbopuffer/turbopuffer" alt="npm bundle size" align="right">
 
 This library provides convenient access to the Turbopuffer REST API from server-side TypeScript or JavaScript.
 
-The REST API documentation can be found on [turbopuffer.com](https://turbopuffer.com/docs). The full API of this library can be found in [api.md](api.md).
+The REST API documentation can be found on [turbopuffer.com](https://turbopuffer.com/docs).
 
 It is generated with [Stainless](https://www.stainless.com/).
+
+> [!WARNING] > **This version of the turbopuffer Python client is in alpha.**
+>
+> You may encounter bugs or performance issues. APIs are subject to change.
+>
+> The stable version of the turbopuffer TypeScript client is [v0.9.1](https://npmjs.org/package/@turbopuffer/turbopuffer).
 
 ## Installation
 
@@ -19,20 +25,28 @@ npm install git+ssh://git@github.com:turbopuffer/turbopuffer-typescript.git
 
 ## Usage
 
-The full API of this library can be found in [api.md](api.md).
-
 <!-- prettier-ignore -->
 ```js
 import Turbopuffer from '@turbopuffer/turbopuffer';
 
 const client = new Turbopuffer({
+  region: 'gcp-us-central1',
   apiKey: process.env['TURBOPUFFER_API_KEY'], // This is the default and can be omitted
 });
 
 async function main() {
-  const response = await client.namespaces.write('products');
+  const response = await client.namespace('products').write({
+    distance_metric: 'cosine_distance',
+    upsert_rows: [
+      {
+        id: '2108ed60-6851-49a0-9016-8325434f3845',
+        vector: [0.1, 0.2],
+        attributes: { name: 'Red boots', price: 34.99 },
+      },
+    ],
+  });
 
-  console.log(response.status);
+  console.log(response.rows_affected);
 }
 
 main();
@@ -47,11 +61,13 @@ This library includes TypeScript definitions for all request params and response
 import Turbopuffer from '@turbopuffer/turbopuffer';
 
 const client = new Turbopuffer({
+  region: 'gcp-us-central1',
   apiKey: process.env['TURBOPUFFER_API_KEY'], // This is the default and can be omitted
 });
 
 async function main() {
-  const documentRowWithScores: Turbopuffer.NamespaceQueryResponse = await client.namespaces.query('products');
+  const params: Turbopuffer.ListNamespacesParams = { prefix: 'foo' };
+  const [namespaceSummary]: [Turbopuffer.NamespaceSummary] = await client.listNamespaces(params);
 }
 
 main();
@@ -68,7 +84,7 @@ a subclass of `APIError` will be thrown:
 <!-- prettier-ignore -->
 ```ts
 async function main() {
-  const documentRowWithScores = await client.namespaces.query('products').catch(async (err) => {
+  const namespaces = await client.listNamespaces({ prefix: 'foo' }).catch(async (err) => {
     if (err instanceof Turbopuffer.APIError) {
       console.log(err.status); // 400
       console.log(err.name); // BadRequestError
@@ -107,11 +123,12 @@ You can use the `maxRetries` option to configure or disable this:
 ```js
 // Configure the default for all requests:
 const client = new Turbopuffer({
+  region: 'gcp-us-central1',
   maxRetries: 0, // default is 2
 });
 
 // Or, configure per-request:
-await client.namespaces.query('products', {
+await client.listNamespaces({ prefix: 'foo' }, {
   maxRetries: 5,
 });
 ```
@@ -124,11 +141,12 @@ Requests time out after 1 minute by default. You can configure this with a `time
 ```ts
 // Configure the default for all requests:
 const client = new Turbopuffer({
+  region: 'gcp-us-central1',
   timeout: 20 * 1000, // 20 seconds (default is 1 minute)
 });
 
 // Override per-request:
-await client.namespaces.query('products', {
+await client.listNamespaces({ prefix: 'foo' }, {
   timeout: 5 * 1000,
 });
 ```
@@ -143,20 +161,20 @@ List methods in the Turbopuffer API are paginated.
 You can use the `for await … of` syntax to iterate through items across all pages:
 
 ```ts
-async function fetchAllNamespaces(params) {
-  const allNamespaces = [];
+async function fetchAllClients(params) {
+  const allClients = [];
   // Automatically fetches more pages as needed.
-  for await (const namespaceSummary of client.namespaces.list({ prefix: 'products' })) {
-    allNamespaces.push(namespaceSummary);
+  for await (const namespaceSummary of client.listNamespaces({ prefix: 'products' })) {
+    allClients.push(namespaceSummary);
   }
-  return allNamespaces;
+  return allClients;
 }
 ```
 
 Alternatively, you can request a single page at a time:
 
 ```ts
-let page = await client.namespaces.list({ prefix: 'products' });
+let page = await client.listNamespaces({ prefix: 'products' });
 for (const namespaceSummary of page.namespaces) {
   console.log(namespaceSummary);
 }
@@ -182,15 +200,15 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new Turbopuffer();
 
-const response = await client.namespaces.query('products').asResponse();
+const response = await client.listNamespaces({ prefix: 'foo' }).asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: documentRowWithScores, response: raw } = await client.namespaces
-  .query('products')
-  .withResponse();
+const { data: namespaces, response: raw } = await client.listNamespaces({ prefix: 'foo' }).withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(documentRowWithScores);
+for await (const namespaceSummary of namespaces) {
+  console.log(namespaceSummary.id);
+}
 ```
 
 ### Logging

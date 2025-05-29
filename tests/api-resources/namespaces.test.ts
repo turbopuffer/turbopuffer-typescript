@@ -3,14 +3,15 @@
 import Turbopuffer from '@turbopuffer/turbopuffer';
 
 const client = new Turbopuffer({
-  apiKey: 'My API Key',
+  apiKey: 'tpuf_A1...',
+  region: 'gcp-us-central1',
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
 describe('resource namespaces', () => {
   // skipped: tests are disabled for the time being
-  test.skip('list', async () => {
-    const responsePromise = client.namespaces.list();
+  test.skip('deleteAll: only required params', async () => {
+    const responsePromise = client.namespace('namespace').deleteAll();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -21,19 +22,13 @@ describe('resource namespaces', () => {
   });
 
   // skipped: tests are disabled for the time being
-  test.skip('list: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.namespaces.list(
-        { cursor: 'cursor', page_size: 1, prefix: 'prefix' },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Turbopuffer.NotFoundError);
+  test.skip('deleteAll: required and optional params', async () => {
+    const response = await client.namespace('namespace').deleteAll();
   });
 
   // skipped: tests are disabled for the time being
-  test.skip('deleteAll', async () => {
-    const responsePromise = client.namespaces.deleteAll('namespace');
+  test.skip('getSchema: only required params', async () => {
+    const responsePromise = client.namespace('namespace').getSchema();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -44,8 +39,13 @@ describe('resource namespaces', () => {
   });
 
   // skipped: tests are disabled for the time being
-  test.skip('getSchema', async () => {
-    const responsePromise = client.namespaces.getSchema('namespace');
+  test.skip('getSchema: required and optional params', async () => {
+    const response = await client.namespace('namespace').getSchema();
+  });
+
+  // skipped: tests are disabled for the time being
+  test.skip('hintCacheWarm: only required params', async () => {
+    const responsePromise = client.namespace('namespace').hintCacheWarm();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -56,8 +56,13 @@ describe('resource namespaces', () => {
   });
 
   // skipped: tests are disabled for the time being
-  test.skip('query', async () => {
-    const responsePromise = client.namespaces.query('namespace');
+  test.skip('hintCacheWarm: required and optional params', async () => {
+    const response = await client.namespace('namespace').hintCacheWarm();
+  });
+
+  // skipped: tests are disabled for the time being
+  test.skip('query: only required params', async () => {
+    const responsePromise = client.namespace('namespace').query({});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -68,29 +73,21 @@ describe('resource namespaces', () => {
   });
 
   // skipped: tests are disabled for the time being
-  test.skip('query: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.namespaces.query(
-        'namespace',
-        {
-          consistency: { level: 'strong' },
-          distance_metric: 'cosine_distance',
-          filters: {},
-          include_attributes: true,
-          include_vectors: true,
-          rank_by: {},
-          top_k: 0,
-          vector: [0],
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Turbopuffer.NotFoundError);
+  test.skip('query: required and optional params', async () => {
+    const response = await client.namespace('namespace').query({
+      namespace: 'namespace',
+      consistency: { level: 'strong' },
+      distance_metric: 'cosine_distance',
+      include_attributes: true,
+      rank_by: ['id', 'asc'],
+      top_k: 0,
+      vector_encoding: 'float',
+    });
   });
 
   // skipped: tests are disabled for the time being
-  test.skip('write', async () => {
-    const responsePromise = client.namespaces.write('namespace');
+  test.skip('recall: only required params', async () => {
+    const responsePromise = client.namespace('namespace').recall();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -101,23 +98,62 @@ describe('resource namespaces', () => {
   });
 
   // skipped: tests are disabled for the time being
-  test.skip('write: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.namespaces.write(
-        'namespace',
-        {
-          operation: {
-            distance_metric: 'cosine_distance',
-            patch_columns: { id: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'] },
-            patch_rows: [{ id: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', vector: [0] }],
-            schema: { foo: [{ filterable: true, full_text_search: true, type: 'string' }] },
-            upsert_columns: { id: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'] },
-            upsert_rows: [{ id: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', vector: [0] }],
-          },
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(Turbopuffer.NotFoundError);
+  test.skip('recall: required and optional params', async () => {
+    const response = await client.namespace('namespace').recall({
+      namespace: 'namespace',
+      filters: {},
+      num: 0,
+      queries: [0],
+      top_k: 0,
+    });
+  });
+
+  // skipped: tests are disabled for the time being
+  test.skip('updateSchema: only required params', async () => {
+    const responsePromise = client.namespace('namespace').updateSchema();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // skipped: tests are disabled for the time being
+  test.skip('updateSchema: required and optional params', async () => {
+    const response = await client.namespace('namespace').updateSchema({
+      namespace: 'namespace',
+      schema: { foo: { ann: true, filterable: true, full_text_search: true, type: 'string' } },
+    });
+  });
+
+  // skipped: tests are disabled for the time being
+  test.skip('write: only required params', async () => {
+    const responsePromise = client.namespace('namespace').write();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // skipped: tests are disabled for the time being
+  test.skip('write: required and optional params', async () => {
+    const response = await client.namespace('namespace').write({
+      namespace: 'namespace',
+      copy_from_namespace: 'copy_from_namespace',
+      delete_by_filter: {},
+      deletes: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
+      distance_metric: 'cosine_distance',
+      encryption: { cmek: { key_name: 'key_name' } },
+      patch_columns: { id: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'], vector: [[0]] },
+      patch_rows: [{ id: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', vector: [0] }],
+      schema: { foo: { ann: true, filterable: true, full_text_search: true, type: 'string' } },
+      upsert_columns: { id: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'], vector: [[0]] },
+      upsert_rows: [{ id: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', vector: [0] }],
+    });
   });
 });

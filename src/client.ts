@@ -15,31 +15,51 @@ import * as Opts from './internal/request-options';
 import { VERSION } from './version';
 import * as Errors from './core/error';
 import * as Pagination from './core/pagination';
-import { AbstractPage, type ListNamespacesParams, ListNamespacesResponse } from './core/pagination';
+import { ListNamespacesResponse } from './core/pagination';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
+import * as TopLevelAPI from './resources/top-level';
+import {
+  ListNamespacesParams as TopLevelAPIListNamespacesParams,
+  NamespaceSummariesListNamespaces,
+  NamespaceSummary,
+} from './resources/top-level';
 import { APIPromise } from './core/api-promise';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
 import {
   AttributeSchema,
+  AttributeType,
   DistanceMetric,
   DocumentColumns,
   DocumentRow,
-  DocumentRowWithScore,
+  FullTextSearch,
   FullTextSearchConfig,
   ID,
+  IncludeAttributes,
+  Language,
+  NamespaceDeleteAllParams,
   NamespaceDeleteAllResponse,
+  NamespaceGetSchemaParams,
   NamespaceGetSchemaResponse,
-  NamespaceListParams,
+  NamespaceHintCacheWarmParams,
+  NamespaceHintCacheWarmResponse,
   NamespaceQueryParams,
   NamespaceQueryResponse,
-  NamespaceSummariesListNamespaces,
-  NamespaceSummary,
+  NamespaceRecallParams,
+  NamespaceRecallResponse,
+  NamespaceUpdateSchemaParams,
+  NamespaceUpdateSchemaResponse,
   NamespaceWriteParams,
   NamespaceWriteResponse,
   Namespaces,
+  QueryBilling,
+  QueryPerformance,
+  Tokenizer,
+  Vector,
+  VectorEncoding,
+  WriteBilling,
 } from './resources/namespaces';
 import { readEnv } from './internal/utils/env';
 import { formatRequestDetails, loggerFor } from './internal/utils/log';
@@ -50,6 +70,13 @@ export interface ClientOptions {
    * API key used for authentication
    */
   apiKey?: string | undefined;
+
+  /**
+   * The turbopuffer region to use.
+   */
+  region?: string | undefined;
+
+  defaultNamespace?: string | null | undefined;
 
   /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
@@ -123,6 +150,8 @@ export interface ClientOptions {
  */
 export class Turbopuffer {
   apiKey: string;
+  region: string;
+  defaultNamespace: string | null;
 
   baseURL: string;
   maxRetries: number;
@@ -140,7 +169,9 @@ export class Turbopuffer {
    * API Client for interfacing with the Turbopuffer API.
    *
    * @param {string | undefined} [opts.apiKey=process.env['TURBOPUFFER_API_KEY'] ?? undefined]
-   * @param {string} [opts.baseURL=process.env['TURBOPUFFER_BASE_URL'] ?? https://api.turbopuffer.com] - Override the default base URL for the API.
+   * @param {string | undefined} [opts.region=process.env['TURBOPUFFER_REGION'] ?? undefined]
+   * @param {string | null | undefined} [opts.defaultNamespace]
+   * @param {string} [opts.baseURL=process.env['TURBOPUFFER_BASE_URL'] ?? https://{region}.turbopuffer.com] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
    * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
@@ -151,18 +182,27 @@ export class Turbopuffer {
   constructor({
     baseURL = readEnv('TURBOPUFFER_BASE_URL'),
     apiKey = readEnv('TURBOPUFFER_API_KEY'),
+    region = readEnv('TURBOPUFFER_REGION'),
+    defaultNamespace = null,
     ...opts
   }: ClientOptions = {}) {
     if (apiKey === undefined) {
       throw new Errors.TurbopufferError(
-        "The TURBOPUFFER_API_KEY environment variable is missing or empty; either provide it, or instantiate the Turbopuffer client with an apiKey option, like new Turbopuffer({ apiKey: 'My API Key' }).",
+        "The TURBOPUFFER_API_KEY environment variable is missing or empty; either provide it, or instantiate the Turbopuffer client with an apiKey option, like new Turbopuffer({ apiKey: 'tpuf_A1...' }).",
+      );
+    }
+    if (region === undefined) {
+      throw new Errors.TurbopufferError(
+        "The TURBOPUFFER_REGION environment variable is missing or empty; either provide it, or instantiate the Turbopuffer client with an region option, like new Turbopuffer({ region: 'gcp-us-central1' }).",
       );
     }
 
     const options: ClientOptions = {
       apiKey,
+      region,
+      defaultNamespace,
       ...opts,
-      baseURL: baseURL || `https://api.turbopuffer.com`,
+      baseURL: baseURL || `https://${region}.turbopuffer.com`,
     };
 
     this.baseURL = options.baseURL!;
@@ -183,6 +223,8 @@ export class Turbopuffer {
     this._options = options;
 
     this.apiKey = apiKey;
+    this.region = region;
+    this.defaultNamespace = defaultNamespace;
   }
 
   /**
@@ -198,6 +240,28 @@ export class Turbopuffer {
       logLevel: this.logLevel,
       fetchOptions: this.fetchOptions,
       apiKey: this.apiKey,
+      region: this.region,
+      defaultNamespace: this.defaultNamespace,
+      ...options,
+    });
+  }
+
+  /**
+   * Construct a namespace resource.
+   */
+  namespace(namespace: string) {
+    return new API.Namespaces(this.withOptions({ defaultNamespace: namespace }));
+  }
+
+  /**
+   * List namespaces.
+   */
+  listNamespaces(
+    query: TopLevelAPI.ListNamespacesParams | null | undefined = {},
+    options?: RequestOptions,
+  ): Pagination.PagePromise<NamespaceSummariesListNamespaces, TopLevelAPI.NamespaceSummary> {
+    return this.getAPIList('/v1/namespaces', Pagination.ListNamespaces<TopLevelAPI.NamespaceSummary>, {
+      query,
       ...options,
     });
   }
@@ -729,36 +793,50 @@ export class Turbopuffer {
   static UnprocessableEntityError = Errors.UnprocessableEntityError;
 
   static toFile = Uploads.toFile;
-
-  namespaces: API.Namespaces = new API.Namespaces(this);
 }
 Turbopuffer.Namespaces = Namespaces;
 export declare namespace Turbopuffer {
   export type RequestOptions = Opts.RequestOptions;
 
-  export import ListNamespaces = Pagination.ListNamespaces;
+  export { type ListNamespacesResponse as ListNamespacesResponse };
+
   export {
-    type ListNamespacesParams as ListNamespacesParams,
-    type ListNamespacesResponse as ListNamespacesResponse,
+    type NamespaceSummary as NamespaceSummary,
+    type NamespaceSummariesListNamespaces as NamespaceSummariesListNamespaces,
+    type TopLevelAPIListNamespacesParams as ListNamespacesParams,
   };
 
   export {
     Namespaces as Namespaces,
     type AttributeSchema as AttributeSchema,
+    type AttributeType as AttributeType,
     type DistanceMetric as DistanceMetric,
     type DocumentColumns as DocumentColumns,
     type DocumentRow as DocumentRow,
-    type DocumentRowWithScore as DocumentRowWithScore,
+    type FullTextSearch as FullTextSearch,
     type FullTextSearchConfig as FullTextSearchConfig,
     type ID as ID,
-    type NamespaceSummary as NamespaceSummary,
+    type IncludeAttributes as IncludeAttributes,
+    type Language as Language,
+    type QueryBilling as QueryBilling,
+    type QueryPerformance as QueryPerformance,
+    type Tokenizer as Tokenizer,
+    type Vector as Vector,
+    type VectorEncoding as VectorEncoding,
+    type WriteBilling as WriteBilling,
     type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
     type NamespaceGetSchemaResponse as NamespaceGetSchemaResponse,
+    type NamespaceHintCacheWarmResponse as NamespaceHintCacheWarmResponse,
     type NamespaceQueryResponse as NamespaceQueryResponse,
+    type NamespaceRecallResponse as NamespaceRecallResponse,
+    type NamespaceUpdateSchemaResponse as NamespaceUpdateSchemaResponse,
     type NamespaceWriteResponse as NamespaceWriteResponse,
-    type NamespaceSummariesListNamespaces as NamespaceSummariesListNamespaces,
-    type NamespaceListParams as NamespaceListParams,
+    type NamespaceDeleteAllParams as NamespaceDeleteAllParams,
+    type NamespaceGetSchemaParams as NamespaceGetSchemaParams,
+    type NamespaceHintCacheWarmParams as NamespaceHintCacheWarmParams,
     type NamespaceQueryParams as NamespaceQueryParams,
+    type NamespaceRecallParams as NamespaceRecallParams,
+    type NamespaceUpdateSchemaParams as NamespaceUpdateSchemaParams,
     type NamespaceWriteParams as NamespaceWriteParams,
   };
 }
