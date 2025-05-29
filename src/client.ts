@@ -30,6 +30,7 @@ import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
 import {
   AttributeSchema,
+  AttributeSchemaConfig,
   AttributeType,
   DistanceMetric,
   DocumentColumns,
@@ -813,6 +814,7 @@ export declare namespace Turbopuffer {
   export {
     Namespaces as Namespaces,
     type AttributeSchema as AttributeSchema,
+    type AttributeSchemaConfig as AttributeSchemaConfig,
     type AttributeType as AttributeType,
     type DistanceMetric as DistanceMetric,
     type DocumentColumns as DocumentColumns,

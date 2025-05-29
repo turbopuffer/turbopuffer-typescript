@@ -3,6 +3,7 @@
 export {
   Namespaces,
   type AttributeSchema,
+  type AttributeSchemaConfig,
   type AttributeType,
   type DistanceMetric,
   type DocumentColumns,

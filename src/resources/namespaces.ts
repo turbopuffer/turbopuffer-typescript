@@ -88,7 +88,23 @@ export class Namespaces extends APIResource {
 /**
  * The schema for an attribute attached to a document.
  */
-export interface AttributeSchema {
+export type AttributeSchema =
+  | 'string'
+  | 'uint'
+  | 'uuid'
+  | 'bool'
+  | 'datetime'
+  | '[]string'
+  | '[]uint'
+  | '[]uuid'
+  | '[]datetime'
+  | string
+  | AttributeSchemaConfig;
+
+/**
+ * Detailed configuration for an attribute attached to a document.
+ */
+export interface AttributeSchemaConfig {
   /**
    * Whether to create an approximate nearest neighbor index for the attribute.
    */
@@ -354,7 +370,7 @@ export interface NamespaceDeleteAllResponse {
 /**
  * The response to a successful namespace schema request.
  */
-export type NamespaceGetSchemaResponse = Record<string, AttributeSchema>;
+export type NamespaceGetSchemaResponse = Record<string, AttributeSchemaConfig>;
 
 /**
  * The response to a successful cache warm request.
@@ -382,7 +398,7 @@ export interface NamespaceQueryResponse {
    */
   performance: QueryPerformance;
 
-  aggregations?: Array<Record<string, unknown>>;
+  aggregations?: Record<string, unknown>;
 
   rows?: Array<DocumentRow>;
 }
@@ -646,6 +662,7 @@ export namespace NamespaceWriteParams {
 export declare namespace Namespaces {
   export {
     type AttributeSchema as AttributeSchema,
+    type AttributeSchemaConfig as AttributeSchemaConfig,
     type AttributeType as AttributeType,
     type DistanceMetric as DistanceMetric,
     type DocumentColumns as DocumentColumns,
