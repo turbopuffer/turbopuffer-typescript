@@ -86,6 +86,11 @@ export class Namespaces extends APIResource {
  */
 export interface AttributeSchema {
   /**
+   * Whether to create an approximate nearest neighbor index for the attribute.
+   */
+  ann?: boolean;
+
+  /**
    * Whether or not the attributes can be used in filters/WHERE clauses.
    */
   filterable?: boolean;
