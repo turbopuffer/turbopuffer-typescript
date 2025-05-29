@@ -15,7 +15,7 @@ import * as Opts from './internal/request-options';
 import { VERSION } from './version';
 import * as Errors from './core/error';
 import * as Pagination from './core/pagination';
-import { AbstractPage, type ListNamespacesParams, ListNamespacesResponse } from './core/pagination';
+import { ListNamespacesResponse } from './core/pagination';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import * as TopLevelAPI from './resources/top-level';
@@ -244,6 +244,13 @@ export class Turbopuffer {
       defaultNamespace: this.defaultNamespace,
       ...options,
     });
+  }
+
+  /**
+   * Construct a namespace resource.
+   */
+  namespace(namespace: string) {
+    return new API.Namespaces(this.withOptions({ defaultNamespace: namespace }));
   }
 
   /**
@@ -786,18 +793,13 @@ export class Turbopuffer {
   static UnprocessableEntityError = Errors.UnprocessableEntityError;
 
   static toFile = Uploads.toFile;
-
-  namespaces: API.Namespaces = new API.Namespaces(this);
 }
 Turbopuffer.Namespaces = Namespaces;
 export declare namespace Turbopuffer {
   export type RequestOptions = Opts.RequestOptions;
 
   export import ListNamespaces = Pagination.ListNamespaces;
-  export {
-    type ListNamespacesParams as ListNamespacesParams,
-    type ListNamespacesResponse as ListNamespacesResponse,
-  };
+  export { type ListNamespacesResponse as ListNamespacesResponse };
 
   export {
     type NamespaceSummary as NamespaceSummary,

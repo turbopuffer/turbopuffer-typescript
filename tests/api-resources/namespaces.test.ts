@@ -11,7 +11,7 @@ const client = new Turbopuffer({
 describe('resource namespaces', () => {
   // skipped: tests are disabled for the time being
   test.skip('deleteAll: only required params', async () => {
-    const responsePromise = client.namespaces.deleteAll({ namespace: 'namespace' });
+    const responsePromise = client.namespace('namespace').deleteAll();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -23,12 +23,12 @@ describe('resource namespaces', () => {
 
   // skipped: tests are disabled for the time being
   test.skip('deleteAll: required and optional params', async () => {
-    const response = await client.namespaces.deleteAll({ namespace: 'namespace' });
+    const response = await client.namespace('namespace').deleteAll();
   });
 
   // skipped: tests are disabled for the time being
   test.skip('getSchema: only required params', async () => {
-    const responsePromise = client.namespaces.getSchema({ namespace: 'namespace' });
+    const responsePromise = client.namespace('namespace').getSchema();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -40,12 +40,12 @@ describe('resource namespaces', () => {
 
   // skipped: tests are disabled for the time being
   test.skip('getSchema: required and optional params', async () => {
-    const response = await client.namespaces.getSchema({ namespace: 'namespace' });
+    const response = await client.namespace('namespace').getSchema();
   });
 
   // skipped: tests are disabled for the time being
   test.skip('hintCacheWarm: only required params', async () => {
-    const responsePromise = client.namespaces.hintCacheWarm({ namespace: 'namespace' });
+    const responsePromise = client.namespace('namespace').hintCacheWarm();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -57,12 +57,12 @@ describe('resource namespaces', () => {
 
   // skipped: tests are disabled for the time being
   test.skip('hintCacheWarm: required and optional params', async () => {
-    const response = await client.namespaces.hintCacheWarm({ namespace: 'namespace' });
+    const response = await client.namespace('namespace').hintCacheWarm();
   });
 
   // skipped: tests are disabled for the time being
   test.skip('query: only required params', async () => {
-    const responsePromise = client.namespaces.query({ namespace: 'namespace' });
+    const responsePromise = client.namespace('namespace').query({});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -74,7 +74,7 @@ describe('resource namespaces', () => {
 
   // skipped: tests are disabled for the time being
   test.skip('query: required and optional params', async () => {
-    const response = await client.namespaces.query({
+    const response = await client.namespace('namespace').query({
       namespace: 'namespace',
       aggregate_by: { foo: 'bar' },
       consistency: { level: 'strong' },
@@ -89,7 +89,7 @@ describe('resource namespaces', () => {
 
   // skipped: tests are disabled for the time being
   test.skip('recall: only required params', async () => {
-    const responsePromise = client.namespaces.recall({ namespace: 'namespace' });
+    const responsePromise = client.namespace('namespace').recall();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -101,7 +101,7 @@ describe('resource namespaces', () => {
 
   // skipped: tests are disabled for the time being
   test.skip('recall: required and optional params', async () => {
-    const response = await client.namespaces.recall({
+    const response = await client.namespace('namespace').recall({
       namespace: 'namespace',
       filters: {},
       num: 0,
@@ -112,7 +112,7 @@ describe('resource namespaces', () => {
 
   // skipped: tests are disabled for the time being
   test.skip('updateSchema: only required params', async () => {
-    const responsePromise = client.namespaces.updateSchema({ namespace: 'namespace' });
+    const responsePromise = client.namespace('namespace').updateSchema();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -124,7 +124,7 @@ describe('resource namespaces', () => {
 
   // skipped: tests are disabled for the time being
   test.skip('updateSchema: required and optional params', async () => {
-    const response = await client.namespaces.updateSchema({
+    const response = await client.namespace('namespace').updateSchema({
       namespace: 'namespace',
       schema: { foo: { ann: true, filterable: true, full_text_search: true, type: 'string' } },
     });
@@ -132,7 +132,7 @@ describe('resource namespaces', () => {
 
   // skipped: tests are disabled for the time being
   test.skip('write: only required params', async () => {
-    const responsePromise = client.namespaces.write({ namespace: 'namespace' });
+    const responsePromise = client.namespace('namespace').write();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -144,7 +144,7 @@ describe('resource namespaces', () => {
 
   // skipped: tests are disabled for the time being
   test.skip('write: required and optional params', async () => {
-    const response = await client.namespaces.write({
+    const response = await client.namespace('namespace').write({
       namespace: 'namespace',
       copy_from_namespace: 'copy_from_namespace',
       delete_by_filter: {},
