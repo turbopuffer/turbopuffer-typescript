@@ -6,7 +6,7 @@ const tpuf = new Turbopuffer({
   region: 'gcp-us-central1',
 });
 
-const testNamespacePrefix = 'typescript_sdk_';
+const testNamespacePrefix = `typescript_sdk_${Date.now()}_`;
 
 /**
  * Escape the error message to be used in a Jest `toThrow` matcher (where
