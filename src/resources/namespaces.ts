@@ -427,7 +427,7 @@ export interface NamespaceRecallResponse {
 /**
  * The updated schema for the namespace.
  */
-export type NamespaceUpdateSchemaResponse = Record<string, AttributeSchema>;
+export type NamespaceUpdateSchemaResponse = Record<string, AttributeSchemaConfig>;
 
 /**
  * The response to a successful write request.
