@@ -82,11 +82,6 @@ export class Namespaces extends APIResource {
 }
 
 /**
- * Count documents.
- */
-export type AggregateBy = Array<unknown>;
-
-/**
  * The schema for an attribute attached to a document.
  */
 export interface AttributeSchema {
@@ -644,7 +639,6 @@ export namespace NamespaceWriteParams {
 
 export declare namespace Namespaces {
   export {
-    type AggregateBy as AggregateBy,
     type AttributeSchema as AttributeSchema,
     type AttributeType as AttributeType,
     type DistanceMetric as DistanceMetric,
