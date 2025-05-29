@@ -15,15 +15,11 @@ import * as Opts from './internal/request-options';
 import { VERSION } from './version';
 import * as Errors from './core/error';
 import * as Pagination from './core/pagination';
-import { ListNamespacesResponse } from './core/pagination';
+import { AbstractPage, type NamespacePageParams, NamespacePageResponse } from './core/pagination';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import * as TopLevelAPI from './resources/top-level';
-import {
-  ListNamespacesParams as TopLevelAPIListNamespacesParams,
-  NamespaceSummariesListNamespaces,
-  NamespaceSummary,
-} from './resources/top-level';
+import { ListNamespacesParams, ListNamespacesResponse, NamespaceSummary } from './resources/top-level';
 import { APIPromise } from './core/api-promise';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
@@ -259,11 +255,8 @@ export class Turbopuffer {
   listNamespaces(
     query: TopLevelAPI.ListNamespacesParams | null | undefined = {},
     options?: RequestOptions,
-  ): Pagination.PagePromise<NamespaceSummariesListNamespaces, TopLevelAPI.NamespaceSummary> {
-    return this.getAPIList('/v1/namespaces', Pagination.ListNamespaces<TopLevelAPI.NamespaceSummary>, {
-      query,
-      ...options,
-    });
+  ): APIPromise<TopLevelAPI.ListNamespacesResponse> {
+    return this.get('/v1/namespaces', { query, ...options });
   }
 
   protected defaultQuery(): Record<string, string | undefined> | undefined {
@@ -798,12 +791,16 @@ Turbopuffer.Namespaces = Namespaces;
 export declare namespace Turbopuffer {
   export type RequestOptions = Opts.RequestOptions;
 
-  export { type ListNamespacesResponse as ListNamespacesResponse };
+  export import NamespacePage = Pagination.NamespacePage;
+  export {
+    type NamespacePageParams as NamespacePageParams,
+    type NamespacePageResponse as NamespacePageResponse,
+  };
 
   export {
     type NamespaceSummary as NamespaceSummary,
-    type NamespaceSummariesListNamespaces as NamespaceSummariesListNamespaces,
-    type TopLevelAPIListNamespacesParams as ListNamespacesParams,
+    type ListNamespacesResponse as ListNamespacesResponse,
+    type ListNamespacesParams as ListNamespacesParams,
   };
 
   export {
