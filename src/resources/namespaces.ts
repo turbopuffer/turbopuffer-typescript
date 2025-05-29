@@ -478,7 +478,7 @@ export interface NamespaceQueryParams {
    * Body param: Aggregations to compute over all documents in the namespace that
    * match the filters.
    */
-  aggregate_by?: unknown;
+  aggregate_by?: Record<string, Aggregation>;
 
   /**
    * Body param: The consistency level for a query.

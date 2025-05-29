@@ -78,7 +78,7 @@ describe('resource namespaces', () => {
       namespace: 'namespace',
       rank_by: {},
       top_k: 0,
-      aggregate_by: {},
+      aggregate_by: { foo: [{}] },
       consistency: { level: 'strong' },
       distance_metric: 'cosine_distance',
       filters: {},
