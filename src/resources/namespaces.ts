@@ -105,16 +105,6 @@ export interface AttributeSchema {
 
 /**
  * The data type of the attribute.
- *
- * - `string` - A string.
- * - `uint` - An unsigned integer.
- * - `uuid` - A UUID.
- * - `bool` - A boolean.
- * - `datetime` - A date and time.
- * - `[]string` - An array of strings.
- * - `[]uint` - An array of unsigned integers.
- * - `[]uuid` - An array of UUIDs.
- * - `[]datetime` - An array of date and time values.
  */
 export type AttributeType =
   | 'string'
@@ -125,7 +115,8 @@ export type AttributeType =
   | '[]string'
   | '[]uint'
   | '[]uuid'
-  | '[]datetime';
+  | '[]datetime'
+  | (string & {});
 
 /**
  * A function used to calculate vector similarity.
