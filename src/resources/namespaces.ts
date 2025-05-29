@@ -88,18 +88,7 @@ export class Namespaces extends APIResource {
 /**
  * The schema for an attribute attached to a document.
  */
-export type AttributeSchema =
-  | 'string'
-  | 'uint'
-  | 'uuid'
-  | 'bool'
-  | 'datetime'
-  | '[]string'
-  | '[]uint'
-  | '[]uuid'
-  | '[]datetime'
-  | string
-  | AttributeSchemaConfig;
+export type AttributeSchema = AttributeType | AttributeSchemaConfig;
 
 /**
  * Detailed configuration for an attribute attached to a document.
@@ -123,25 +112,17 @@ export interface AttributeSchemaConfig {
   full_text_search?: FullTextSearch;
 
   /**
-   * The data type of the attribute.
+   * The data type of the attribute. Valid values: string, int, uint, uuid, datetime,
+   * bool, []string, []int, []uint, []uuid, []datetime, [DIMS]f16, [DIMS]f32.
    */
   type?: AttributeType;
 }
 
 /**
- * The data type of the attribute.
+ * The data type of the attribute. Valid values: string, int, uint, uuid, datetime,
+ * bool, []string, []int, []uint, []uuid, []datetime, [DIMS]f16, [DIMS]f32.
  */
-export type AttributeType =
-  | 'string'
-  | 'uint'
-  | 'uuid'
-  | 'bool'
-  | 'datetime'
-  | '[]string'
-  | '[]uint'
-  | '[]uuid'
-  | '[]datetime'
-  | (string & {});
+export type AttributeType = string;
 
 /**
  * A function used to calculate vector similarity.
