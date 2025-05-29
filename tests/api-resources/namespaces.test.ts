@@ -76,12 +76,10 @@ describe('resource namespaces', () => {
   test.skip('query: required and optional params', async () => {
     const response = await client.namespace('namespace').query({
       namespace: 'namespace',
-      aggregate_by: { foo: 'bar' },
       consistency: { level: 'strong' },
       distance_metric: 'cosine_distance',
-      filters: {},
       include_attributes: true,
-      rank_by: {},
+      rank_by: ['id', 'asc'],
       top_k: 0,
       vector_encoding: 'float',
     });

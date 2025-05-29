@@ -4,6 +4,7 @@ import { APIResource } from '../core/resource';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
+import { AggregateBy, Filter, RankBy } from './custom';
 
 export class Namespaces extends APIResource {
   /**
@@ -165,6 +166,12 @@ export interface DocumentRow {
    * A vector embedding associated with a document.
    */
   vector?: Vector;
+
+  /**
+   * The ranking function's score for the document: distance from the query
+   * vector for ANN, BM25 score for BM25, omitted when ordering by an attribute.
+   */
+  $dist?: number;
 
   [k: string]: unknown;
 }
@@ -462,7 +469,7 @@ export interface NamespaceQueryParams {
    * Body param: Aggregations to compute over all documents in the namespace that
    * match the filters.
    */
-  aggregate_by?: Record<string, unknown>;
+  aggregate_by?: Record<string, AggregateBy>;
 
   /**
    * Body param: The consistency level for a query.
@@ -478,7 +485,7 @@ export interface NamespaceQueryParams {
    * Body param: Exact filters for attributes to refine search results for. Think of
    * it as a SQL WHERE clause.
    */
-  filters?: unknown;
+  filters?: Filter;
 
   /**
    * Body param: Whether to include attributes in the response.
@@ -488,7 +495,7 @@ export interface NamespaceQueryParams {
   /**
    * Body param: How to rank the documents in the namespace.
    */
-  rank_by?: unknown;
+  rank_by?: RankBy;
 
   /**
    * Body param: The number of results to return.

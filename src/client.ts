@@ -798,7 +798,6 @@ Turbopuffer.Namespaces = Namespaces;
 export declare namespace Turbopuffer {
   export type RequestOptions = Opts.RequestOptions;
 
-  export import ListNamespaces = Pagination.ListNamespaces;
   export { type ListNamespacesResponse as ListNamespacesResponse };
 
   export {

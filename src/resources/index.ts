@@ -38,3 +38,4 @@ export {
   type ListNamespacesParams,
   type NamespaceSummariesListNamespaces,
 } from './top-level';
+export * from './custom';

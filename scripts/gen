@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+api_gen_image=ghcr.io/turbopuffer/turbopuffer-apigen:2289a3fc9863f0bcd2ac00b1ba220822bf1a171b
+
+echo "==> Generating code"
+docker run -v "$(pwd):/work" "$api_gen_image" typescript > src/resources/custom.ts

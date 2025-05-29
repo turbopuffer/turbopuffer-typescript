@@ -1,12 +1,18 @@
-# Turbopuffer TypeScript API Library
+# Turbopuffer TypeScript API Library <a href="https://turbopuffer.com"><img src="https://github.com/user-attachments/assets/8d6cca4c-10b7-4d3a-9782-696053baf44e" align="right"></a>
 
-[![NPM version](https://img.shields.io/npm/v/@turbopuffer/turbopuffer.svg)](https://npmjs.org/package/@turbopuffer/turbopuffer) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/@turbopuffer/turbopuffer)
+<a href="https://npmjs.org/package/@turbopuffer/turbopuffer"><img src="https://img.shields.io/npm/v/@turbopuffer/turbopuffer.svg" alt="NPM version" align="right"></a> <img src="https://img.shields.io/bundlephobia/minzip/@turbopuffer/turbopuffer" alt="npm bundle size" align="right">
 
 This library provides convenient access to the Turbopuffer REST API from server-side TypeScript or JavaScript.
 
-The REST API documentation can be found on [turbopuffer.com](https://turbopuffer.com/docs). The full API of this library can be found in [api.md](api.md).
+The REST API documentation can be found on [turbopuffer.com](https://turbopuffer.com/docs).
 
 It is generated with [Stainless](https://www.stainless.com/).
+
+> [!WARNING] > **This version of the turbopuffer Python client is in alpha.**
+>
+> You may encounter bugs or performance issues. APIs are subject to change.
+>
+> The stable version of the turbopuffer TypeScript client is [v0.9.1](https://npmjs.org/package/@turbopuffer/turbopuffer).
 
 ## Installation
 
@@ -19,8 +25,6 @@ npm install git+ssh://git@github.com:turbopuffer/turbopuffer-typescript.git
 
 ## Usage
 
-The full API of this library can be found in [api.md](api.md).
-
 <!-- prettier-ignore -->
 ```js
 import Turbopuffer from '@turbopuffer/turbopuffer';
@@ -31,8 +35,7 @@ const client = new Turbopuffer({
 });
 
 async function main() {
-  const response = await client.namespaces.write({
-    namespace: 'products',
+  const response = await client.namespace('products').write({
     distance_metric: 'cosine_distance',
     upsert_rows: [
       {
