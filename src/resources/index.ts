@@ -3,6 +3,7 @@
 export {
   Namespaces,
   type AttributeSchema,
+  type AttributeSchemaConfig,
   type AttributeType,
   type DistanceMetric,
   type DocumentColumns,
@@ -36,6 +37,6 @@ export {
 export {
   type NamespaceSummary,
   type ListNamespacesParams,
-  type NamespaceSummariesListNamespaces,
+  type NamespaceSummariesNamespacePage,
 } from './top-level';
 export * from './custom';

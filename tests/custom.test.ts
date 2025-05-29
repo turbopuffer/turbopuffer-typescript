@@ -6,7 +6,7 @@ const tpuf = new Turbopuffer({
   region: 'gcp-us-central1',
 });
 
-const testNamespacePrefix = 'typescript_sdk_';
+const testNamespacePrefix = `typescript_sdk_${Date.now()}_`;
 
 /**
  * Escape the error message to be used in a Jest `toThrow` matcher (where
@@ -821,6 +821,7 @@ test('patch', async () => {
       { id: 1, a: 1 },
       { id: 2, b: 2 },
     ],
+    distance_metric: 'cosine_distance',
   });
 
   await ns.write({
@@ -828,6 +829,7 @@ test('patch', async () => {
       { id: 1, b: 1 },
       { id: 2, a: 2 },
     ],
+    distance_metric: 'cosine_distance',
   });
 
   let results = await ns.query({ rank_by: ['id', 'asc'], include_attributes: ['id', 'a', 'b'], top_k: 10 });

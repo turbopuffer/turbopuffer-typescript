@@ -88,7 +88,12 @@ export class Namespaces extends APIResource {
 /**
  * The schema for an attribute attached to a document.
  */
-export interface AttributeSchema {
+export type AttributeSchema = AttributeType | AttributeSchemaConfig;
+
+/**
+ * Detailed configuration for an attribute attached to a document.
+ */
+export interface AttributeSchemaConfig {
   /**
    * Whether to create an approximate nearest neighbor index for the attribute.
    */
@@ -107,25 +112,17 @@ export interface AttributeSchema {
   full_text_search?: FullTextSearch;
 
   /**
-   * The data type of the attribute.
+   * The data type of the attribute. Valid values: string, int, uint, uuid, datetime,
+   * bool, []string, []int, []uint, []uuid, []datetime, [DIMS]f16, [DIMS]f32.
    */
   type?: AttributeType;
 }
 
 /**
- * The data type of the attribute.
+ * The data type of the attribute. Valid values: string, int, uint, uuid, datetime,
+ * bool, []string, []int, []uint, []uuid, []datetime, [DIMS]f16, [DIMS]f32.
  */
-export type AttributeType =
-  | 'string'
-  | 'uint'
-  | 'uuid'
-  | 'bool'
-  | 'datetime'
-  | '[]string'
-  | '[]uint'
-  | '[]uuid'
-  | '[]datetime'
-  | (string & {});
+export type AttributeType = string;
 
 /**
  * A function used to calculate vector similarity.
@@ -354,7 +351,7 @@ export interface NamespaceDeleteAllResponse {
 /**
  * The response to a successful namespace schema request.
  */
-export type NamespaceGetSchemaResponse = Record<string, AttributeSchema>;
+export type NamespaceGetSchemaResponse = Record<string, AttributeSchemaConfig>;
 
 /**
  * The response to a successful cache warm request.
@@ -382,7 +379,7 @@ export interface NamespaceQueryResponse {
    */
   performance: QueryPerformance;
 
-  aggregations?: Array<Record<string, unknown>>;
+  aggregations?: Record<string, unknown>;
 
   rows?: Array<DocumentRow>;
 }
@@ -411,7 +408,7 @@ export interface NamespaceRecallResponse {
 /**
  * The updated schema for the namespace.
  */
-export type NamespaceUpdateSchemaResponse = Record<string, AttributeSchema>;
+export type NamespaceUpdateSchemaResponse = Record<string, AttributeSchemaConfig>;
 
 /**
  * The response to a successful write request.
@@ -646,6 +643,7 @@ export namespace NamespaceWriteParams {
 export declare namespace Namespaces {
   export {
     type AttributeSchema as AttributeSchema,
+    type AttributeSchemaConfig as AttributeSchemaConfig,
     type AttributeType as AttributeType,
     type DistanceMetric as DistanceMetric,
     type DocumentColumns as DocumentColumns,

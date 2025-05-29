@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.10.0-alpha.3 (2025-05-29)
+
+Full Changelog: [v0.10.0-alpha.2...v0.10.0-alpha.3](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.0-alpha.2...v0.10.0-alpha.3)
+
+### Features
+
+* **api:** api update ([4f9daca](https://github.com/turbopuffer/turbopuffer-typescript/commit/4f9daca48b35f7fff0e6729a70555e5a7f589b6e))
+* **api:** api update ([1e6c3fc](https://github.com/turbopuffer/turbopuffer-typescript/commit/1e6c3fcaffbfc2855752c1103262dd107600ffac))
+* **api:** api update ([7c7587a](https://github.com/turbopuffer/turbopuffer-typescript/commit/7c7587a0224b28c2039bc8a3d35b645dbea1bf62))
+* **api:** api update ([8754d0d](https://github.com/turbopuffer/turbopuffer-typescript/commit/8754d0dacd7dd1a4cea28e8841a3415ce244ee4e))
+* **api:** api update ([9d2a817](https://github.com/turbopuffer/turbopuffer-typescript/commit/9d2a8175e472d42b1ad7545c909e12024694bb98))
+
 ## 0.10.0-alpha.2 (2025-05-29)
 
 Full Changelog: [v0.10.0-alpha.1...v0.10.0-alpha.2](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.0-alpha.1...v0.10.0-alpha.2)

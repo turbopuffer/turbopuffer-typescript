@@ -15,13 +15,13 @@ import * as Opts from './internal/request-options';
 import { VERSION } from './version';
 import * as Errors from './core/error';
 import * as Pagination from './core/pagination';
-import { ListNamespacesResponse } from './core/pagination';
+import { AbstractPage, type NamespacePageParams, NamespacePageResponse } from './core/pagination';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import * as TopLevelAPI from './resources/top-level';
 import {
-  ListNamespacesParams as TopLevelAPIListNamespacesParams,
-  NamespaceSummariesListNamespaces,
+  ListNamespacesParams,
+  NamespaceSummariesNamespacePage,
   NamespaceSummary,
 } from './resources/top-level';
 import { APIPromise } from './core/api-promise';
@@ -30,6 +30,7 @@ import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
 import {
   AttributeSchema,
+  AttributeSchemaConfig,
   AttributeType,
   DistanceMetric,
   DocumentColumns,
@@ -259,8 +260,8 @@ export class Turbopuffer {
   listNamespaces(
     query: TopLevelAPI.ListNamespacesParams | null | undefined = {},
     options?: RequestOptions,
-  ): Pagination.PagePromise<NamespaceSummariesListNamespaces, TopLevelAPI.NamespaceSummary> {
-    return this.getAPIList('/v1/namespaces', Pagination.ListNamespaces<TopLevelAPI.NamespaceSummary>, {
+  ): Pagination.PagePromise<NamespaceSummariesNamespacePage, TopLevelAPI.NamespaceSummary> {
+    return this.getAPIList('/v1/namespaces', Pagination.NamespacePage<TopLevelAPI.NamespaceSummary>, {
       query,
       ...options,
     });
@@ -798,17 +799,22 @@ Turbopuffer.Namespaces = Namespaces;
 export declare namespace Turbopuffer {
   export type RequestOptions = Opts.RequestOptions;
 
-  export { type ListNamespacesResponse as ListNamespacesResponse };
+  export import NamespacePage = Pagination.NamespacePage;
+  export {
+    type NamespacePageParams as NamespacePageParams,
+    type NamespacePageResponse as NamespacePageResponse,
+  };
 
   export {
     type NamespaceSummary as NamespaceSummary,
-    type NamespaceSummariesListNamespaces as NamespaceSummariesListNamespaces,
-    type TopLevelAPIListNamespacesParams as ListNamespacesParams,
+    type NamespaceSummariesNamespacePage as NamespaceSummariesNamespacePage,
+    type ListNamespacesParams as ListNamespacesParams,
   };
 
   export {
     Namespaces as Namespaces,
     type AttributeSchema as AttributeSchema,
+    type AttributeSchemaConfig as AttributeSchemaConfig,
     type AttributeType as AttributeType,
     type DistanceMetric as DistanceMetric,
     type DocumentColumns as DocumentColumns,

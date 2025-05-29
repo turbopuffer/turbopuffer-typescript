@@ -107,20 +107,20 @@ export class PagePromise<
   }
 }
 
-export interface ListNamespacesResponse<Item> {
+export interface NamespacePageResponse<Item> {
   namespaces: Array<Item>;
 
   next_cursor: string;
 }
 
-export interface ListNamespacesParams {
+export interface NamespacePageParams {
   cursor?: string;
 }
 
 /**
  * Namespace pagination.
  */
-export class ListNamespaces<Item> extends AbstractPage<Item> implements ListNamespacesResponse<Item> {
+export class NamespacePage<Item> extends AbstractPage<Item> implements NamespacePageResponse<Item> {
   namespaces: Array<Item>;
 
   next_cursor: string;
@@ -128,7 +128,7 @@ export class ListNamespaces<Item> extends AbstractPage<Item> implements ListName
   constructor(
     client: Turbopuffer,
     response: Response,
-    body: ListNamespacesResponse<Item>,
+    body: NamespacePageResponse<Item>,
     options: FinalRequestOptions,
   ) {
     super(client, response, body, options);
