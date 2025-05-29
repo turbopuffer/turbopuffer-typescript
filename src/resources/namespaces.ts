@@ -82,6 +82,11 @@ export class Namespaces extends APIResource {
 }
 
 /**
+ * A list of aggregations to compute over all documents in the namespace.
+ */
+export type Aggregation = Array<unknown>;
+
+/**
  * The schema for an attribute attached to a document.
  */
 export interface AttributeSchema {
@@ -470,6 +475,12 @@ export interface NamespaceQueryParams {
   top_k: number;
 
   /**
+   * Body param: Aggregations to compute over all documents in the namespace that
+   * match the filters.
+   */
+  aggregate_by?: unknown;
+
+  /**
    * Body param: The consistency level for a query.
    */
   consistency?: NamespaceQueryParams.Consistency;
@@ -633,6 +644,7 @@ export namespace NamespaceWriteParams {
 
 export declare namespace Namespaces {
   export {
+    type Aggregation as Aggregation,
     type AttributeSchema as AttributeSchema,
     type AttributeType as AttributeType,
     type DistanceMetric as DistanceMetric,

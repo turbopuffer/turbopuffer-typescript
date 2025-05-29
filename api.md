@@ -12,6 +12,7 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/namespaces.ts">Aggregation</a></code>
 - <code><a href="./src/resources/namespaces.ts">AttributeSchema</a></code>
 - <code><a href="./src/resources/namespaces.ts">AttributeType</a></code>
 - <code><a href="./src/resources/namespaces.ts">DistanceMetric</a></code>
