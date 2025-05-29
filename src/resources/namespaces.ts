@@ -182,10 +182,20 @@ export type FullTextSearch = boolean | FullTextSearchConfig;
  */
 export interface FullTextSearchConfig {
   /**
+   * The `b` document length normalization parameter for BM25. Defaults to `0.75`.
+   */
+  b?: number;
+
+  /**
    * Whether searching is case-sensitive. Defaults to `false` (i.e.
    * case-insensitive).
    */
   case_sensitive?: boolean;
+
+  /**
+   * The `k1` term saturation parameter for BM25. Defaults to `1.2`.
+   */
+  k1?: number;
 
   /**
    * Describes the language of a text attribute. Defaults to `english`.
