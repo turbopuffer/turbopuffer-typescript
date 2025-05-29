@@ -94,7 +94,7 @@ export interface AttributeSchema {
   ann?: boolean;
 
   /**
-   * Whether or not the attributes can be used in filters/WHERE clauses.
+   * Whether or not the attributes can be used in filters.
    */
   filterable?: boolean;
 
