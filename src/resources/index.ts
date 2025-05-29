@@ -33,5 +33,9 @@ export {
   type NamespaceUpdateSchemaParams,
   type NamespaceWriteParams,
 } from './namespaces';
-export { type NamespaceSummary, type ListNamespacesResponse, type ListNamespacesParams } from './top-level';
+export {
+  type NamespaceSummary,
+  type ListNamespacesParams,
+  type NamespaceSummariesNamespacePage,
+} from './top-level';
 export * from './custom';

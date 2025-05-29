@@ -19,7 +19,11 @@ import { AbstractPage, type NamespacePageParams, NamespacePageResponse } from '.
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import * as TopLevelAPI from './resources/top-level';
-import { ListNamespacesParams, ListNamespacesResponse, NamespaceSummary } from './resources/top-level';
+import {
+  ListNamespacesParams,
+  NamespaceSummariesNamespacePage,
+  NamespaceSummary,
+} from './resources/top-level';
 import { APIPromise } from './core/api-promise';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
@@ -255,8 +259,11 @@ export class Turbopuffer {
   listNamespaces(
     query: TopLevelAPI.ListNamespacesParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<TopLevelAPI.ListNamespacesResponse> {
-    return this.get('/v1/namespaces', { query, ...options });
+  ): Pagination.PagePromise<NamespaceSummariesNamespacePage, TopLevelAPI.NamespaceSummary> {
+    return this.getAPIList('/v1/namespaces', Pagination.NamespacePage<TopLevelAPI.NamespaceSummary>, {
+      query,
+      ...options,
+    });
   }
 
   protected defaultQuery(): Record<string, string | undefined> | undefined {
@@ -799,7 +806,7 @@ export declare namespace Turbopuffer {
 
   export {
     type NamespaceSummary as NamespaceSummary,
-    type ListNamespacesResponse as ListNamespacesResponse,
+    type NamespaceSummariesNamespacePage as NamespaceSummariesNamespacePage,
     type ListNamespacesParams as ListNamespacesParams,
   };
 

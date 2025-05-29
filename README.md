@@ -67,7 +67,7 @@ const client = new Turbopuffer({
 
 async function main() {
   const params: Turbopuffer.ListNamespacesParams = { prefix: 'foo' };
-  const namespaces: Turbopuffer.ListNamespacesResponse = await client.listNamespaces(params);
+  const [namespaceSummary]: [Turbopuffer.NamespaceSummary] = await client.listNamespaces(params);
 }
 
 main();
@@ -155,6 +155,37 @@ On timeout, an `APIConnectionTimeoutError` is thrown.
 
 Note that requests which time out will be [retried twice by default](#retries).
 
+## Auto-pagination
+
+List methods in the Turbopuffer API are paginated.
+You can use the `for await … of` syntax to iterate through items across all pages:
+
+```ts
+async function fetchAllClients(params) {
+  const allClients = [];
+  // Automatically fetches more pages as needed.
+  for await (const namespaceSummary of client.listNamespaces({ prefix: 'products' })) {
+    allClients.push(namespaceSummary);
+  }
+  return allClients;
+}
+```
+
+Alternatively, you can request a single page at a time:
+
+```ts
+let page = await client.listNamespaces({ prefix: 'products' });
+for (const namespaceSummary of page.namespaces) {
+  console.log(namespaceSummary);
+}
+
+// Convenience methods are provided for manually paginating:
+while (page.hasNextPage()) {
+  page = await page.getNextPage();
+  // ...
+}
+```
+
 ## Advanced Usage
 
 ### Accessing raw Response data (e.g., headers)
@@ -175,7 +206,9 @@ console.log(response.statusText); // access the underlying Response object
 
 const { data: namespaces, response: raw } = await client.listNamespaces({ prefix: 'foo' }).withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(namespaces.namespaces);
+for await (const namespaceSummary of namespaces) {
+  console.log(namespaceSummary.id);
+}
 ```
 
 ### Logging

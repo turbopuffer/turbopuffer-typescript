@@ -3,11 +3,10 @@
 Types:
 
 - <code><a href="./src/resources/top-level.ts">NamespaceSummary</a></code>
-- <code><a href="./src/resources/top-level.ts">ListNamespacesResponse</a></code>
 
 Methods:
 
-- <code title="get /v1/namespaces">client.<a href="./src/index.ts">listNamespaces</a>({ ...params }) -> ListNamespacesResponse</code>
+- <code title="get /v1/namespaces">client.<a href="./src/index.ts">listNamespaces</a>({ ...params }) -> NamespaceSummariesNamespacePage</code>
 
 # Namespaces
 
