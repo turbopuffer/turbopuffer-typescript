@@ -18,17 +18,6 @@ export class Namespaces extends APIResource {
   }
 
   /**
-   * Get namespace schema.
-   */
-  getSchema(
-    params: NamespaceGetSchemaParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<NamespaceGetSchemaResponse> {
-    const { namespace = this._client.defaultNamespace } = params ?? {};
-    return this._client.get(path`/v1/namespaces/${namespace}/schema`, options);
-  }
-
-  /**
    * Warm the cache for a namespace.
    */
   hintCacheWarm(
@@ -59,6 +48,17 @@ export class Namespaces extends APIResource {
   ): APIPromise<NamespaceRecallResponse> {
     const { namespace = this._client.defaultNamespace, ...body } = params ?? {};
     return this._client.post(path`/v1/namespaces/${namespace}/_debug/recall`, { body, ...options });
+  }
+
+  /**
+   * Get namespace schema.
+   */
+  schema(
+    params: NamespaceSchemaParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<NamespaceSchemaResponse> {
+    const { namespace = this._client.defaultNamespace } = params ?? {};
+    return this._client.get(path`/v1/namespaces/${namespace}/schema`, options);
   }
 
   /**
@@ -342,11 +342,6 @@ export interface NamespaceDeleteAllResponse {
 }
 
 /**
- * The response to a successful namespace schema request.
- */
-export type NamespaceGetSchemaResponse = Record<string, AttributeSchemaConfig>;
-
-/**
  * The response to a successful cache warm request.
  */
 export interface NamespaceHintCacheWarmResponse {
@@ -399,6 +394,11 @@ export interface NamespaceRecallResponse {
 }
 
 /**
+ * The response to a successful namespace schema request.
+ */
+export type NamespaceSchemaResponse = Record<string, AttributeSchemaConfig>;
+
+/**
  * The updated schema for the namespace.
  */
 export type NamespaceUpdateSchemaResponse = Record<string, AttributeSchemaConfig>;
@@ -429,13 +429,6 @@ export interface NamespaceWriteResponse {
 }
 
 export interface NamespaceDeleteAllParams {
-  /**
-   * The name of the namespace.
-   */
-  namespace?: string;
-}
-
-export interface NamespaceGetSchemaParams {
   /**
    * The name of the namespace.
    */
@@ -541,6 +534,13 @@ export interface NamespaceRecallParams {
    * Body param: Search for `top_k` nearest neighbors.
    */
   top_k?: number;
+}
+
+export interface NamespaceSchemaParams {
+  /**
+   * The name of the namespace.
+   */
+  namespace?: string;
 }
 
 export interface NamespaceUpdateSchemaParams {
@@ -653,17 +653,17 @@ export declare namespace Namespaces {
     type VectorEncoding as VectorEncoding,
     type WriteBilling as WriteBilling,
     type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
-    type NamespaceGetSchemaResponse as NamespaceGetSchemaResponse,
     type NamespaceHintCacheWarmResponse as NamespaceHintCacheWarmResponse,
     type NamespaceQueryResponse as NamespaceQueryResponse,
     type NamespaceRecallResponse as NamespaceRecallResponse,
+    type NamespaceSchemaResponse as NamespaceSchemaResponse,
     type NamespaceUpdateSchemaResponse as NamespaceUpdateSchemaResponse,
     type NamespaceWriteResponse as NamespaceWriteResponse,
     type NamespaceDeleteAllParams as NamespaceDeleteAllParams,
-    type NamespaceGetSchemaParams as NamespaceGetSchemaParams,
     type NamespaceHintCacheWarmParams as NamespaceHintCacheWarmParams,
     type NamespaceQueryParams as NamespaceQueryParams,
     type NamespaceRecallParams as NamespaceRecallParams,
+    type NamespaceSchemaParams as NamespaceSchemaParams,
     type NamespaceUpdateSchemaParams as NamespaceUpdateSchemaParams,
     type NamespaceWriteParams as NamespaceWriteParams,
   };

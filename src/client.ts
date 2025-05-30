@@ -19,11 +19,7 @@ import { AbstractPage, type NamespacePageParams, NamespacePageResponse } from '.
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import * as TopLevelAPI from './resources/top-level';
-import {
-  ListNamespacesParams,
-  NamespaceSummariesNamespacePage,
-  NamespaceSummary,
-} from './resources/top-level';
+import { NamespaceSummariesNamespacePage, NamespaceSummary, NamespacesParams } from './resources/top-level';
 import { APIPromise } from './core/api-promise';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
@@ -42,14 +38,14 @@ import {
   Language,
   NamespaceDeleteAllParams,
   NamespaceDeleteAllResponse,
-  NamespaceGetSchemaParams,
-  NamespaceGetSchemaResponse,
   NamespaceHintCacheWarmParams,
   NamespaceHintCacheWarmResponse,
   NamespaceQueryParams,
   NamespaceQueryResponse,
   NamespaceRecallParams,
   NamespaceRecallResponse,
+  NamespaceSchemaParams,
+  NamespaceSchemaResponse,
   NamespaceUpdateSchemaParams,
   NamespaceUpdateSchemaResponse,
   NamespaceWriteParams,
@@ -250,8 +246,8 @@ export class Turbopuffer {
   /**
    * List namespaces.
    */
-  listNamespaces(
-    query: TopLevelAPI.ListNamespacesParams | null | undefined = {},
+  namespaces(
+    query: TopLevelAPI.NamespacesParams | null | undefined = {},
     options?: RequestOptions,
   ): Pagination.PagePromise<NamespaceSummariesNamespacePage, TopLevelAPI.NamespaceSummary> {
     return this.getAPIList('/v1/namespaces', Pagination.NamespacePage<TopLevelAPI.NamespaceSummary>, {
@@ -803,7 +799,7 @@ export declare namespace Turbopuffer {
   export {
     type NamespaceSummary as NamespaceSummary,
     type NamespaceSummariesNamespacePage as NamespaceSummariesNamespacePage,
-    type ListNamespacesParams as ListNamespacesParams,
+    type NamespacesParams as NamespacesParams,
   };
 
   export {
@@ -826,17 +822,17 @@ export declare namespace Turbopuffer {
     type VectorEncoding as VectorEncoding,
     type WriteBilling as WriteBilling,
     type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
-    type NamespaceGetSchemaResponse as NamespaceGetSchemaResponse,
     type NamespaceHintCacheWarmResponse as NamespaceHintCacheWarmResponse,
     type NamespaceQueryResponse as NamespaceQueryResponse,
     type NamespaceRecallResponse as NamespaceRecallResponse,
+    type NamespaceSchemaResponse as NamespaceSchemaResponse,
     type NamespaceUpdateSchemaResponse as NamespaceUpdateSchemaResponse,
     type NamespaceWriteResponse as NamespaceWriteResponse,
     type NamespaceDeleteAllParams as NamespaceDeleteAllParams,
-    type NamespaceGetSchemaParams as NamespaceGetSchemaParams,
     type NamespaceHintCacheWarmParams as NamespaceHintCacheWarmParams,
     type NamespaceQueryParams as NamespaceQueryParams,
     type NamespaceRecallParams as NamespaceRecallParams,
+    type NamespaceSchemaParams as NamespaceSchemaParams,
     type NamespaceUpdateSchemaParams as NamespaceUpdateSchemaParams,
     type NamespaceWriteParams as NamespaceWriteParams,
   };

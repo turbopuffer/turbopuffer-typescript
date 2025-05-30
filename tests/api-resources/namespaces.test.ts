@@ -27,23 +27,6 @@ describe('resource namespaces', () => {
   });
 
   // skipped: tests are disabled for the time being
-  test.skip('getSchema: only required params', async () => {
-    const responsePromise = client.namespaces.getSchema({ namespace: 'namespace' });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // skipped: tests are disabled for the time being
-  test.skip('getSchema: required and optional params', async () => {
-    const response = await client.namespaces.getSchema({ namespace: 'namespace' });
-  });
-
-  // skipped: tests are disabled for the time being
   test.skip('hintCacheWarm: only required params', async () => {
     const responsePromise = client.namespaces.hintCacheWarm({ namespace: 'namespace' });
     const rawResponse = await responsePromise.asResponse();
@@ -108,6 +91,23 @@ describe('resource namespaces', () => {
       queries: [0],
       top_k: 0,
     });
+  });
+
+  // skipped: tests are disabled for the time being
+  test.skip('schema: only required params', async () => {
+    const responsePromise = client.namespaces.schema({ namespace: 'namespace' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // skipped: tests are disabled for the time being
+  test.skip('schema: required and optional params', async () => {
+    const response = await client.namespaces.schema({ namespace: 'namespace' });
   });
 
   // skipped: tests are disabled for the time being
