@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.10.0-alpha.6 (2025-05-30)
+
+Full Changelog: [v0.10.0-alpha.5...v0.10.0-alpha.6](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.0-alpha.5...v0.10.0-alpha.6)
+
+### Documentation
+
+* **pagination:** improve naming ([4ee6692](https://github.com/turbopuffer/turbopuffer-typescript/commit/4ee66929343332941a13c589d243bfe3118c189f))
+
 ## 0.10.0-alpha.5 (2025-05-30)
 
 Full Changelog: [v0.10.0-alpha.4...v0.10.0-alpha.5](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.0-alpha.4...v0.10.0-alpha.5)
