@@ -66,8 +66,8 @@ const client = new Turbopuffer({
 });
 
 async function main() {
-  const params: Turbopuffer.ListNamespacesParams = { prefix: 'foo' };
-  const [namespaceSummary]: [Turbopuffer.NamespaceSummary] = await client.listNamespaces(params);
+  const params: Turbopuffer.NamespacesParams = { prefix: 'foo' };
+  const [namespaceSummary]: [Turbopuffer.NamespaceSummary] = await client.namespaces(params);
 }
 
 main();
@@ -84,7 +84,7 @@ a subclass of `APIError` will be thrown:
 <!-- prettier-ignore -->
 ```ts
 async function main() {
-  const namespaces = await client.listNamespaces({ prefix: 'foo' }).catch(async (err) => {
+  const namespaces = await client.namespaces({ prefix: 'foo' }).catch(async (err) => {
     if (err instanceof Turbopuffer.APIError) {
       console.log(err.status); // 400
       console.log(err.name); // BadRequestError
@@ -128,7 +128,7 @@ const client = new Turbopuffer({
 });
 
 // Or, configure per-request:
-await client.listNamespaces({ prefix: 'foo' }, {
+await client.namespaces({ prefix: 'foo' }, {
   maxRetries: 5,
 });
 ```
@@ -146,7 +146,7 @@ const client = new Turbopuffer({
 });
 
 // Override per-request:
-await client.listNamespaces({ prefix: 'foo' }, {
+await client.namespaces({ prefix: 'foo' }, {
   timeout: 5 * 1000,
 });
 ```
@@ -164,7 +164,7 @@ You can use the `for await … of` syntax to iterate through items across all pa
 async function fetchAllClients(params) {
   const allClients = [];
   // Automatically fetches more pages as needed.
-  for await (const namespaceSummary of client.listNamespaces({ prefix: 'products' })) {
+  for await (const namespaceSummary of client.namespaces({ prefix: 'products' })) {
     allClients.push(namespaceSummary);
   }
   return allClients;
@@ -174,7 +174,7 @@ async function fetchAllClients(params) {
 Alternatively, you can request a single page at a time:
 
 ```ts
-let page = await client.listNamespaces({ prefix: 'products' });
+let page = await client.namespaces({ prefix: 'products' });
 for (const namespaceSummary of page.namespaces) {
   console.log(namespaceSummary);
 }
@@ -200,11 +200,11 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new Turbopuffer();
 
-const response = await client.listNamespaces({ prefix: 'foo' }).asResponse();
+const response = await client.namespaces({ prefix: 'foo' }).asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: namespaces, response: raw } = await client.listNamespaces({ prefix: 'foo' }).withResponse();
+const { data: namespaces, response: raw } = await client.namespaces({ prefix: 'foo' }).withResponse();
 console.log(raw.headers.get('X-My-Header'));
 for await (const namespaceSummary of namespaces) {
   console.log(namespaceSummary.id);

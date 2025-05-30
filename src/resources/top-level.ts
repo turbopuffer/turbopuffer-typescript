@@ -15,7 +15,7 @@ export interface NamespaceSummary {
   id: string;
 }
 
-export interface ListNamespacesParams extends NamespacePageParams {
+export interface NamespacesParams extends NamespacePageParams {
   /**
    * Limit the number of results per page.
    */
@@ -31,6 +31,6 @@ export declare namespace TopLevel {
   export {
     type NamespaceSummary as NamespaceSummary,
     type NamespaceSummariesNamespacePage as NamespaceSummariesNamespacePage,
-    type ListNamespacesParams as ListNamespacesParams,
+    type NamespacesParams as NamespacesParams,
   };
 }
