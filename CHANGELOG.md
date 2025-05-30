@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.10.0-alpha.4 (2025-05-30)
+
+Full Changelog: [v0.10.0-alpha.3...v0.10.0-alpha.4](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.0-alpha.3...v0.10.0-alpha.4)
+
+### Features
+
+* **docs:** add UPGRADING.md ([1bb8284](https://github.com/turbopuffer/turbopuffer-typescript/commit/1bb8284bdce4b4a3aa80f9b4734761865f837e6b))
+
+
+### Bug Fixes
+
+* compat with more runtimes ([bd6f27e](https://github.com/turbopuffer/turbopuffer-typescript/commit/bd6f27ec98112c91bab8e25226b29110b106f579))
+
 ## 0.10.0-alpha.3 (2025-05-29)
 
 Full Changelog: [v0.10.0-alpha.2...v0.10.0-alpha.3](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.0-alpha.2...v0.10.0-alpha.3)
