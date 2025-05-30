@@ -155,13 +155,13 @@ List methods in the Turbopuffer API are paginated.
 You can use the `for await … of` syntax to iterate through items across all pages:
 
 ```ts
-async function fetchAllClients(params) {
-  const allClients = [];
+async function fetchAllNamespaceSummaries(params) {
+  const allNamespaceSummaries = [];
   // Automatically fetches more pages as needed.
   for await (const namespaceSummary of client.namespaces({ prefix: 'products' })) {
-    allClients.push(namespaceSummary);
+    allNamespaceSummaries.push(namespaceSummary);
   }
-  return allClients;
+  return allNamespaceSummaries;
 }
 ```
 
