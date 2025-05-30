@@ -287,10 +287,10 @@ test('bm25_with_default_schema_and_simple_query', async () => {
 });
 
 test('namespaces', async () => {
-  const namespaces0 = await tpuf.listNamespaces({ page_size: 5 });
+  const namespaces0 = await tpuf.namespaces({ page_size: 5 });
   const cursor0 = namespaces0.next_cursor;
 
-  const namespaces1 = await tpuf.listNamespaces({
+  const namespaces1 = await tpuf.namespaces({
     cursor: cursor0,
     page_size: 5,
   });
@@ -302,7 +302,7 @@ test('namespaces', async () => {
 });
 
 test('hint_cache_warm', async () => {
-  const nsId = (await tpuf.listNamespaces({ page_size: 1 })).namespaces[0]?.id!;
+  const nsId = (await tpuf.namespaces({ page_size: 1 })).namespaces[0]?.id!;
   const ns = await tpuf.namespace(nsId);
 
   const result = await ns.hintCacheWarm();
@@ -376,7 +376,7 @@ test('schema', async () => {
     },
   });
 
-  const schema = await ns.getSchema();
+  const schema = await ns.schema();
   expect(schema).toEqual({
     id: {
       type: 'uint',
@@ -460,7 +460,7 @@ test('update_schema', async () => {
     },
   });
 
-  const schema = await ns.getSchema();
+  const schema = await ns.schema();
   expect(schema).toEqual({
     id: {
       type: 'uint',

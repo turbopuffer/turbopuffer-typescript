@@ -93,7 +93,7 @@ describe('resource namespaces', () => {
 
   // skipped: tests are disabled for the time being
   test.skip('schema: only required params', async () => {
-    const responsePromise = client.namespaces.schema({ namespace: 'namespace' });
+    const responsePromise = client.namespace('namespace').schema();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -105,7 +105,7 @@ describe('resource namespaces', () => {
 
   // skipped: tests are disabled for the time being
   test.skip('schema: required and optional params', async () => {
-    const response = await client.namespaces.schema({ namespace: 'namespace' });
+    const response = await client.namespace('namespace').schema();
   });
 
   // skipped: tests are disabled for the time being
