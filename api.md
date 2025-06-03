@@ -15,9 +15,8 @@ Types:
 - <code><a href="./src/resources/namespaces.ts">AttributeSchema</a></code>
 - <code><a href="./src/resources/namespaces.ts">AttributeSchemaConfig</a></code>
 - <code><a href="./src/resources/namespaces.ts">AttributeType</a></code>
+- <code><a href="./src/resources/namespaces.ts">Columns</a></code>
 - <code><a href="./src/resources/namespaces.ts">DistanceMetric</a></code>
-- <code><a href="./src/resources/namespaces.ts">DocumentColumns</a></code>
-- <code><a href="./src/resources/namespaces.ts">DocumentRow</a></code>
 - <code><a href="./src/resources/namespaces.ts">FullTextSearch</a></code>
 - <code><a href="./src/resources/namespaces.ts">FullTextSearchConfig</a></code>
 - <code><a href="./src/resources/namespaces.ts">ID</a></code>
@@ -25,6 +24,7 @@ Types:
 - <code><a href="./src/resources/namespaces.ts">Language</a></code>
 - <code><a href="./src/resources/namespaces.ts">QueryBilling</a></code>
 - <code><a href="./src/resources/namespaces.ts">QueryPerformance</a></code>
+- <code><a href="./src/resources/namespaces.ts">Row</a></code>
 - <code><a href="./src/resources/namespaces.ts">Tokenizer</a></code>
 - <code><a href="./src/resources/namespaces.ts">Vector</a></code>
 - <code><a href="./src/resources/namespaces.ts">VectorEncoding</a></code>

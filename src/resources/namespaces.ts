@@ -124,18 +124,10 @@ export interface AttributeSchemaConfig {
 export type AttributeType = string;
 
 /**
- * A function used to calculate vector similarity.
- *
- * - `cosine_distance` - Defined as `1 - cosine_similarity` and ranges from 0 to 2.
- *   Lower is better.
- * - `euclidean_squared` - Defined as `sum((x - y)^2)`. Lower is better.
+ * A list of documents in columnar format. Each key is a column name, mapped to an
+ * array of values for that column.
  */
-export type DistanceMetric = 'cosine_distance' | 'euclidean_squared';
-
-/**
- * A list of documents in columnar format. The keys are the column names.
- */
-export interface DocumentColumns {
+export interface Columns {
   /**
    * The IDs of the documents.
    */
@@ -150,21 +142,13 @@ export interface DocumentColumns {
 }
 
 /**
- * A single document, in a row-based format.
+ * A function used to calculate vector similarity.
+ *
+ * - `cosine_distance` - Defined as `1 - cosine_similarity` and ranges from 0 to 2.
+ *   Lower is better.
+ * - `euclidean_squared` - Defined as `sum((x - y)^2)`. Lower is better.
  */
-export interface DocumentRow {
-  /**
-   * An identifier for a document.
-   */
-  id: ID;
-
-  /**
-   * A vector embedding associated with a document.
-   */
-  vector?: Vector;
-
-  [k: string]: unknown;
-}
+export type DistanceMetric = 'cosine_distance' | 'euclidean_squared';
 
 /**
  * Whether this attribute can be used as part of a BM25 full-text search. Requires
@@ -302,6 +286,23 @@ export interface QueryPerformance {
 }
 
 /**
+ * A single document, in a row-based format.
+ */
+export interface Row {
+  /**
+   * An identifier for a document.
+   */
+  id: ID;
+
+  /**
+   * A vector embedding associated with a document.
+   */
+  vector?: Vector;
+
+  [k: string]: unknown;
+}
+
+/**
  * The tokenizer to use for full-text search on an attribute.
  */
 export type Tokenizer = 'pre_tokenized_array' | 'word_v0' | 'word_v1';
@@ -369,7 +370,7 @@ export interface NamespaceQueryResponse {
 
   aggregations?: Record<string, unknown>;
 
-  rows?: Array<DocumentRow>;
+  rows?: Array<Row>;
 }
 
 /**
@@ -587,15 +588,15 @@ export interface NamespaceWriteParams {
   encryption?: NamespaceWriteParams.Encryption;
 
   /**
-   * Body param: A list of documents in columnar format. The keys are the column
-   * names.
+   * Body param: A list of documents in columnar format. Each key is a column name,
+   * mapped to an array of values for that column.
    */
-  patch_columns?: DocumentColumns;
+  patch_columns?: Columns;
 
   /**
    * Body param:
    */
-  patch_rows?: Array<DocumentRow>;
+  patch_rows?: Array<Row>;
 
   /**
    * Body param: The schema of the attributes attached to the documents.
@@ -603,15 +604,15 @@ export interface NamespaceWriteParams {
   schema?: Record<string, AttributeSchema>;
 
   /**
-   * Body param: A list of documents in columnar format. The keys are the column
-   * names.
+   * Body param: A list of documents in columnar format. Each key is a column name,
+   * mapped to an array of values for that column.
    */
-  upsert_columns?: DocumentColumns;
+  upsert_columns?: Columns;
 
   /**
    * Body param:
    */
-  upsert_rows?: Array<DocumentRow>;
+  upsert_rows?: Array<Row>;
 }
 
 export namespace NamespaceWriteParams {
@@ -638,9 +639,8 @@ export declare namespace Namespaces {
     type AttributeSchema as AttributeSchema,
     type AttributeSchemaConfig as AttributeSchemaConfig,
     type AttributeType as AttributeType,
+    type Columns as Columns,
     type DistanceMetric as DistanceMetric,
-    type DocumentColumns as DocumentColumns,
-    type DocumentRow as DocumentRow,
     type FullTextSearch as FullTextSearch,
     type FullTextSearchConfig as FullTextSearchConfig,
     type ID as ID,
@@ -648,6 +648,7 @@ export declare namespace Namespaces {
     type Language as Language,
     type QueryBilling as QueryBilling,
     type QueryPerformance as QueryPerformance,
+    type Row as Row,
     type Tokenizer as Tokenizer,
     type Vector as Vector,
     type VectorEncoding as VectorEncoding,
