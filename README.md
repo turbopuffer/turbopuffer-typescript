@@ -27,23 +27,19 @@ const client = new Turbopuffer({
   apiKey: process.env['TURBOPUFFER_API_KEY'], // This is the default and can be omitted
 });
 
-async function main() {
-  const response = await client.namespaces.write({
-    namespace: 'products',
-    distance_metric: 'cosine_distance',
-    upsert_rows: [
-      {
-        id: '2108ed60-6851-49a0-9016-8325434f3845',
-        vector: [0.1, 0.2],
-        attributes: { name: 'Red boots', price: 34.99 },
-      },
-    ],
-  });
+const response = await client.namespaces.write({
+  namespace: 'products',
+  distance_metric: 'cosine_distance',
+  upsert_rows: [
+    {
+      id: '2108ed60-6851-49a0-9016-8325434f3845',
+      vector: [0.1, 0.2],
+      attributes: { name: 'Red boots', price: 34.99 },
+    },
+  ],
+});
 
-  console.log(response.rows_affected);
-}
-
-main();
+console.log(response.rows_affected);
 ```
 
 ### Request & Response types
@@ -59,12 +55,8 @@ const client = new Turbopuffer({
   apiKey: process.env['TURBOPUFFER_API_KEY'], // This is the default and can be omitted
 });
 
-async function main() {
-  const params: Turbopuffer.NamespacesParams = { prefix: 'foo' };
-  const [namespaceSummary]: [Turbopuffer.NamespaceSummary] = await client.namespaces(params);
-}
-
-main();
+const params: Turbopuffer.NamespacesParams = { prefix: 'foo' };
+const [namespaceSummary]: [Turbopuffer.NamespaceSummary] = await client.namespaces(params);
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -77,19 +69,15 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-async function main() {
-  const namespaces = await client.namespaces({ prefix: 'foo' }).catch(async (err) => {
-    if (err instanceof Turbopuffer.APIError) {
-      console.log(err.status); // 400
-      console.log(err.name); // BadRequestError
-      console.log(err.headers); // {server: 'nginx', ...}
-    } else {
-      throw err;
-    }
-  });
-}
-
-main();
+const namespaces = await client.namespaces({ prefix: 'foo' }).catch(async (err) => {
+  if (err instanceof Turbopuffer.APIError) {
+    console.log(err.status); // 400
+    console.log(err.name); // BadRequestError
+    console.log(err.headers); // {server: 'nginx', ...}
+  } else {
+    throw err;
+  }
+});
 ```
 
 Error codes are as follows:
