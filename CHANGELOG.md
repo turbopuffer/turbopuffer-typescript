@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.10.0-alpha.7 (2025-06-03)
+
+Full Changelog: [v0.10.0-alpha.6...v0.10.0-alpha.7](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.0-alpha.6...v0.10.0-alpha.7)
+
+### Features
+
+* **api:** api update ([0ecd67c](https://github.com/turbopuffer/turbopuffer-typescript/commit/0ecd67c0ccd543e1353ca14a8ef49f46c8886eb2))
+
+
+### Bug Fixes
+
+* **upgrading:** remove some breaking changes that have been backed out ([6e5abef](https://github.com/turbopuffer/turbopuffer-typescript/commit/6e5abefebf4808e7417d9ce52d092817e993fa5b))
+
+
+### Chores
+
+* adjust eslint.config.mjs ignore pattern ([94b0741](https://github.com/turbopuffer/turbopuffer-typescript/commit/94b0741f5cbf2395cf7430a53bd9eb1bdbf0d298))
+* **deps:** bump eslint-plugin-prettier ([dc13a19](https://github.com/turbopuffer/turbopuffer-typescript/commit/dc13a193999e16861841c79b153853227682f192))
+* **internal:** update jest config ([1c38732](https://github.com/turbopuffer/turbopuffer-typescript/commit/1c3873212e0006c7f9b403a7dd190c40995359ec))
+
 ## 0.10.0-alpha.6 (2025-05-30)
 
 Full Changelog: [v0.10.0-alpha.5...v0.10.0-alpha.6](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.0-alpha.5...v0.10.0-alpha.6)
