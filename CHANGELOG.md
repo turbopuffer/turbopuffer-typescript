@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.10.0-alpha.8 (2025-06-06)
+
+Full Changelog: [v0.10.0-alpha.7...v0.10.0-alpha.8](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.0-alpha.7...v0.10.0-alpha.8)
+
+### Features
+
+* **api:** api update ([c2f5189](https://github.com/turbopuffer/turbopuffer-typescript/commit/c2f5189d25587270219feadbc3569f323c678acf))
+
+
+### Bug Fixes
+
+* **guide:** update UPGRADING.md ([c0c3e36](https://github.com/turbopuffer/turbopuffer-typescript/commit/c0c3e36962fb8f284b4bdd8fde17a39d05aefee8))
+* upgrade to latest supplemental codegen ([dee0c3a](https://github.com/turbopuffer/turbopuffer-typescript/commit/dee0c3a0654c3c5947d3f3617c07e0b1cb3ba395))
+
+
+### Chores
+
+* **internal:** codegen related update ([bfa9d8e](https://github.com/turbopuffer/turbopuffer-typescript/commit/bfa9d8ee7a0f800aa26de5f9c391a30dc79144ca))
+* **internal:** codegen related update ([c73299c](https://github.com/turbopuffer/turbopuffer-typescript/commit/c73299c4a31efa0c02b898be135f23d6623e8514))
+* **internal:** version bump ([5ecabb2](https://github.com/turbopuffer/turbopuffer-typescript/commit/5ecabb2e3ef2ab4803f5ac27477190d26a8b9860))
+
 ## 0.10.0-alpha.7 (2025-06-03)
 
 Full Changelog: [v0.10.0-alpha.6...v0.10.0-alpha.7](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.0-alpha.6...v0.10.0-alpha.7)
