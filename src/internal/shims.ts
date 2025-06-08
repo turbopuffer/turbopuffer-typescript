@@ -7,11 +7,14 @@
  * messages in cases where an environment isn't fully supported.
  */
 
+import { isRuntimeFullyNodeCompatible } from '../lib/runtime';
 import { type Fetch } from './builtin-types';
 import { type ReadableStream } from './shim-types';
 
 export function getDefaultFetch(): Fetch {
-  if (typeof fetch !== 'undefined') {
+  if (isRuntimeFullyNodeCompatible) {
+    return require('../lib/fetch-undici').fetchUndici;
+  } else if (typeof fetch !== 'undefined') {
     return fetch as any;
   }
 
