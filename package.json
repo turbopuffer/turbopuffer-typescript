@@ -1,6 +1,6 @@
 {
   "name": "@turbopuffer/turbopuffer",
-  "version": "0.10.0-alpha.8",
+  "version": "0.10.0-alpha.9",
   "description": "The official TypeScript library for the Turbopuffer API",
   "author": "Turbopuffer <info@turbopuffer.com>",
   "types": "dist/index.d.ts",
@@ -23,7 +23,9 @@
     "lint": "./scripts/lint",
     "fix": "./scripts/format"
   },
-  "dependencies": {},
+  "dependencies": {
+    "undici": "^7.10.0"
+  },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.17.0",
     "@swc/core": "^1.3.102",

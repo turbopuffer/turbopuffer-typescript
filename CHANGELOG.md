@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.10.0-alpha.9 (2025-06-08)
+
+Full Changelog: [v0.10.0-alpha.8...v0.10.0-alpha.9](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.0-alpha.8...v0.10.0-alpha.9)
+
+### Features
+
+* use faster undici request API in Node environments ([#88](https://github.com/turbopuffer/turbopuffer-typescript/issues/88)) ([dd2c13c](https://github.com/turbopuffer/turbopuffer-typescript/commit/dd2c13c41283ca21b4cba1dcf43e5bbd6070e23f))
+
 ## 0.10.0-alpha.8 (2025-06-06)
 
 Full Changelog: [v0.10.0-alpha.7...v0.10.0-alpha.8](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.0-alpha.7...v0.10.0-alpha.8)
