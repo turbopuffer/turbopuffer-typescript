@@ -1,6 +1,6 @@
 {
   "name": "@turbopuffer/turbopuffer",
-  "version": "0.10.0-alpha.9",
+  "version": "0.10.0-alpha.10",
   "description": "The official TypeScript library for the Turbopuffer API",
   "author": "Turbopuffer <info@turbopuffer.com>",
   "types": "dist/index.d.ts",
