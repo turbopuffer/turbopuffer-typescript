@@ -157,7 +157,7 @@ export class Turbopuffer {
   logLevel: LogLevel | undefined;
   fetchOptions: MergedRequestInit | undefined;
 
-  private fetch: Fetch;
+  private fetch: Promise<Fetch>;
   #encoder: Opts.RequestEncoder;
   protected idempotencyHeader?: string;
   private _options: ClientOptions;
@@ -214,7 +214,7 @@ export class Turbopuffer {
       defaultLogLevel;
     this.fetchOptions = options.fetchOptions;
     this.maxRetries = options.maxRetries ?? 2;
-    this.fetch = options.fetch ?? Shims.getDefaultFetch();
+    this.fetch = options.fetch ? Promise.resolve(options.fetch) : Shims.getDefaultFetch();
     this.#encoder = Opts.FallbackEncoder;
 
     this._options = options;
@@ -588,7 +588,8 @@ export class Turbopuffer {
 
     try {
       // use undefined this binding; fetch errors if bound to something else in browser/cloudflare
-      return await this.fetch.call(undefined, url, fetchOptions);
+      const fetch = await this.fetch;
+      return await fetch.call(undefined, url, fetchOptions);
     } finally {
       clearTimeout(timeout);
     }

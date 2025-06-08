@@ -11,9 +11,9 @@ import { isRuntimeFullyNodeCompatible } from '../lib/runtime';
 import { type Fetch } from './builtin-types';
 import { type ReadableStream } from './shim-types';
 
-export function getDefaultFetch(): Fetch {
+export async function getDefaultFetch(): Promise<Fetch> {
   if (isRuntimeFullyNodeCompatible) {
-    return require('../lib/fetch-undici').fetchUndici;
+    return (await import('../lib/fetch-undici')).fetchUndici;
   } else if (typeof fetch !== 'undefined') {
     return fetch as any;
   }
