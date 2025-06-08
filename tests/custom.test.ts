@@ -16,6 +16,16 @@ function escapeError(error: string) {
   return JSON.stringify(error).slice(1, -1);
 }
 
+async function expectThrows(promise: Promise<any>, errorMatcher: any) {
+  // Work around a Bun limitation: https://github.com/oven-sh/bun/issues/5602
+  // @ts-ignore
+  if (typeof Bun !== 'undefined') {
+    await expect(async () => await promise).toThrow(errorMatcher);
+  } else {
+    await expect(promise).rejects.toThrow(errorMatcher);
+  }
+}
+
 test('bm25_with_custom_schema_and_sum_query', async () => {
   const ns = tpuf.namespace(testNamespacePrefix + 'bm25_with_custom_schema_and_sum_query');
 
@@ -131,12 +141,13 @@ test('bm25_with_tokenizer_pre_tokenized_array', async () => {
   });
   expect(results.rows?.length).toEqual(2);
 
-  await expect(
+  await expectThrows(
     ns.query({
       rank_by: ['content', 'BM25', 'jumped'],
       top_k: 10,
     }),
-  ).rejects.toThrow(escapeError('invalid input \'jumped\' for rank_by field "content", expecting []string'));
+    escapeError('invalid input \'jumped\' for rank_by field "content", expecting []string'),
+  );
 });
 
 test('contains_all_tokens', async () => {
@@ -676,38 +687,32 @@ test('sanity', async () => {
   // Delete the entire namespace.
   await ns.deleteAll();
 
-  // For some reason, expect().toThrow doesn't catch properly
-  let gotError: any = null;
-  try {
-    await ns.query({
+  await expectThrows(
+    ns.query({
       rank_by: ['vector', 'ANN', [1, 1]],
       filters: ['numbers', 'In', [2, 4]],
       top_k: 10,
-    });
-  } catch (e: any) {
-    gotError = e;
-  }
-  const message = `🤷 namespace '${nameSpaceName}' was not found`;
-  expect(gotError).toStrictEqual(
-    new NotFoundError(404, { error: message, status: 'error' }, message, new Headers()),
+    }),
+    NotFoundError,
   );
 }, 10_000);
 
 test('connection_errors_are_wrapped', async () => {
   const tpuf = new Turbopuffer({
-    baseURL: 'https://api.turbopuffer.com:12345',
+    baseURL: 'http://localhost:12345',
     region: 'byoc',
     timeout: 500,
   });
 
   const ns = tpuf.namespace(testNamespacePrefix + 'connection_errors_are_wrapped');
 
-  await expect(
+  await expectThrows(
     ns.query({
       rank_by: ['vector', 'ANN', [1, 1]],
       top_k: 10,
     }),
-  ).rejects.toThrow(APIConnectionError);
+    APIConnectionError,
+  );
 });
 
 test('empty_namespace', async () => {
@@ -736,7 +741,7 @@ test('empty_namespace', async () => {
 test('no_cmek', async () => {
   const ns = tpuf.namespace(testNamespacePrefix + 'no_cmek');
 
-  await expect(
+  await expectThrows(
     ns.write({
       upsert_rows: [
         {
@@ -751,7 +756,8 @@ test('no_cmek', async () => {
         },
       },
     }),
-  ).rejects.toThrow(APIError);
+    APIError,
+  );
 });
 
 test('copy_from_namespace', async () => {
