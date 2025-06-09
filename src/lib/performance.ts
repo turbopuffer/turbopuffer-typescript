@@ -48,8 +48,8 @@ export interface ClientPerformance {
   client_total_ms: number;
   /** Number of milliseconds spent compressing the request on the client. */
   client_compress_ms?: number;
-  /** Number of milliseconds between beginning to send the requestand
-   * receiving the last response header from the server.
+  /** Number of milliseconds between the start of the request and receiving the
+   * last response header from the server.
    *
    * WARNING: This parameter is only set when using the default fetch
    * implementation in Node and Deno.
