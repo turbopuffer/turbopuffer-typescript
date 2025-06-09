@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.10.0 (2025-06-09)
+
+Full Changelog: [v0.10.0-alpha.11...v0.10.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.0-alpha.11...v0.10.0)
+
+### Bug Fixes
+
+* restore `File` import in uploads.test.ts ([9b08f90](https://github.com/turbopuffer/turbopuffer-typescript/commit/9b08f9068e41c7f5b747e804b77910f7d4203c60))
+
+
+### Chores
+
+* avoid type error in certain environments ([0e834a6](https://github.com/turbopuffer/turbopuffer-typescript/commit/0e834a62eb77424c85dbc69062caaab318a97de8))
+* **docs:** use top-level-await in example snippets ([29932c6](https://github.com/turbopuffer/turbopuffer-typescript/commit/29932c60701d727bc86b1126bc726ed7c8792dab))
+* **internal:** fix readablestream types in node 20 ([4c8007f](https://github.com/turbopuffer/turbopuffer-typescript/commit/4c8007fd97a6254ef0b5afe882c1608ef4e993fd))
+* **internal:** version bump ([e6cdb28](https://github.com/turbopuffer/turbopuffer-typescript/commit/e6cdb28e070d5d2a21ad624ef21292a5ae887f53))
+* **internal:** version bump ([91da5bc](https://github.com/turbopuffer/turbopuffer-typescript/commit/91da5bc9aea92110a8036225163e3fd89918b3f2))
+* **internal:** version bump ([27063a3](https://github.com/turbopuffer/turbopuffer-typescript/commit/27063a35f03cd8216ac8bdc9429849672aee3896))
+* **internal:** version bump ([f458b0e](https://github.com/turbopuffer/turbopuffer-typescript/commit/f458b0ecd3ca202c81ab8ba525b843aefd2b9a74))
+
 ## 0.10.0-alpha.11 (2025-06-09)
 
 Full Changelog: [v0.10.0-alpha.10...v0.10.0-alpha.11](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.0-alpha.10...v0.10.0-alpha.11)

@@ -9,8 +9,8 @@
 
 import { HttpClientOptions } from '../lib/http-client';
 import { isRuntimeFullyNodeCompatible } from '../lib/runtime';
-import { type Fetch } from './builtin-types';
-import { type ReadableStream } from './shim-types';
+import type { Fetch } from './builtin-types';
+import type { ReadableStream } from './shim-types';
 
 export async function getDefaultFetch(options: HttpClientOptions): Promise<Fetch> {
   if (isRuntimeFullyNodeCompatible) {
