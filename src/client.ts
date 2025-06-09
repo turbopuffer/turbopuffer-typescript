@@ -91,6 +91,22 @@ export interface ClientOptions {
    */
   timeout?: number | undefined;
   /**
+   * The maximum amount of time (in milliseconds) that the client should wait for a socket
+   * to be established.
+   *
+   * WARNING: This parameter is only supported when using the default fetch
+   * implementation in Node and Deno.
+   */
+  connectTimeout?: number | undefined;
+  /**
+   * The maximum amount of time (in milliseconds) that the client should keep open a socket without
+   * active connections.
+   *
+   * WARNING: This parameter is only supported when using the default fetch
+   * implementation in Node and Deno.
+   */
+  idleTimeout?: number | undefined;
+  /**
    * Additional `RequestInit` options to be passed to `fetch` calls.
    * Properties will be overridden by per-request `fetchOptions`.
    */
@@ -214,7 +230,13 @@ export class Turbopuffer {
       defaultLogLevel;
     this.fetchOptions = options.fetchOptions;
     this.maxRetries = options.maxRetries ?? 2;
-    this.fetch = options.fetch ? Promise.resolve(options.fetch) : Shims.getDefaultFetch();
+    this.fetch =
+      options.fetch ?
+        Promise.resolve(options.fetch)
+      : Shims.getDefaultFetch({
+          connectTimeout: options.connectTimeout ?? 10 * 1000,
+          connectionIdleTimeout: options.idleTimeout ?? 60 * 1000,
+        });
     this.#encoder = Opts.FallbackEncoder;
 
     this._options = options;
