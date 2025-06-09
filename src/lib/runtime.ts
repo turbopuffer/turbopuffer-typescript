@@ -1,5 +1,7 @@
 type Runtime = 'bun' | 'deno' | 'cloudflare-workers' | 'browser' | 'node' | undefined;
 
+// TODO(benesch): see if we can merge this with src/internal/detect-platform.ts
+// if that one learns to detect bun.
 function detectRuntime(): Runtime {
   // @ts-expect-error can be ignored
   if (typeof globalThis.Bun !== 'undefined') return 'bun';
