@@ -17,7 +17,19 @@ export async function getDefaultFetch(options: HttpClientOptions): Promise<Fetch
     const { makeFetchUndici } = await import('../lib/fetch-undici');
     return makeFetchUndici(options);
   } else if (typeof fetch !== 'undefined') {
-    return fetch as any;
+    const fetchSmuggling: typeof fetch = async (url, options) => {
+      const response = await fetch(url, options);
+
+      // Smuggle the performance clock into the response object.
+      Object.defineProperty(response, 'clock', {
+        value: (options as any).clock,
+        enumerable: true,
+      });
+
+      return response;
+    };
+
+    return fetchSmuggling;
   }
 
   throw new Error(
