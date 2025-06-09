@@ -49,7 +49,7 @@ import {
   NamespaceUpdateSchemaResponse,
   NamespaceWriteParams,
   NamespaceWriteResponse,
-  Namespaces,
+  Namespace,
   QueryBilling,
   QueryPerformance,
   Row,
@@ -61,6 +61,8 @@ import {
 import { readEnv } from './internal/utils/env';
 import { formatRequestDetails, loggerFor } from './internal/utils/log';
 import { isEmptyObj } from './internal/utils/values';
+import { makeGzipCompressor, Compressor } from './lib/compressor';
+import { RequestClock } from './lib/performance';
 
 export interface ClientOptions {
   /**
@@ -90,6 +92,28 @@ export interface ClientOptions {
    * much longer than this timeout before the promise succeeds or fails.
    */
   timeout?: number | undefined;
+  /**
+   * The maximum amount of time (in milliseconds) that the client should wait for a socket
+   * to be established.
+   *
+   * WARNING: This parameter is only supported when using the default fetch
+   * implementation in Node and Deno.
+   */
+  connectTimeout?: number | undefined;
+  /**
+   * The maximum amount of time (in milliseconds) that the client should keep open a socket without
+   * active connections.
+   *
+   * WARNING: This parameter is only supported when using the default fetch
+   * implementation in Node and Deno.
+   */
+  idleTimeout?: number | undefined;
+  /**
+   * Whether to compress the request body and accept compressed responses.
+   *
+   * Defaults to true.
+   */
+  compression?: boolean | undefined;
   /**
    * Additional `RequestInit` options to be passed to `fetch` calls.
    * Properties will be overridden by per-request `fetchOptions`.
@@ -156,9 +180,11 @@ export class Turbopuffer {
   logger: Logger | undefined;
   logLevel: LogLevel | undefined;
   fetchOptions: MergedRequestInit | undefined;
+  compression: boolean;
 
   private fetch: Promise<Fetch>;
   #encoder: Opts.RequestEncoder;
+  compressor: Promise<Compressor> | undefined;
   protected idempotencyHeader?: string;
   private _options: ClientOptions;
 
@@ -213,9 +239,17 @@ export class Turbopuffer {
       parseLogLevel(readEnv('TURBOPUFFER_LOG'), "process.env['TURBOPUFFER_LOG']", this) ??
       defaultLogLevel;
     this.fetchOptions = options.fetchOptions;
+    this.compression = options.compression === undefined ? true : options.compression;
     this.maxRetries = options.maxRetries ?? 2;
-    this.fetch = options.fetch ? Promise.resolve(options.fetch) : Shims.getDefaultFetch();
+    this.fetch =
+      options.fetch ?
+        Promise.resolve(options.fetch)
+      : Shims.getDefaultFetch({
+          connectTimeout: options.connectTimeout ?? 10 * 1000,
+          connectionIdleTimeout: options.idleTimeout ?? 60 * 1000,
+        });
     this.#encoder = Opts.FallbackEncoder;
+    this.compressor = this.compression ? makeGzipCompressor() : undefined;
 
     this._options = options;
 
@@ -247,7 +281,7 @@ export class Turbopuffer {
    * Construct a namespace resource.
    */
   namespace(namespace: string) {
-    return new API.Namespaces(this.withOptions({ defaultNamespace: namespace }));
+    return new API.Namespace(this.withOptions({ defaultNamespace: namespace }));
   }
 
   /**
@@ -390,6 +424,10 @@ export class Turbopuffer {
     retriesRemaining: number | null,
     retryOfRequestLogID: string | undefined,
   ): Promise<APIResponseProps> {
+    const clock: RequestClock = {
+      requestStart: performance.now(),
+    };
+
     const options = await optionsInput;
     const maxRetries = options.maxRetries ?? this.maxRetries;
     if (retriesRemaining == null) {
@@ -398,7 +436,10 @@ export class Turbopuffer {
 
     await this.prepareOptions(options);
 
-    const { req, url, timeout } = this.buildRequest(options, { retryCount: maxRetries - retriesRemaining });
+    const { req, url, timeout } = await this.buildRequest(options, {
+      retryCount: maxRetries - retriesRemaining,
+      clock,
+    });
 
     await this.prepareRequest(req, { url, options });
 
@@ -537,6 +578,8 @@ export class Turbopuffer {
       }),
     );
 
+    clock.deserializeStart = performance.now();
+
     return { response, options, controller, requestLogID, retryOfRequestLogID, startTime };
   }
 
@@ -672,17 +715,29 @@ export class Turbopuffer {
     return sleepSeconds * jitter * 1000;
   }
 
-  buildRequest(
+  async buildRequest(
     inputOptions: FinalRequestOptions,
-    { retryCount = 0 }: { retryCount?: number } = {},
-  ): { req: FinalizedRequestInit; url: string; timeout: number } {
+    { retryCount = 0, clock }: { retryCount?: number; clock: RequestClock } = {
+      clock: {
+        requestStart: 0,
+      },
+    },
+  ): Promise<{ req: FinalizedRequestInit; url: string; timeout: number }> {
     const options = { ...inputOptions };
     const { method, path, query } = options;
 
     const url = this.buildURL(path!, query as Record<string, unknown>);
     if ('timeout' in options) validatePositiveInteger('timeout', options.timeout);
     options.timeout = options.timeout ?? this.timeout;
-    const { bodyHeaders, body } = this.buildBody({ options });
+    let content = this.buildBody({ options });
+    clock.compressStart = performance.now();
+    clock.compressEnd = clock.compressStart; // overwritten later if we actually compress
+    if (this.compressor) {
+      const compressor = await this.compressor;
+      content = await compressor(content);
+      clock.compressEnd = performance.now();
+    }
+    const { bodyHeaders, body } = content;
     const reqHeaders = this.buildHeaders({ options: inputOptions, method, bodyHeaders, retryCount });
 
     const req: FinalizedRequestInit = {
@@ -695,6 +750,12 @@ export class Turbopuffer {
       ...((this.fetchOptions as any) ?? {}),
       ...((options.fetchOptions as any) ?? {}),
     };
+
+    // Smuggle the performance clock into the request object.
+    Object.defineProperty(req, 'clock', {
+      value: clock,
+      enumerable: true,
+    });
 
     return { req, url, timeout: options.timeout };
   }
@@ -720,6 +781,7 @@ export class Turbopuffer {
       idempotencyHeaders,
       {
         Accept: 'application/json',
+        'Accept-Encoding': this.compression ? 'gzip' : 'identity',
         'User-Agent': this.getUserAgent(),
         'X-Stainless-Retry-Count': String(retryCount),
         ...(options.timeout ? { 'X-Stainless-Timeout': String(Math.trunc(options.timeout / 1000)) } : {}),
@@ -792,7 +854,7 @@ export class Turbopuffer {
 
   static toFile = Uploads.toFile;
 }
-Turbopuffer.Namespaces = Namespaces;
+Turbopuffer.Namespace = Namespace;
 export declare namespace Turbopuffer {
   export type RequestOptions = Opts.RequestOptions;
 
@@ -809,7 +871,7 @@ export declare namespace Turbopuffer {
   };
 
   export {
-    Namespaces as Namespaces,
+    Namespace as Namespace,
     type AttributeSchema as AttributeSchema,
     type AttributeSchemaConfig as AttributeSchemaConfig,
     type AttributeType as AttributeType,

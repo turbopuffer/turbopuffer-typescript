@@ -5,8 +5,9 @@ import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 import { AggregateBy, Filter, RankBy } from './custom';
+import { ClientPerformance } from '../lib/performance';
 
-export class Namespaces extends APIResource {
+export class Namespace extends APIResource {
   /**
    * Delete namespace.
    */
@@ -373,7 +374,7 @@ export interface NamespaceQueryResponse {
   /**
    * The performance information for a query.
    */
-  performance: QueryPerformance;
+  performance: QueryPerformance & ClientPerformance;
 
   aggregations?: Record<string, unknown>;
 
