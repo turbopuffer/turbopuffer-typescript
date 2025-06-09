@@ -698,8 +698,8 @@ test('sanity', async () => {
   );
 }, 10_000);
 
-test("exists", async () => {
-  let ns = tpuf.namespace(testNamespacePrefix + "exists");
+test('exists', async () => {
+  let ns = tpuf.namespace(testNamespacePrefix + 'exists');
 
   try {
     await ns.deleteAll();
@@ -712,16 +712,16 @@ test("exists", async () => {
       id: [1],
       vector: [[0.1, 0.1]],
       private: [true],
-      tags: [["a", "b"]],
+      tags: [['a', 'b']],
     },
-    distance_metric: "cosine_distance",
+    distance_metric: 'cosine_distance',
   });
 
   let exists = await ns.exists();
   expect(exists).toEqual(true);
   await ns.deleteAll();
 
-  ns = tpuf.namespace("non_existent_ns");
+  ns = tpuf.namespace('non_existent_ns');
   exists = await ns.exists();
   expect(exists).toEqual(false);
 });
