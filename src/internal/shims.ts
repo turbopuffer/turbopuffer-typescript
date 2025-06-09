@@ -7,15 +7,29 @@
  * messages in cases where an environment isn't fully supported.
  */
 
+import { HttpClientOptions } from '../lib/http-client';
 import { isRuntimeFullyNodeCompatible } from '../lib/runtime';
 import { type Fetch } from './builtin-types';
 import { type ReadableStream } from './shim-types';
 
-export async function getDefaultFetch(): Promise<Fetch> {
+export async function getDefaultFetch(options: HttpClientOptions): Promise<Fetch> {
   if (isRuntimeFullyNodeCompatible) {
-    return (await import('../lib/fetch-undici')).fetchUndici;
+    const { makeFetchUndici } = await import('../lib/fetch-undici');
+    return makeFetchUndici(options);
   } else if (typeof fetch !== 'undefined') {
-    return fetch as any;
+    const fetchSmuggling: typeof fetch = async (url, options) => {
+      const response = await fetch(url, options);
+
+      // Smuggle the performance clock into the response object.
+      Object.defineProperty(response, 'clock', {
+        value: (options as any).clock,
+        enumerable: true,
+      });
+
+      return response;
+    };
+
+    return fetchSmuggling;
   }
 
   throw new Error(

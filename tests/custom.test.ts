@@ -1,4 +1,5 @@
 import Turbopuffer, { APIConnectionError, APIError, NotFoundError } from '@turbopuffer/turbopuffer';
+import { isRuntimeFullyNodeCompatible } from '@turbopuffer/turbopuffer/lib/runtime';
 import { AttributeSchema, RankBy } from '@turbopuffer/turbopuffer/resources';
 import assert from 'assert';
 
@@ -697,6 +698,34 @@ test('sanity', async () => {
   );
 }, 10_000);
 
+test('exists', async () => {
+  let ns = tpuf.namespace(testNamespacePrefix + 'exists');
+
+  try {
+    await ns.deleteAll();
+  } catch (_: unknown) {
+    /* empty */
+  }
+
+  await ns.write({
+    upsert_columns: {
+      id: [1],
+      vector: [[0.1, 0.1]],
+      private: [true],
+      tags: [['a', 'b']],
+    },
+    distance_metric: 'cosine_distance',
+  });
+
+  let exists = await ns.exists();
+  expect(exists).toEqual(true);
+  await ns.deleteAll();
+
+  ns = tpuf.namespace('non_existent_ns');
+  exists = await ns.exists();
+  expect(exists).toEqual(false);
+});
+
 test('connection_errors_are_wrapped', async () => {
   const tpuf = new Turbopuffer({
     baseURL: 'http://localhost:12345',
@@ -914,7 +943,7 @@ function randomVector(dims: number) {
     .map(() => Math.random());
 }
 
-test.skip('compression', async () => {
+test('compression', async () => {
   const ns = tpuf.namespace(testNamespacePrefix + 'compression');
 
   try {
@@ -933,26 +962,31 @@ test.skip('compression', async () => {
     distance_metric: 'cosine_distance',
   });
 
-  const resultsWithPerformance = await ns.query({
+  const results = await ns.query({
     rank_by: ['vector', 'ANN', randomVector(1024)],
     top_k: 10,
     include_attributes: true,
   });
 
-  const performance = resultsWithPerformance.performance;
-  // expect(performance.compress_time).toBeGreaterThan(0);
-  // expect(performance.body_read_time).toBeGreaterThan(0);
-  // expect(performance.deserialize_time).toBeGreaterThan(0);
-  // if (isRuntimeFullyNodeCompatible) {
-  //   expect(performance.decompress_time).toBeGreaterThan(0); // Response should be compressed
-  // } else {
-  //   expect(performance.decompress_time).toBeNull;
-  // }
+  const performance = results.performance;
+  expect(performance.client_total_ms).toBeGreaterThan(0);
+  expect(performance.client_compress_ms).toBeGreaterThan(0);
+  expect(performance.client_deserialize_ms).toBeGreaterThan(0);
+  if (isRuntimeFullyNodeCompatible) {
+    expect(performance.client_response_ms).toBeGreaterThan(0);
+    expect(performance.client_body_read_ms).toBeGreaterThan(0);
+    expect(performance.client_decompress_ms).toBeGreaterThan(0); // Response should be compressed
+  } else {
+    expect(performance.client_response_ms).toBeUndefined();
+    expect(performance.client_body_read_ms).toBeUndefined();
+    expect(performance.client_decompress_ms).toBeUndefined();
+  }
 });
 
-test.skip('disable_compression', async () => {
+test('disable_compression', async () => {
   const tpufNoCompression = new Turbopuffer({
-    // compression: false,
+    region: 'gcp-us-central1',
+    compression: false,
   });
 
   const ns = tpufNoCompression.namespace(testNamespacePrefix + 'disable_compression');
@@ -973,21 +1007,25 @@ test.skip('disable_compression', async () => {
     distance_metric: 'cosine_distance',
   });
 
-  const resultsWithPerformance = await ns.query({
+  const results = await ns.query({
     rank_by: ['vector', 'ANN', randomVector(1024)],
     top_k: 10,
     include_attributes: true,
   });
 
-  const performance = resultsWithPerformance.performance;
-  // expect(performance.compress_time).toBeNull;
-  // expect(performance.body_read_time).toBeGreaterThan(0);
-  // expect(performance.deserialize_time).toBeGreaterThan(0);
-  // if (isRuntimeFullyNodeCompatible) {
-  //   expect(performance.decompress_time).toEqual(0);
-  // } else {
-  //   expect(performance.decompress_time).toBeNull;
-  // }
+  const performance = results.performance;
+  expect(performance.client_total_ms).toBeGreaterThan(0);
+  expect(performance.client_compress_ms).toEqual(0);
+  expect(performance.client_deserialize_ms).toBeGreaterThan(0);
+  if (isRuntimeFullyNodeCompatible) {
+    expect(performance.client_response_ms).toBeGreaterThan(0);
+    expect(performance.client_body_read_ms).toBeGreaterThan(0);
+    expect(performance.client_decompress_ms).toEqual(0);
+  } else {
+    expect(performance.client_response_ms).toBeUndefined();
+    expect(performance.client_body_read_ms).toBeUndefined();
+    expect(performance.client_decompress_ms).toBeUndefined();
+  }
 });
 
 test('product_operator', async () => {

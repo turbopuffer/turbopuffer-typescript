@@ -3,6 +3,7 @@
 import type { FinalRequestOptions } from './request-options';
 import { type Turbopuffer } from '../client';
 import { formatRequestDetails, loggerFor } from './utils/log';
+import { mergeClockIntoResponse } from '../lib/performance';
 
 export type APIResponseProps = {
   response: Response;
@@ -30,6 +31,7 @@ export async function defaultParseResponse<T>(client: Turbopuffer, props: APIRes
     const isJSON = mediaType?.includes('application/json') || mediaType?.endsWith('+json');
     if (isJSON) {
       const json = await response.json();
+      mergeClockIntoResponse(json, (response as any).clock);
       return json as T;
     }
 

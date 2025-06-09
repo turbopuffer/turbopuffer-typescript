@@ -8,7 +8,8 @@ The REST API documentation can be found on [turbopuffer.com](https://turbopuffer
 
 It is generated with [Stainless](https://www.stainless.com/).
 
-> [!WARNING] > **This version of the turbopuffer Python client is in alpha.**
+> [!WARNING]
+> **This version of the turbopuffer TypeScript client is in alpha.**
 >
 > You may encounter bugs or performance issues. APIs are subject to change.
 >

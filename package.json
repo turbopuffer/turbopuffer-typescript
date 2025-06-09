@@ -1,6 +1,6 @@
 {
   "name": "@turbopuffer/turbopuffer",
-  "version": "0.10.0-alpha.10",
+  "version": "0.10.0-alpha.11",
   "description": "The official TypeScript library for the Turbopuffer API",
   "author": "Turbopuffer <info@turbopuffer.com>",
   "types": "dist/index.d.ts",
@@ -24,6 +24,7 @@
     "fix": "./scripts/format"
   },
   "dependencies": {
+    "pako": "^2.1.0",
     "undici": "^7.10.0"
   },
   "devDependencies": {
@@ -32,6 +33,7 @@
     "@swc/jest": "^0.2.29",
     "@types/jest": "^29.4.0",
     "@types/node": "^20.17.6",
+    "@types/pako": "^2.0.3",
     "typescript-eslint": "8.31.1",
     "@typescript-eslint/eslint-plugin": "8.31.1",
     "@typescript-eslint/parser": "8.31.1",

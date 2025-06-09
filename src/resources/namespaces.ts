@@ -5,8 +5,10 @@ import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 import { AggregateBy, Filter, RankBy } from './custom';
+import { ClientPerformance } from '../lib/performance';
+import { NotFoundError } from '../error';
 
-export class Namespaces extends APIResource {
+export class Namespace extends APIResource {
   /**
    * Delete namespace.
    */
@@ -60,6 +62,21 @@ export class Namespaces extends APIResource {
   ): APIPromise<NamespaceSchemaResponse> {
     const { namespace = this._client.defaultNamespace } = params ?? {};
     return this._client.get(path`/v1/namespaces/${namespace}/schema`, options);
+  }
+
+  /**
+   * Check whether the namespace exists.
+   */
+  async exists() {
+    try {
+      await this.schema();
+      return true;
+    } catch (e) {
+      if (e instanceof NotFoundError) {
+        return false;
+      }
+      throw e;
+    }
   }
 
   /**
@@ -373,7 +390,7 @@ export interface NamespaceQueryResponse {
   /**
    * The performance information for a query.
    */
-  performance: QueryPerformance;
+  performance: QueryPerformance & ClientPerformance;
 
   aggregations?: Record<string, unknown>;
 

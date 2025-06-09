@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.10.0-alpha.11 (2025-06-09)
+
+Full Changelog: [v0.10.0-alpha.10...v0.10.0-alpha.11](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.0-alpha.10...v0.10.0-alpha.11)
+
+### Features
+
+* add `connectTimeout` and `idleTimeout` options ([#92](https://github.com/turbopuffer/turbopuffer-typescript/issues/92)) ([2eb22fd](https://github.com/turbopuffer/turbopuffer-typescript/commit/2eb22fd019fde4478acc1e7269d34384ea6133df))
+* restore exists() method ([aab677a](https://github.com/turbopuffer/turbopuffer-typescript/commit/aab677a3699419a9ad9af64b111cc188b0c38624))
+
+
+### Bug Fixes
+
+* fix WARNING syntax in README ([e4bd9fb](https://github.com/turbopuffer/turbopuffer-typescript/commit/e4bd9fb03505564981bd629f04c484d9f4259880))
+* formatting ([4ad681b](https://github.com/turbopuffer/turbopuffer-typescript/commit/4ad681bcf9d07978a9227074382f52c61016ae3b))
+
 ## 0.10.0-alpha.10 (2025-06-08)
 
 Full Changelog: [v0.10.0-alpha.9...v0.10.0-alpha.10](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.0-alpha.9...v0.10.0-alpha.10)
