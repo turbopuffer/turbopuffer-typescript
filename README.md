@@ -8,12 +8,10 @@ The REST API documentation can be found on [turbopuffer.com](https://turbopuffer
 
 It is generated with [Stainless](https://www.stainless.com/).
 
-> [!WARNING]
-> **This version of the turbopuffer TypeScript client is in alpha.**
+> [!IMPORTANT]
+> **The latest version of the TypeScript SDK (v0.10) contains several breaking changes.**
 >
-> You may encounter bugs or performance issues. APIs are subject to change.
->
-> The stable version of the turbopuffer TypeScript client is [v0.9.1](https://npmjs.org/package/@turbopuffer/turbopuffer).
+> Consult [UPGRADING.md](./UPGRADING.md) for details.
 
 ## Installation
 
