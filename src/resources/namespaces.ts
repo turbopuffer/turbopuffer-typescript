@@ -6,7 +6,7 @@ import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 import { AggregateBy, Filter, RankBy } from './custom';
 
-export class Namespaces extends APIResource {
+export class Namespace extends APIResource {
   /**
    * Delete namespace.
    */

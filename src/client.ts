@@ -49,7 +49,7 @@ import {
   NamespaceUpdateSchemaResponse,
   NamespaceWriteParams,
   NamespaceWriteResponse,
-  Namespaces,
+  Namespace,
   QueryBilling,
   QueryPerformance,
   Row,
@@ -269,7 +269,7 @@ export class Turbopuffer {
    * Construct a namespace resource.
    */
   namespace(namespace: string) {
-    return new API.Namespaces(this.withOptions({ defaultNamespace: namespace }));
+    return new API.Namespace(this.withOptions({ defaultNamespace: namespace }));
   }
 
   /**
@@ -814,7 +814,7 @@ export class Turbopuffer {
 
   static toFile = Uploads.toFile;
 }
-Turbopuffer.Namespaces = Namespaces;
+Turbopuffer.Namespace = Namespace;
 export declare namespace Turbopuffer {
   export type RequestOptions = Opts.RequestOptions;
 
@@ -831,7 +831,7 @@ export declare namespace Turbopuffer {
   };
 
   export {
-    Namespaces as Namespaces,
+    Namespace as Namespace,
     type AttributeSchema as AttributeSchema,
     type AttributeSchemaConfig as AttributeSchemaConfig,
     type AttributeType as AttributeType,
