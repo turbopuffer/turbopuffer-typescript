@@ -25,18 +25,13 @@ a specification of the turbopuffer API. This unlocks several benefits:
 
 There are several breaking changes as a result of this rewrite:
 
-- Compression is not optimized for large responses.
+- The following query performance metrics have been renamed:
 
-  TODO(benesch): fix this.
-
-- The following performance metrics have been removed without replacement:
-
-  - `response_time`
-  - `body_read_time`
-  - `compress_time`
-  - `deserialize_time`
-
-  TODO(benesch): restore these?
+  - `compress_time` => `client_compress_ms`
+  - `response_time` => `client_response_ms`
+  - `body_read_time` => `client_body_read_ms`
+  - `decompress_time` => `client_decompress_ms`
+  - `deserialize_time` => `client_deserialize_ms`
 
 - Several changes have been made to the `Turbopuffer` constructor:
 
