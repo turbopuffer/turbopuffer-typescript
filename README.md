@@ -2,9 +2,7 @@
 
 <a href="https://npmjs.org/package/@turbopuffer/turbopuffer"><img src="https://img.shields.io/npm/v/@turbopuffer/turbopuffer.svg" alt="NPM version" align="right"></a> <img src="https://img.shields.io/bundlephobia/minzip/@turbopuffer/turbopuffer" alt="npm bundle size" align="right">
 
-This library provides convenient access to the Turbopuffer REST API from server-side TypeScript or JavaScript.
-
-The REST API documentation can be found on [turbopuffer.com](https://turbopuffer.com/docs).
+This library provides convenient access to the Turbopuffer HTTP API from server-side TypeScript or JavaScript.
 
 It is generated with [Stainless](https://www.stainless.com/).
 
@@ -12,6 +10,10 @@ It is generated with [Stainless](https://www.stainless.com/).
 > **The latest version of the TypeScript SDK (v0.10) contains several breaking changes.**
 >
 > Consult [UPGRADING.md](./UPGRADING.md) for details.
+
+## Documentation
+
+The HTTP API documentation can be found at [turbopuffer.com/docs](https://turbopuffer.com/docs).
 
 ## Installation
 
@@ -398,7 +400,7 @@ The following runtimes are supported:
 - Bun 1.0 or later.
 - Cloudflare Workers.
 - Vercel Edge Runtime.
-- Jest 28 or greater with the `"node"` environment (`"jsdom"` is not supported at this time).
+- Jest 28 or greater with the `"node"` environment
 - Nitro v2.6 or greater.
 
 Note that React Native is not supported at this time.
