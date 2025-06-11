@@ -44,6 +44,37 @@ describe('resource namespaces', () => {
   });
 
   // skipped: tests are disabled for the time being
+  test.skip('multiQuery: only required params', async () => {
+    const responsePromise = client.namespaces.multiQuery({ namespace: 'namespace', queries: [{}] });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // skipped: tests are disabled for the time being
+  test.skip('multiQuery: required and optional params', async () => {
+    const response = await client.namespaces.multiQuery({
+      namespace: 'namespace',
+      queries: [
+        {
+          aggregate_by: { foo: 'bar' },
+          distance_metric: 'cosine_distance',
+          filters: {},
+          include_attributes: true,
+          rank_by: {},
+          top_k: 0,
+        },
+      ],
+      consistency: { level: 'strong' },
+      vector_encoding: 'float',
+    });
+  });
+
+  // skipped: tests are disabled for the time being
   test.skip('query: only required params', async () => {
     const responsePromise = client.namespaces.query({ namespace: 'namespace' });
     const rawResponse = await responsePromise.asResponse();
