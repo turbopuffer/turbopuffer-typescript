@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as NamespacesAPI from './namespaces';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
@@ -29,6 +30,20 @@ export class Namespace extends APIResource {
   ): APIPromise<NamespaceHintCacheWarmResponse> {
     const { namespace = this._client.defaultNamespace } = params ?? {};
     return this._client.get(path`/v1/namespaces/${namespace}/hint_cache_warm`, options);
+  }
+
+  /**
+   * Issue multiple concurrent queries filter or search documents.
+   */
+  multiQuery(
+    params: NamespaceMultiQueryParams,
+    options?: RequestOptions,
+  ): APIPromise<NamespaceMultiQueryResponse> {
+    const { namespace = this._client.defaultNamespace, ...body } = params;
+    return this._client.post(path`/v2/namespaces/${namespace}/query?stainless_overload=multiQuery`, {
+      body,
+      ...options,
+    });
   }
 
   /**
@@ -379,6 +394,31 @@ export interface NamespaceHintCacheWarmResponse {
 }
 
 /**
+ * The result of a multi-query.
+ */
+export interface NamespaceMultiQueryResponse {
+  /**
+   * The billing information for a query.
+   */
+  billing: QueryBilling;
+
+  /**
+   * The performance information for a query.
+   */
+  performance: QueryPerformance;
+
+  results: Array<NamespaceMultiQueryResponse.Result>;
+}
+
+export namespace NamespaceMultiQueryResponse {
+  export interface Result {
+    aggregations?: Record<string, unknown>;
+
+    rows?: Array<NamespacesAPI.Row>;
+  }
+}
+
+/**
  * The result of a query.
  */
 export interface NamespaceQueryResponse {
@@ -465,6 +505,82 @@ export interface NamespaceHintCacheWarmParams {
    * The name of the namespace.
    */
   namespace?: string;
+}
+
+export interface NamespaceMultiQueryParams {
+  /**
+   * Path param: The name of the namespace.
+   */
+  namespace?: string;
+
+  /**
+   * Body param:
+   */
+  queries: Array<NamespaceMultiQueryParams.Query>;
+
+  /**
+   * Body param: The consistency level for a query.
+   */
+  consistency?: NamespaceMultiQueryParams.Consistency;
+
+  /**
+   * Body param: The encoding to use for vectors in the response.
+   */
+  vector_encoding?: VectorEncoding;
+}
+
+export namespace NamespaceMultiQueryParams {
+  /**
+   * Query, filter, full-text search and vector search documents.
+   */
+  export interface Query {
+    /**
+     * Aggregations to compute over all documents in the namespace that match the
+     * filters.
+     */
+    aggregate_by?: Record<string, unknown>;
+
+    /**
+     * A function used to calculate vector similarity.
+     */
+    distance_metric?: NamespacesAPI.DistanceMetric;
+
+    /**
+     * Exact filters for attributes to refine search results for. Think of it as a SQL
+     * WHERE clause.
+     */
+    filters?: unknown;
+
+    /**
+     * Whether to include attributes in the response.
+     */
+    include_attributes?: NamespacesAPI.IncludeAttributes;
+
+    /**
+     * How to rank the documents in the namespace.
+     */
+    rank_by?: unknown;
+
+    /**
+     * The number of results to return.
+     */
+    top_k?: number;
+  }
+
+  /**
+   * The consistency level for a query.
+   */
+  export interface Consistency {
+    /**
+     * The query's consistency level.
+     *
+     * - `strong` - Strong consistency. Requires a round-trip to object storage to
+     *   fetch the latest writes.
+     * - `eventual` - Eventual consistency. Does not require a round-trip to object
+     *   storage, but may not see the latest writes.
+     */
+    level?: 'strong' | 'eventual';
+  }
 }
 
 export interface NamespaceQueryParams {
@@ -679,6 +795,7 @@ export declare namespace Namespaces {
     type WriteBilling as WriteBilling,
     type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
     type NamespaceHintCacheWarmResponse as NamespaceHintCacheWarmResponse,
+    type NamespaceMultiQueryResponse as NamespaceMultiQueryResponse,
     type NamespaceQueryResponse as NamespaceQueryResponse,
     type NamespaceRecallResponse as NamespaceRecallResponse,
     type NamespaceSchemaResponse as NamespaceSchemaResponse,
@@ -686,6 +803,7 @@ export declare namespace Namespaces {
     type NamespaceWriteResponse as NamespaceWriteResponse,
     type NamespaceDeleteAllParams as NamespaceDeleteAllParams,
     type NamespaceHintCacheWarmParams as NamespaceHintCacheWarmParams,
+    type NamespaceMultiQueryParams as NamespaceMultiQueryParams,
     type NamespaceQueryParams as NamespaceQueryParams,
     type NamespaceRecallParams as NamespaceRecallParams,
     type NamespaceSchemaParams as NamespaceSchemaParams,

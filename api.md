@@ -31,6 +31,7 @@ Types:
 - <code><a href="./src/resources/namespaces.ts">WriteBilling</a></code>
 - <code><a href="./src/resources/namespaces.ts">NamespaceDeleteAllResponse</a></code>
 - <code><a href="./src/resources/namespaces.ts">NamespaceHintCacheWarmResponse</a></code>
+- <code><a href="./src/resources/namespaces.ts">NamespaceMultiQueryResponse</a></code>
 - <code><a href="./src/resources/namespaces.ts">NamespaceQueryResponse</a></code>
 - <code><a href="./src/resources/namespaces.ts">NamespaceRecallResponse</a></code>
 - <code><a href="./src/resources/namespaces.ts">NamespaceSchemaResponse</a></code>
@@ -41,6 +42,7 @@ Methods:
 
 - <code title="delete /v2/namespaces/{namespace}">client.namespaces.<a href="./src/resources/namespaces.ts">deleteAll</a>({ ...params }) -> NamespaceDeleteAllResponse</code>
 - <code title="get /v1/namespaces/{namespace}/hint_cache_warm">client.namespaces.<a href="./src/resources/namespaces.ts">hintCacheWarm</a>({ ...params }) -> NamespaceHintCacheWarmResponse</code>
+- <code title="post /v2/namespaces/{namespace}/query?stainless_overload=multiQuery">client.namespaces.<a href="./src/resources/namespaces.ts">multiQuery</a>({ ...params }) -> NamespaceMultiQueryResponse</code>
 - <code title="post /v2/namespaces/{namespace}/query">client.namespaces.<a href="./src/resources/namespaces.ts">query</a>({ ...params }) -> NamespaceQueryResponse</code>
 - <code title="post /v1/namespaces/{namespace}/_debug/recall">client.namespaces.<a href="./src/resources/namespaces.ts">recall</a>({ ...params }) -> NamespaceRecallResponse</code>
 - <code title="get /v1/namespaces/{namespace}/schema">client.namespaces.<a href="./src/resources/namespaces.ts">schema</a>({ ...params }) -> NamespaceSchemaResponse</code>
