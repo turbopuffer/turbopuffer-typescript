@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.10.1 (2025-06-11)
+
+Full Changelog: [v0.10.0...v0.10.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.0...v0.10.1)
+
+### Features
+
+* **api:** Add support for new `multiQuery` api
+
+
+### Bug Fixes
+
+* correct documentation for client_response_ms perf metric ([#96](https://github.com/turbopuffer/turbopuffer-typescript/issues/96)) ([95874e0](https://github.com/turbopuffer/turbopuffer-typescript/commit/95874e041bb7a8565855c102cefaf5e7d105fa61))
+* **README:** align documentation link with other SDKs ([b01efe5](https://github.com/turbopuffer/turbopuffer-typescript/commit/b01efe53bf67b484d203e1496bb961cc677513db))
+* **README:** install from npm ([97755b3](https://github.com/turbopuffer/turbopuffer-typescript/commit/97755b3c8457420a139550d722e38686c13af658))
+
 ## 0.10.0 (2025-06-09)
 
 Full Changelog: [v0.10.0-alpha.11...v0.10.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.0-alpha.11...v0.10.0)
