@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.10.1 (2025-06-11)
+
+Full Changelog: [v0.10.0...v0.10.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.0...v0.10.1)
+
+### Features
+
+* **api:** api update ([18c9735](https://github.com/turbopuffer/turbopuffer-typescript/commit/18c9735a35a8c6470137b648c8aba303ce7efbba))
+
+
+### Bug Fixes
+
+* **api:** api update ([82ca26d](https://github.com/turbopuffer/turbopuffer-typescript/commit/82ca26dcdce1253aa1bc26850584001eabdfc92d))
+* **api:** api update ([e96afba](https://github.com/turbopuffer/turbopuffer-typescript/commit/e96afbaaa564c256eeddca0112c212bbaceb7a14))
+* correct documentation for client_response_ms perf metric ([#96](https://github.com/turbopuffer/turbopuffer-typescript/issues/96)) ([95874e0](https://github.com/turbopuffer/turbopuffer-typescript/commit/95874e041bb7a8565855c102cefaf5e7d105fa61))
+* **README:** align documentation link with other SDKs ([b01efe5](https://github.com/turbopuffer/turbopuffer-typescript/commit/b01efe53bf67b484d203e1496bb961cc677513db))
+* **README:** install from npm ([97755b3](https://github.com/turbopuffer/turbopuffer-typescript/commit/97755b3c8457420a139550d722e38686c13af658))
+
+
+### Chores
+
+* **test:** custom code ([07ef3c8](https://github.com/turbopuffer/turbopuffer-typescript/commit/07ef3c8ae6b64778f09318bae4f063fdca3eb32f))
+* **test:** custom code ([a91ef33](https://github.com/turbopuffer/turbopuffer-typescript/commit/a91ef3328fe8b8427058ab0378933d610d08ac4b))
+
 ## 0.10.0 (2025-06-09)
 
 Full Changelog: [v0.10.0-alpha.11...v0.10.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.0-alpha.11...v0.10.0)
