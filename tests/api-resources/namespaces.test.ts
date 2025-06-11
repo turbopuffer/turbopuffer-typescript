@@ -45,7 +45,7 @@ describe('resource namespaces', () => {
 
   // skipped: tests are disabled for the time being
   test.skip('multiQuery: only required params', async () => {
-    const responsePromise = client.namespaces.multiQuery({ namespace: 'namespace', queries: [{}] });
+    const responsePromise = client.namespace('namespace').multiQuery({ namespace: 'namespace', queries: [{}] });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -57,7 +57,7 @@ describe('resource namespaces', () => {
 
   // skipped: tests are disabled for the time being
   test.skip('multiQuery: required and optional params', async () => {
-    const response = await client.namespaces.multiQuery({
+    const response = await client.namespace('namespace').multiQuery({
       namespace: 'namespace',
       queries: [
         {
