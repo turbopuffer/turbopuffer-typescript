@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.10.2 (2025-06-13)
+
+Full Changelog: [v0.10.1...v0.10.2](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.1...v0.10.2)
+
+### Bug Fixes
+
+* convert to Undici 6-compatible headers object ([#98](https://github.com/turbopuffer/turbopuffer-typescript/issues/98)) ([caa7bd6](https://github.com/turbopuffer/turbopuffer-typescript/commit/caa7bd6d057b1a22dd8d87cd445df75e1247ecaf))
+
 ## 0.10.1 (2025-06-11)
 
 Full Changelog: [v0.10.0...v0.10.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.0...v0.10.1)
