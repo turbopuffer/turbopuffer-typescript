@@ -3,6 +3,7 @@ import { HttpClientOptions } from './http-client';
 import { promisify } from 'node:util';
 import { gunzip as gunzipNode } from 'node:zlib';
 import { RequestClock } from './performance';
+import { UndiciHeaders } from 'undici/types/dispatcher';
 
 const gunzip = promisify(gunzipNode);
 
@@ -26,6 +27,26 @@ export const makeFetchUndici = (clientOptions: HttpClientOptions) => {
     // Extract the smuggled clock from the request options.
     let clock: RequestClock = (options as any).clock;
 
+    // Convert from `fetch` to `undici` request format.
+    let requestHeaders: UndiciHeaders;
+    if (options.headers === undefined) {
+      requestHeaders = {};
+    } else if (options.headers instanceof Headers) {
+      // Versions of `undici` before 6.7.0 [0] didn't support `Headers` objects
+      // directly, so convert to a plain object, which both Undici 6 and 7
+      // support.
+      //
+      // Our package.json does constrain to Undici 7+, but we have at least one
+      // user in the wild who was managing to link against Undici 6. It's much
+      // easier to solve it this way than to fix npm/Yarn dependency resolution
+      // issues.
+      //
+      // [0]: https://github.com/nodejs/undici/commit/c2f006894c53609032ccbf82a98e1b0221da4d66
+      requestHeaders = Object.fromEntries(options.headers);
+    } else {
+      requestHeaders = options.headers;
+    }
+
     // Make request using undici's low-level request API, which is much faster
     // than the high-level fetch API. (*This* shim doesn't need to be standards
     // compliant, which is why we can outperform the built-in fetch shim.)
@@ -33,7 +54,7 @@ export const makeFetchUndici = (clientOptions: HttpClientOptions) => {
       origin: url.origin,
       path: url.search ? `${url.pathname}${url.search}` : url.pathname,
       method: options.method || 'GET',
-      headers: options.headers || {},
+      headers: requestHeaders,
       body: options.body as any,
       signal: options.signal,
     });
