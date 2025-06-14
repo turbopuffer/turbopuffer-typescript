@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.10.3 (2025-06-14)
+
+Full Changelog: [v0.10.2...v0.10.3](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.2...v0.10.3)
+
+### Bug Fixes
+
+* publish script — handle NPM errors correctly ([0e1670e](https://github.com/turbopuffer/turbopuffer-typescript/commit/0e1670edb84ebb3896c381fd44c32917262673de))
+
 ## 0.10.2 (2025-06-13)
 
 Full Changelog: [v0.10.1...v0.10.2](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.1...v0.10.2)
