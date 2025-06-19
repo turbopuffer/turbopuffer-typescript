@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.10.3 (2025-06-19)
+
+Full Changelog: [v0.10.2...v0.10.3](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.2...v0.10.3)
+
+### Features
+
+* **client:** add support for endpoint-specific base URLs ([277ee87](https://github.com/turbopuffer/turbopuffer-typescript/commit/277ee87aab93f780b16c3886927877af04288837))
+
+
+### Bug Fixes
+
+* publish script — handle NPM errors correctly ([0e1670e](https://github.com/turbopuffer/turbopuffer-typescript/commit/0e1670edb84ebb3896c381fd44c32917262673de))
+* strict types for async query and multi_query APIs ([#101](https://github.com/turbopuffer/turbopuffer-typescript/issues/101)) ([d5ed3b4](https://github.com/turbopuffer/turbopuffer-typescript/commit/d5ed3b429a592db2a1e9a6f6f6a70568b305816a))
+
+
+### Chores
+
+* **ci:** enable for pull requests ([83600c3](https://github.com/turbopuffer/turbopuffer-typescript/commit/83600c30fcc15d10ce2083af1c85220a7943bed2))
+* **client:** refactor imports ([f04378d](https://github.com/turbopuffer/turbopuffer-typescript/commit/f04378dde83d1b3c102c5b3b0f06da0f539340c6))
+* **internal:** codegen related update ([52ec226](https://github.com/turbopuffer/turbopuffer-typescript/commit/52ec2267524fdb7533794f0e48d60d396af24cfe))
+
 ## 0.10.2 (2025-06-13)
 
 Full Changelog: [v0.10.1...v0.10.2](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.1...v0.10.2)
