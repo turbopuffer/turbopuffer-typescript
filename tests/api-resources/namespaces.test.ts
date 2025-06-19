@@ -63,11 +63,9 @@ describe('resource namespaces', () => {
       namespace: 'namespace',
       queries: [
         {
-          aggregate_by: { foo: 'bar' },
           distance_metric: 'cosine_distance',
-          filters: {},
           include_attributes: true,
-          rank_by: {},
+          rank_by: ['id', 'asc'],
           top_k: 0,
         },
       ],
