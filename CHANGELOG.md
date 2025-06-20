@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.10.5 (2025-06-20)
+
+Full Changelog: [v0.10.4...v0.10.5](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.4...v0.10.5)
+
+### Bug Fixes
+
+* **client:** explicitly copy fetch in withOptions ([6b8700b](https://github.com/turbopuffer/turbopuffer-typescript/commit/6b8700bf07f244ffa9de4733aa41851a6d407fe3))
+
 ## 0.10.4 (2025-06-20)
 
 Full Changelog: [v0.10.3...v0.10.4](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.3...v0.10.4)
