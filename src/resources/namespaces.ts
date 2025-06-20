@@ -267,6 +267,43 @@ export type Language =
   | 'turkish';
 
 /**
+ * Query, filter, full-text search and vector search documents.
+ */
+export interface Query {
+  /**
+   * Aggregations to compute over all documents in the namespace that match the
+   * filters.
+   */
+  aggregate_by?: Record<string, unknown>;
+
+  /**
+   * A function used to calculate vector similarity.
+   */
+  distance_metric?: DistanceMetric;
+
+  /**
+   * Exact filters for attributes to refine search results for. Think of it as a SQL
+   * WHERE clause.
+   */
+  filters?: unknown;
+
+  /**
+   * Whether to include attributes in the response.
+   */
+  include_attributes?: IncludeAttributes;
+
+  /**
+   * How to rank the documents in the namespace.
+   */
+  rank_by?: unknown;
+
+  /**
+   * The number of results to return.
+   */
+  top_k?: number;
+}
+
+/**
  * The billing information for a query.
  */
 export interface QueryBilling {
@@ -516,7 +553,7 @@ export interface NamespaceMultiQueryParams {
   /**
    * Body param:
    */
-  queries: Array<NamespaceMultiQueryParams.Query>;
+  queries: Array<Query>;
 
   /**
    * Body param: The consistency level for a query.
@@ -530,43 +567,6 @@ export interface NamespaceMultiQueryParams {
 }
 
 export namespace NamespaceMultiQueryParams {
-  /**
-   * Query, filter, full-text search and vector search documents.
-   */
-  export interface Query {
-    /**
-     * Aggregations to compute over all documents in the namespace that match the
-     * filters.
-     */
-    aggregate_by?: Record<string, AggregateBy>;
-
-    /**
-     * A function used to calculate vector similarity.
-     */
-    distance_metric?: NamespacesAPI.DistanceMetric;
-
-    /**
-     * Exact filters for attributes to refine search results for. Think of it as a SQL
-     * WHERE clause.
-     */
-    filters?: Filter;
-
-    /**
-     * Whether to include attributes in the response.
-     */
-    include_attributes?: NamespacesAPI.IncludeAttributes;
-
-    /**
-     * How to rank the documents in the namespace.
-     */
-    rank_by?: RankBy;
-
-    /**
-     * The number of results to return.
-     */
-    top_k?: number;
-  }
-
   /**
    * The consistency level for a query.
    */
@@ -786,6 +786,7 @@ export declare namespace Namespaces {
     type ID as ID,
     type IncludeAttributes as IncludeAttributes,
     type Language as Language,
+    type Query as Query,
     type QueryBilling as QueryBilling,
     type QueryPerformance as QueryPerformance,
     type Row as Row,

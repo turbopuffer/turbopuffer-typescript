@@ -12,6 +12,7 @@ export {
   type ID,
   type IncludeAttributes,
   type Language,
+  type Query,
   type QueryBilling,
   type QueryPerformance,
   type Row,
