@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.10.4 (2025-06-20)
+
+Full Changelog: [v0.10.3...v0.10.4](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.3...v0.10.4)
+
+### Features
+
+* **api:** introduce dedicated Query model ([111f45a](https://github.com/turbopuffer/turbopuffer-typescript/commit/111f45a7797a502b72c25051ac0a0ad4bfc3ad18))
+
+
+### Bug Fixes
+
+* strict types for new QueryParam type ([55a3785](https://github.com/turbopuffer/turbopuffer-typescript/commit/55a378558cc1f63a6a2ef0093c732d46bb8371a7))
+
+
+### Chores
+
+* **readme:** update badges ([650ce70](https://github.com/turbopuffer/turbopuffer-typescript/commit/650ce70edab85b7c4f8aefcb30fff73d5f296f25))
+* **readme:** use better example snippet for undocumented params ([2e8a0bf](https://github.com/turbopuffer/turbopuffer-typescript/commit/2e8a0bfe6a1b1c1a3daa3f05313d6439eab06d98))
+
 ## 0.10.3 (2025-06-19)
 
 Full Changelog: [v0.10.2...v0.10.3](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.2...v0.10.3)
