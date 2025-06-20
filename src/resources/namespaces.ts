@@ -274,7 +274,7 @@ export interface Query {
    * Aggregations to compute over all documents in the namespace that match the
    * filters.
    */
-  aggregate_by?: Record<string, unknown>;
+  aggregate_by?: Record<string, AggregateBy>;
 
   /**
    * A function used to calculate vector similarity.
@@ -285,7 +285,7 @@ export interface Query {
    * Exact filters for attributes to refine search results for. Think of it as a SQL
    * WHERE clause.
    */
-  filters?: unknown;
+  filters?: Filter;
 
   /**
    * Whether to include attributes in the response.
@@ -295,7 +295,7 @@ export interface Query {
   /**
    * How to rank the documents in the namespace.
    */
-  rank_by?: unknown;
+  rank_by?: RankBy;
 
   /**
    * The number of results to return.
