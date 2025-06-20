@@ -1,6 +1,6 @@
 # Turbopuffer TypeScript API Library <a href="https://turbopuffer.com"><img src="https://github.com/user-attachments/assets/8d6cca4c-10b7-4d3a-9782-696053baf44e" align="right"></a>
 
-<a href="https://npmjs.org/package/@turbopuffer/turbopuffer"><img src="https://img.shields.io/npm/v/@turbopuffer/turbopuffer.svg" alt="NPM version" align="right"></a> <img src="https://img.shields.io/bundlephobia/minzip/@turbopuffer/turbopuffer" alt="npm bundle size" align="right">
+<a href="https://npmjs.org/package/@turbopuffer/turbopuffer"><img src="https://img.shields.io/npm/v/@turbopuffer/turbopuffer.svg?label=npm%20(stable)" alt="NPM version" align="right"></a> <img src="https://img.shields.io/bundlephobia/minzip/@turbopuffer/turbopuffer" alt="npm bundle size" align="right">
 
 This library provides convenient access to the Turbopuffer HTTP API from server-side TypeScript or JavaScript.
 
