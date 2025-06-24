@@ -256,7 +256,7 @@ export interface Query {
    * Aggregations to compute over all documents in the namespace that match the
    * filters.
    */
-  aggregate_by?: Record<string, unknown>;
+  aggregate_by?: { [key: string]: unknown };
 
   /**
    * A function used to calculate vector similarity.
@@ -425,7 +425,7 @@ export interface NamespaceMultiQueryResponse {
 
 export namespace NamespaceMultiQueryResponse {
   export interface Result {
-    aggregations?: Record<string, unknown>;
+    aggregations?: { [key: string]: unknown };
 
     rows?: Array<NamespacesAPI.Row>;
   }
@@ -445,7 +445,7 @@ export interface NamespaceQueryResponse {
    */
   performance: QueryPerformance;
 
-  aggregations?: Record<string, unknown>;
+  aggregations?: { [key: string]: unknown };
 
   rows?: Array<Row>;
 }
@@ -474,12 +474,12 @@ export interface NamespaceRecallResponse {
 /**
  * The response to a successful namespace schema request.
  */
-export type NamespaceSchemaResponse = Record<string, AttributeSchemaConfig>;
+export type NamespaceSchemaResponse = { [key: string]: AttributeSchemaConfig };
 
 /**
  * The updated schema for the namespace.
  */
-export type NamespaceUpdateSchemaResponse = Record<string, AttributeSchemaConfig>;
+export type NamespaceUpdateSchemaResponse = { [key: string]: AttributeSchemaConfig };
 
 /**
  * The response to a successful write request.
@@ -569,7 +569,7 @@ export interface NamespaceQueryParams {
    * Body param: Aggregations to compute over all documents in the namespace that
    * match the filters.
    */
-  aggregate_by?: Record<string, unknown>;
+  aggregate_by?: { [key: string]: unknown };
 
   /**
    * Body param: The consistency level for a query.
@@ -669,7 +669,7 @@ export interface NamespaceUpdateSchemaParams {
   /**
    * Body param: The desired schema for the namespace.
    */
-  schema?: Record<string, AttributeSchema>;
+  schema?: { [key: string]: AttributeSchema };
 }
 
 export interface NamespaceWriteParams {
@@ -717,7 +717,7 @@ export interface NamespaceWriteParams {
   /**
    * Body param: The schema of the attributes attached to the documents.
    */
-  schema?: Record<string, AttributeSchema>;
+  schema?: { [key: string]: AttributeSchema };
 
   /**
    * Body param: A list of documents in columnar format. Each key is a column name,
