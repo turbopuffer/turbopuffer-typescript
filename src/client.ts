@@ -133,7 +133,7 @@ export interface ClientOptions {
    *
    * If not provided, we expect that `fetch` is defined globally.
    */
-  fetch?: Fetch | undefined;
+  fetch?: Promise<Fetch> | Fetch | undefined;
 
   /**
    * The maximum number of times that the client will retry a request in case of a
