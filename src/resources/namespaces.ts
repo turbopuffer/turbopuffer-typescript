@@ -449,7 +449,7 @@ export interface NamespaceMultiQueryResponse {
 
 export namespace NamespaceMultiQueryResponse {
   export interface Result {
-    aggregations?: Record<string, unknown>;
+    aggregations?: { [key: string]: unknown };
 
     rows?: Array<NamespacesAPI.Row>;
   }
@@ -469,7 +469,7 @@ export interface NamespaceQueryResponse {
    */
   performance: QueryPerformance & ClientPerformance;
 
-  aggregations?: Record<string, unknown>;
+  aggregations?: { [key: string]: unknown };
 
   rows?: Array<Row>;
 }
@@ -498,12 +498,12 @@ export interface NamespaceRecallResponse {
 /**
  * The response to a successful namespace schema request.
  */
-export type NamespaceSchemaResponse = Record<string, AttributeSchemaConfig>;
+export type NamespaceSchemaResponse = { [key: string]: AttributeSchemaConfig };
 
 /**
  * The updated schema for the namespace.
  */
-export type NamespaceUpdateSchemaResponse = Record<string, AttributeSchemaConfig>;
+export type NamespaceUpdateSchemaResponse = { [key: string]: AttributeSchemaConfig };
 
 /**
  * The response to a successful write request.
@@ -693,7 +693,7 @@ export interface NamespaceUpdateSchemaParams {
   /**
    * Body param: The desired schema for the namespace.
    */
-  schema?: Record<string, AttributeSchema>;
+  schema?: { [key: string]: AttributeSchema };
 }
 
 export interface NamespaceWriteParams {
@@ -741,7 +741,7 @@ export interface NamespaceWriteParams {
   /**
    * Body param: The schema of the attributes attached to the documents.
    */
-  schema?: Record<string, AttributeSchema>;
+  schema?: { [key: string]: AttributeSchema };
 
   /**
    * Body param: A list of documents in columnar format. Each key is a column name,
