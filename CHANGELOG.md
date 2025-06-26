@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.10.5 (2025-06-26)
+
+Full Changelog: [v0.10.4...v0.10.5](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.4...v0.10.5)
+
+### Bug Fixes
+
+* allow options.fetch to be a promise ([87ac00a](https://github.com/turbopuffer/turbopuffer-typescript/commit/87ac00a5ea1c2d6b1928831cbf297cca04ede35f))
+* **client:** explicitly copy fetch in withOptions ([6b8700b](https://github.com/turbopuffer/turbopuffer-typescript/commit/6b8700bf07f244ffa9de4733aa41851a6d407fe3))
+
+
+### Refactors
+
+* **types:** replace Record with mapped types ([a1d14dc](https://github.com/turbopuffer/turbopuffer-typescript/commit/a1d14dcfb153ba9512c64e112cff5cf4fc7bfa7c))
+
 ## 0.10.4 (2025-06-20)
 
 Full Changelog: [v0.10.3...v0.10.4](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.3...v0.10.4)
