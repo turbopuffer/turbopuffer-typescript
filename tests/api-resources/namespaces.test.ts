@@ -177,13 +177,16 @@ describe('resource namespaces', () => {
       namespace: 'namespace',
       copy_from_namespace: 'copy_from_namespace',
       delete_by_filter: {},
+      delete_condition: {},
       deletes: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
       distance_metric: 'cosine_distance',
       encryption: { cmek: { key_name: 'key_name' } },
       patch_columns: { id: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'], vector: [[0]] },
+      patch_condition: {},
       patch_rows: [{ id: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', vector: [0] }],
       schema: { foo: 'string' },
       upsert_columns: { id: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'], vector: [[0]] },
+      upsert_condition: {},
       upsert_rows: [{ id: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', vector: [0] }],
     });
   });
