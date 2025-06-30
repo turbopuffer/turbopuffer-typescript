@@ -689,6 +689,12 @@ export interface NamespaceWriteParams {
   delete_by_filter?: unknown;
 
   /**
+   * Body param: A condition evaluated against the current value of each document
+   * targeted by a delete write. Only documents that pass the condition are deleted.
+   */
+  delete_condition?: unknown;
+
+  /**
    * Body param:
    */
   deletes?: Array<ID>;
@@ -710,6 +716,12 @@ export interface NamespaceWriteParams {
   patch_columns?: Columns;
 
   /**
+   * Body param: A condition evaluated against the current value of each document
+   * targeted by a patch write. Only documents that pass the condition are patched.
+   */
+  patch_condition?: unknown;
+
+  /**
    * Body param:
    */
   patch_rows?: Array<Row>;
@@ -724,6 +736,13 @@ export interface NamespaceWriteParams {
    * mapped to an array of values for that column.
    */
   upsert_columns?: Columns;
+
+  /**
+   * Body param: A condition evaluated against the current value of each document
+   * targeted by an upsert write. Only documents that pass the condition are
+   * upserted.
+   */
+  upsert_condition?: unknown;
 
   /**
    * Body param:
