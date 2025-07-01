@@ -27,24 +27,40 @@ npm install @turbopuffer/turbopuffer
 ```js
 import Turbopuffer from '@turbopuffer/turbopuffer';
 
-const client = new Turbopuffer({
+const tpuf = new Turbopuffer({
   region: 'gcp-us-central1',
   apiKey: process.env['TURBOPUFFER_API_KEY'], // This is the default and can be omitted
 });
 
-const response = await client.namespace('products').write
-  namespace: 'products',
-  distance_metric: 'cosine_distance',
-  upsert_rows: [
-    {
-      id: '2108ed60-6851-49a0-9016-8325434f3845',
-      vector: [0.1, 0.2],
-      attributes: { name: 'Red boots', price: 34.99 },
-    },
-  ],
-});
+const ns = tpuf.namespace("example");
 
-console.log(response.rows_affected);
+// Query nearest neighbors with filter.
+const vectorResult = await ns.query({
+  rank_by: ["vector", "ANN", [0.1, 0.2]],
+  top_k: 10,
+  filters: [
+    "And",
+    [
+      ["name", "Eq", "foo"],
+      ["public", "Eq", 1],
+    ],
+  ],
+  include_attributes: ["name"],
+});
+console.log(vectorResult.rows);
+// [{ id: 1, attributes: { name: 'foo' }, dist: 0.009067952632904053 }]
+
+// Full-text search on an attribute.
+const ftsResult = await ns.query({
+  top_k: 10,
+  filters: ["name", "Eq", "foo"],
+  rank_by: ["text", "BM25", "quick walrus"],
+});
+console.log(ftsResult.rows);
+// [{ id: 1, attributes: { name: 'foo' }, dist: 0.19 }]
+// [{ id: 2, attributes: { name: 'foo' }, dist: 0.168 }]
+
+// See https://turbopuffer.com/docs/quickstart for more.
 ```
 
 ### Request & Response types
