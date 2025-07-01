@@ -504,6 +504,21 @@ export interface NamespaceWriteResponse {
    * The status of the request.
    */
   status: 'OK';
+
+  /**
+   * The number of rows deleted by the write request.
+   */
+  rows_deleted?: number;
+
+  /**
+   * The number of rows patched by the write request.
+   */
+  rows_patched?: number;
+
+  /**
+   * The number of rows upserted by the write request.
+   */
+  rows_upserted?: number;
 }
 
 export interface NamespaceDeleteAllParams {
