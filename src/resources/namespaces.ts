@@ -710,13 +710,13 @@ export interface NamespaceWriteParams {
   /**
    * Body param: The filter specifying which documents to delete.
    */
-  delete_by_filter?: unknown;
+  delete_by_filter?: Filter;
 
   /**
    * Body param: A condition evaluated against the current value of each document
    * targeted by a delete write. Only documents that pass the condition are deleted.
    */
-  delete_condition?: unknown;
+  delete_condition?: Filter;
 
   /**
    * Body param:
@@ -743,7 +743,7 @@ export interface NamespaceWriteParams {
    * Body param: A condition evaluated against the current value of each document
    * targeted by a patch write. Only documents that pass the condition are patched.
    */
-  patch_condition?: unknown;
+  patch_condition?: Filter;
 
   /**
    * Body param:
@@ -766,7 +766,7 @@ export interface NamespaceWriteParams {
    * targeted by an upsert write. Only documents that pass the condition are
    * upserted.
    */
-  upsert_condition?: unknown;
+  upsert_condition?: Filter;
 
   /**
    * Body param:
