@@ -1,5 +1,33 @@
 # Changelog
 
+## 0.10.5 (2025-07-01)
+
+Full Changelog: [v0.10.4...v0.10.5](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.4...v0.10.5)
+
+### Bug Fixes
+
+* add support for `$ref_new` expressions ([#106](https://github.com/turbopuffer/turbopuffer-typescript/issues/106)) ([46ef836](https://github.com/turbopuffer/turbopuffer-typescript/commit/46ef836c1ee103f740e4d872c5d2da3b0f617963))
+* allow options.fetch to be a promise ([87ac00a](https://github.com/turbopuffer/turbopuffer-typescript/commit/87ac00a5ea1c2d6b1928831cbf297cca04ede35f))
+* **api:** api update ([f1f4eb4](https://github.com/turbopuffer/turbopuffer-typescript/commit/f1f4eb4f64d708ef08f3d134dd56b6d99133f9ed))
+* **api:** api update ([b013d65](https://github.com/turbopuffer/turbopuffer-typescript/commit/b013d65fe51f93ef80cb397ae6d824b59555bff7))
+* **ci:** release-doctor — report correct token name ([39f10b3](https://github.com/turbopuffer/turbopuffer-typescript/commit/39f10b33a6a8fb0974cfffcb70338d2628549ae1))
+* **client:** explicitly copy fetch in withOptions ([6b8700b](https://github.com/turbopuffer/turbopuffer-typescript/commit/6b8700bf07f244ffa9de4733aa41851a6d407fe3))
+* **client:** get fetchOptions type more reliably ([39d37fa](https://github.com/turbopuffer/turbopuffer-typescript/commit/39d37fa560f3888dd8778e167b23f26e54c241cc))
+* correct name of stainless bot ([#107](https://github.com/turbopuffer/turbopuffer-typescript/issues/107)) ([de84ddd](https://github.com/turbopuffer/turbopuffer-typescript/commit/de84ddd5c1194086d640d3e6a05148d2c9776712))
+* **README:** improve headline example ([#105](https://github.com/turbopuffer/turbopuffer-typescript/issues/105)) ([a0cff47](https://github.com/turbopuffer/turbopuffer-typescript/commit/a0cff473d5dd08867407841007a64eb36dd72166))
+* strict types for write conditions ([#104](https://github.com/turbopuffer/turbopuffer-typescript/issues/104)) ([c8654d0](https://github.com/turbopuffer/turbopuffer-typescript/commit/c8654d09ba3865fec9cc707fcfc67d3e3e2e21f5))
+
+
+### Chores
+
+* **ci:** only run for pushes and fork pull requests ([50a8869](https://github.com/turbopuffer/turbopuffer-typescript/commit/50a88690e1fd42d53fb6d5cae4f7cd68c9ec7a64))
+* **client:** improve path param validation ([edf77f1](https://github.com/turbopuffer/turbopuffer-typescript/commit/edf77f1d51bf752b1a404a56d53add6f2f205b64))
+
+
+### Refactors
+
+* **types:** replace Record with mapped types ([a1d14dc](https://github.com/turbopuffer/turbopuffer-typescript/commit/a1d14dcfb153ba9512c64e112cff5cf4fc7bfa7c))
+
 ## 0.10.4 (2025-06-20)
 
 Full Changelog: [v0.10.3...v0.10.4](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.3...v0.10.4)
