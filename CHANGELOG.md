@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.10.6 (2025-07-03)
+
+Full Changelog: [v0.10.5...v0.10.6](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.5...v0.10.6)
+
+### Chores
+
+* add docs to RequestOptions type ([981f436](https://github.com/turbopuffer/turbopuffer-typescript/commit/981f436ab628c8ef6d95f635142d0c460e0b17fd))
+
 ## 0.10.5 (2025-07-01)
 
 Full Changelog: [v0.10.4...v0.10.5](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.4...v0.10.5)
