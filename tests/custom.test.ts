@@ -406,6 +406,7 @@ test('schema', async () => {
         remove_stopwords: true,
         case_sensitive: false,
         tokenizer: 'word_v1',
+        max_token_length: 39,
       },
     },
     tags: {
@@ -419,6 +420,7 @@ test('schema', async () => {
         remove_stopwords: false,
         case_sensitive: true,
         tokenizer: 'word_v1',
+        max_token_length: 39,
       },
     },
     private: {
@@ -490,6 +492,7 @@ test('update_schema', async () => {
         remove_stopwords: false,
         case_sensitive: true,
         tokenizer: 'word_v1',
+        max_token_length: 39,
       },
     },
     private: {
@@ -546,6 +549,7 @@ test('update_schema', async () => {
         remove_stopwords: false,
         case_sensitive: true,
         tokenizer: 'word_v1',
+        max_token_length: 39,
       },
     },
     private: {
@@ -697,6 +701,153 @@ test('sanity', async () => {
     NotFoundError,
   );
 }, 10_000);
+
+test('contains_and_contains_any', async () => {
+  const ns = tpuf.namespace(testNamespacePrefix + 'contains_and_contains_any');
+
+  try {
+    await ns.deleteAll();
+  } catch (_: unknown) {
+    /* empty */
+  }
+
+  await ns.write({
+    upsert_rows: [
+      {
+        id: 1,
+        tags: ['python', 'javascript', 'rust'],
+        category: 'backend',
+      },
+      {
+        id: 2,
+        tags: ['javascript', 'typescript', 'react'],
+        category: 'frontend',
+      },
+      {
+        id: 3,
+        tags: ['rust', 'go', 'c++'],
+        category: 'systems',
+      },
+      {
+        id: 4,
+        tags: ['python', 'django', 'flask'],
+        category: 'backend',
+      },
+    ],
+  });
+
+  // Test Contains operator
+  const containsResults = await ns.query({
+    rank_by: ['id', 'asc'],
+    filters: ['tags', 'Contains', 'javascript'],
+    top_k: 10,
+  });
+  assert(containsResults.rows);
+  const containsIds = containsResults.rows.map((row) => row.id).sort();
+  expect(containsIds).toEqual([1, 2]);
+
+  // Test NotContains operator
+  const notContainsResults = await ns.query({
+    rank_by: ['id', 'asc'],
+    filters: ['tags', 'NotContains', 'javascript'],
+    top_k: 10,
+  });
+  assert(notContainsResults.rows);
+  const notContainsIds = notContainsResults.rows.map((row) => row.id).sort();
+  expect(notContainsIds).toEqual([3, 4]);
+
+  // Test ContainsAny operator
+  const containsAnyResults = await ns.query({
+    rank_by: ['id', 'asc'],
+    filters: ['tags', 'ContainsAny', ['rust', 'typescript']],
+    top_k: 10,
+  });
+  assert(containsAnyResults.rows);
+  // Check that all expected IDs are present, regardless of order
+  const containsAnyIds = containsAnyResults.rows.map((row) => row.id).sort();
+  expect(containsAnyIds).toEqual([1, 2, 3]);
+
+  // Test NotContainsAny operator
+  const notContainsAnyResults = await ns.query({
+    rank_by: ['id', 'asc'],
+    filters: ['tags', 'NotContainsAny', ['javascript', 'rust', 'go']],
+    top_k: 10,
+  });
+  assert(notContainsAnyResults.rows);
+  expect(notContainsAnyResults.rows[0]?.id).toEqual(4);
+
+  // Test combined with other filters
+  const combinedResults = await ns.query({
+    rank_by: ['id', 'asc'],
+    filters: [
+      'And',
+      [
+        ['tags', 'Contains', 'python'],
+        ['category', 'Eq', 'backend'],
+      ],
+    ],
+    top_k: 10,
+  });
+  assert(combinedResults.rows);
+  const combinedIds = combinedResults.rows.map((row) => row.id).sort();
+  expect(combinedIds).toEqual([1, 4]);
+
+  // Test edge case: Contains with single element array
+  const singleElementResults = await ns.query({
+    rank_by: ['id', 'asc'],
+    filters: ['tags', 'ContainsAny', ['python']],
+    top_k: 10,
+  });
+  assert(singleElementResults.rows);
+  const singleElementIds = singleElementResults.rows.map((row) => row.id).sort();
+  expect(singleElementIds).toEqual([1, 4]);
+
+  // Test error case: passing non-array to ContainsAny
+  await expectThrows(
+    ns.query({
+      rank_by: ['id', 'asc'],
+      filters: ['tags', 'ContainsAny', 'python'],
+      top_k: 10,
+    }),
+    escapeError("filter error in key `tags`: type mismatch, ContainsAny expects []string, but got 'python'"),
+  );
+
+  // Test error case: passing array to Contains
+  await expectThrows(
+    ns.query({
+      rank_by: ['id', 'asc'],
+      filters: ['tags', 'Contains', ['python', 'javascript']],
+      top_k: 10,
+    }),
+    escapeError(
+      "filter error in key `tags`: type mismatch, Contains expects string, but got '[python, javascript]'",
+    ),
+  );
+
+  // Test error case: passing non-array to NotContainsAny
+  await expectThrows(
+    ns.query({
+      rank_by: ['id', 'asc'],
+      filters: ['tags', 'NotContainsAny', 'python'],
+      top_k: 10,
+    }),
+    escapeError(
+      "filter error in key `tags`: type mismatch, NotContainsAny expects []string, but got 'python'",
+    ),
+  );
+
+  // Test error case: passing array to NotContains
+  await expectThrows(
+    ns.query({
+      rank_by: ['id', 'asc'],
+      filters: ['tags', 'NotContains', ['python', 'javascript']],
+      top_k: 10,
+    }),
+    escapeError(
+      "filter error in key `tags`: type mismatch, NotContains expects string, but got '[python, javascript]'",
+    ),
+  );
+});
 
 test('exists', async () => {
   let ns = tpuf.namespace(testNamespacePrefix + 'exists');
