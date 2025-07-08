@@ -81,7 +81,7 @@ export interface ClientOptions {
   /**
    * The turbopuffer region to use.
    */
-  region?: string | undefined;
+  region?: string | null | undefined;
 
   defaultNamespace?: string | null | undefined;
 
@@ -181,7 +181,7 @@ export interface ClientOptions {
  */
 export class Turbopuffer {
   apiKey: string;
-  region: string;
+  region: string | null;
   defaultNamespace: string | null;
 
   baseURL: string;
@@ -202,7 +202,7 @@ export class Turbopuffer {
    * API Client for interfacing with the Turbopuffer API.
    *
    * @param {string | undefined} [opts.apiKey=process.env['TURBOPUFFER_API_KEY'] ?? undefined]
-   * @param {string | undefined} [opts.region=process.env['TURBOPUFFER_REGION'] ?? undefined]
+   * @param {string | null | undefined} [opts.region=process.env['TURBOPUFFER_REGION'] ?? null]
    * @param {string | null | undefined} [opts.defaultNamespace]
    * @param {string} [opts.baseURL=process.env['TURBOPUFFER_BASE_URL'] ?? https://{region}.turbopuffer.com] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
@@ -215,18 +215,13 @@ export class Turbopuffer {
   constructor({
     baseURL = readEnv('TURBOPUFFER_BASE_URL'),
     apiKey = readEnv('TURBOPUFFER_API_KEY'),
-    region = readEnv('TURBOPUFFER_REGION'),
+    region = readEnv('TURBOPUFFER_REGION') ?? null,
     defaultNamespace = null,
     ...opts
   }: ClientOptions = {}) {
     if (apiKey === undefined) {
       throw new Errors.TurbopufferError(
         "The TURBOPUFFER_API_KEY environment variable is missing or empty; either provide it, or instantiate the Turbopuffer client with an apiKey option, like new Turbopuffer({ apiKey: 'tpuf_A1...' }).",
-      );
-    }
-    if (region === undefined) {
-      throw new Errors.TurbopufferError(
-        "The TURBOPUFFER_REGION environment variable is missing or empty; either provide it, or instantiate the Turbopuffer client with an region option, like new Turbopuffer({ region: 'gcp-us-central1' }).",
       );
     }
 

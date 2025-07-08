@@ -24,7 +24,6 @@ describe('instantiate client', () => {
       baseURL: 'http://localhost:5000/',
       defaultHeaders: { 'X-My-Default-Header': '2' },
       apiKey: 'tpuf_A1...',
-      region: 'gcp-us-central1',
     });
 
     test('they are used in the request', async () => {
@@ -88,19 +87,14 @@ describe('instantiate client', () => {
         error: jest.fn(),
       };
 
-      const client = new Turbopuffer({
-        logger: logger,
-        logLevel: 'debug',
-        apiKey: 'tpuf_A1...',
-        region: 'gcp-us-central1',
-      });
+      const client = new Turbopuffer({ logger: logger, logLevel: 'debug', apiKey: 'tpuf_A1...' });
 
       await forceAPIResponseForClient(client);
       expect(debugMock).toHaveBeenCalled();
     });
 
     test('default logLevel is warn', async () => {
-      const client = new Turbopuffer({ apiKey: 'tpuf_A1...', region: 'gcp-us-central1' });
+      const client = new Turbopuffer({ apiKey: 'tpuf_A1...' });
       expect(client.logLevel).toBe('warn');
     });
 
@@ -113,12 +107,7 @@ describe('instantiate client', () => {
         error: jest.fn(),
       };
 
-      const client = new Turbopuffer({
-        logger: logger,
-        logLevel: 'info',
-        apiKey: 'tpuf_A1...',
-        region: 'gcp-us-central1',
-      });
+      const client = new Turbopuffer({ logger: logger, logLevel: 'info', apiKey: 'tpuf_A1...' });
 
       await forceAPIResponseForClient(client);
       expect(debugMock).not.toHaveBeenCalled();
@@ -134,7 +123,7 @@ describe('instantiate client', () => {
       };
 
       process.env['TURBOPUFFER_LOG'] = 'debug';
-      const client = new Turbopuffer({ logger: logger, apiKey: 'tpuf_A1...', region: 'gcp-us-central1' });
+      const client = new Turbopuffer({ logger: logger, apiKey: 'tpuf_A1...' });
       expect(client.logLevel).toBe('debug');
 
       await forceAPIResponseForClient(client);
@@ -151,7 +140,7 @@ describe('instantiate client', () => {
       };
 
       process.env['TURBOPUFFER_LOG'] = 'not a log level';
-      const client = new Turbopuffer({ logger: logger, apiKey: 'tpuf_A1...', region: 'gcp-us-central1' });
+      const client = new Turbopuffer({ logger: logger, apiKey: 'tpuf_A1...' });
       expect(client.logLevel).toBe('warn');
       expect(warnMock).toHaveBeenCalledWith(
         'process.env[\'TURBOPUFFER_LOG\'] was set to "not a log level", expected one of ["off","error","warn","info","debug"]',
@@ -168,12 +157,7 @@ describe('instantiate client', () => {
       };
 
       process.env['TURBOPUFFER_LOG'] = 'debug';
-      const client = new Turbopuffer({
-        logger: logger,
-        logLevel: 'off',
-        apiKey: 'tpuf_A1...',
-        region: 'gcp-us-central1',
-      });
+      const client = new Turbopuffer({ logger: logger, logLevel: 'off', apiKey: 'tpuf_A1...' });
 
       await forceAPIResponseForClient(client);
       expect(debugMock).not.toHaveBeenCalled();
@@ -189,12 +173,7 @@ describe('instantiate client', () => {
       };
 
       process.env['TURBOPUFFER_LOG'] = 'not a log level';
-      const client = new Turbopuffer({
-        logger: logger,
-        logLevel: 'debug',
-        apiKey: 'tpuf_A1...',
-        region: 'gcp-us-central1',
-      });
+      const client = new Turbopuffer({ logger: logger, logLevel: 'debug', apiKey: 'tpuf_A1...' });
       expect(client.logLevel).toBe('debug');
       expect(warnMock).not.toHaveBeenCalled();
     });
@@ -206,7 +185,6 @@ describe('instantiate client', () => {
         baseURL: 'http://localhost:5000/',
         defaultQuery: { apiVersion: 'foo' },
         apiKey: 'tpuf_A1...',
-        region: 'gcp-us-central1',
       });
       expect(client.buildURL('/foo', null)).toEqual('http://localhost:5000/foo?apiVersion=foo');
     });
@@ -216,7 +194,6 @@ describe('instantiate client', () => {
         baseURL: 'http://localhost:5000/',
         defaultQuery: { apiVersion: 'foo', hello: 'world' },
         apiKey: 'tpuf_A1...',
-        region: 'gcp-us-central1',
       });
       expect(client.buildURL('/foo', null)).toEqual('http://localhost:5000/foo?apiVersion=foo&hello=world');
     });
@@ -226,7 +203,6 @@ describe('instantiate client', () => {
         baseURL: 'http://localhost:5000/',
         defaultQuery: { hello: 'world' },
         apiKey: 'tpuf_A1...',
-        region: 'gcp-us-central1',
       });
       expect(client.buildURL('/foo', { hello: undefined })).toEqual('http://localhost:5000/foo');
     });
@@ -236,7 +212,6 @@ describe('instantiate client', () => {
     const client = new Turbopuffer({
       baseURL: 'http://localhost:5000/',
       apiKey: 'tpuf_A1...',
-      region: 'gcp-us-central1',
       fetch: (url) => {
         return Promise.resolve(
           new Response(JSON.stringify({ url, custom: true }), {
@@ -255,7 +230,6 @@ describe('instantiate client', () => {
     const client = new Turbopuffer({
       baseURL: 'http://localhost:5000/',
       apiKey: 'tpuf_A1...',
-      region: 'gcp-us-central1',
       fetch: defaultFetch,
     });
   });
@@ -264,7 +238,6 @@ describe('instantiate client', () => {
     const client = new Turbopuffer({
       baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
       apiKey: 'tpuf_A1...',
-      region: 'gcp-us-central1',
       fetch: (...args) => {
         return new Promise((resolve, reject) =>
           setTimeout(
@@ -297,7 +270,6 @@ describe('instantiate client', () => {
     const client = new Turbopuffer({
       baseURL: 'http://localhost:5000/',
       apiKey: 'tpuf_A1...',
-      region: 'gcp-us-central1',
       fetch: testFetch,
     });
 
@@ -307,20 +279,12 @@ describe('instantiate client', () => {
 
   describe('baseUrl', () => {
     test('trailing slash', () => {
-      const client = new Turbopuffer({
-        baseURL: 'http://localhost:5000/custom/path/',
-        apiKey: 'tpuf_A1...',
-        region: 'gcp-us-central1',
-      });
+      const client = new Turbopuffer({ baseURL: 'http://localhost:5000/custom/path/', apiKey: 'tpuf_A1...' });
       expect(client.buildURL('/foo', null)).toEqual('http://localhost:5000/custom/path/foo');
     });
 
     test('no trailing slash', () => {
-      const client = new Turbopuffer({
-        baseURL: 'http://localhost:5000/custom/path',
-        apiKey: 'tpuf_A1...',
-        region: 'gcp-us-central1',
-      });
+      const client = new Turbopuffer({ baseURL: 'http://localhost:5000/custom/path', apiKey: 'tpuf_A1...' });
       expect(client.buildURL('/foo', null)).toEqual('http://localhost:5000/custom/path/foo');
     });
 
@@ -329,39 +293,35 @@ describe('instantiate client', () => {
     });
 
     test('explicit option', () => {
-      const client = new Turbopuffer({
-        baseURL: 'https://example.com',
-        apiKey: 'tpuf_A1...',
-        region: 'gcp-us-central1',
-      });
+      const client = new Turbopuffer({ baseURL: 'https://example.com', apiKey: 'tpuf_A1...' });
       expect(client.baseURL).toEqual('https://example.com');
     });
 
     test('env variable', () => {
       process.env['TURBOPUFFER_BASE_URL'] = 'https://example.com/from_env';
-      const client = new Turbopuffer({ apiKey: 'tpuf_A1...', region: 'gcp-us-central1' });
+      const client = new Turbopuffer({ apiKey: 'tpuf_A1...' });
       expect(client.baseURL).toEqual('https://example.com/from_env');
     });
 
     test('empty env variable', () => {
       process.env['TURBOPUFFER_BASE_URL'] = ''; // empty
-      const client = new Turbopuffer({ apiKey: 'tpuf_A1...', region: 'gcp-us-central1' });
+      const client = new Turbopuffer({ apiKey: 'tpuf_A1...' });
       expect(client.baseURL).toEqual('https://gcp-us-central1.turbopuffer.com');
     });
 
     test('blank env variable', () => {
       process.env['TURBOPUFFER_BASE_URL'] = '  '; // blank
-      const client = new Turbopuffer({ apiKey: 'tpuf_A1...', region: 'gcp-us-central1' });
+      const client = new Turbopuffer({ apiKey: 'tpuf_A1...' });
       expect(client.baseURL).toEqual('https://gcp-us-central1.turbopuffer.com');
     });
   });
 
   test('maxRetries option is correctly set', () => {
-    const client = new Turbopuffer({ maxRetries: 4, apiKey: 'tpuf_A1...', region: 'gcp-us-central1' });
+    const client = new Turbopuffer({ maxRetries: 4, apiKey: 'tpuf_A1...' });
     expect(client.maxRetries).toEqual(4);
 
     // default
-    const client2 = new Turbopuffer({ apiKey: 'tpuf_A1...', region: 'gcp-us-central1' });
+    const client2 = new Turbopuffer({ apiKey: 'tpuf_A1...' });
     expect(client2.maxRetries).toEqual(2);
   });
 
@@ -371,7 +331,6 @@ describe('instantiate client', () => {
         baseURL: 'http://localhost:5000/',
         maxRetries: 3,
         apiKey: 'tpuf_A1...',
-        region: 'gcp-us-central1',
       });
 
       const newClient = client.withOptions({
@@ -398,7 +357,6 @@ describe('instantiate client', () => {
         defaultHeaders: { 'X-Test-Header': 'test-value' },
         defaultQuery: { 'test-param': 'test-value' },
         apiKey: 'tpuf_A1...',
-        region: 'gcp-us-central1',
       });
 
       const newClient = client.withOptions({
@@ -417,7 +375,6 @@ describe('instantiate client', () => {
         baseURL: 'http://localhost:5000/',
         timeout: 1000,
         apiKey: 'tpuf_A1...',
-        region: 'gcp-us-central1',
       });
 
       // Modify the client properties directly after creation
@@ -447,24 +404,20 @@ describe('instantiate client', () => {
   test('with environment variable arguments', () => {
     // set options via env var
     process.env['TURBOPUFFER_API_KEY'] = 'tpuf_A1...';
-    process.env['TURBOPUFFER_REGION'] = 'gcp-us-central1';
     const client = new Turbopuffer();
     expect(client.apiKey).toBe('tpuf_A1...');
-    expect(client.region).toBe('gcp-us-central1');
   });
 
   test('with overridden environment variable arguments', () => {
     // set options via env var
     process.env['TURBOPUFFER_API_KEY'] = 'another tpuf_A1...';
-    process.env['TURBOPUFFER_REGION'] = 'another gcp-us-central1';
-    const client = new Turbopuffer({ apiKey: 'tpuf_A1...', region: 'gcp-us-central1' });
+    const client = new Turbopuffer({ apiKey: 'tpuf_A1...' });
     expect(client.apiKey).toBe('tpuf_A1...');
-    expect(client.region).toBe('gcp-us-central1');
   });
 });
 
 describe('request building', () => {
-  const client = new Turbopuffer({ apiKey: 'tpuf_A1...', region: 'gcp-us-central1' });
+  const client = new Turbopuffer({ apiKey: 'tpuf_A1...' });
 
   describe('custom headers', () => {
     test('handles undefined', async () => {
@@ -483,7 +436,7 @@ describe('request building', () => {
 });
 
 describe('default encoder', () => {
-  const client = new Turbopuffer({ apiKey: 'tpuf_A1...', region: 'gcp-us-central1' });
+  const client = new Turbopuffer({ apiKey: 'tpuf_A1...' });
 
   class Serializable {
     toJSON() {
@@ -568,12 +521,7 @@ describe('retries', () => {
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
 
-    const client = new Turbopuffer({
-      apiKey: 'tpuf_A1...',
-      region: 'gcp-us-central1',
-      timeout: 10,
-      fetch: testFetch,
-    });
+    const client = new Turbopuffer({ apiKey: 'tpuf_A1...', timeout: 10, fetch: testFetch });
 
     expect(await client.request({ path: '/foo', method: 'get' })).toEqual({ a: 1 });
     expect(count).toEqual(2);
@@ -603,12 +551,7 @@ describe('retries', () => {
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
 
-    const client = new Turbopuffer({
-      apiKey: 'tpuf_A1...',
-      region: 'gcp-us-central1',
-      fetch: testFetch,
-      maxRetries: 4,
-    });
+    const client = new Turbopuffer({ apiKey: 'tpuf_A1...', fetch: testFetch, maxRetries: 4 });
 
     expect(await client.request({ path: '/foo', method: 'get' })).toEqual({ a: 1 });
 
@@ -632,12 +575,7 @@ describe('retries', () => {
       capturedRequest = init;
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
-    const client = new Turbopuffer({
-      apiKey: 'tpuf_A1...',
-      region: 'gcp-us-central1',
-      fetch: testFetch,
-      maxRetries: 4,
-    });
+    const client = new Turbopuffer({ apiKey: 'tpuf_A1...', fetch: testFetch, maxRetries: 4 });
 
     expect(
       await client.request({
@@ -668,7 +606,6 @@ describe('retries', () => {
     };
     const client = new Turbopuffer({
       apiKey: 'tpuf_A1...',
-      region: 'gcp-us-central1',
       fetch: testFetch,
       maxRetries: 4,
       defaultHeaders: { 'X-Stainless-Retry-Count': null },
@@ -700,12 +637,7 @@ describe('retries', () => {
       capturedRequest = init;
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
-    const client = new Turbopuffer({
-      apiKey: 'tpuf_A1...',
-      region: 'gcp-us-central1',
-      fetch: testFetch,
-      maxRetries: 4,
-    });
+    const client = new Turbopuffer({ apiKey: 'tpuf_A1...', fetch: testFetch, maxRetries: 4 });
 
     expect(
       await client.request({
@@ -735,7 +667,7 @@ describe('retries', () => {
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
 
-    const client = new Turbopuffer({ apiKey: 'tpuf_A1...', region: 'gcp-us-central1', fetch: testFetch });
+    const client = new Turbopuffer({ apiKey: 'tpuf_A1...', fetch: testFetch });
 
     expect(await client.request({ path: '/foo', method: 'get' })).toEqual({ a: 1 });
     expect(count).toEqual(2);
@@ -765,7 +697,7 @@ describe('retries', () => {
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
 
-    const client = new Turbopuffer({ apiKey: 'tpuf_A1...', region: 'gcp-us-central1', fetch: testFetch });
+    const client = new Turbopuffer({ apiKey: 'tpuf_A1...', fetch: testFetch });
 
     expect(await client.request({ path: '/foo', method: 'get' })).toEqual({ a: 1 });
     expect(count).toEqual(2);
