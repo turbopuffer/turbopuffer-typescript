@@ -184,7 +184,7 @@ export class Turbopuffer {
   region: string | null;
   defaultNamespace: string | null;
 
-  baseURL: string;
+  readonly baseURL: string;
   maxRetries: number;
   timeout: number;
   logger: Logger | undefined;
@@ -230,10 +230,25 @@ export class Turbopuffer {
       region,
       defaultNamespace,
       ...opts,
-      baseURL: baseURL || `https://${region}.turbopuffer.com`,
+      baseURL,
     };
 
-    this.baseURL = options.baseURL!;
+    baseURL = baseURL || 'https://{region}.turbopuffer.com';
+    const hasRegionPlaceholder = baseURL.includes('{region}');
+    if (hasRegionPlaceholder) {
+      if (region === null) {
+        throw new Errors.TurbopufferError(
+          `region is required, but not set (baseURL has a {region} placeholder: ${baseURL})`,
+        );
+      }
+      baseURL = baseURL.replace('{region}', region);
+    } else if (region !== null) {
+      throw new Errors.TurbopufferError(
+        `region is set, but would be ignored (baseURL does not contain {region} placeholder: ${baseURL})`,
+      );
+    }
+
+    this.baseURL = baseURL;
     this.timeout = options.timeout ?? Turbopuffer.DEFAULT_TIMEOUT /* 1 minute */;
     this.logger = options.logger ?? console;
     const defaultLogLevel = 'warn';
@@ -269,7 +284,6 @@ export class Turbopuffer {
   withOptions(options: Partial<ClientOptions>): this {
     return new (this.constructor as any as new (props: ClientOptions) => typeof this)({
       ...this._options,
-      baseURL: this.baseURL,
       maxRetries: this.maxRetries,
       timeout: this.timeout,
       logger: this.logger,
