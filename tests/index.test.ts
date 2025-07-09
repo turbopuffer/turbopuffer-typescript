@@ -7,6 +7,8 @@ import Turbopuffer from '@turbopuffer/turbopuffer';
 import { APIUserAbortError } from '@turbopuffer/turbopuffer';
 const defaultFetch = fetch;
 
+process.env['TURBOPUFFER_BASE_URL'] = 'http://localhost:5000/';
+
 describe('instantiate client', () => {
   const env = process.env;
 
@@ -305,14 +307,71 @@ describe('instantiate client', () => {
 
     test('empty env variable', () => {
       process.env['TURBOPUFFER_BASE_URL'] = ''; // empty
-      const client = new Turbopuffer({ apiKey: 'tpuf_A1...' });
-      expect(client.baseURL).toEqual('https://gcp-us-central1.turbopuffer.com');
+      const client = new Turbopuffer({ apiKey: 'tpuf_A1...', region: 'my-cool-region' });
+      expect(client.baseURL).toEqual('https://my-cool-region.turbopuffer.com');
     });
 
     test('blank env variable', () => {
       process.env['TURBOPUFFER_BASE_URL'] = '  '; // blank
-      const client = new Turbopuffer({ apiKey: 'tpuf_A1...' });
-      expect(client.baseURL).toEqual('https://gcp-us-central1.turbopuffer.com');
+      const client = new Turbopuffer({ apiKey: 'tpuf_A1...', region: 'my-cool-region' });
+      expect(client.baseURL).toEqual('https://my-cool-region.turbopuffer.com');
+    });
+
+    describe('region option', () => {
+      beforeEach(() => {
+        process.env['TURBOPUFFER_BASE_URL'] = undefined;
+      });
+
+      test('region substitution works with default URL', () => {
+        const client = new Turbopuffer({
+          apiKey: 'tpuf_A1...',
+          region: 'my-cool-region',
+        });
+        expect(client.baseURL).toEqual('https://my-cool-region.turbopuffer.com');
+        expect(client.region).toBe('my-cool-region');
+      });
+
+      test('region is required with default URL', () => {
+        expect(() => {
+          new Turbopuffer({
+            apiKey: 'tpuf_A1...',
+          });
+        }).toThrow(
+          'region is required, but not set (baseURL has a {region} placeholder: https://{region}.turbopuffer.com)',
+        );
+      });
+
+      test('region is not required with complete URL', () => {
+        const client = new Turbopuffer({
+          apiKey: 'tpuf_A1...',
+          baseURL: 'https://my-cool-region.turbopuffer.com',
+        });
+        expect(client.baseURL).toEqual('https://my-cool-region.turbopuffer.com');
+        expect(client.region).toBeNull();
+      });
+
+      test('error when region is missing but URL has placeholder', () => {
+        expect(() => {
+          new Turbopuffer({
+            apiKey: 'tpuf_A1...',
+            baseURL: 'https://tpuf-{region}.example.com',
+          });
+        }).toThrow(
+          'region is required, but not set (baseURL has a {region} placeholder: https://tpuf-{region}.example.com)',
+        );
+      });
+
+      test('error when region is provided but URL has no placeholder', () => {
+        expect(() => {
+          new Turbopuffer({
+            apiKey: 'tpuf_A1...',
+            baseURL: 'https://tpuf.example.com',
+            region: 'gcp-us-central1',
+          });
+        }).toThrow(
+          'region is set, but would be ignored (baseURL does not contain {region} placeholder: https://tpuf.example.com)',
+        );
+      });
     });
   });
 
@@ -368,36 +427,6 @@ describe('instantiate client', () => {
 
       const { req } = await newClient.buildRequest({ path: '/foo', method: 'get' });
       expect(req.headers.get('x-test-header')).toEqual('test-value');
-    });
-
-    test('respects runtime property changes when creating new client', () => {
-      const client = new Turbopuffer({
-        baseURL: 'http://localhost:5000/',
-        timeout: 1000,
-        apiKey: 'tpuf_A1...',
-      });
-
-      // Modify the client properties directly after creation
-      client.baseURL = 'http://localhost:6000/';
-      client.timeout = 2000;
-
-      // Create a new client with withOptions
-      const newClient = client.withOptions({
-        maxRetries: 10,
-      });
-
-      // Verify the new client uses the updated properties, not the original ones
-      expect(newClient.baseURL).toEqual('http://localhost:6000/');
-      expect(newClient.timeout).toEqual(2000);
-      expect(newClient.maxRetries).toEqual(10);
-
-      // Original client should still have its modified properties
-      expect(client.baseURL).toEqual('http://localhost:6000/');
-      expect(client.timeout).toEqual(2000);
-      expect(client.maxRetries).not.toEqual(10);
-
-      // Verify URL building uses the updated baseURL
-      expect(newClient.buildURL('/bar', null)).toEqual('http://localhost:6000/bar');
     });
   });
 

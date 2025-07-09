@@ -880,7 +880,6 @@ test('exists', async () => {
 test('connection_errors_are_wrapped', async () => {
   const tpuf = new Turbopuffer({
     baseURL: 'http://localhost:12345',
-    region: 'byoc',
     timeout: 500,
   });
 
@@ -1135,8 +1134,7 @@ test('compression', async () => {
 });
 
 test('disable_compression', async () => {
-  const tpufNoCompression = new Turbopuffer({
-    region: 'gcp-us-central1',
+  const tpufNoCompression = tpuf.withOptions({
     compression: false,
   });
 
