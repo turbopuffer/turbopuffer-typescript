@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.10.6 (2025-07-09)
+
+Full Changelog: [v0.10.5...v0.10.6](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.5...v0.10.6)
+
+### Bug Fixes
+
+* **api:** add support for [Not]Contains[Any] operators ([#110](https://github.com/turbopuffer/turbopuffer-typescript/issues/110)) ([b6e9941](https://github.com/turbopuffer/turbopuffer-typescript/commit/b6e994104dd3a86f7105cb81702398a54b2c36c4))
+* **api:** api update ([c88ea45](https://github.com/turbopuffer/turbopuffer-typescript/commit/c88ea45e1265ae87020f405e99a8d1d48a3d7a85))
+* don't require region unless baseUrl contains {region} placeholder ([#111](https://github.com/turbopuffer/turbopuffer-typescript/issues/111)) ([5fba8ce](https://github.com/turbopuffer/turbopuffer-typescript/commit/5fba8cee002fbd9870eeb6feda041f8e83e40972))
+
+
+### Chores
+
+* add docs to RequestOptions type ([981f436](https://github.com/turbopuffer/turbopuffer-typescript/commit/981f436ab628c8ef6d95f635142d0c460e0b17fd))
+
 ## 0.10.5 (2025-07-01)
 
 Full Changelog: [v0.10.4...v0.10.5](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.4...v0.10.5)
