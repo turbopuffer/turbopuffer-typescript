@@ -249,6 +249,26 @@ export type Language =
   | 'turkish';
 
 /**
+ * Metadata about a namespace.
+ */
+export interface NamespaceMetadata {
+  /**
+   * The approximate number of logical bytes in the namespace.
+   */
+  approx_logical_bytes: number;
+
+  /**
+   * The timestamp when the namespace was created.
+   */
+  created_at: string;
+
+  /**
+   * The schema of the namespace.
+   */
+  schema: { [key: string]: AttributeSchemaConfig };
+}
+
+/**
  * Query, filter, full-text search and vector search documents.
  */
 export interface Query {
@@ -796,6 +816,7 @@ export declare namespace Namespaces {
     type ID as ID,
     type IncludeAttributes as IncludeAttributes,
     type Language as Language,
+    type NamespaceMetadata as NamespaceMetadata,
     type Query as Query,
     type QueryBilling as QueryBilling,
     type QueryPerformance as QueryPerformance,

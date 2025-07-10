@@ -35,6 +35,7 @@ import {
   NamespaceDeleteAllResponse,
   NamespaceHintCacheWarmParams,
   NamespaceHintCacheWarmResponse,
+  NamespaceMetadata,
   NamespaceMultiQueryParams,
   NamespaceMultiQueryResponse,
   NamespaceQueryParams,
@@ -233,7 +234,7 @@ export class Turbopuffer {
    * Create a new client instance re-using the same options given to the current client with optional overriding.
    */
   withOptions(options: Partial<ClientOptions>): this {
-    const client = new (this.constructor as any as new (props: ClientOptions) => typeof this)({
+    return new (this.constructor as any as new (props: ClientOptions) => typeof this)({
       ...this._options,
       baseURL: this.baseURL,
       maxRetries: this.maxRetries,
@@ -247,7 +248,6 @@ export class Turbopuffer {
       defaultNamespace: this.defaultNamespace,
       ...options,
     });
-    return client;
   }
 
   /**
@@ -278,7 +278,7 @@ export class Turbopuffer {
     return;
   }
 
-  protected async authHeaders(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
+  protected authHeaders(opts: FinalRequestOptions): NullableHeaders | undefined {
     return buildHeaders([{ Authorization: `Bearer ${this.apiKey}` }]);
   }
 
@@ -410,9 +410,7 @@ export class Turbopuffer {
 
     await this.prepareOptions(options);
 
-    const { req, url, timeout } = await this.buildRequest(options, {
-      retryCount: maxRetries - retriesRemaining,
-    });
+    const { req, url, timeout } = this.buildRequest(options, { retryCount: maxRetries - retriesRemaining });
 
     await this.prepareRequest(req, { url, options });
 
@@ -490,7 +488,7 @@ export class Turbopuffer {
     } with status ${response.status} in ${headersTime - startTime}ms`;
 
     if (!response.ok) {
-      const shouldRetry = await this.shouldRetry(response);
+      const shouldRetry = this.shouldRetry(response);
       if (retriesRemaining && shouldRetry) {
         const retryMessage = `retrying, ${retriesRemaining} attempts remaining`;
 
@@ -608,7 +606,7 @@ export class Turbopuffer {
     }
   }
 
-  private async shouldRetry(response: Response): Promise<boolean> {
+  private shouldRetry(response: Response): boolean {
     // Note this is not a standard header.
     const shouldRetryHeader = response.headers.get('x-should-retry');
 
@@ -685,10 +683,10 @@ export class Turbopuffer {
     return sleepSeconds * jitter * 1000;
   }
 
-  async buildRequest(
+  buildRequest(
     inputOptions: FinalRequestOptions,
     { retryCount = 0 }: { retryCount?: number } = {},
-  ): Promise<{ req: FinalizedRequestInit; url: string; timeout: number }> {
+  ): { req: FinalizedRequestInit; url: string; timeout: number } {
     const options = { ...inputOptions };
     const { method, path, query, defaultBaseURL } = options;
 
@@ -696,7 +694,7 @@ export class Turbopuffer {
     if ('timeout' in options) validatePositiveInteger('timeout', options.timeout);
     options.timeout = options.timeout ?? this.timeout;
     const { bodyHeaders, body } = this.buildBody({ options });
-    const reqHeaders = await this.buildHeaders({ options: inputOptions, method, bodyHeaders, retryCount });
+    const reqHeaders = this.buildHeaders({ options: inputOptions, method, bodyHeaders, retryCount });
 
     const req: FinalizedRequestInit = {
       method,
@@ -712,7 +710,7 @@ export class Turbopuffer {
     return { req, url, timeout: options.timeout };
   }
 
-  private async buildHeaders({
+  private buildHeaders({
     options,
     method,
     bodyHeaders,
@@ -722,7 +720,7 @@ export class Turbopuffer {
     method: HTTPMethod;
     bodyHeaders: HeadersLike;
     retryCount: number;
-  }): Promise<Headers> {
+  }): Headers {
     let idempotencyHeaders: HeadersLike = {};
     if (this.idempotencyHeader && method !== 'get') {
       if (!options.idempotencyKey) options.idempotencyKey = this.defaultIdempotencyKey();
@@ -738,7 +736,7 @@ export class Turbopuffer {
         ...(options.timeout ? { 'X-Stainless-Timeout': String(Math.trunc(options.timeout / 1000)) } : {}),
         ...getPlatformHeaders(),
       },
-      await this.authHeaders(options),
+      this.authHeaders(options),
       this._options.defaultHeaders,
       bodyHeaders,
       options.headers,
@@ -835,6 +833,7 @@ export declare namespace Turbopuffer {
     type ID as ID,
     type IncludeAttributes as IncludeAttributes,
     type Language as Language,
+    type NamespaceMetadata as NamespaceMetadata,
     type Query as Query,
     type QueryBilling as QueryBilling,
     type QueryPerformance as QueryPerformance,
