@@ -407,7 +407,6 @@ test('schema', async () => {
         remove_stopwords: true,
         case_sensitive: false,
         tokenizer: 'word_v1',
-        max_token_length: 39,
       },
     },
     tags: {
@@ -422,7 +421,6 @@ test('schema', async () => {
         remove_stopwords: false,
         case_sensitive: true,
         tokenizer: 'word_v1',
-        max_token_length: 39,
       },
     },
     private: {
@@ -495,7 +493,6 @@ test('update_schema', async () => {
         remove_stopwords: false,
         case_sensitive: true,
         tokenizer: 'word_v1',
-        max_token_length: 39,
       },
     },
     private: {
@@ -553,7 +550,6 @@ test('update_schema', async () => {
         remove_stopwords: false,
         case_sensitive: true,
         tokenizer: 'word_v1',
-        max_token_length: 39,
       },
     },
     private: {
