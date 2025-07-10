@@ -43,6 +43,23 @@ describe('resource namespaces', () => {
   });
 
   // skipped: tests are disabled for the time being
+  test.skip('metadata: only required params', async () => {
+    const responsePromise = client.namespaces.metadata({ namespace: 'namespace' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // skipped: tests are disabled for the time being
+  test.skip('metadata: required and optional params', async () => {
+    const response = await client.namespaces.metadata({ namespace: 'namespace' });
+  });
+
+  // skipped: tests are disabled for the time being
   test.skip('multiQuery: only required params', async () => {
     const responsePromise = client
       .namespace('namespace')
