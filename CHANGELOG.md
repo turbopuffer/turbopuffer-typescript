@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.10.7 (2025-07-10)
+
+Full Changelog: [v0.10.6...v0.10.7](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.6...v0.10.7)
+
+### Bug Fixes
+
+* add test for new metadata endpoint ([d95e8f1](https://github.com/turbopuffer/turbopuffer-typescript/commit/d95e8f1973f87dcc23840ca7e97dd180275bf407))
+* **api:** api update ([f6a1a5d](https://github.com/turbopuffer/turbopuffer-typescript/commit/f6a1a5d9e49b46cb7c19291b7387cae3b3ae7896))
+* **api:** api update ([c8f4249](https://github.com/turbopuffer/turbopuffer-typescript/commit/c8f42499e2b165d9f3682215ff62506874b13fd3))
+* prevent vite from pre-bundling undici ([#112](https://github.com/turbopuffer/turbopuffer-typescript/issues/112)) ([5c114aa](https://github.com/turbopuffer/turbopuffer-typescript/commit/5c114aaf78349305d6555f349e8f7d317ada2c49))
+* restore async-ness of buildRequest ([9c7b2b1](https://github.com/turbopuffer/turbopuffer-typescript/commit/9c7b2b16fb41156097d1fad4ade7b06f2457adc1))
+* use namespace-resource style calls in tests ([e89f0c2](https://github.com/turbopuffer/turbopuffer-typescript/commit/e89f0c22a7afa459640efa48125b80d071dcfadb))
+
+
+### Chores
+
+* make some internal functions async ([2e07fd4](https://github.com/turbopuffer/turbopuffer-typescript/commit/2e07fd48829278f3a2043f5d1834c741f037ce13))
+
 ## 0.10.6 (2025-07-09)
 
 Full Changelog: [v0.10.5...v0.10.6](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.5...v0.10.6)
