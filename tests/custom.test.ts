@@ -323,7 +323,7 @@ test('hint_cache_warm', async () => {
   expect(['ACCEPTED', 'OK']).toContain(result.status);
 });
 
-test('schema', async () => {
+test('schema and metadata', async () => {
   const ns = tpuf.namespace(testNamespacePrefix + 'schema');
 
   try {
@@ -388,8 +388,7 @@ test('schema', async () => {
     },
   });
 
-  const schema = await ns.schema();
-  expect(schema).toEqual({
+  const expectedSchema = {
     id: {
       type: 'uint',
       filterable: null,
@@ -434,6 +433,19 @@ test('schema', async () => {
       filterable: null,
       full_text_search: null,
     },
+  };
+
+  const schema = await ns.schema();
+  expect(schema).toEqual(expectedSchema);
+
+  const metadata = await ns.metadata();
+  const { created_at, ...remainingMetadata } = metadata;
+  expect(Date.parse(created_at)).toBeGreaterThan(Date.now() - 60_000);
+  expect(remainingMetadata).toEqual({
+    // Too little data to trigger indexing (which is what computes the
+    // approximate size), so we expect an approximate size of 0.
+    approx_logical_bytes: 0,
+    schema: expectedSchema,
   });
 });
 
