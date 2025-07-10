@@ -31,6 +31,7 @@ export {
   type NamespaceWriteResponse,
   type NamespaceDeleteAllParams,
   type NamespaceHintCacheWarmParams,
+  type NamespaceMetadataParams,
   type NamespaceMultiQueryParams,
   type NamespaceQueryParams,
   type NamespaceRecallParams,

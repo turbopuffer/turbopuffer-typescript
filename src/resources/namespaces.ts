@@ -30,6 +30,17 @@ export class Namespaces extends APIResource {
   }
 
   /**
+   * Get metadata about a namespace.
+   */
+  metadata(
+    params: NamespaceMetadataParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<NamespaceMetadata> {
+    const { namespace = this._client.defaultNamespace } = params ?? {};
+    return this._client.get(path`/v1/namespaces/${namespace}/metadata`, options);
+  }
+
+  /**
    * Issue multiple concurrent queries filter or search documents.
    */
   multiQuery(
@@ -555,6 +566,13 @@ export interface NamespaceHintCacheWarmParams {
   namespace?: string;
 }
 
+export interface NamespaceMetadataParams {
+  /**
+   * The name of the namespace.
+   */
+  namespace?: string;
+}
+
 export interface NamespaceMultiQueryParams {
   /**
    * Path param: The name of the namespace.
@@ -835,6 +853,7 @@ export declare namespace Namespaces {
     type NamespaceWriteResponse as NamespaceWriteResponse,
     type NamespaceDeleteAllParams as NamespaceDeleteAllParams,
     type NamespaceHintCacheWarmParams as NamespaceHintCacheWarmParams,
+    type NamespaceMetadataParams as NamespaceMetadataParams,
     type NamespaceMultiQueryParams as NamespaceMultiQueryParams,
     type NamespaceQueryParams as NamespaceQueryParams,
     type NamespaceRecallParams as NamespaceRecallParams,
