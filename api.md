@@ -22,6 +22,7 @@ Types:
 - <code><a href="./src/resources/namespaces.ts">ID</a></code>
 - <code><a href="./src/resources/namespaces.ts">IncludeAttributes</a></code>
 - <code><a href="./src/resources/namespaces.ts">Language</a></code>
+- <code><a href="./src/resources/namespaces.ts">NamespaceMetadata</a></code>
 - <code><a href="./src/resources/namespaces.ts">Query</a></code>
 - <code><a href="./src/resources/namespaces.ts">QueryBilling</a></code>
 - <code><a href="./src/resources/namespaces.ts">QueryPerformance</a></code>
