@@ -44,7 +44,7 @@ describe('resource namespaces', () => {
 
   // skipped: tests are disabled for the time being
   test.skip('metadata: only required params', async () => {
-    const responsePromise = client.namespaces.metadata({ namespace: 'namespace' });
+    const responsePromise = client.namespace('namespace').metadata();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -56,7 +56,7 @@ describe('resource namespaces', () => {
 
   // skipped: tests are disabled for the time being
   test.skip('metadata: required and optional params', async () => {
-    const response = await client.namespaces.metadata({ namespace: 'namespace' });
+    const response = await client.namespace('namespace').metadata();
   });
 
   // skipped: tests are disabled for the time being
