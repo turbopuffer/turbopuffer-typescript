@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.11.0 (2025-07-11)
+
+Full Changelog: [v0.10.7...v0.11.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.7...v0.11.0)
+
+### Features
+
+* **mcp:** support filtering tool results by a jq expression ([f7ec555](https://github.com/turbopuffer/turbopuffer-typescript/commit/f7ec5555d938891009f2d044503af2d87044c808))
+
 ## 0.10.7 (2025-07-10)
 
 Full Changelog: [v0.10.6...v0.10.7](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.6...v0.10.7)

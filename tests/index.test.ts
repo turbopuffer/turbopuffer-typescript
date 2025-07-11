@@ -385,7 +385,7 @@ describe('instantiate client', () => {
   });
 
   describe('withOptions', () => {
-    test('creates a new client with overridden options', () => {
+    test('creates a new client with overridden options', async () => {
       const client = new Turbopuffer({
         baseURL: 'http://localhost:5000/',
         maxRetries: 3,
