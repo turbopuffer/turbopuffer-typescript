@@ -1,5 +1,4 @@
 import { EncodedContent } from '../internal/request-options';
-import { importDynamic } from '../internal/shims';
 import { isRuntimeFullyNodeCompatible } from './runtime';
 
 export type Compressor = (content: EncodedContent) => Promise<EncodedContent>;
@@ -11,12 +10,10 @@ export const makeGzipCompressor = async () => {
   let gzip: (data: string) => Promise<Uint8Array>;
 
   if (isRuntimeFullyNodeCompatible) {
-    // Use `importDynamic` to hide this import from Vite, as it's not available
-    // in edge environments like Cloudflare Workers.
-    gzip = (await importDynamic('../lib/gzip-node')).default;
+    gzip = (await import('./gzip-node')).default; // @tpuf-bundler-ignore
   } else {
-    // `gzip-pako` is compatible with edge environments so we can use
-    // a normal import.
+    // `gzip-pako` is compatible with edge environments so no need to hide
+    // this import from bundlers.
     gzip = (await import('./gzip-pako')).default;
   }
 
