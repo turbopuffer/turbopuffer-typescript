@@ -13,6 +13,7 @@ export const makeGzipCompressor = async () => {
   if (isRuntimeFullyNodeCompatible) {
     // Use `importDynamic` to hide this import from Vite, as it's not available
     // in edge environments like Cloudflare Workers.
+    // This has to be `../lib` because it'll be called from `src/internal/shims.ts`.
     gzip = (await importDynamic('../lib/gzip-node')).default;
   } else {
     // `gzip-pako` is compatible with edge environments so we can use
