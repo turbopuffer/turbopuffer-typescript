@@ -38,6 +38,9 @@ node scripts/utils/make-dist-package-json.cjs > dist/package.json
 node scripts/utils/fix-index-exports.cjs
 cp tsconfig.dist-src.json dist/src/tsconfig.json
 
+# fix dynamic imports
+node scripts/utils/fix-dynamic-imports.cjs
+
 node scripts/utils/postprocess-files.cjs
 
 # make sure that nothing crashes when we require the output CJS or
