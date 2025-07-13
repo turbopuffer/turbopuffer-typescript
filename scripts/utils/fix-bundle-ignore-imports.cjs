@@ -24,14 +24,3 @@ glob.sync('dist/**/*.mjs').forEach((file) => {
     fs.writeFileSync(file, transformed);
   }
 });
-
-glob.sync('dist/**/*.js').forEach((file) => {
-  const code = fs.readFileSync(file, 'utf8');
-  const transformed = code.replace(
-    /require\("([^"]+)"\)(.*) \/\/ @tpuf-bundler-ignore\n/gm,
-    'require((() => "$1")())$2\n',
-  );
-  if (transformed !== code) {
-    fs.writeFileSync(file, transformed);
-  }
-});
