@@ -12,25 +12,9 @@ import { isRuntimeFullyNodeCompatible } from '../lib/runtime';
 import type { Fetch } from './builtin-types';
 import type { ReadableStream } from './shim-types';
 
-/**
- * Like the built-in `import` function, but prevents the static analysis that certain bundlers
- * can perform when static paths are passed directly to `import`.
- *
- * Specifically, this prevents Vite's [dep-optimizer](https://vite.dev/guide/dep-pre-bundling.html)
- * from pre-bundling the import and causing errors — without this, `vite dev` will unconditionally
- * try to import the dependency, even when targeting edge environments like Cloudflare Workers
- * where the dependency is not compatible.
- */
-export async function importDynamic(path: string) {
-  return await import(path);
-}
-
 export async function getDefaultFetch(options: HttpClientOptions): Promise<Fetch> {
   if (isRuntimeFullyNodeCompatible) {
-    // Use `importDynamic` to hide this import from Vite. `undici` depends on
-    // `node:sqlite`, which is not available in edge environments like
-    // Cloudflare Workers.
-    const { makeFetchUndici } = await importDynamic('../lib/fetch-undici');
+    const { makeFetchUndici } = await import('../lib/fetch-undici'); // @tpuf-bundler-ignore
     return makeFetchUndici(options);
   } else if (typeof fetch !== 'undefined') {
     const fetchSmuggling: typeof fetch = async (url, options) => {
