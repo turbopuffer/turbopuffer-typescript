@@ -179,7 +179,7 @@ export interface ClientOptions {
 }
 
 // 30 min in ms
-const retryAfterLimit = 60 * 1000 * 30;
+const retryAfterLimitMs = 60 * 1000 * 30;
 
 /**
  * API Client for interfacing with the Turbopuffer API.
@@ -727,7 +727,7 @@ export class Turbopuffer {
 
     // If the API asks us to wait a certain amount of time (and it's a reasonable amount),
     // just do what it says, but otherwise calculate a default
-    if (!(timeoutMillis && 0 <= timeoutMillis && timeoutMillis < retryAfterLimit)) {
+    if (!(timeoutMillis && 0 <= timeoutMillis && timeoutMillis < retryAfterLimitMs)) {
       const maxRetries = options.maxRetries ?? this.maxRetries;
       timeoutMillis = this.calculateDefaultRetryTimeoutMillis(retriesRemaining, maxRetries);
     }

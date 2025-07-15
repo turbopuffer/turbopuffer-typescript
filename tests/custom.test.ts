@@ -438,6 +438,48 @@ test('schema and metadata', async () => {
   const schema = await ns.schema();
   expect(schema).toEqual(expectedSchema);
 
+  const expectedMetadata = {
+    id: {
+      type: 'uint',
+    },
+    title: {
+      type: 'string',
+      filterable: false,
+      full_text_search: {
+        k1: 1.2,
+        b: 0.75,
+        language: 'english',
+        stemming: true,
+        max_token_length: 39,
+        remove_stopwords: true,
+        case_sensitive: false,
+        tokenizer: 'word_v1',
+      },
+    },
+    tags: {
+      type: '[]string',
+      filterable: false,
+      full_text_search: {
+        k1: 1.2,
+        b: 0.75,
+        language: 'english',
+        stemming: false,
+        max_token_length: 39,
+        remove_stopwords: false,
+        case_sensitive: true,
+        tokenizer: 'word_v1',
+      },
+    },
+    private: {
+      type: 'bool',
+      filterable: true,
+    },
+    vector: {
+      type: '[2]f16',
+      ann: true,
+    },
+  };
+
   const metadata = await ns.metadata();
   const { created_at, ...remainingMetadata } = metadata;
   expect(Date.parse(created_at)).toBeGreaterThan(Date.now() - 60_000);
@@ -445,7 +487,7 @@ test('schema and metadata', async () => {
     // Too little data to trigger indexing (which is what computes the
     // approximate size), so we expect an approximate size of 0.
     approx_logical_bytes: 0,
-    schema: expectedSchema,
+    schema: expectedMetadata,
   });
 });
 
