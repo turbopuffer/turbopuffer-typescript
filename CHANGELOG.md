@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.10.9 (2025-07-18)
+
+Full Changelog: [v0.10.8...v0.10.9](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.8...v0.10.9)
+
+### Chores
+
+* **ts:** reorder package.json imports ([98dc585](https://github.com/turbopuffer/turbopuffer-typescript/commit/98dc585d783ec0c1926918475a6e6e3676cba20d))
+
 ## 0.10.8 (2025-07-13)
 
 Full Changelog: [v0.10.7...v0.10.8](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.7...v0.10.8)
