@@ -71,8 +71,9 @@ import {
   parseLogLevel,
 } from './internal/utils/log';
 import { isEmptyObj } from './internal/utils/values';
-import { makeGzipCompressor, Compressor } from './lib/compressor';
-import { RequestClock } from './lib/performance';
+import { compress } from './internal/custom/compress';
+import { RequestClock } from './internal/custom/performance';
+import { makeFetch } from '#fetch';
 
 export interface ClientOptions {
   /**
@@ -137,7 +138,7 @@ export interface ClientOptions {
    *
    * If not provided, we expect that `fetch` is defined globally.
    */
-  fetch?: Promise<Fetch> | Fetch | undefined;
+  fetch?: Fetch | undefined;
 
   /**
    * The maximum number of times that the client will retry a request in case of a
@@ -197,9 +198,8 @@ export class Turbopuffer {
   fetchOptions: MergedRequestInit | undefined;
   compression: boolean;
 
-  private fetch: Promise<Fetch>;
+  private fetch: Fetch;
   #encoder: Opts.RequestEncoder;
-  compressor: Promise<Compressor> | undefined;
   protected idempotencyHeader?: string;
   private _options: ClientOptions;
 
@@ -267,14 +267,12 @@ export class Turbopuffer {
     this.compression = options.compression === undefined ? true : options.compression;
     this.maxRetries = options.maxRetries ?? 2;
     this.fetch =
-      options.fetch ?
-        Promise.resolve(options.fetch)
-      : Shims.getDefaultFetch({
-          connectTimeout: options.connectTimeout ?? 10 * 1000,
-          connectionIdleTimeout: options.idleTimeout ?? 60 * 1000,
-        });
+      options.fetch ??
+      makeFetch({
+        connectTimeout: options.connectTimeout ?? 10 * 1000,
+        connectionIdleTimeout: options.idleTimeout ?? 60 * 1000,
+      });
     this.#encoder = Opts.FallbackEncoder;
-    this.compressor = this.compression ? makeGzipCompressor() : undefined;
 
     this._options = options;
 
@@ -769,9 +767,8 @@ export class Turbopuffer {
     let content = this.buildBody({ options });
     clock.compressStart = performance.now();
     clock.compressEnd = clock.compressStart; // overwritten later if we actually compress
-    if (this.compressor) {
-      const compressor = await this.compressor;
-      content = await compressor(content);
+    if (this.compression) {
+      content = await compress(content);
       clock.compressEnd = performance.now();
     }
     const { bodyHeaders, body } = content;

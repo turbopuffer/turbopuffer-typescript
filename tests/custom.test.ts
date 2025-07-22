@@ -1,5 +1,4 @@
 import Turbopuffer, { APIConnectionError, APIError, NotFoundError } from '@turbopuffer/turbopuffer';
-import { isRuntimeFullyNodeCompatible } from '@turbopuffer/turbopuffer/lib/runtime';
 import { AttributeSchema, RankBy } from '@turbopuffer/turbopuffer/resources';
 import assert from 'assert';
 
@@ -8,6 +7,8 @@ const tpuf = new Turbopuffer({
 });
 
 const testNamespacePrefix = `typescript_sdk_${Date.now()}_`;
+
+const isTrulyNode = typeof (globalThis as any).Bun === 'undefined' && typeof window === 'undefined';
 
 /**
  * Escape the error message to be used in a Jest `toThrow` matcher (where
@@ -309,7 +310,7 @@ test('namespaces', async () => {
   const cursor1 = namespaces1.next_cursor;
 
   expect(namespaces0.namespaces.length).toEqual(5);
-  expect(namespaces0.namespaces.length).toEqual(5);
+  expect(namespaces1.namespaces.length).toEqual(5);
   expect(cursor0).not.toEqual(cursor1);
 });
 
@@ -1176,7 +1177,7 @@ test('compression', async () => {
   expect(performance.client_total_ms).toBeGreaterThan(0);
   expect(performance.client_compress_ms).toBeGreaterThan(0);
   expect(performance.client_deserialize_ms).toBeGreaterThan(0);
-  if (isRuntimeFullyNodeCompatible) {
+  if (isTrulyNode) {
     expect(performance.client_response_ms).toBeGreaterThan(0);
     expect(performance.client_body_read_ms).toBeGreaterThan(0);
     expect(performance.client_decompress_ms).toBeGreaterThan(0); // Response should be compressed
@@ -1220,7 +1221,7 @@ test('disable_compression', async () => {
   expect(performance.client_total_ms).toBeGreaterThan(0);
   expect(performance.client_compress_ms).toEqual(0);
   expect(performance.client_deserialize_ms).toBeGreaterThan(0);
-  if (isRuntimeFullyNodeCompatible) {
+  if (isTrulyNode) {
     expect(performance.client_response_ms).toBeGreaterThan(0);
     expect(performance.client_body_read_ms).toBeGreaterThan(0);
     expect(performance.client_decompress_ms).toEqual(0);

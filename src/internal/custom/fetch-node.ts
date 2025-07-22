@@ -7,7 +7,7 @@ import { UndiciHeaders } from 'undici/types/dispatcher';
 
 const gunzip = promisify(gunzipNode);
 
-export const makeFetchUndici = (clientOptions: HttpClientOptions) => {
+export const makeFetch = (clientOptions: HttpClientOptions) => {
   const agent = new Agent({
     keepAliveTimeout: clientOptions.connectionIdleTimeout,
     keepAliveMaxTimeout: 24 * 60 * 60 * 1000, // maximum configurable idle timeout with server hint
