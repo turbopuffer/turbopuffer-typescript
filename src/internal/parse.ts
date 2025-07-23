@@ -3,7 +3,7 @@
 import type { FinalRequestOptions } from './request-options';
 import { type Turbopuffer } from '../client';
 import { formatRequestDetails, loggerFor } from './utils/log';
-import { mergeClockIntoResponse } from '../lib/performance';
+import { mergeClockIntoResponse } from './custom/performance';
 
 export type APIResponseProps = {
   response: Response;

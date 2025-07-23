@@ -9,6 +9,8 @@ const config: JestConfigWithTsJest = {
   moduleNameMapper: {
     '^@turbopuffer/turbopuffer$': '<rootDir>/src/index.ts',
     '^@turbopuffer/turbopuffer/(.*)$': '<rootDir>/src/$1',
+    '^#fetch$': '<rootDir>/src/internal/custom/fetch-node.ts',
+    '^#gzip$': '<rootDir>/src/internal/custom/gzip-node.ts',
   },
   modulePathIgnorePatterns: [
     '<rootDir>/ecosystem-tests/',
