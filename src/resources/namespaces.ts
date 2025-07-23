@@ -6,7 +6,7 @@ import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 import { AggregateBy, Filter, RankBy } from './custom';
-import { ClientPerformance } from '../lib/performance';
+import { ClientPerformance } from '../internal/custom/performance';
 import { NotFoundError } from '../error';
 
 export class Namespace extends APIResource {

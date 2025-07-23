@@ -7,35 +7,7 @@
  * messages in cases where an environment isn't fully supported.
  */
 
-import { HttpClientOptions } from '../lib/http-client';
-import { isRuntimeFullyNodeCompatible } from '../lib/runtime';
-import type { Fetch } from './builtin-types';
 import type { ReadableStream } from './shim-types';
-
-export async function getDefaultFetch(options: HttpClientOptions): Promise<Fetch> {
-  if (isRuntimeFullyNodeCompatible) {
-    const { makeFetchUndici } = await import('../lib/fetch-undici'); // @tpuf-bundler-ignore
-    return makeFetchUndici(options);
-  } else if (typeof fetch !== 'undefined') {
-    const fetchSmuggling: typeof fetch = async (url, options) => {
-      const response = await fetch(url, options);
-
-      // Smuggle the performance clock into the response object.
-      Object.defineProperty(response, 'clock', {
-        value: (options as any).clock,
-        enumerable: true,
-      });
-
-      return response;
-    };
-
-    return fetchSmuggling;
-  }
-
-  throw new Error(
-    '`fetch` is not defined as a global; Either pass `fetch` to the client, `new Turbopuffer({ fetch })` or polyfill the global, `globalThis.fetch = fetch`',
-  );
-}
 
 type ReadableStreamArgs = ConstructorParameters<typeof ReadableStream>;
 

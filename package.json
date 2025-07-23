@@ -53,7 +53,31 @@
   },
   "imports": {
     "@turbopuffer/turbopuffer": ".",
-    "@turbopuffer/turbopuffer/*": "./src/*"
+    "@turbopuffer/turbopuffer/*": "./src/*",
+    "#fetch": {
+      "bun": {
+        "import": "./internal/custom/fetch-default.mjs",
+        "require": "./internal/custom/fetch-default.js"
+      },
+      "node": {
+        "import": "./internal/custom/fetch-node.mjs",
+        "require": "./internal/custom/fetch-node.js"
+      },
+      "import": "./internal/custom/fetch-default.mjs",
+      "require": "./internal/custom/fetch-default.js"
+    },
+    "#gzip": {
+      "bun": {
+        "import": "./internal/custom/gzip-default.mjs",
+        "require": "./internal/custom/gzip-default.js"
+      },
+      "node": {
+        "import": "./internal/custom/gzip-node.mjs",
+        "require": "./internal/custom/gzip-node.js"
+      },
+      "import": "./internal/custom/gzip-default.mjs",
+      "require": "./internal/custom/gzip-default.js"
+    }
   },
   "exports": {
     ".": {
