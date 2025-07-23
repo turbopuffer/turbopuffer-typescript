@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.10.10 (2025-07-23)
+
+Full Changelog: [v0.10.9...v0.10.10](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.9...v0.10.10)
+
+### Bug Fixes
+
+* use conditional imports rather than dynamic imports ([#123](https://github.com/turbopuffer/turbopuffer-typescript/issues/123)) ([74390d9](https://github.com/turbopuffer/turbopuffer-typescript/commit/74390d958137f7d74e6558d7ac3687a3c7b4927e))
+
 ## 0.10.9 (2025-07-18)
 
 Full Changelog: [v0.10.8...v0.10.9](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.8...v0.10.9)
