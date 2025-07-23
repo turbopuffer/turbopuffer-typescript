@@ -48,11 +48,27 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Set up Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.2.12
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.2.15
+
       - name: Bootstrap
         run: ./scripts/bootstrap
 
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
       - name: Check build
         run: ./scripts/build
+
+      - name: Test runtimes
+        run: ./scripts/test-runtimes
 
       - name: Get GitHub OIDC Token
         if: github.repository == 'stainless-sdks/turbopuffer-typescript'
@@ -69,9 +85,9 @@ jobs:
           SHA: ${{ github.sha }}
         run: ./scripts/utils/upload-artifact.sh
 
-  test-node:
+  test:
     timeout-minutes: 10
-    name: test-node
+    name: test
     runs-on: ${{ github.repository == 'stainless-sdks/turbopuffer-typescript' && 'depot-ubuntu-24.04' || 'ubuntu-latest' }}
     if: github.event_name == 'push' || github.event.pull_request.head.repo.fork
     steps:
@@ -87,47 +103,5 @@ jobs:
 
       - name: Run tests
         run: ./scripts/test
-        env:
-          TURBOPUFFER_API_KEY: ${{ secrets.TURBOPUFFER_API_KEY }}
-
-  test-bun:
-    name: test-bun
-    runs-on: ${{ github.repository == 'stainless-sdks/turbopuffer-typescript' && 'depot-ubuntu-24.04' || 'ubuntu-latest' }}
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: 1.2.15
-
-      - name: Bootstrap
-        run: |
-          bun install --frozen-lockfile
-
-          # Symlink `bun` to `node`, just in case some test invokes `node`. This
-          # ensures we really do test Bun, not Node.
-          ln -sf "$(which bun)" /usr/local/bin/node
-
-      - name: Run Bun tests
-        run: bun test tests/custom.test.ts
-        env:
-          TURBOPUFFER_API_KEY: ${{ secrets.TURBOPUFFER_API_KEY }}
-
-  test-browser:
-    name: test-browser
-    runs-on: ${{ github.repository == 'stainless-sdks/turbopuffer-typescript' && 'depot-ubuntu-24.04' || 'ubuntu-latest' }}
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Bootstrap
-        run: ./scripts/bootstrap
-
-      - name: Run tests
-        run: ./scripts/test --config jest.config.jsdom.ts tests/custom.test.ts
         env:
           TURBOPUFFER_API_KEY: ${{ secrets.TURBOPUFFER_API_KEY }}

@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+# Run a basic smoke test in all supported JavaScript runtimes.
+
+set -e
+
+echo "==> Running smoke tests in Node"
+
+(cd dist && node ../scripts/utils/smoke-test.cjs)
+(cd dist && node ../scripts/utils/smoke-test.mjs)
+
+echo "==> Running smoke tests in Deno"
+
+(cd dist && deno -A ../scripts/utils/smoke-test.cjs)
+(cd dist && deno -A ../scripts/utils/smoke-test.mjs)
+
+echo "==> Running smoke tests in Bun"
+
+(cd dist && bun ../scripts/utils/smoke-test.cjs)
+(cd dist && bun ../scripts/utils/smoke-test.mjs)
+
+echo "==> Running smoke tests in Cloudflare Workers"
+
+(cd dist && node ../scripts/utils/smoke-test-cloudflare-workers.mjs)
+
+echo "==> Running smoke tests in Vercel Edge Functions"
+
+(cd dist && node ../scripts/utils/smoke-test-vercel-edge-runtime.mjs)
+
+echo "==> Running smoke tests in browsers"
+
+npx playwright test --browser=all ../scripts/utils/smoke-test-browser.test.mjs
