@@ -27,6 +27,13 @@ echo "==> Running smoke tests in Vercel Edge Functions"
 
 (cd dist && node ../scripts/utils/smoke-test-vercel-edge-runtime.mjs)
 
+for webpack_version in v5.83.0 v5.100.2
+do
+  echo "==> Running smoke tests with webpack $webpack_version"
+
+  (cd dist && node ../scripts/utils/smoke-test-webpack.mjs $webpack_version)
+done
+
 echo "==> Running smoke tests in browsers"
 
 npx playwright test --browser=all ../scripts/utils/smoke-test-browser.test.mjs
