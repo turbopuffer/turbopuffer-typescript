@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.10.11 (2025-07-26)
+
+Full Changelog: [v0.10.10...v0.10.11](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.10...v0.10.11)
+
+### Bug Fixes
+
+* run smoke tests in all supported non-Node runtimes ([#125](https://github.com/turbopuffer/turbopuffer-typescript/issues/125)) ([8eedc82](https://github.com/turbopuffer/turbopuffer-typescript/commit/8eedc82a94e6f9c88f039f0155ae605145185ec9))
+
 ## 0.10.10 (2025-07-23)
 
 Full Changelog: [v0.10.9...v0.10.10](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.9...v0.10.10)
