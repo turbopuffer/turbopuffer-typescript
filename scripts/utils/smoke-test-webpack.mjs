@@ -7,7 +7,8 @@ if (process.argv.length !== 3) {
   process.exit(1);
 }
 
-const webpack = (await import(`webpack-${process.argv[2]}`)).default;
+const webpackVersion = process.argv[2];
+const webpack = (await import(`webpack-${webpackVersion}`)).default;
 
 const root = dirname(fileURLToPath(import.meta.url));
 const output = {
@@ -35,8 +36,7 @@ webpack(
     }
 
     console.log('stats', stats.toString());
-
-    if (err !== null || stats.hasErrors()) {
+    if (stats.hasErrors()) {
       process.exit(1);
     }
 
@@ -44,6 +44,6 @@ webpack(
     const res = await makeTpufRequest();
     assert(res.status === '🐡');
 
-    console.log(`webpack smoke test passed (webpack v${webpack.version})`);
+    console.log(`webpack ${webpackVersion} smoke test passed`);
   },
 );
