@@ -52,11 +52,14 @@
     "tsconfig-paths": "^4.0.0",
     "typescript": "5.8.3",
     "typescript-eslint": "8.31.1",
+    "webpack-v5.100.2": "npm:webpack@5.100.2",
+    "webpack-v5.83.0": "npm:webpack@5.83.0",
     "wrangler": "^4.25.1"
   },
+  "resolutions": {
+    "webpack-v5.83.0/enhanced-resolve": "5.14.1"
+  },
   "imports": {
-    "@turbopuffer/turbopuffer": ".",
-    "@turbopuffer/turbopuffer/*": "./src/*",
     "#fetch": {
       "bun": {
         "import": "./internal/custom/fetch-default.mjs",
