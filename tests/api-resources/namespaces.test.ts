@@ -80,6 +80,7 @@ describe('resource namespaces', () => {
       queries: [
         {
           distance_metric: 'cosine_distance',
+          exclude_attributes: ['string'],
           include_attributes: true,
           rank_by: ['id', 'asc'],
           top_k: 0,
@@ -108,6 +109,7 @@ describe('resource namespaces', () => {
       namespace: 'namespace',
       consistency: { level: 'strong' },
       distance_metric: 'cosine_distance',
+      exclude_attributes: ['string'],
       include_attributes: true,
       rank_by: ['id', 'asc'],
       top_k: 0,
