@@ -269,6 +269,11 @@ export interface NamespaceMetadata {
   approx_logical_bytes: number;
 
   /**
+   * The approximate number of rows in the namespace.
+   */
+  approx_row_count: number;
+
+  /**
    * The timestamp when the namespace was created.
    */
   created_at: string;
