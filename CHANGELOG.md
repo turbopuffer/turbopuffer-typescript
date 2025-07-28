@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.10.12 (2025-07-28)
+
+Full Changelog: [v0.10.11...v0.10.12](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.11...v0.10.12)
+
+### Bug Fixes
+
+* **api:** api update ([f74f49a](https://github.com/turbopuffer/turbopuffer-typescript/commit/f74f49a03924ccec27046a3702f1370fcc262501))
+* more precise types for filters that take arrays ([9273d74](https://github.com/turbopuffer/turbopuffer-typescript/commit/9273d74e84440781458bbccb8bb7abcd21411e10))
+
 ## 0.10.11 (2025-07-26)
 
 Full Changelog: [v0.10.10...v0.10.11](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.10...v0.10.11)
