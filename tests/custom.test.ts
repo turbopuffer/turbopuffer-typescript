@@ -699,7 +699,7 @@ test('sanity', async () => {
           'Or',
           [
             ['foo', 'Eq', 'bar'],
-            ['numbers', 'In', 4],
+            ['numbers', 'In', [4]],
           ],
         ],
         ['foo', 'NotEq', null],
@@ -861,7 +861,7 @@ test('contains_and_contains_any', async () => {
   await expectThrows(
     ns.query({
       rank_by: ['id', 'asc'],
-      filters: ['tags', 'ContainsAny', 'python'],
+      filters: ['tags', 'ContainsAny', 'python'] as any,
       top_k: 10,
     }),
     escapeError("filter error in key `tags`: type mismatch, ContainsAny expects []string, but got 'python'"),
@@ -883,7 +883,7 @@ test('contains_and_contains_any', async () => {
   await expectThrows(
     ns.query({
       rank_by: ['id', 'asc'],
-      filters: ['tags', 'NotContainsAny', 'python'],
+      filters: ['tags', 'NotContainsAny', 'python'] as any,
       top_k: 10,
     }),
     escapeError(
