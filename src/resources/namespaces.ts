@@ -313,6 +313,12 @@ export interface Query {
   distance_metric?: DistanceMetric;
 
   /**
+   * List of attribute names to exclude from the response. All other attributes will
+   * be included in the response.
+   */
+  exclude_attributes?: Array<string>;
+
+  /**
    * Exact filters for attributes to refine search results for. Think of it as a SQL
    * WHERE clause.
    */
@@ -657,6 +663,12 @@ export interface NamespaceQueryParams {
    * Body param: A function used to calculate vector similarity.
    */
   distance_metric?: DistanceMetric;
+
+  /**
+   * Body param: List of attribute names to exclude from the response. All other
+   * attributes will be included in the response.
+   */
+  exclude_attributes?: Array<string>;
 
   /**
    * Body param: Exact filters for attributes to refine search results for. Think of
