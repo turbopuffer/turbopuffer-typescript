@@ -79,6 +79,7 @@ describe('resource namespaces', () => {
         {
           aggregate_by: { foo: 'bar' },
           distance_metric: 'cosine_distance',
+          exclude_attributes: ['string'],
           filters: {},
           include_attributes: true,
           rank_by: {},
@@ -109,6 +110,7 @@ describe('resource namespaces', () => {
       aggregate_by: { foo: 'bar' },
       consistency: { level: 'strong' },
       distance_metric: 'cosine_distance',
+      exclude_attributes: ['string'],
       filters: {},
       include_attributes: true,
       rank_by: {},
