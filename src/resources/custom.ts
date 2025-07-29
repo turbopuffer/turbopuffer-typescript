@@ -20,6 +20,7 @@ export type Filter =
   | [string, 'NotGlob', string]
   | [string, 'IGlob', string]
   | [string, 'NotIGlob', string]
+  | [string, 'Regex', string]
   | [string, 'ContainsAllTokens', string]
   | [string, 'ContainsAllTokens', string[]]
   | ['Not', Filter]
