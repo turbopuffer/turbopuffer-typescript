@@ -106,7 +106,7 @@ export class Namespaces extends APIResource {
     options?: RequestOptions,
   ): APIPromise<NamespaceWriteResponse> {
     const { namespace = this._client.defaultNamespace, ...body } = params ?? {};
-    return this._client.post(path`/v2/namespaces/${namespace}`, { body, ...options });
+    return this._client.post(path`/v2/namespaces/${namespace}`, { body, maxRetries: 6, ...options });
   }
 }
 
