@@ -137,6 +137,11 @@ export interface AttributeSchemaConfig {
   full_text_search?: FullTextSearch;
 
   /**
+   * Whether to enable Regex filters on this attribute.
+   */
+  regex?: boolean;
+
+  /**
    * The data type of the attribute. Valid values: string, int, uint, uuid, datetime,
    * bool, []string, []int, []uint, []uuid, []datetime, [DIMS]f16, [DIMS]f32.
    */
