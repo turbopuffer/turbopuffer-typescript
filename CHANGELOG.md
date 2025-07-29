@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.10.13 (2025-07-29)
+
+Full Changelog: [v0.10.12...v0.10.13](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.12...v0.10.13)
+
+### Bug Fixes
+
+* add support for regex filter ([81dc485](https://github.com/turbopuffer/turbopuffer-typescript/commit/81dc485e752164313a5709242d9072282106caae))
+* **api:** api update ([70dced2](https://github.com/turbopuffer/turbopuffer-typescript/commit/70dced29ef5d59cf753c12b00227f1ff473c715a))
+* **api:** api update ([e34e24c](https://github.com/turbopuffer/turbopuffer-typescript/commit/e34e24ca2dfde03826070404e76742bddc66ffd7))
+
 ## 0.10.12 (2025-07-28)
 
 Full Changelog: [v0.10.11...v0.10.12](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.11...v0.10.12)
