@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.10.14 (2025-07-29)
+
+Full Changelog: [v0.10.13...v0.10.14](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.13...v0.10.14)
+
+### Bug Fixes
+
+* **api:** api update ([23c008e](https://github.com/turbopuffer/turbopuffer-typescript/commit/23c008e9d4ebeb827ea87e53acaea8053398cc0d))
+* **api:** api update ([c385765](https://github.com/turbopuffer/turbopuffer-typescript/commit/c385765f65b065b2a3a5c4b0c59d390f80591074))
+
+
+### Chores
+
+* **internal:** remove redundant imports config ([f754eb2](https://github.com/turbopuffer/turbopuffer-typescript/commit/f754eb20a2005679ce4f38a5832ec6c414b42065))
+
 ## 0.10.13 (2025-07-29)
 
 Full Changelog: [v0.10.12...v0.10.13](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.12...v0.10.13)
