@@ -19,6 +19,17 @@ export class Namespaces extends APIResource {
   }
 
   /**
+   * Explain a query plan.
+   */
+  explainQuery(
+    params: NamespaceExplainQueryParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<NamespaceExplainQueryResponse> {
+    const { namespace = this._client.defaultNamespace, ...body } = params ?? {};
+    return this._client.post(path`/v2/namespaces/${namespace}/explain_query`, { body, ...options });
+  }
+
+  /**
    * Warm the cache for a namespace.
    */
   hintCacheWarm(
@@ -442,6 +453,16 @@ export interface NamespaceDeleteAllResponse {
 }
 
 /**
+ * The response to a successful query explain.
+ */
+export interface NamespaceExplainQueryResponse {
+  /**
+   * The textual representation of the query plan.
+   */
+  plan_text?: string;
+}
+
+/**
  * The response to a successful cache warm request.
  */
 export interface NamespaceHintCacheWarmResponse {
@@ -573,6 +594,78 @@ export interface NamespaceDeleteAllParams {
    * The name of the namespace.
    */
   namespace?: string;
+}
+
+export interface NamespaceExplainQueryParams {
+  /**
+   * Path param: The name of the namespace.
+   */
+  namespace?: string;
+
+  /**
+   * Body param: Aggregations to compute over all documents in the namespace that
+   * match the filters.
+   */
+  aggregate_by?: { [key: string]: unknown };
+
+  /**
+   * Body param: The consistency level for a query.
+   */
+  consistency?: NamespaceExplainQueryParams.Consistency;
+
+  /**
+   * Body param: A function used to calculate vector similarity.
+   */
+  distance_metric?: DistanceMetric;
+
+  /**
+   * Body param: List of attribute names to exclude from the response. All other
+   * attributes will be included in the response.
+   */
+  exclude_attributes?: Array<string>;
+
+  /**
+   * Body param: Exact filters for attributes to refine search results for. Think of
+   * it as a SQL WHERE clause.
+   */
+  filters?: unknown;
+
+  /**
+   * Body param: Whether to include attributes in the response.
+   */
+  include_attributes?: IncludeAttributes;
+
+  /**
+   * Body param: How to rank the documents in the namespace.
+   */
+  rank_by?: unknown;
+
+  /**
+   * Body param: The number of results to return.
+   */
+  top_k?: number;
+
+  /**
+   * Body param: The encoding to use for vectors in the response.
+   */
+  vector_encoding?: VectorEncoding;
+}
+
+export namespace NamespaceExplainQueryParams {
+  /**
+   * The consistency level for a query.
+   */
+  export interface Consistency {
+    /**
+     * The query's consistency level.
+     *
+     * - `strong` - Strong consistency. Requires a round-trip to object storage to
+     *   fetch the latest writes.
+     * - `eventual` - Eventual consistency. Does not require a round-trip to object
+     *   storage, but may not see the latest writes.
+     */
+    level?: 'strong' | 'eventual';
+  }
 }
 
 export interface NamespaceHintCacheWarmParams {
@@ -866,6 +959,7 @@ export declare namespace Namespaces {
     type VectorEncoding as VectorEncoding,
     type WriteBilling as WriteBilling,
     type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
+    type NamespaceExplainQueryResponse as NamespaceExplainQueryResponse,
     type NamespaceHintCacheWarmResponse as NamespaceHintCacheWarmResponse,
     type NamespaceMultiQueryResponse as NamespaceMultiQueryResponse,
     type NamespaceQueryResponse as NamespaceQueryResponse,
@@ -874,6 +968,7 @@ export declare namespace Namespaces {
     type NamespaceUpdateSchemaResponse as NamespaceUpdateSchemaResponse,
     type NamespaceWriteResponse as NamespaceWriteResponse,
     type NamespaceDeleteAllParams as NamespaceDeleteAllParams,
+    type NamespaceExplainQueryParams as NamespaceExplainQueryParams,
     type NamespaceHintCacheWarmParams as NamespaceHintCacheWarmParams,
     type NamespaceMetadataParams as NamespaceMetadataParams,
     type NamespaceMultiQueryParams as NamespaceMultiQueryParams,
