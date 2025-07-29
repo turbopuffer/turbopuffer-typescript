@@ -26,6 +26,34 @@ describe('resource namespaces', () => {
   });
 
   // skipped: tests are disabled for the time being
+  test.skip('explainQuery: only required params', async () => {
+    const responsePromise = client.namespaces.explainQuery({ namespace: 'namespace' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // skipped: tests are disabled for the time being
+  test.skip('explainQuery: required and optional params', async () => {
+    const response = await client.namespaces.explainQuery({
+      namespace: 'namespace',
+      aggregate_by: { foo: 'bar' },
+      consistency: { level: 'strong' },
+      distance_metric: 'cosine_distance',
+      exclude_attributes: ['string'],
+      filters: {},
+      include_attributes: true,
+      rank_by: {},
+      top_k: 0,
+      vector_encoding: 'float',
+    });
+  });
+
+  // skipped: tests are disabled for the time being
   test.skip('hintCacheWarm: only required params', async () => {
     const responsePromise = client.namespace('namespace').hintCacheWarm();
     const rawResponse = await responsePromise.asResponse();
