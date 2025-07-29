@@ -376,12 +376,12 @@ describe('instantiate client', () => {
   });
 
   test('maxRetries option is correctly set', () => {
-    const client = new Turbopuffer({ maxRetries: 4, apiKey: 'tpuf_A1...' });
-    expect(client.maxRetries).toEqual(4);
+    const client = new Turbopuffer({ maxRetries: 8, apiKey: 'tpuf_A1...' });
+    expect(client.maxRetries).toEqual(8);
 
     // default
     const client2 = new Turbopuffer({ apiKey: 'tpuf_A1...' });
-    expect(client2.maxRetries).toEqual(2);
+    expect(client2.maxRetries).toEqual(4);
   });
 
   describe('withOptions', () => {
