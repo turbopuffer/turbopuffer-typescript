@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.10.15 (2025-07-30)
+
+Full Changelog: [v0.10.14...v0.10.15](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.14...v0.10.15)
+
+### Bug Fixes
+
+* **api:** api update ([1926803](https://github.com/turbopuffer/turbopuffer-typescript/commit/19268037dca0a7ba1e0a0adaedbde2dfc7b8c178))
+* **api:** api update ([a9eda3e](https://github.com/turbopuffer/turbopuffer-typescript/commit/a9eda3edd2e4797f6377414da1f08786abd937df))
+
 ## 0.10.14 (2025-07-29)
 
 Full Changelog: [v0.10.13...v0.10.14](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.13...v0.10.14)
