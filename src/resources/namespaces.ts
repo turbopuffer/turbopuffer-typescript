@@ -243,6 +243,13 @@ export interface FullTextSearchConfig {
   language?: Language;
 
   /**
+   * Maximum length of a token in bytes. Tokens larger than this value during
+   * tokenization will be filtered out. Has to be between `1` and `254` (inclusive).
+   * Defaults to `39`.
+   */
+  max_token_length?: number;
+
+  /**
    * Removes common words from the text based on language. Defaults to `true` (i.e.
    * remove common words).
    */
