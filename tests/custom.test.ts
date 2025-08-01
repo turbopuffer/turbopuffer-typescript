@@ -488,6 +488,7 @@ test('schema and metadata', async () => {
     // Too little data to trigger indexing (which is what computes the
     // approximate size), so we expect an approximate size of 0.
     approx_logical_bytes: 0,
+    approx_row_count: 0,
     schema: expectedMetadata,
   });
 });
