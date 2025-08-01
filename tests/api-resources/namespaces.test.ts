@@ -27,7 +27,7 @@ describe('resource namespaces', () => {
 
   // skipped: tests are disabled for the time being
   test.skip('explainQuery: only required params', async () => {
-    const responsePromise = client.namespaces.explainQuery({ namespace: 'namespace' });
+    const responsePromise = client.namespace('namespace').explainQuery();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -39,7 +39,7 @@ describe('resource namespaces', () => {
 
   // skipped: tests are disabled for the time being
   test.skip('explainQuery: required and optional params', async () => {
-    const response = await client.namespaces.explainQuery({
+    const response = await client.namespace('namespace').explainQuery({
       namespace: 'namespace',
       aggregate_by: { foo: 'bar' },
       consistency: { level: 'strong' },
