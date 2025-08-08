@@ -637,7 +637,7 @@ export interface NamespaceExplainQueryParams {
    * Body param: Aggregations to compute over all documents in the namespace that
    * match the filters.
    */
-  aggregate_by?: { [key: string]: unknown };
+  aggregate_by?: Record<string, AggregateBy>;
 
   /**
    * Body param: The consistency level for a query.
@@ -659,7 +659,7 @@ export interface NamespaceExplainQueryParams {
    * Body param: Exact filters for attributes to refine search results for. Think of
    * it as a SQL WHERE clause.
    */
-  filters?: unknown;
+  filters?: Filter;
 
   /**
    * Body param: Whether to include attributes in the response.
@@ -669,7 +669,7 @@ export interface NamespaceExplainQueryParams {
   /**
    * Body param: How to rank the documents in the namespace.
    */
-  rank_by?: unknown;
+  rank_by?: RankBy;
 
   /**
    * Body param: The number of results to return.
