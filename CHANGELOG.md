@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.10.16 (2025-08-08)
+
+Full Changelog: [v0.10.15...v0.10.16](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.15...v0.10.16)
+
+### Bug Fixes
+
+* use strict types for explainQuery ([#134](https://github.com/turbopuffer/turbopuffer-typescript/issues/134)) ([dcf99c4](https://github.com/turbopuffer/turbopuffer-typescript/commit/dcf99c4b2e23701ab8f195e68bcc0141214ded45))
+
+
+### Chores
+
+* **internal:** move publish config ([7c29d05](https://github.com/turbopuffer/turbopuffer-typescript/commit/7c29d05940788778a7d0d73404cb2548f06d6227))
+
 ## 0.10.15 (2025-07-30)
 
 Full Changelog: [v0.10.14...v0.10.15](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.14...v0.10.15)
