@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.10.17 (2025-08-11)
+
+Full Changelog: [v0.10.16...v0.10.17](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.16...v0.10.17)
+
+### Chores
+
+* **internal:** update comment in script ([f1a172f](https://github.com/turbopuffer/turbopuffer-typescript/commit/f1a172f7c24a2b3b5707b904631225a25e971049))
+* update @stainless-api/prism-cli to v5.15.0 ([a0a42c7](https://github.com/turbopuffer/turbopuffer-typescript/commit/a0a42c7fcdc9105c6208f2584c60edbcc8e6eda4))
+
 ## 0.10.16 (2025-08-08)
 
 Full Changelog: [v0.10.15...v0.10.16](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.15...v0.10.16)
