@@ -8,7 +8,7 @@ const client = new Turbopuffer({
 });
 
 describe('top level methods', () => {
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('namespaces', async () => {
     const responsePromise = client.namespaces();
     const rawResponse = await responsePromise.asResponse();
@@ -20,7 +20,7 @@ describe('top level methods', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('namespaces: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
