@@ -811,7 +811,9 @@ export class Turbopuffer {
 
   namespaces: API.Namespaces = new API.Namespaces(this);
 }
+
 Turbopuffer.Namespaces = Namespaces;
+
 export declare namespace Turbopuffer {
   export type RequestOptions = Opts.RequestOptions;
 
