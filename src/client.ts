@@ -890,7 +890,9 @@ export class Turbopuffer {
 
   static toFile = Uploads.toFile;
 }
+
 Turbopuffer.Namespace = Namespace;
+
 export declare namespace Turbopuffer {
   export type RequestOptions = Opts.RequestOptions;
 
