@@ -8,7 +8,7 @@ const client = new Turbopuffer({
 });
 
 describe('resource namespaces', () => {
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('deleteAll: only required params', async () => {
     const responsePromise = client.namespace('namespace').deleteAll();
     const rawResponse = await responsePromise.asResponse();
@@ -20,12 +20,12 @@ describe('resource namespaces', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('deleteAll: required and optional params', async () => {
     const response = await client.namespace('namespace').deleteAll();
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('explainQuery: only required params', async () => {
     const responsePromise = client.namespace('namespace').explainQuery();
     const rawResponse = await responsePromise.asResponse();
@@ -37,7 +37,7 @@ describe('resource namespaces', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('explainQuery: required and optional params', async () => {
     const response = await client.namespace('namespace').explainQuery({
       namespace: 'namespace',
@@ -50,7 +50,7 @@ describe('resource namespaces', () => {
     });
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('hintCacheWarm: only required params', async () => {
     const responsePromise = client.namespace('namespace').hintCacheWarm();
     const rawResponse = await responsePromise.asResponse();
@@ -62,12 +62,12 @@ describe('resource namespaces', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('hintCacheWarm: required and optional params', async () => {
     const response = await client.namespace('namespace').hintCacheWarm();
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('metadata: only required params', async () => {
     const responsePromise = client.namespace('namespace').metadata();
     const rawResponse = await responsePromise.asResponse();
@@ -79,12 +79,12 @@ describe('resource namespaces', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('metadata: required and optional params', async () => {
     const response = await client.namespace('namespace').metadata();
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('multiQuery: only required params', async () => {
     const responsePromise = client
       .namespace('namespace')
@@ -98,7 +98,7 @@ describe('resource namespaces', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('multiQuery: required and optional params', async () => {
     const response = await client.namespace('namespace').multiQuery({
       namespace: 'namespace',
@@ -116,7 +116,7 @@ describe('resource namespaces', () => {
     });
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('query: only required params', async () => {
     const responsePromise = client.namespace('namespace').query({});
     const rawResponse = await responsePromise.asResponse();
@@ -128,7 +128,7 @@ describe('resource namespaces', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('query: required and optional params', async () => {
     const response = await client.namespace('namespace').query({
       namespace: 'namespace',
@@ -142,7 +142,7 @@ describe('resource namespaces', () => {
     });
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('recall: only required params', async () => {
     const responsePromise = client.namespace('namespace').recall();
     const rawResponse = await responsePromise.asResponse();
@@ -154,7 +154,7 @@ describe('resource namespaces', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('recall: required and optional params', async () => {
     const response = await client.namespace('namespace').recall({
       namespace: 'namespace',
@@ -165,7 +165,7 @@ describe('resource namespaces', () => {
     });
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('schema: only required params', async () => {
     const responsePromise = client.namespace('namespace').schema();
     const rawResponse = await responsePromise.asResponse();
@@ -177,12 +177,12 @@ describe('resource namespaces', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('schema: required and optional params', async () => {
     const response = await client.namespace('namespace').schema();
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('updateSchema: only required params', async () => {
     const responsePromise = client.namespace('namespace').updateSchema();
     const rawResponse = await responsePromise.asResponse();
@@ -194,7 +194,7 @@ describe('resource namespaces', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('updateSchema: required and optional params', async () => {
     const response = await client.namespace('namespace').updateSchema({
       namespace: 'namespace',
@@ -202,7 +202,7 @@ describe('resource namespaces', () => {
     });
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('write: only required params', async () => {
     const responsePromise = client.namespace('namespace').write();
     const rawResponse = await responsePromise.asResponse();
@@ -214,7 +214,7 @@ describe('resource namespaces', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // skipped: tests are disabled for the time being
+  // Prism tests are disabled
   test.skip('write: required and optional params', async () => {
     const response = await client.namespace('namespace').write({
       namespace: 'namespace',

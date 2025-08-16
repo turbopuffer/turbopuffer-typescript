@@ -500,7 +500,7 @@ export interface NamespaceHintCacheWarmResponse {
   /**
    * The status of the request.
    */
-  status: 'OK';
+  status: 'ACCEPTED';
 
   message?: string;
 }
