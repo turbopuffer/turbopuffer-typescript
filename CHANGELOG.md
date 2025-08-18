@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.10.18 (2025-08-18)
+
+Full Changelog: [v0.10.17...v0.10.18](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.17...v0.10.18)
+
+### Bug Fixes
+
+* **api:** add support for `group_by` query parameter ([901d005](https://github.com/turbopuffer/turbopuffer-typescript/commit/901d005dd3960ccfed1aba4d5424fab2f144f566))
+* remove 200 error code for hint_cache_warm API call (always 202 now) ([10306e5](https://github.com/turbopuffer/turbopuffer-typescript/commit/10306e523224d4ec99d7f877f2c5397a36291d36))
+
+
+### Chores
+
+* **deps:** update dependency @types/node to v20.17.58 ([ad69dfc](https://github.com/turbopuffer/turbopuffer-typescript/commit/ad69dfc3fdcfd2050359541aae1ff21c206b611a))
+* **internal:** codegen related update ([a5efca1](https://github.com/turbopuffer/turbopuffer-typescript/commit/a5efca18487b8fbf0205e965f96c8372be27f9b8))
+* **internal:** formatting change ([5199be7](https://github.com/turbopuffer/turbopuffer-typescript/commit/5199be7cc597b76daf69b6f5d6a3af76a72eb1b7))
+
 ## 0.10.17 (2025-08-11)
 
 Full Changelog: [v0.10.16...v0.10.17](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.16...v0.10.17)
