@@ -335,6 +335,12 @@ export interface Query {
   filters?: unknown;
 
   /**
+   * Groups documents by the specified attributes (the "group key") before computing
+   * aggregates. Aggregates are computed separately for each group.
+   */
+  group_by?: Array<string>;
+
+  /**
    * Whether to include attributes in the response.
    */
   include_attributes?: IncludeAttributes;
@@ -500,6 +506,8 @@ export interface NamespaceMultiQueryResponse {
 
 export namespace NamespaceMultiQueryResponse {
   export interface Result {
+    aggregation_groups?: Array<NamespacesAPI.Row>;
+
     aggregations?: { [key: string]: unknown };
 
     rows?: Array<NamespacesAPI.Row>;
@@ -519,6 +527,8 @@ export interface NamespaceQueryResponse {
    * The performance information for a query.
    */
   performance: QueryPerformance;
+
+  aggregation_groups?: Array<Row>;
 
   aggregations?: { [key: string]: unknown };
 
@@ -636,6 +646,12 @@ export interface NamespaceExplainQueryParams {
    * it as a SQL WHERE clause.
    */
   filters?: unknown;
+
+  /**
+   * Body param: Groups documents by the specified attributes (the "group key")
+   * before computing aggregates. Aggregates are computed separately for each group.
+   */
+  group_by?: Array<string>;
 
   /**
    * Body param: Whether to include attributes in the response.
@@ -761,6 +777,12 @@ export interface NamespaceQueryParams {
    * it as a SQL WHERE clause.
    */
   filters?: unknown;
+
+  /**
+   * Body param: Groups documents by the specified attributes (the "group key")
+   * before computing aggregates. Aggregates are computed separately for each group.
+   */
+  group_by?: Array<string>;
 
   /**
    * Body param: Whether to include attributes in the response.
