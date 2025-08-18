@@ -44,6 +44,7 @@ describe('resource namespaces', () => {
       consistency: { level: 'strong' },
       distance_metric: 'cosine_distance',
       exclude_attributes: ['string'],
+      group_by: ['string'],
       include_attributes: true,
       top_k: 0,
       vector_encoding: 'float',
@@ -106,6 +107,7 @@ describe('resource namespaces', () => {
         {
           distance_metric: 'cosine_distance',
           exclude_attributes: ['string'],
+          group_by: ['string'],
           include_attributes: true,
           rank_by: ['id', 'asc'],
           top_k: 0,
@@ -135,6 +137,7 @@ describe('resource namespaces', () => {
       consistency: { level: 'strong' },
       distance_metric: 'cosine_distance',
       exclude_attributes: ['string'],
+      group_by: ['string'],
       include_attributes: true,
       rank_by: ['id', 'asc'],
       top_k: 0,
