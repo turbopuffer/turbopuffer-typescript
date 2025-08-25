@@ -262,7 +262,8 @@ export interface FullTextSearchConfig {
   stemming?: boolean;
 
   /**
-   * The tokenizer to use for full-text search on an attribute.
+   * The tokenizer to use for full-text search on an attribute. Defaults to
+   * `word_v2`.
    */
   tokenizer?: Tokenizer;
 }
@@ -450,9 +451,10 @@ export interface Row {
 }
 
 /**
- * The tokenizer to use for full-text search on an attribute.
+ * The tokenizer to use for full-text search on an attribute. Defaults to
+ * `word_v2`.
  */
-export type Tokenizer = 'pre_tokenized_array' | 'word_v0' | 'word_v1';
+export type Tokenizer = 'pre_tokenized_array' | 'word_v0' | 'word_v1' | 'word_v2';
 
 /**
  * A vector embedding associated with a document.
