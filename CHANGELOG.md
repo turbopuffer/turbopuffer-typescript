@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.0.0 (2025-08-28)
+
+Full Changelog: [v0.10.18...v1.0.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.18...v1.0.0)
+
+### Features
+
+* Make word_v2 the default FTS tokenizer ([b428340](https://github.com/turbopuffer/turbopuffer-typescript/commit/b428340858fdaceada3dccb3f6367e58ab0b726c))
+* **mcp:** add code execution tool ([329ad4b](https://github.com/turbopuffer/turbopuffer-typescript/commit/329ad4b3ee72e893b8ecef3bc0d40a59313a567c))
+
+
+### Chores
+
+* add package to package.json ([f61070d](https://github.com/turbopuffer/turbopuffer-typescript/commit/f61070dd9d6194ba1728762295e78ca0dfa1bbf7))
+* **client:** qualify global Blob ([e6d9204](https://github.com/turbopuffer/turbopuffer-typescript/commit/e6d92042c9b6fb36cfa6bbed36c79b14043068b8))
+* update CI script ([a265648](https://github.com/turbopuffer/turbopuffer-typescript/commit/a265648b3542e21518edba546690bf3c79c77908))
+
 ## 0.10.18 (2025-08-18)
 
 Full Changelog: [v0.10.17...v0.10.18](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.17...v0.10.18)
