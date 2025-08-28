@@ -3,7 +3,7 @@ import { AttributeSchema, RankBy } from '@turbopuffer/turbopuffer/resources';
 import assert from 'assert';
 
 const tpuf = new Turbopuffer({
-  region: 'gcp-us-central1',
+  region: 'aws-us-east-1', // switch back to gcp-us-central1 when compressed responses are fixed
 });
 
 const testNamespacePrefix = `typescript_sdk_${Date.now()}_`;
@@ -406,7 +406,7 @@ test('schema and metadata', async () => {
         max_token_length: 39,
         remove_stopwords: true,
         case_sensitive: false,
-        tokenizer: 'word_v1',
+        tokenizer: 'word_v2',
       },
     },
     tags: {
@@ -420,7 +420,7 @@ test('schema and metadata', async () => {
         max_token_length: 39,
         remove_stopwords: false,
         case_sensitive: true,
-        tokenizer: 'word_v1',
+        tokenizer: 'word_v2',
       },
     },
     private: {
@@ -454,7 +454,7 @@ test('schema and metadata', async () => {
         max_token_length: 39,
         remove_stopwords: true,
         case_sensitive: false,
-        tokenizer: 'word_v1',
+        tokenizer: 'word_v2',
       },
     },
     tags: {
@@ -468,7 +468,7 @@ test('schema and metadata', async () => {
         max_token_length: 39,
         remove_stopwords: false,
         case_sensitive: true,
-        tokenizer: 'word_v1',
+        tokenizer: 'word_v2',
       },
     },
     private: {
@@ -548,7 +548,7 @@ test('update_schema', async () => {
         max_token_length: 39,
         remove_stopwords: false,
         case_sensitive: true,
-        tokenizer: 'word_v1',
+        tokenizer: 'word_v2',
       },
     },
     private: {
@@ -578,7 +578,7 @@ test('update_schema', async () => {
           stemming: false,
           remove_stopwords: false,
           case_sensitive: true,
-          tokenizer: 'word_v1',
+          tokenizer: 'word_v2',
         },
       },
       private: {
@@ -605,7 +605,7 @@ test('update_schema', async () => {
         max_token_length: 39,
         remove_stopwords: false,
         case_sensitive: true,
-        tokenizer: 'word_v1',
+        tokenizer: 'word_v2',
       },
     },
     private: {

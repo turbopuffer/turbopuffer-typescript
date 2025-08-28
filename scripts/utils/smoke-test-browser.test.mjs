@@ -25,7 +25,7 @@ test('smoke test', async ({ page }) => {
   // just aren't configured to allow that right now. But given that the client
   // itself supports running in the browser, seemed worthwhile to lock that
   // behavior in, in case we one day want to set up CORS to allow this.
-  await page.goto('https://gcp-us-central1.turbopuffer.com');
+  await page.goto('https://aws-us-east-1.turbopuffer.com'); // switch back to gcp-us-central1 when content-type is fixed
 
   const res = await page.evaluate((bundle) => {
     eval(bundle);
