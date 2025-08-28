@@ -366,7 +366,7 @@ describe('instantiate client', () => {
           new Turbopuffer({
             apiKey: 'tpuf_A1...',
             baseURL: 'https://tpuf.example.com',
-            region: 'gcp-us-central1',
+            region: 'aws-us-east-1', // switch back to gcp-us-central1 once content-type is fixed
           });
         }).toThrow(
           'region is set, but would be ignored (baseURL does not contain {region} placeholder: https://tpuf.example.com)',
