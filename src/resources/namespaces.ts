@@ -122,6 +122,11 @@ export class Namespaces extends APIResource {
 }
 
 /**
+ * A single aggregation group.
+ */
+export type AggregationGroup = { [key: string]: unknown };
+
+/**
  * The schema for an attribute attached to a document.
  */
 export type AttributeSchema = AttributeType | AttributeSchemaConfig;
@@ -508,7 +513,7 @@ export interface NamespaceMultiQueryResponse {
 
 export namespace NamespaceMultiQueryResponse {
   export interface Result {
-    aggregation_groups?: Array<NamespacesAPI.Row>;
+    aggregation_groups?: Array<NamespacesAPI.AggregationGroup>;
 
     aggregations?: { [key: string]: unknown };
 
@@ -530,7 +535,7 @@ export interface NamespaceQueryResponse {
    */
   performance: QueryPerformance;
 
-  aggregation_groups?: Array<Row>;
+  aggregation_groups?: Array<AggregationGroup>;
 
   aggregations?: { [key: string]: unknown };
 
@@ -970,6 +975,7 @@ export namespace NamespaceWriteParams {
 
 export declare namespace Namespaces {
   export {
+    type AggregationGroup as AggregationGroup,
     type AttributeSchema as AttributeSchema,
     type AttributeSchemaConfig as AttributeSchemaConfig,
     type AttributeType as AttributeType,
