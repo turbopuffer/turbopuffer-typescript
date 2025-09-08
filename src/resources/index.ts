@@ -2,6 +2,7 @@
 
 export {
   Namespace as Namespace,
+  type AggregationGroup,
   type AttributeSchema,
   type AttributeSchemaConfig,
   type AttributeType,

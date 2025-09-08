@@ -21,6 +21,7 @@ import * as TopLevelAPI from './resources/top-level';
 import { NamespaceSummariesNamespacePage, NamespaceSummary, NamespacesParams } from './resources/top-level';
 import { APIPromise } from './core/api-promise';
 import {
+  AggregationGroup,
   AttributeSchema,
   AttributeSchemaConfig,
   AttributeType,
@@ -910,6 +911,7 @@ export declare namespace Turbopuffer {
 
   export {
     Namespace as Namespace,
+    type AggregationGroup as AggregationGroup,
     type AttributeSchema as AttributeSchema,
     type AttributeSchemaConfig as AttributeSchemaConfig,
     type AttributeType as AttributeType,
