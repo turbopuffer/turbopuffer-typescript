@@ -585,6 +585,26 @@ export interface NamespaceRecallResponse {
    * The average recall of the queries.
    */
   avg_recall: number;
+
+  /**
+   * Ground truth data including query vectors and true nearest neighbors. Only
+   * included when include_ground_truth is true.
+   */
+  ground_truth?: Array<NamespaceRecallResponse.GroundTruth>;
+}
+
+export namespace NamespaceRecallResponse {
+  export interface GroundTruth {
+    /**
+     * The true nearest neighbors with their distances and vectors.
+     */
+    nearest_neighbors: Array<NamespacesAPI.Row>;
+
+    /**
+     * The query vector used for this search.
+     */
+    query_vector: Array<number>;
+  }
 }
 
 /**
@@ -863,6 +883,12 @@ export interface NamespaceRecallParams {
    * Body param: Filter by attributes. Same syntax as the query endpoint.
    */
   filters?: unknown;
+
+  /**
+   * Body param: Include ground truth data (query vectors and true nearest neighbors)
+   * in the response.
+   */
+  include_ground_truth?: boolean;
 
   /**
    * Body param: The number of searches to run.
