@@ -167,6 +167,7 @@ describe('resource namespaces', () => {
     const response = await client.namespaces.recall({
       namespace: 'namespace',
       filters: {},
+      include_ground_truth: true,
       num: 0,
       queries: [0],
       top_k: 0,
