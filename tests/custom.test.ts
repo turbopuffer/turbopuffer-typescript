@@ -3,7 +3,7 @@ import { AttributeSchema, RankBy } from '@turbopuffer/turbopuffer/resources';
 import assert from 'assert';
 
 const tpuf = new Turbopuffer({
-  region: 'aws-us-east-1', // switch back to gcp-us-central1 when compressed responses are fixed
+  region: 'gcp-us-central1',
 });
 
 const testNamespacePrefix = `typescript_sdk_${Date.now()}_`;
