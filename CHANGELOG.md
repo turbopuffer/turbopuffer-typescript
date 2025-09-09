@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.1.0 (2025-09-09)
+
+Full Changelog: [v1.0.0...v1.1.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.0.0...v1.1.0)
+
+### Features
+
+* spec: add dedicated type for AggregationGroup response ([edea304](https://github.com/turbopuffer/turbopuffer-typescript/commit/edea3045c782cc56d8356f1b8dc9d0d547e21241))
+* tpuf: add include_ground_truth option to recall endpoint ([f31e1b1](https://github.com/turbopuffer/turbopuffer-typescript/commit/f31e1b1843c26673db9af34bff1163c7f357bac7))
+
+
+### Chores
+
+* **internal:** update global Error reference ([5323be8](https://github.com/turbopuffer/turbopuffer-typescript/commit/5323be8e0d8caa9c474cf18c794bb8ffaeb345aa))
+
 ## 1.0.0 (2025-08-28)
 
 Full Changelog: [v0.10.18...v1.0.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.18...v1.0.0)
