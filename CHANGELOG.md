@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.1.1 (2025-09-11)
+
+Full Changelog: [v1.1.0...v1.1.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.1.0...v1.1.1)
+
+### Bug Fixes
+
+* coerce nullable values to undefined ([4e0bb4e](https://github.com/turbopuffer/turbopuffer-typescript/commit/4e0bb4e783a3ced1c7fdbdd95758a632acaf2bd8))
+
+
+### Chores
+
+* ci build action ([4e77a58](https://github.com/turbopuffer/turbopuffer-typescript/commit/4e77a587fda757777a78a553fd77917f97d86408))
+
 ## 1.1.0 (2025-09-09)
 
 Full Changelog: [v1.0.0...v1.1.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.0.0...v1.1.0)
