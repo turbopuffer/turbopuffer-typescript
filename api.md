@@ -16,7 +16,9 @@ Types:
 - <code><a href="./src/resources/namespaces.ts">AttributeSchema</a></code>
 - <code><a href="./src/resources/namespaces.ts">AttributeSchemaConfig</a></code>
 - <code><a href="./src/resources/namespaces.ts">AttributeType</a></code>
+- <code><a href="./src/resources/namespaces.ts">Bm25ClauseParams</a></code>
 - <code><a href="./src/resources/namespaces.ts">Columns</a></code>
+- <code><a href="./src/resources/namespaces.ts">ContainsAllTokensFilterParams</a></code>
 - <code><a href="./src/resources/namespaces.ts">DistanceMetric</a></code>
 - <code><a href="./src/resources/namespaces.ts">FullTextSearch</a></code>
 - <code><a href="./src/resources/namespaces.ts">FullTextSearchConfig</a></code>
