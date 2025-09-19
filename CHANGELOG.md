@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.2.0 (2025-09-19)
+
+Full Changelog: [v1.1.1...v1.2.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.1.1...v1.2.0)
+
+### Features
+
+* add WithParams variant to BM25 and ContainsAllTokens ([dba6675](https://github.com/turbopuffer/turbopuffer-typescript/commit/dba66753c4462c07de09118e3f99fafb56003791))
+
+
+### Chores
+
+* do not install brew dependencies in ./scripts/bootstrap by default ([0a8ce93](https://github.com/turbopuffer/turbopuffer-typescript/commit/0a8ce93cd8e0aa94ebff7bdcc2165f3e2c8182cc))
+
 ## 1.1.1 (2025-09-11)
 
 Full Changelog: [v1.1.0...v1.1.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.1.0...v1.1.1)
