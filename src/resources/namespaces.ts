@@ -189,6 +189,16 @@ export interface AttributeSchemaConfig {
 export type AttributeType = string;
 
 /**
+ * Additional (optional) parameters for a single BM25 query clause.
+ */
+export interface Bm25ClauseParams {
+  /**
+   * Whether to treat the last token in the query input as a literal prefix.
+   */
+  last_as_prefix?: boolean;
+}
+
+/**
  * A list of documents in columnar format. Each key is a column name, mapped to an
  * array of values for that column.
  */
@@ -204,6 +214,16 @@ export interface Columns {
   vector?: Array<Vector> | Array<number> | string;
 
   [k: string]: Array<unknown> | Array<ID> | Array<Vector> | Array<number> | string | undefined;
+}
+
+/**
+ * Additional (optional) parameters for the ContainsAllTokens filter.
+ */
+export interface ContainsAllTokensFilterParams {
+  /**
+   * Whether to treat the last token in the query input as a literal prefix.
+   */
+  last_as_prefix?: boolean;
 }
 
 /**
@@ -1029,7 +1049,9 @@ export declare namespace Namespaces {
     type AttributeSchema as AttributeSchema,
     type AttributeSchemaConfig as AttributeSchemaConfig,
     type AttributeType as AttributeType,
+    type Bm25ClauseParams as Bm25ClauseParams,
     type Columns as Columns,
+    type ContainsAllTokensFilterParams as ContainsAllTokensFilterParams,
     type DistanceMetric as DistanceMetric,
     type FullTextSearch as FullTextSearch,
     type FullTextSearchConfig as FullTextSearchConfig,
