@@ -30,7 +30,7 @@ export class Namespaces extends APIResource {
   }
 
   /**
-   * Warm the cache for a namespace.
+   * Signal turbopuffer to prepare for low-latency requests.
    */
   hintCacheWarm(
     params: NamespaceHintCacheWarmParams | null | undefined = {},
