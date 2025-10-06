@@ -7,8 +7,8 @@
     "paths": {
       "@turbopuffer/turbopuffer/*": ["./dist/src/*"],
       "@turbopuffer/turbopuffer": ["./dist/src/index.ts"],
-      "#fetch": ["dist/src/internal/custom/fetch-node.ts"],
-      "#gzip": ["dist/src/internal/custom/gzip-node.ts"]
+      "#fetch": ["./dist/src/internal/custom/fetch-node.ts"],
+      "#gzip": ["./dist/src/internal/custom/gzip-node.ts"]
     },
     "noEmit": false,
     "declaration": true,

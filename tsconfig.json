@@ -10,8 +10,8 @@
     "paths": {
       "@turbopuffer/turbopuffer/*": ["./src/*"],
       "@turbopuffer/turbopuffer": ["./src/index.ts"],
-      "#fetch": ["src/internal/custom/fetch-default.ts"],
-      "#gzip": ["src/internal/custom/gzip-default.ts"]
+      "#fetch": ["./src/internal/custom/fetch-default.ts"],
+      "#gzip": ["./src/internal/custom/gzip-default.ts"]
     },
     "noEmit": true,
 
