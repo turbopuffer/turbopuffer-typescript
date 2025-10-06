@@ -1,5 +1,29 @@
 # Changelog
 
+## 1.2.1 (2025-10-06)
+
+Full Changelog: [v1.2.0...v1.2.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.2.0...v1.2.1)
+
+### Performance Improvements
+
+* faster formatting ([744011e](https://github.com/turbopuffer/turbopuffer-typescript/commit/744011e38559d36ca46687730b37e1b0810a4071))
+
+
+### Chores
+
+* **internal:** codegen related update ([8b0246c](https://github.com/turbopuffer/turbopuffer-typescript/commit/8b0246ccf602990bd407f991dbc7c51ca7bcb5aa))
+* **internal:** fix incremental formatting in some cases ([c7e5e81](https://github.com/turbopuffer/turbopuffer-typescript/commit/c7e5e81633d3aeefc1523c95115a08f900956e0a))
+* **internal:** ignore .eslintcache ([d99cfbb](https://github.com/turbopuffer/turbopuffer-typescript/commit/d99cfbb0e867e66343febada810a25670545a38e))
+* **internal:** remove .eslintcache ([bede60b](https://github.com/turbopuffer/turbopuffer-typescript/commit/bede60b741eed66858ffd4b50bedf1697890333a))
+* **internal:** remove deprecated `compilerOptions.baseUrl` from tsconfig.json ([009e59e](https://github.com/turbopuffer/turbopuffer-typescript/commit/009e59e046628342e7c2a49866f5ebca533a2d21))
+* **internal:** use npm pack for build uploads ([631d898](https://github.com/turbopuffer/turbopuffer-typescript/commit/631d8987f2b6bd194a80769796e64472743856f3))
+* **jsdoc:** fix [@link](https://github.com/link) annotations to refer only to parts of the package‘s public interface ([aa93da5](https://github.com/turbopuffer/turbopuffer-typescript/commit/aa93da5c7c9c9ace004049fa870a29baea782e50))
+
+
+### Documentation
+
+* hint_cache_warm also update header and openapi ([27a2904](https://github.com/turbopuffer/turbopuffer-typescript/commit/27a2904bfe9b045a77eac233f08e650729461af0))
+
 ## 1.2.0 (2025-09-19)
 
 Full Changelog: [v1.1.1...v1.2.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.1.1...v1.2.0)
