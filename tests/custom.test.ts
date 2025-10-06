@@ -1279,25 +1279,23 @@ test('product_operator', async () => {
   });
 
   const queries: RankBy[] = [
-    ['Product', [2, ['title', 'BM25', 'one']]],
-    ['Product', [['title', 'BM25', 'one'], 2]],
+    ['Product', 2, ['title', 'BM25', 'one']],
+    ['Product', ['title', 'BM25', 'one'], 2],
     [
       'Sum',
       [
-        ['Product', [2, ['title', 'BM25', 'one']]],
+        ['Product', 2, ['title', 'BM25', 'one']],
         ['content', 'BM25', 'foo'],
       ],
     ],
     [
       'Product',
+      2,
       [
-        2,
+        'Max',
         [
-          'Max',
-          [
-            ['Product', [2, ['title', 'BM25', 'one']]],
-            ['content', 'BM25', 'foo'],
-          ],
+          ['Product', 2, ['title', 'BM25', 'one']],
+          ['content', 'BM25', 'foo'],
         ],
       ],
     ],

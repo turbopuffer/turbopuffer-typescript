@@ -44,6 +44,6 @@ export type RankByText =
   | [string, 'BM25', string[], Bm25ClauseParams]
   | ['Sum', RankByText[]]
   | ['Max', RankByText[]]
-  | ['Product', [number, RankByText]]
-  | ['Product', [RankByText, number]];
+  | ['Product', number, RankByText]
+  | ['Product', RankByText, number];
 export type RankByVector = [string, 'ANN', number[]];
