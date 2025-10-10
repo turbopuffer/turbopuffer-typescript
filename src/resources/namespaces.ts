@@ -950,6 +950,12 @@ export interface NamespaceWriteParams {
   deletes?: Array<ID>;
 
   /**
+   * Body param: Disables write throttling (HTTP 429 responses) during high-volume
+   * ingestion.
+   */
+  disable_backpressure?: boolean;
+
+  /**
    * Body param: A function used to calculate vector similarity.
    */
   distance_metric?: DistanceMetric;

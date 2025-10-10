@@ -231,6 +231,7 @@ describe('resource namespaces', () => {
       delete_by_filter: {},
       delete_condition: {},
       deletes: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
+      disable_backpressure: true,
       distance_metric: 'cosine_distance',
       encryption: { cmek: { key_name: 'key_name' } },
       patch_columns: { id: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'], vector: [[0]] },
