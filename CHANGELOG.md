@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3.0 (2025-10-10)
+
+Full Changelog: [v1.2.1...v1.3.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.2.1...v1.3.0)
+
+### Features
+
+* Promote disable_backpressure to first-class Write property ([b5c7f9e](https://github.com/turbopuffer/turbopuffer-typescript/commit/b5c7f9e5778634ea9f7f52ba4f6f92318a39eec6))
+
 ## 1.2.1 (2025-10-06)
 
 Full Changelog: [v1.2.0...v1.2.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.2.0...v1.2.1)
