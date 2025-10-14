@@ -158,15 +158,17 @@ export interface AttributeSchemaConfig {
   regex?: boolean;
 
   /**
-   * The data type of the attribute. Valid values: string, int, uint, uuid, datetime,
-   * bool, []string, []int, []uint, []uuid, []datetime, [DIMS]f16, [DIMS]f32.
+   * The data type of the attribute. Valid values: string, int, uint, float, uuid,
+   * datetime, bool, []string, []int, []uint, []float, []uuid, []datetime, []bool,
+   * [DIMS]f16, [DIMS]f32.
    */
   type?: AttributeType;
 }
 
 /**
- * The data type of the attribute. Valid values: string, int, uint, uuid, datetime,
- * bool, []string, []int, []uint, []uuid, []datetime, [DIMS]f16, [DIMS]f32.
+ * The data type of the attribute. Valid values: string, int, uint, float, uuid,
+ * datetime, bool, []string, []int, []uint, []float, []uuid, []datetime, []bool,
+ * [DIMS]f16, [DIMS]f32.
  */
 export type AttributeType = string;
 
