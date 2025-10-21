@@ -1038,9 +1038,9 @@ export namespace NamespaceWriteParams {
     /**
      * Filter by attributes. Same syntax as the query endpoint.
      */
-    filters?: unknown;
+    filters: unknown;
 
-    patch?: { [key: string]: unknown };
+    patch: { [key: string]: unknown };
   }
 }
 
