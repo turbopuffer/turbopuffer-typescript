@@ -333,6 +333,52 @@ export interface NamespaceMetadata {
    * The schema of the namespace.
    */
   schema: { [key: string]: AttributeSchemaConfig };
+
+  /**
+   * The timestamp when the namespace was last modified by a write operation.
+   */
+  updated_at: string;
+
+  /**
+   * Indicates that the namespace is encrypted with a customer-managed encryption key
+   * (CMEK).
+   */
+  encryption?: boolean | NamespaceMetadata.Cmek;
+
+  index?: NamespaceMetadata.Status | NamespaceMetadata.UnionMember1;
+}
+
+export namespace NamespaceMetadata {
+  /**
+   * Indicates that the namespace is encrypted with a customer-managed encryption key
+   * (CMEK).
+   */
+  export interface Cmek {
+    cmek?: Cmek.Cmek;
+  }
+
+  export namespace Cmek {
+    export interface Cmek {
+      /**
+       * The name of the CMEK key in use.
+       */
+      key_name: string;
+    }
+  }
+
+  export interface Status {
+    status: 'up-to-date';
+  }
+
+  export interface UnionMember1 {
+    status: 'updating';
+
+    /**
+     * The number of bytes in the namespace that are in the write-ahead log but have
+     * not yet been indexed.
+     */
+    unindexed_bytes: number;
+  }
 }
 
 /**
