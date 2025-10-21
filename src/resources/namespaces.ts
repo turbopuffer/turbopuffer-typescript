@@ -968,6 +968,11 @@ export interface NamespaceWriteParams {
   encryption?: NamespaceWriteParams.Encryption;
 
   /**
+   * Body param: The patch and filter specifying which documents to patch.
+   */
+  patch_by_filter?: NamespaceWriteParams.PatchByFilter;
+
+  /**
    * Body param: A list of documents in columnar format. Each key is a column name,
    * mapped to an array of values for that column.
    */
@@ -1024,6 +1029,18 @@ export namespace NamespaceWriteParams {
        */
       key_name: string;
     }
+  }
+
+  /**
+   * The patch and filter specifying which documents to patch.
+   */
+  export interface PatchByFilter {
+    /**
+     * Filter by attributes. Same syntax as the query endpoint.
+     */
+    filters?: unknown;
+
+    patch?: { [key: string]: unknown };
   }
 }
 
