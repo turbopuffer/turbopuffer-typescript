@@ -489,7 +489,14 @@ test('schema and metadata', async () => {
     // approximate size), so we expect an approximate size of 0.
     approx_logical_bytes: 0,
     approx_row_count: 0,
+    encryption: {
+      sse: true,
+    },
+    index: {
+      status: 'up-to-date',
+    },
     schema: expectedMetadata,
+    updated_at: expect.any(String),
   });
 });
 
