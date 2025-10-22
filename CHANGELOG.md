@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.5.0 (2025-10-22)
+
+Full Changelog: [v1.3.0...v1.5.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.3.0...v1.5.0)
+
+### Features
+
+* Metadata endpoint updates (e.g. to track indexing progress) ([6ae8eb1](https://github.com/turbopuffer/turbopuffer-typescript/commit/6ae8eb1d13ce92db3bcfe40a8f05e1a39190a8b1))
+* required for patch_by_filter :facepalm: ([6347ce5](https://github.com/turbopuffer/turbopuffer-typescript/commit/6347ce58d4789d27a226abbd02207644e8b84e1c))
+* stainless: add patch_by_filter ([f3246b5](https://github.com/turbopuffer/turbopuffer-typescript/commit/f3246b50419e0cee301650785e94db57b403ede0))
+
 ## 1.3.0 (2025-10-14)
 
 Full Changelog: [v1.2.1...v1.3.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.2.1...v1.3.0)
