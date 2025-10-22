@@ -496,7 +496,7 @@ test('schema and metadata', async () => {
       status: 'up-to-date',
     },
     schema: expectedMetadata,
-    updated_at: expect.any(Date),
+    updated_at: expect.any(String),
   });
 });
 
