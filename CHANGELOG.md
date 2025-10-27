@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.5.1 (2025-10-27)
+
+Full Changelog: [v1.5.0...v1.5.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.5.0...v1.5.1)
+
 ## 1.5.0 (2025-10-22)
 
 Full Changelog: [v1.3.0...v1.5.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.3.0...v1.5.0)
