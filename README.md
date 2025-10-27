@@ -385,6 +385,18 @@ const client = new Turbopuffer({
 });
 ```
 
+### Compression
+
+By default the library will compress all requests and responses with gzip. When the client is CPU constrained or when not limited by bandwidth you may want to disable compression. You can disable compression by setting `compression: false`
+
+```ts
+import Turbopuffer from 'npm:@turbopuffer/turbopuffer';
+
+const client = new Turbopuffer({
+  compression: false,
+});
+```
+
 ## Frequently Asked Questions
 
 ## Semantic versioning
