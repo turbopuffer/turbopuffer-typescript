@@ -154,9 +154,10 @@ export type AttributeSchema = AttributeType | AttributeSchemaConfig;
  */
 export interface AttributeSchemaConfig {
   /**
-   * Whether to create an approximate nearest neighbor index for the attribute.
+   * Whether to create an approximate nearest neighbor index for the attribute. Can
+   * be a boolean or a detailed configuration object.
    */
-  ann?: boolean;
+  ann?: boolean | AttributeSchemaConfig.AnnConfig;
 
   /**
    * Whether or not the attributes can be used in filters.
@@ -181,6 +182,18 @@ export interface AttributeSchemaConfig {
    * [DIMS]f16, [DIMS]f32.
    */
   type?: AttributeType;
+}
+
+export namespace AttributeSchemaConfig {
+  /**
+   * Configuration options for ANN (Approximate Nearest Neighbor) indexing.
+   */
+  export interface AnnConfig {
+    /**
+     * A function used to calculate vector similarity.
+     */
+    distance_metric?: NamespacesAPI.DistanceMetric;
+  }
 }
 
 /**
