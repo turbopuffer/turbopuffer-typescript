@@ -136,6 +136,13 @@ export type AttributeSchema = AttributeType | AttributeSchemaConfig;
  */
 export interface AttributeSchemaConfig {
   /**
+   * The data type of the attribute. Valid values: string, int, uint, float, uuid,
+   * datetime, bool, []string, []int, []uint, []float, []uuid, []datetime, []bool,
+   * [DIMS]f16, [DIMS]f32.
+   */
+  type: AttributeType;
+
+  /**
    * Whether to create an approximate nearest neighbor index for the attribute. Can
    * be a boolean or a detailed configuration object.
    */
@@ -157,13 +164,6 @@ export interface AttributeSchemaConfig {
    * Whether to enable Regex filters on this attribute.
    */
   regex?: boolean;
-
-  /**
-   * The data type of the attribute. Valid values: string, int, uint, float, uuid,
-   * datetime, bool, []string, []int, []uint, []float, []uuid, []datetime, []bool,
-   * [DIMS]f16, [DIMS]f32.
-   */
-  type?: AttributeType;
 }
 
 export namespace AttributeSchemaConfig {
