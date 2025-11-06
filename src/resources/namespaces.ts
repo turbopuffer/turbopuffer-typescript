@@ -343,6 +343,14 @@ export interface NamespaceMetadata {
   created_at: string;
 
   /**
+   * Indicates that the namespace is encrypted with a customer-managed encryption key
+   * (CMEK).
+   */
+  encryption: NamespaceMetadata.Sse | NamespaceMetadata.Cmek;
+
+  index: NamespaceMetadata.Status | NamespaceMetadata.UnionMember1;
+
+  /**
    * The schema of the namespace.
    */
   schema: { [key: string]: AttributeSchemaConfig };
@@ -351,23 +359,22 @@ export interface NamespaceMetadata {
    * The timestamp when the namespace was last modified by a write operation.
    */
   updated_at: string;
-
-  /**
-   * Indicates that the namespace is encrypted with a customer-managed encryption key
-   * (CMEK).
-   */
-  encryption?: boolean | NamespaceMetadata.Cmek;
-
-  index?: NamespaceMetadata.Status | NamespaceMetadata.UnionMember1;
 }
 
 export namespace NamespaceMetadata {
+  export interface Sse {
+    /**
+     * Always true. Indicates that the namespace is encrypted with SSE.
+     */
+    sse: boolean;
+  }
+
   /**
    * Indicates that the namespace is encrypted with a customer-managed encryption key
    * (CMEK).
    */
   export interface Cmek {
-    cmek?: Cmek.Cmek;
+    cmek: Cmek.Cmek;
   }
 
   export namespace Cmek {
