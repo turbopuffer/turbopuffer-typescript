@@ -348,7 +348,7 @@ export interface NamespaceMetadata {
    */
   encryption: NamespaceMetadata.Sse | NamespaceMetadata.Cmek;
 
-  index: NamespaceMetadata.Status | NamespaceMetadata.UnionMember1;
+  index: NamespaceMetadata.IndexUpToDate | NamespaceMetadata.IndexUpdating;
 
   /**
    * The schema of the namespace.
@@ -386,11 +386,11 @@ export namespace NamespaceMetadata {
     }
   }
 
-  export interface Status {
+  export interface IndexUpToDate {
     status: 'up-to-date';
   }
 
-  export interface UnionMember1 {
+  export interface IndexUpdating {
     status: 'updating';
 
     /**
