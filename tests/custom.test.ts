@@ -477,7 +477,9 @@ test('schema and metadata', async () => {
     },
     vector: {
       type: '[2]f16',
-      ann: true,
+      ann: {
+        distance_metric: 'cosine_distance',
+      },
     },
   };
 
