@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.6.0 (2025-11-06)
+
+Full Changelog: [v1.5.1...v1.6.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.5.1...v1.6.0)
+
+### Features
+
+* Add vector attribute schema to metadata endpoint ([cf43266](https://github.com/turbopuffer/turbopuffer-typescript/commit/cf4326678d8199d653723e892cdf67c9c6364a74))
+* Make `type` required on `AttributeSchemaConfig` ([b00d23e](https://github.com/turbopuffer/turbopuffer-typescript/commit/b00d23ef23733e5eeb9db32f0a03772ae4f27cf2))
+* openapi: Fix stainless warnings ([6cba3a6](https://github.com/turbopuffer/turbopuffer-typescript/commit/6cba3a6c75574a9a8ec1129e425a3e1250d20216))
+* openapi: name variants of `NamespaceMetadata.index` ([42f18a6](https://github.com/turbopuffer/turbopuffer-typescript/commit/42f18a65d8994a5e5c43fd5d6b83ba1213307c2e))
+
 ## 1.5.1 (2025-10-27)
 
 Full Changelog: [v1.5.0...v1.5.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.5.0...v1.5.1)
