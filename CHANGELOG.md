@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.7.0 (2025-11-13)
+
+Full Changelog: [v1.6.0...v1.7.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.6.0...v1.7.0)
+
+### Features
+
+* Allow for a CMEK key to be specified in copy_from_namespace ([99ea095](https://github.com/turbopuffer/turbopuffer-typescript/commit/99ea095e5ecfd151191d7c870db5daa7501fb822))
+
 ## 1.6.0 (2025-11-06)
 
 Full Changelog: [v1.5.1...v1.6.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.5.1...v1.6.0)
