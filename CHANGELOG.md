@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.7.0 (2025-11-17)
+
+Full Changelog: [v1.6.0...v1.7.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.6.0...v1.7.0)
+
+### Features
+
+* Allow for a CMEK key to be specified in copy_from_namespace ([99ea095](https://github.com/turbopuffer/turbopuffer-typescript/commit/99ea095e5ecfd151191d7c870db5daa7501fb822))
+* spec: add support for cross-org CFN to SDKs ([ed7f236](https://github.com/turbopuffer/turbopuffer-typescript/commit/ed7f2369e3f0ec1b454768a5b6291a47550a7320))
+
 ## 1.6.0 (2025-11-06)
 
 Full Changelog: [v1.5.1...v1.6.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.5.1...v1.6.0)
