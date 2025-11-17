@@ -997,11 +997,9 @@ export interface NamespaceWriteParams {
   namespace?: string;
 
   /**
-   * Body param: The namespace to copy documents from. When copying, you can
-   * optionally specify an `encryption` parameter to encrypt the destination
-   * namespace with a different CMEK key than the source namespace.
+   * Body param: The namespace to copy documents from.
    */
-  copy_from_namespace?: string;
+  copy_from_namespace?: string | NamespaceWriteParams.CopyFromNamespaceConfig;
 
   /**
    * Body param: The filter specifying which documents to delete.
@@ -1082,6 +1080,18 @@ export interface NamespaceWriteParams {
 }
 
 export namespace NamespaceWriteParams {
+  export interface CopyFromNamespaceConfig {
+    /**
+     * An API key for the organization containing the source namespace
+     */
+    source_api_key: string;
+
+    /**
+     * The namespace to copy documents from.
+     */
+    source_namespace: string;
+  }
+
   /**
    * The encryption configuration for a namespace.
    */
