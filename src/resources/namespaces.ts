@@ -244,6 +244,12 @@ export type FullTextSearch = boolean | FullTextSearchConfig;
  */
 export interface FullTextSearchConfig {
   /**
+   * Whether to convert each non-ASCII character in a token to its ASCII equivalent,
+   * if one exists (e.g., à -> a). Defaults to `false` (i.e., no folding).
+   */
+  ascii_folding?: boolean;
+
+  /**
    * The `b` document length normalization parameter for BM25. Defaults to `0.75`.
    */
   b?: number;
