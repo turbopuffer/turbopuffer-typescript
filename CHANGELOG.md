@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.8.0 (2025-11-25)
+
+Full Changelog: [v1.7.0...v1.8.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.7.0...v1.8.0)
+
+### Features
+
+* site: add ascii_folding to docs and SDKs ([e06dffd](https://github.com/turbopuffer/turbopuffer-typescript/commit/e06dffd44abcb90c6a29c137c4d84778c45b04ab))
+
 ## 1.7.0 (2025-11-17)
 
 Full Changelog: [v1.6.0...v1.7.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.6.0...v1.7.0)
