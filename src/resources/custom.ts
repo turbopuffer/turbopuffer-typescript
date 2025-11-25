@@ -2,7 +2,7 @@
 
 import { Bm25ClauseParams, ContainsAllTokensFilterParams } from './namespaces';
 
-export type AggregateBy = ['Count'] | ['Count', string];
+export type AggregateBy = ['Count'] | ['Sum', string] | ['Count', string];
 export type Expr = ExprRefNew;
 export type ExprRefNew = { $ref_new: string };
 export type Filter =
@@ -31,6 +31,8 @@ export type Filter =
   | [string, 'ContainsAllTokens', string[]]
   | [string, 'ContainsAllTokens', string, ContainsAllTokensFilterParams]
   | [string, 'ContainsAllTokens', string[], ContainsAllTokensFilterParams]
+  | [string, 'ContainsTokenSequence', string]
+  | [string, 'ContainsTokenSequence', string[]]
   | ['Not', Filter]
   | ['And', Filter[]]
   | ['Or', Filter[]];
