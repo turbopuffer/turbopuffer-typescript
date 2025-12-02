@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.9.1 (2025-12-02)
+
+Full Changelog: [v1.9.0...v1.9.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.9.0...v1.9.1)
+
+### Documentation
+
+* add cross-region copy_from_namespace to write API docs ([7edf5ac](https://github.com/turbopuffer/turbopuffer-typescript/commit/7edf5acddeffa094a58234709047d597d0c28bf9))
+
 ## 1.9.0 (2025-12-02)
 
 Full Changelog: [v1.8.0...v1.9.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.8.0...v1.9.0)
