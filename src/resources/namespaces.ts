@@ -1127,14 +1127,19 @@ export interface NamespaceWriteParams {
 export namespace NamespaceWriteParams {
   export interface CopyFromNamespaceConfig {
     /**
-     * An API key for the organization containing the source namespace
-     */
-    source_api_key: string;
-
-    /**
      * The namespace to copy documents from.
      */
     source_namespace: string;
+
+    /**
+     * (Optional) An API key for the organization containing the source namespace
+     */
+    source_api_key?: string;
+
+    /**
+     * (Optional) The region of the source namespace.
+     */
+    source_region?: string;
   }
 
   /**
