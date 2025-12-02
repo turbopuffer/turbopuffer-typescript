@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.9.0 (2025-12-02)
+
+Full Changelog: [v1.8.0...v1.9.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.8.0...v1.9.0)
+
+### Features
+
+* sdks: add &lt;patch|delete&gt;_by_filter_allow_partial options ([21ecf04](https://github.com/turbopuffer/turbopuffer-typescript/commit/21ecf04cd0111d532f13a41bd1becd11ca35047e))
+
+
+### Chores
+
+* **client:** fix logger property type ([d2c8c17](https://github.com/turbopuffer/turbopuffer-typescript/commit/d2c8c1704e6dbf2d627e34212f5bb8cf5d9eedb8))
+* **internal:** upgrade eslint ([f425da8](https://github.com/turbopuffer/turbopuffer-typescript/commit/f425da86d8f8ff5a96e9ca7ce4c665de3c7c98f4))
+
 ## 1.8.0 (2025-11-25)
 
 Full Changelog: [v1.7.0...v1.8.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.7.0...v1.8.0)
