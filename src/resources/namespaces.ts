@@ -746,6 +746,11 @@ export interface NamespaceWriteResponse {
   rows_patched?: number;
 
   /**
+   * Whether more documents match the filter for partial operations.
+   */
+  rows_remaining?: boolean;
+
+  /**
    * The number of rows upserted by the write request.
    */
   rows_upserted?: number;
@@ -1037,6 +1042,11 @@ export interface NamespaceWriteParams {
   delete_by_filter?: Filter;
 
   /**
+   * Body param: Allow partial completion when filter matches too many documents.
+   */
+  delete_by_filter_allow_partial?: boolean;
+
+  /**
    * Body param: A condition evaluated against the current value of each document
    * targeted by a delete write. Only documents that pass the condition are deleted.
    */
@@ -1067,6 +1077,11 @@ export interface NamespaceWriteParams {
    * Body param: The patch and filter specifying which documents to patch.
    */
   patch_by_filter?: NamespaceWriteParams.PatchByFilter;
+
+  /**
+   * Body param: Allow partial completion when filter matches too many documents.
+   */
+  patch_by_filter_allow_partial?: boolean;
 
   /**
    * Body param: A list of documents in columnar format. Each key is a column name,
