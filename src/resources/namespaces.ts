@@ -1108,12 +1108,12 @@ export namespace NamespaceWriteParams {
     source_namespace: string;
 
     /**
-     * (Optional) An API key for the organization containing the source namespace
+     * An API key for the organization containing the source namespace
      */
     source_api_key?: string;
 
     /**
-     * (Optional) The region of the source namespace.
+     * The region of the source namespace.
      */
     source_region?: string;
   }
