@@ -1165,7 +1165,11 @@ function randomVector(dims: number) {
 }
 
 test('compression', async () => {
-  const ns = tpuf.namespace(testNamespacePrefix + 'compression');
+  const tpufWithCompression = tpuf.withOptions({
+    compression: true,
+  });
+
+  const ns = tpufWithCompression.namespace(testNamespacePrefix + 'compression');
 
   try {
     await ns.deleteAll();
@@ -1204,12 +1208,8 @@ test('compression', async () => {
   }
 });
 
-test('disable_compression', async () => {
-  const tpufNoCompression = tpuf.withOptions({
-    compression: false,
-  });
-
-  const ns = tpufNoCompression.namespace(testNamespacePrefix + 'disable_compression');
+test('default_compression_disabled', async () => {
+  const ns = tpuf.namespace(testNamespacePrefix + 'default_compression_disabled');
 
   try {
     await ns.deleteAll();
