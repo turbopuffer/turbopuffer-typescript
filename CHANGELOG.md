@@ -1,5 +1,28 @@
 # Changelog
 
+## 1.10.0 (2025-12-08)
+
+Full Changelog: [v1.9.1...v1.10.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.9.1...v1.10.0)
+
+### Features
+
+* add word_v3 to the spec ([26740b3](https://github.com/turbopuffer/turbopuffer-typescript/commit/26740b3a0d32c22e4686433e0c5726fc896a3c7f))
+* disable compression by default ([#153](https://github.com/turbopuffer/turbopuffer-typescript/issues/153)) ([89f5d40](https://github.com/turbopuffer/turbopuffer-typescript/commit/89f5d406dadcfb6d2f483e0c57414afa4de21c42))
+* make word_v3 the default tokenizer ([#154](https://github.com/turbopuffer/turbopuffer-typescript/issues/154)) ([892913a](https://github.com/turbopuffer/turbopuffer-typescript/commit/892913a0a6ef75e2bcdc03f49ce148a4f58983a7))
+
+
+### Bug Fixes
+
+* **mcp:** correct code tool API endpoint ([1701b95](https://github.com/turbopuffer/turbopuffer-typescript/commit/1701b95571ac932f69f95120c6418944953683fd))
+* **mcp:** return correct lines on typescript errors ([ccc47d7](https://github.com/turbopuffer/turbopuffer-typescript/commit/ccc47d7e85fe9978b7417ada5c1175454d5642b3))
+
+
+### Chores
+
+* codegen updates ([6fc981e](https://github.com/turbopuffer/turbopuffer-typescript/commit/6fc981ebe44b4c463bfddc068541baaf4c7b428f))
+* **internal:** codegen related update ([9290e4b](https://github.com/turbopuffer/turbopuffer-typescript/commit/9290e4b7492dc28dcac8b34cc3d54373bd460597))
+* **internal:** codegen related update ([86ec03c](https://github.com/turbopuffer/turbopuffer-typescript/commit/86ec03c900b817d6226872b8edc6f1c40a848ddb))
+
 ## 1.9.1 (2025-12-02)
 
 Full Changelog: [v1.9.0...v1.9.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.9.0...v1.9.1)
