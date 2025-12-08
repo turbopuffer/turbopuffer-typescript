@@ -129,7 +129,7 @@ export interface ClientOptions {
   /**
    * Whether to compress the request body and accept compressed responses.
    *
-   * Defaults to true.
+   * Defaults to false.
    */
   compression?: boolean | undefined;
   /**
@@ -269,7 +269,7 @@ export class Turbopuffer {
       parseLogLevel(readEnv('TURBOPUFFER_LOG'), "process.env['TURBOPUFFER_LOG']", this) ??
       defaultLogLevel;
     this.fetchOptions = options.fetchOptions;
-    this.compression = options.compression === undefined ? true : options.compression;
+    this.compression = options.compression === undefined ? false : options.compression;
     this.maxRetries = options.maxRetries ?? 4;
     this.fetch =
       options.fetch ??
