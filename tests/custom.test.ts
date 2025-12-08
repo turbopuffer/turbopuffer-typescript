@@ -407,7 +407,7 @@ test('schema and metadata', async () => {
         remove_stopwords: true,
         ascii_folding: false,
         case_sensitive: false,
-        tokenizer: 'word_v2',
+        tokenizer: 'word_v3',
       },
     },
     tags: {
@@ -422,7 +422,7 @@ test('schema and metadata', async () => {
         remove_stopwords: false,
         ascii_folding: false,
         case_sensitive: true,
-        tokenizer: 'word_v2',
+        tokenizer: 'word_v3',
       },
     },
     private: {
@@ -457,7 +457,7 @@ test('schema and metadata', async () => {
         remove_stopwords: true,
         ascii_folding: false,
         case_sensitive: false,
-        tokenizer: 'word_v2',
+        tokenizer: 'word_v3',
       },
     },
     tags: {
@@ -472,7 +472,7 @@ test('schema and metadata', async () => {
         remove_stopwords: false,
         ascii_folding: false,
         case_sensitive: true,
-        tokenizer: 'word_v2',
+        tokenizer: 'word_v3',
       },
     },
     private: {
@@ -562,7 +562,7 @@ test('update_schema', async () => {
         remove_stopwords: false,
         ascii_folding: false,
         case_sensitive: true,
-        tokenizer: 'word_v2',
+        tokenizer: 'word_v3',
       },
     },
     private: {
@@ -592,7 +592,7 @@ test('update_schema', async () => {
           stemming: false,
           remove_stopwords: false,
           case_sensitive: true,
-          tokenizer: 'word_v2',
+          tokenizer: 'word_v3',
         },
       },
       private: {
@@ -620,7 +620,7 @@ test('update_schema', async () => {
         remove_stopwords: false,
         ascii_folding: false,
         case_sensitive: true,
-        tokenizer: 'word_v2',
+        tokenizer: 'word_v3',
       },
     },
     private: {
