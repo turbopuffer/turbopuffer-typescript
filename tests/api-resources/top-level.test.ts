@@ -25,7 +25,11 @@ describe('top level methods', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.namespaces(
-        { cursor: 'cursor', page_size: 1, prefix: 'prefix' },
+        {
+          cursor: 'cursor',
+          page_size: 1,
+          prefix: 'prefix',
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Turbopuffer.NotFoundError);
