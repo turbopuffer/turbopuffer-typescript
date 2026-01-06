@@ -203,7 +203,9 @@ const response = await client.namespaces({ prefix: 'foo' }).asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: namespaces, response: raw } = await client.namespaces({ prefix: 'foo' }).withResponse();
+const { data: namespaces, response: raw } = await client
+  .namespaces({ prefix: 'foo' })
+  .withResponse();
 console.log(raw.headers.get('X-My-Header'));
 for await (const namespaceSummary of namespaces) {
   console.log(namespaceSummary.id);

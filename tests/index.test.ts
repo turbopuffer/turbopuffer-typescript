@@ -89,7 +89,11 @@ describe('instantiate client', () => {
         error: jest.fn(),
       };
 
-      const client = new Turbopuffer({ logger: logger, logLevel: 'debug', apiKey: 'tpuf_A1...' });
+      const client = new Turbopuffer({
+        logger: logger,
+        logLevel: 'debug',
+        apiKey: 'tpuf_A1...',
+      });
 
       await forceAPIResponseForClient(client);
       expect(debugMock).toHaveBeenCalled();
@@ -109,7 +113,11 @@ describe('instantiate client', () => {
         error: jest.fn(),
       };
 
-      const client = new Turbopuffer({ logger: logger, logLevel: 'info', apiKey: 'tpuf_A1...' });
+      const client = new Turbopuffer({
+        logger: logger,
+        logLevel: 'info',
+        apiKey: 'tpuf_A1...',
+      });
 
       await forceAPIResponseForClient(client);
       expect(debugMock).not.toHaveBeenCalled();
@@ -159,7 +167,11 @@ describe('instantiate client', () => {
       };
 
       process.env['TURBOPUFFER_LOG'] = 'debug';
-      const client = new Turbopuffer({ logger: logger, logLevel: 'off', apiKey: 'tpuf_A1...' });
+      const client = new Turbopuffer({
+        logger: logger,
+        logLevel: 'off',
+        apiKey: 'tpuf_A1...',
+      });
 
       await forceAPIResponseForClient(client);
       expect(debugMock).not.toHaveBeenCalled();
@@ -175,7 +187,11 @@ describe('instantiate client', () => {
       };
 
       process.env['TURBOPUFFER_LOG'] = 'not a log level';
-      const client = new Turbopuffer({ logger: logger, logLevel: 'debug', apiKey: 'tpuf_A1...' });
+      const client = new Turbopuffer({
+        logger: logger,
+        logLevel: 'debug',
+        apiKey: 'tpuf_A1...',
+      });
       expect(client.logLevel).toBe('debug');
       expect(warnMock).not.toHaveBeenCalled();
     });
@@ -550,7 +566,11 @@ describe('retries', () => {
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
 
-    const client = new Turbopuffer({ apiKey: 'tpuf_A1...', timeout: 10, fetch: testFetch });
+    const client = new Turbopuffer({
+      apiKey: 'tpuf_A1...',
+      timeout: 10,
+      fetch: testFetch,
+    });
 
     expect(await client.request({ path: '/foo', method: 'get' })).toEqual({ a: 1 });
     expect(count).toEqual(2);
@@ -580,7 +600,11 @@ describe('retries', () => {
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
 
-    const client = new Turbopuffer({ apiKey: 'tpuf_A1...', fetch: testFetch, maxRetries: 4 });
+    const client = new Turbopuffer({
+      apiKey: 'tpuf_A1...',
+      fetch: testFetch,
+      maxRetries: 4,
+    });
 
     expect(await client.request({ path: '/foo', method: 'get' })).toEqual({ a: 1 });
 
@@ -604,7 +628,11 @@ describe('retries', () => {
       capturedRequest = init;
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
-    const client = new Turbopuffer({ apiKey: 'tpuf_A1...', fetch: testFetch, maxRetries: 4 });
+    const client = new Turbopuffer({
+      apiKey: 'tpuf_A1...',
+      fetch: testFetch,
+      maxRetries: 4,
+    });
 
     expect(
       await client.request({
@@ -666,7 +694,11 @@ describe('retries', () => {
       capturedRequest = init;
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
-    const client = new Turbopuffer({ apiKey: 'tpuf_A1...', fetch: testFetch, maxRetries: 4 });
+    const client = new Turbopuffer({
+      apiKey: 'tpuf_A1...',
+      fetch: testFetch,
+      maxRetries: 4,
+    });
 
     expect(
       await client.request({
