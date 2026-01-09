@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.10.1 (2026-01-09)
+
+Full Changelog: [v1.10.0...v1.10.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.10.0...v1.10.1)
+
+### Chores
+
+* break long lines in snippets into multiline ([195ba1a](https://github.com/turbopuffer/turbopuffer-typescript/commit/195ba1a26da70cf503b661f785a7dd35b3ca193c))
+* **internal:** codegen related update ([2ff74ae](https://github.com/turbopuffer/turbopuffer-typescript/commit/2ff74aeb19e10b8f2d3de1eb63539c20a9de2209))
+
 ## 1.10.0 (2025-12-08)
 
 Full Changelog: [v1.9.1...v1.10.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.9.1...v1.10.0)
