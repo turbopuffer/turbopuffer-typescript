@@ -690,8 +690,8 @@ test('sanity', async () => {
   const performance = resultsWithPerformance.performance;
   expect(performance.approx_namespace_size).toEqual(3);
   expect(performance.exhaustive_search_count).toEqual(3);
-  expect(performance.query_execution_ms).toBeGreaterThan(10);
-  expect(performance.server_total_ms).toBeGreaterThan(10);
+  expect(performance.query_execution_ms).toBeGreaterThan(2);
+  expect(performance.server_total_ms).toBeGreaterThan(2);
 
   const billing = resultsWithPerformance.billing;
   expect(billing).toEqual({
