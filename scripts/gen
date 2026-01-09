@@ -16,3 +16,4 @@ apigen() {
 
 echo "==> Generating code"
 apigen typescript > src/resources/custom.ts
+./node_modules/.bin/eslint --fix .
