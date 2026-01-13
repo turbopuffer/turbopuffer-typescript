@@ -862,7 +862,7 @@ export interface NamespaceMultiQueryParams {
   namespace?: string;
 
   /**
-   * Body param:
+   * Body param
    */
   queries: Array<Query>;
 
@@ -1053,7 +1053,7 @@ export interface NamespaceWriteParams {
   delete_condition?: Filter;
 
   /**
-   * Body param:
+   * Body param
    */
   deletes?: Array<ID>;
 
@@ -1096,7 +1096,7 @@ export interface NamespaceWriteParams {
   patch_condition?: Filter;
 
   /**
-   * Body param:
+   * Body param
    */
   patch_rows?: Array<Row>;
 
@@ -1119,7 +1119,7 @@ export interface NamespaceWriteParams {
   upsert_condition?: Filter;
 
   /**
-   * Body param:
+   * Body param
    */
   upsert_rows?: Array<Row>;
 }
