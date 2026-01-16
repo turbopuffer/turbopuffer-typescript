@@ -8,4 +8,5 @@ dist-deno
 /*.tgz
 .idea/
 .eslintcache
-
+dist-bundle
+*.mcpb
