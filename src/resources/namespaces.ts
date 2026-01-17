@@ -736,6 +736,18 @@ export interface NamespaceWriteResponse {
   status: 'OK';
 
   /**
+   * The IDs of documents that were deleted. Only included when `return_affected_ids`
+   * is true and at least one document was deleted.
+   */
+  deleted_ids?: Array<ID>;
+
+  /**
+   * The IDs of documents that were patched. Only included when `return_affected_ids`
+   * is true and at least one document was patched.
+   */
+  patched_ids?: Array<ID>;
+
+  /**
    * The number of rows deleted by the write request.
    */
   rows_deleted?: number;
@@ -754,6 +766,12 @@ export interface NamespaceWriteResponse {
    * The number of rows upserted by the write request.
    */
   rows_upserted?: number;
+
+  /**
+   * The IDs of documents that were upserted. Only included when
+   * `return_affected_ids` is true and at least one document was upserted.
+   */
+  upserted_ids?: Array<ID>;
 }
 
 export interface NamespaceDeleteAllParams {
@@ -862,7 +880,7 @@ export interface NamespaceMultiQueryParams {
   namespace?: string;
 
   /**
-   * Body param:
+   * Body param
    */
   queries: Array<Query>;
 
@@ -1053,7 +1071,7 @@ export interface NamespaceWriteParams {
   delete_condition?: Filter;
 
   /**
-   * Body param:
+   * Body param
    */
   deletes?: Array<ID>;
 
@@ -1096,9 +1114,16 @@ export interface NamespaceWriteParams {
   patch_condition?: Filter;
 
   /**
-   * Body param:
+   * Body param
    */
   patch_rows?: Array<Row>;
+
+  /**
+   * Body param: If true, return the IDs of affected rows (deleted, patched,
+   * upserted) in the response. For filtered and conditional writes, only IDs for
+   * writes that succeeded will be included.
+   */
+  return_affected_ids?: boolean;
 
   /**
    * Body param: The schema of the attributes attached to the documents.
@@ -1119,7 +1144,7 @@ export interface NamespaceWriteParams {
   upsert_condition?: Filter;
 
   /**
-   * Body param:
+   * Body param
    */
   upsert_rows?: Array<Row>;
 }
