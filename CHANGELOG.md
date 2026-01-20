@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.11.0 (2026-01-20)
+
+Full Changelog: [v1.10.1...v1.11.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.10.1...v1.11.0)
+
+### Features
+
+* [TPUF-1097] tpuf: return failed IDs for conditional writes ([787db7f](https://github.com/turbopuffer/turbopuffer-typescript/commit/787db7fa308949c9b260f35316339917237f1dae))
+
+
+### Chores
+
+* configure new SDK language ([746b7d0](https://github.com/turbopuffer/turbopuffer-typescript/commit/746b7d09ba81b7fd59e0a5de8f3d7562214bfae4))
+* fix typo in descriptions ([056c951](https://github.com/turbopuffer/turbopuffer-typescript/commit/056c9518f2ef106f87550ead2fc85819de7d13ee))
+* **internal:** codegen related update ([698b173](https://github.com/turbopuffer/turbopuffer-typescript/commit/698b17350ba15b628f48e2ad725459718995cb5f))
+* **internal:** codegen related update ([6d6ca04](https://github.com/turbopuffer/turbopuffer-typescript/commit/6d6ca04bb0cbb29b9c46665e600b5a011a33bec3))
+* **internal:** configure MCP Server hosting ([bf0e8e5](https://github.com/turbopuffer/turbopuffer-typescript/commit/bf0e8e53a4c212b5481c806d92a5478487585712))
+* **internal:** update `actions/checkout` version ([d0dcfeb](https://github.com/turbopuffer/turbopuffer-typescript/commit/d0dcfeb8f56c72a867d5539edc8ca612192c9ddb))
+* **internal:** upgrade babel, qs, js-yaml ([7905dc0](https://github.com/turbopuffer/turbopuffer-typescript/commit/7905dc091437211485133f6b07765b4c456a9d61))
+
 ## 1.10.1 (2026-01-09)
 
 Full Changelog: [v1.10.0...v1.10.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.10.0...v1.10.1)
