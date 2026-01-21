@@ -48,5 +48,6 @@ export type RankByText =
   | ['Sum', RankByText[]]
   | ['Max', RankByText[]]
   | ['Product', number, RankByText]
-  | ['Product', RankByText, number];
+  | ['Product', RankByText, number]
+  | Filter;
 export type RankByVector = [string, 'ANN', number[]] | [string, 'kNN', number[]];
