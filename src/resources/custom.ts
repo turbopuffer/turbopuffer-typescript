@@ -49,4 +49,4 @@ export type RankByText =
   | ['Max', RankByText[]]
   | ['Product', number, RankByText]
   | ['Product', RankByText, number];
-export type RankByVector = [string, 'ANN', number[]];
+export type RankByVector = [string, 'ANN', number[]] | [string, 'kNN', number[]];
