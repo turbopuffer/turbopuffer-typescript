@@ -21,7 +21,7 @@ export const newMcpServer = () =>
   new McpServer(
     {
       name: 'turbopuffer_turbopuffer_api',
-      version: '1.11.0',
+      version: '1.12.0',
     },
     { capabilities: { tools: {}, logging: {} } },
   );
