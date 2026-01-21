@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.12.0 (2026-01-21)
+
+Full Changelog: [v1.11.0...v1.12.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.11.0...v1.12.0)
+
+### Features
+
+* Apigen integration ([6386097](https://github.com/turbopuffer/turbopuffer-typescript/commit/6386097a4d1d6c6abc27e453de21463f406609b2))
+
 ## 1.11.0 (2026-01-20)
 
 Full Changelog: [v1.10.1...v1.11.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.10.1...v1.11.0)
