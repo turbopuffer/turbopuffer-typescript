@@ -8,8 +8,6 @@ on:
 jobs:
   check-pr-author:
     runs-on: ubuntu-latest
-    # Only run for PRs targeting main (belt-and-suspenders with branches filter)
-    if: github.event.pull_request.base.ref == 'main'
     steps:
       - name: Check if PR target is allowed
         run: |
