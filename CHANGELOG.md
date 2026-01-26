@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.13.0 (2026-01-26)
+
+Full Changelog: [v1.12.0...v1.13.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.12.0...v1.13.0)
+
+### Features
+
+* Add instructions to MCP server config ([2a603cf](https://github.com/turbopuffer/turbopuffer-typescript/commit/2a603cfe8e8eff8fa1bbf879d60598ded56ffa76))
+* spec: use OIDC for publishing TypeScript package ([0320473](https://github.com/turbopuffer/turbopuffer-typescript/commit/03204736f18d5966bd1b69708447dae72d607b03))
+
+
+### Chores
+
+* **ci:** upgrade `actions/github-script` ([3ba3472](https://github.com/turbopuffer/turbopuffer-typescript/commit/3ba34728fd85a6818558669c293910d5ceb4caa8))
+* **internal:** update lock file ([2dd4d34](https://github.com/turbopuffer/turbopuffer-typescript/commit/2dd4d34d078fcf9ac7d1fe7458fddf68b1fe1c77))
+* regenerate custom types ([5544f20](https://github.com/turbopuffer/turbopuffer-typescript/commit/5544f203576e0fd338f8e0f6e27fa86f75025619))
+
 ## 1.12.0 (2026-01-21)
 
 Full Changelog: [v1.11.0...v1.12.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.11.0...v1.12.0)
