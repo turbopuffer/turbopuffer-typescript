@@ -36,10 +36,11 @@ export type Filter =
   | ['Not', Filter]
   | ['And', Filter[]]
   | ['Or', Filter[]];
-export type RankBy = RankByVector | RankByText | RankByAttribute | RankByAttributes;
+export type RankBy = RankByVector | RankByKnn | RankByText | RankByAttribute | RankByAttributes;
 export type RankByAttribute = [string, RankByAttributeOrder];
 export type RankByAttributeOrder = 'asc' | 'desc';
 export type RankByAttributes = RankByAttribute[];
+export type RankByKnn = [string, 'kNN', number[]];
 export type RankByText =
   | [string, 'BM25', string]
   | [string, 'BM25', string[]]
@@ -50,4 +51,4 @@ export type RankByText =
   | ['Product', number, RankByText]
   | ['Product', RankByText, number]
   | Filter;
-export type RankByVector = [string, 'ANN', number[]] | [string, 'kNN', number[]];
+export type RankByVector = [string, 'ANN', number[]];
