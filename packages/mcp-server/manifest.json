@@ -1,7 +1,7 @@
 {
   "dxt_version": "0.2",
   "name": "@turbopuffer/turbopuffer-mcp",
-  "version": "1.13.0",
+  "version": "1.14.0",
   "description": "The official MCP Server for the Turbopuffer API",
   "author": {
     "name": "Turbopuffer",
