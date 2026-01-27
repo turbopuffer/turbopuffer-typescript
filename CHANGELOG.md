@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.14.0 (2026-01-27)
+
+Full Changelog: [v1.13.0...v1.14.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.13.0...v1.14.0)
+
+### Features
+
+* export resource types from main entry point ([#163](https://github.com/turbopuffer/turbopuffer-typescript/issues/163)) ([36a94d6](https://github.com/turbopuffer/turbopuffer-typescript/commit/36a94d6b51df9a75a30afb05d9fd201c9a9f0ac0))
+
 ## 1.13.0 (2026-01-26)
 
 Full Changelog: [v1.12.0...v1.13.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.12.0...v1.13.0)
