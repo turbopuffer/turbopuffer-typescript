@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.14.4 (2026-01-27)
+
+Full Changelog: [v1.14.3...v1.14.4](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.14.3...v1.14.4)
+
+### Bug Fixes
+
+* unset NODE_AUTH_TOKEN ([4c9fad3](https://github.com/turbopuffer/turbopuffer-typescript/commit/4c9fad3981b37f610d8e80121f7f69e028d3e7ec))
+
 ## 1.14.3 (2026-01-27)
 
 Full Changelog: [v1.14.2...v1.14.3](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.14.2...v1.14.3)
