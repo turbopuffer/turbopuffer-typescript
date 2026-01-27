@@ -2,7 +2,7 @@
 
 import { McpTool, Metadata, ToolCallResult, asErrorResult, asTextContentResult } from './types';
 import { Tool } from '@modelcontextprotocol/sdk/types.js';
-import { readEnv, readEnvOrError } from './server';
+import { readEnv, requireValue } from './server';
 import { WorkerInput, WorkerOutput } from './code-tool-types';
 import { Turbopuffer } from '@turbopuffer/turbopuffer';
 
@@ -75,7 +75,10 @@ export function codeTool(): McpTool {
         ...(stainlessAPIKey && { Authorization: stainlessAPIKey }),
         'Content-Type': 'application/json',
         client_envs: JSON.stringify({
-          TURBOPUFFER_API_KEY: readEnvOrError('TURBOPUFFER_API_KEY') ?? client.apiKey ?? undefined,
+          TURBOPUFFER_API_KEY: requireValue(
+            readEnv('TURBOPUFFER_API_KEY') ?? client.apiKey,
+            'set TURBOPUFFER_API_KEY environment variable or provide apiKey client option',
+          ),
           TURBOPUFFER_REGION: readEnv('TURBOPUFFER_REGION') ?? client.region ?? undefined,
           TURBOPUFFER_BASE_URL: readEnv('TURBOPUFFER_BASE_URL') ?? client.baseURL ?? undefined,
         }),
