@@ -8,6 +8,9 @@ It is generated with [Stainless](https://www.stainless.com/).
 
 ## MCP Server
 
+> [!WARNING]
+> This MCP server is in beta. You may run into rough edges and limitations.
+
 Use the turbopuffer MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.
 
 [![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=%40turbopuffer%2Fturbopuffer-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIkB0dXJib3B1ZmZlci90dXJib3B1ZmZlci1tY3AiXX0)
