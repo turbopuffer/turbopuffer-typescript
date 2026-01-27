@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.14.5 (2026-01-27)
+
+Full Changelog: [v1.14.4...v1.14.5](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.14.4...v1.14.5)
+
+### Bug Fixes
+
+* add MCP server beta warning ([7147331](https://github.com/turbopuffer/turbopuffer-typescript/commit/71473316275ee39f6e1a148c7e99a720171d4bc6))
+
+
+### Chores
+
+* retrigger npm publishing ([eab6136](https://github.com/turbopuffer/turbopuffer-typescript/commit/eab6136237d1d2cb07b4c42b95eb3a33ecf6482d))
+
 ## 1.14.4 (2026-01-27)
 
 Full Changelog: [v1.14.3...v1.14.4](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.14.3...v1.14.4)
