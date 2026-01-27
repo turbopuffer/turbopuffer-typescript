@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.14.3 (2026-01-27)
+
+Full Changelog: [v1.14.2...v1.14.3](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.14.2...v1.14.3)
+
+### Bug Fixes
+
+* update npm registry URL (again) ([acc691a](https://github.com/turbopuffer/turbopuffer-typescript/commit/acc691ae3820dc99817e2e482d1ce274573af782))
+
 ## 1.14.2 (2026-01-27)
 
 Full Changelog: [v1.14.1...v1.14.2](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.14.1...v1.14.2)
