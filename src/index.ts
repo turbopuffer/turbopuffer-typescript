@@ -21,3 +21,6 @@ export {
   PermissionDeniedError,
   UnprocessableEntityError,
 } from './core/error';
+
+// Re-export custom types for convenient access (Filter, RankBy, etc.)
+export * from './resources/custom';
