@@ -65,5 +65,10 @@ fi
 # Install OIDC compatible npm version
 npm install --prefix ../oidc/ npm@11.6.2
 
+../oidc/node_modules/.bin/npm config list -l
+
+# TODO(benesch): why is this necessary?
+export NPM_CONFIG_REGISTRY=https://registry.npmjs.org
+
 # Publish with the appropriate tag
 ../oidc/node_modules/.bin/npm publish --tag "$TAG"
