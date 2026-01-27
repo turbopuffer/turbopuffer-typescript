@@ -28,12 +28,9 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Set up pnpm
-        uses: pnpm/action-setup@v4
-
       - name: Install dependencies
         run: |
-          pnpm install
+          yarn install
 
       - name: Publish to NPM
         run: |
@@ -42,7 +39,7 @@ jobs:
           else
             PATHS_RELEASED='[\".\", \"packages/mcp-server\"]'
           fi
-          pnpm tsn scripts/publish-packages.ts "{ \"paths_released\": \"$PATHS_RELEASED\" }"
+          yarn tsn scripts/publish-packages.ts "{ \"paths_released\": \"$PATHS_RELEASED\" }"
 
       - name: Upload MCP Server DXT GitHub release asset
         run: |

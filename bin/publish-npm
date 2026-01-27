@@ -9,7 +9,7 @@ elif [[ ! ${ACTIONS_ID_TOKEN_REQUEST_TOKEN:-} ]]; then
   exit 1
 fi
 
-pnpm build
+yarn build
 cd dist
 
 # Get package name and version from package.json
@@ -66,4 +66,4 @@ fi
 npm install --prefix ../oidc/ npm@11.6.2
 
 # Publish with the appropriate tag
-pnpm publish --npm-path "$(cd ../ && pwd)/oidc/node_modules/.bin/npm" --no-git-checks --tag "$TAG"
+../oidc/node_modules/.bin/npm publish --tag "$TAG"

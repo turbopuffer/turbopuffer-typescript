@@ -1,13 +1,13 @@
 ## Setting up the environment
 
-This repository uses [`pnpm`](https://pnpm.io/).
+This repository uses [`yarn@v1`](https://classic.yarnpkg.com/lang/en/docs/install).
 Other package managers may work but are not officially supported for development.
 
 To set up the repository, run:
 
 ```sh
-$ pnpm install
-$ pnpm build
+$ yarn
+$ yarn build
 ```
 
 This will install all the required dependencies and build output files to `dist/`.
@@ -32,7 +32,7 @@ All files in the `examples/` directory are not modified by the generator and can
 ```sh
 $ chmod +x examples/<your-example>.ts
 # run the example against your api
-$ pnpm tsn -T examples/<your-example>.ts
+$ yarn tsn -T examples/<your-example>.ts
 ```
 
 ## Using the repository from source
@@ -72,7 +72,7 @@ $ npx prism mock path/to/your/openapi.yml
 ```
 
 ```sh
-$ pnpm run test
+$ yarn run test
 ```
 
 ## Linting and formatting
@@ -83,13 +83,13 @@ This repository uses [prettier](https://www.npmjs.com/package/prettier) and
 To lint:
 
 ```sh
-$ pnpm lint
+$ yarn lint
 ```
 
 To format and fix all lint issues automatically:
 
 ```sh
-$ pnpm fix
+$ yarn fix
 ```
 
 ## Publishing and releases
