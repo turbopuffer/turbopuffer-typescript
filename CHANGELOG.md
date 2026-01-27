@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.14.1 (2026-01-27)
+
+Full Changelog: [v1.14.0...v1.14.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.14.0...v1.14.1)
+
+### Bug Fixes
+
+* registry URL for publishing ([6194b59](https://github.com/turbopuffer/turbopuffer-typescript/commit/6194b59a78ea4ffc68b52b1c07bc15ec7e5b05dc))
+
 ## 1.14.0 (2026-01-27)
 
 Full Changelog: [v1.13.0...v1.14.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.13.0...v1.14.0)
