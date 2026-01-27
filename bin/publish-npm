@@ -64,15 +64,10 @@ fi
 
 # Install OIDC compatible npm version
 npm install --prefix ../oidc/ npm@11.6.2
-env | grep -i npm_
-
-../oidc/node_modules/.bin/npm config list -l
 
 # TODO(benesch): why is this necessary?
 export npm_config_registry=https://registry.npmjs.org
 unset NODE_AUTH_TOKEN
-
-../oidc/node_modules/.bin/npm config list -l
 
 # Publish with the appropriate tag
 ../oidc/node_modules/.bin/npm publish --tag "$TAG"
