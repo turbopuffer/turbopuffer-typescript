@@ -43,14 +43,14 @@ For clients with a configuration JSON, it might look something like this:
 If you use Cursor, you can install the MCP server by using the button below. You will need to set your environment variables
 in Cursor's `mcp.json`, which can be found in Cursor Settings > Tools & MCP > New MCP Server.
 
-[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=%40turbopuffer%2Fturbopuffer-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIkB0dXJib3B1ZmZlci90dXJib3B1ZmZlci1tY3AiXSwiZW52Ijp7IlRVUkJPUFVGRkVSX0FQSV9LRVkiOiJTZXQgeW91ciBUVVJCT1BVRkZFUl9BUElfS0VZIGhlcmUuIiwiVFVSQk9QVUZGRVJfUkVHSU9OIjoiU2V0IHlvdXIgVFVSQk9QVUZGRVJfUkVHSU9OIGhlcmUuIiwiVFVSQk9QVUZGRVJfREVGQVVMVF9OQU1FU1BBQ0UiOiJTZXQgeW91ciBUVVJCT1BVRkZFUl9ERUZBVUxUX05BTUVTUEFDRSBoZXJlLiJ9fQ)
+[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=%40turbopuffer%2Fturbopuffer-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIkB0dXJib3B1ZmZlci90dXJib3B1ZmZlci1tY3AiXSwiZW52Ijp7IlRVUkJPUFVGRkVSX0FQSV9LRVkiOiJ0cHVmX0ExLi4uIiwiVFVSQk9QVUZGRVJfUkVHSU9OIjoiZ2NwLXVzLWNlbnRyYWwxIiwiVFVSQk9QVUZGRVJfREVGQVVMVF9OQU1FU1BBQ0UiOiJNeSBEZWZhdWx0IE5hbWVzcGFjZSJ9fQ)
 
 ### VS Code
 
 If you use MCP, you can install the MCP server by clicking the link below. You will need to set your environment variables
 in VS Code's `mcp.json`, which can be found via Command Palette > MCP: Open User Configuration.
 
-[Open VS Code](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22%40turbopuffer%2Fturbopuffer-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40turbopuffer%2Fturbopuffer-mcp%22%5D%2C%22env%22%3A%7B%22TURBOPUFFER_API_KEY%22%3A%22Set%20your%20TURBOPUFFER_API_KEY%20here.%22%2C%22TURBOPUFFER_REGION%22%3A%22Set%20your%20TURBOPUFFER_REGION%20here.%22%2C%22TURBOPUFFER_DEFAULT_NAMESPACE%22%3A%22Set%20your%20TURBOPUFFER_DEFAULT_NAMESPACE%20here.%22%7D%7D)
+[Open VS Code](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22%40turbopuffer%2Fturbopuffer-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40turbopuffer%2Fturbopuffer-mcp%22%5D%2C%22env%22%3A%7B%22TURBOPUFFER_API_KEY%22%3A%22tpuf_A1...%22%2C%22TURBOPUFFER_REGION%22%3A%22gcp-us-central1%22%2C%22TURBOPUFFER_DEFAULT_NAMESPACE%22%3A%22My%20Default%20Namespace%22%7D%7D)
 
 ### Claude Code
 
@@ -58,7 +58,7 @@ If you use Claude Code, you can install the MCP server by running the command be
 environment variables in Claude Code's `.claude.json`, which can be found in your home directory.
 
 ```
-claude mcp add turbopuffer_turbopuffer_mcp_api --env TURBOPUFFER_API_KEY="Your TURBOPUFFER_API_KEY here." TURBOPUFFER_REGION="Your TURBOPUFFER_REGION here." TURBOPUFFER_DEFAULT_NAMESPACE="Your TURBOPUFFER_DEFAULT_NAMESPACE here." -- npx -y @turbopuffer/turbopuffer-mcp
+claude mcp add turbopuffer_turbopuffer_mcp_api --env TURBOPUFFER_API_KEY="tpuf_A1..." TURBOPUFFER_REGION="gcp-us-central1" TURBOPUFFER_DEFAULT_NAMESPACE="My Default Namespace" -- npx -y @turbopuffer/turbopuffer-mcp
 ```
 
 ## Code Mode
