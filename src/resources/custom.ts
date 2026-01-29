@@ -31,6 +31,8 @@ export type Filter =
   | [string, 'ContainsAllTokens', string[]]
   | [string, 'ContainsAllTokens', string, ContainsAllTokensFilterParams]
   | [string, 'ContainsAllTokens', string[], ContainsAllTokensFilterParams]
+  | [string, 'ContainsAnyToken', string]
+  | [string, 'ContainsAnyToken', string[]]
   | [string, 'ContainsTokenSequence', string]
   | [string, 'ContainsTokenSequence', string[]]
   | ['Not', Filter]
