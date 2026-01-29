@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.14.8 (2026-01-29)
+
+Full Changelog: [v1.14.7...v1.14.8](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.14.7...v1.14.8)
+
+### Chores
+
+* trigger mcp publish ([64d6cd6](https://github.com/turbopuffer/turbopuffer-typescript/commit/64d6cd69a5ee49166df62b49260d3c3f3d73be2c))
+
 ## 1.14.7 (2026-01-29)
 
 Full Changelog: [v1.14.6...v1.14.7](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.14.6...v1.14.7)
