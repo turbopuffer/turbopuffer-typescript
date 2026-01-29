@@ -1,5 +1,27 @@
 # Changelog
 
+## 1.14.6 (2026-01-29)
+
+Full Changelog: [v1.14.5...v1.14.6](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.14.5...v1.14.6)
+
+### Bug Fixes
+
+* **docs:** fix mcp installation instructions for remote servers ([a984c85](https://github.com/turbopuffer/turbopuffer-typescript/commit/a984c85d23646ea0ec1d95c2ee06add21dba007b))
+* **mcp:** allow falling back for required env variables ([9f3b951](https://github.com/turbopuffer/turbopuffer-typescript/commit/9f3b9517dd87dc8afc7cd7b747e482e58329c7c5))
+* **publish:** use npm registry directly for trusted publishing support ([44eb53b](https://github.com/turbopuffer/turbopuffer-typescript/commit/44eb53b523dbef825894d7c870a3349fe17483a9))
+* remove duplicate registry setting ([c611e83](https://github.com/turbopuffer/turbopuffer-typescript/commit/c611e834ca7b792920854d8fd5e00ed6669408d0))
+
+
+### Chores
+
+* clean up npm publishing ([37ce6a5](https://github.com/turbopuffer/turbopuffer-typescript/commit/37ce6a510eb60410b61f1b9bc362aa29a8093f97))
+* **internal:** codegen related update ([b50fa44](https://github.com/turbopuffer/turbopuffer-typescript/commit/b50fa44af4628b266da457760b71f430400bf80d))
+* **internal:** codegen related update ([888628c](https://github.com/turbopuffer/turbopuffer-typescript/commit/888628cf993522f6125b812c605aa267ec26df4b))
+* **internal:** version bump ([30ce6e1](https://github.com/turbopuffer/turbopuffer-typescript/commit/30ce6e1a936e76ec4969623de458b8e5a0c4d54d))
+* manual updates ([fff001a](https://github.com/turbopuffer/turbopuffer-typescript/commit/fff001a5562b900298903452828fd81fc5601c95))
+* **mcp:** up tsconfig lib version to es2022 ([d3bac23](https://github.com/turbopuffer/turbopuffer-typescript/commit/d3bac23cbd51d3628d93c2898ae72d322443bed0))
+* regenerate custom types ([db9309c](https://github.com/turbopuffer/turbopuffer-typescript/commit/db9309cf3f432980bc2a1f8eaf107305fa322fca))
+
 ## 1.14.5 (2026-01-27)
 
 Full Changelog: [v1.14.4...v1.14.5](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.14.4...v1.14.5)
