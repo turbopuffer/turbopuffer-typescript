@@ -3,17 +3,14 @@ name: PR Target Check
 on:
   pull_request:
     types: [opened, synchronize, reopened, edited]
-    branches: [main]
 
 jobs:
   check-pr-author:
     runs-on: ubuntu-latest
-    # Only run for PRs targeting main (belt-and-suspenders with branches filter)
-    if: github.event.pull_request.base.ref == 'main'
     steps:
       - name: Check if PR target is allowed
         run: |
-          if [ "${{ github.event.pull_request.user.login }}" != "stainless-app[bot]" ]; then
+          if [[ "${{ github.event.pull_request.base.ref }}" = main && "${{ github.event.pull_request.user.login }}" != "stainless-app[bot]" ]]; then
             echo "❌ PR author ${{ github.event.pull_request.user.login }} is not allowed to create PRs against main"
             echo "Only stainless-app[bot] is allowed to create PRs against main"
             echo "Did you mean to create a PR against the next branch?"
