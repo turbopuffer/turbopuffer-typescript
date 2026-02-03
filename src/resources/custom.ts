@@ -2,6 +2,7 @@
 
 import Bm25ClauseParams from '../index';
 import ContainsAllTokensFilterParams from '../index';
+import ContainsAnyTokenFilterParams from '../index';
 
 export type AggregateBy = ['Count'] | ['Sum', string] | ['Count', string];
 export type Expr = ExprRefNew;
@@ -34,6 +35,8 @@ export type Filter =
   | [string, 'ContainsAllTokens', string[], ContainsAllTokensFilterParams]
   | [string, 'ContainsAnyToken', string]
   | [string, 'ContainsAnyToken', string[]]
+  | [string, 'ContainsAnyToken', string, ContainsAnyTokenFilterParams]
+  | [string, 'ContainsAnyToken', string[], ContainsAnyTokenFilterParams]
   | [string, 'ContainsTokenSequence', string]
   | [string, 'ContainsTokenSequence', string[]]
   | ['Not', Filter]
