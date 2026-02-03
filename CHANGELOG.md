@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.14.10 (2026-02-03)
+
+Full Changelog: [v1.14.9...v1.14.10](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.14.9...v1.14.10)
+
+### Bug Fixes
+
+* **client:** avoid memory leak with abort signals ([19bdb80](https://github.com/turbopuffer/turbopuffer-typescript/commit/19bdb80270dc9659976e0157b759e9e42f6b7550))
+
+
+### Chores
+
+* **client:** do not parse responses with empty content-length ([3384cb8](https://github.com/turbopuffer/turbopuffer-typescript/commit/3384cb868b90c4e9b783792b2d29d1beae515f06))
+* **internal:** support oauth authorization code flow for MCP servers ([eb9d706](https://github.com/turbopuffer/turbopuffer-typescript/commit/eb9d706a3c4bb730d6752b2f40f98f81f0bf0406))
+
 ## 1.14.9 (2026-02-01)
 
 Full Changelog: [v1.14.8...v1.14.9](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.14.8...v1.14.9)
