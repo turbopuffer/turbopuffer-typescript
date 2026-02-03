@@ -9,6 +9,7 @@ export {
   type Bm25ClauseParams,
   type Columns,
   type ContainsAllTokensFilterParams,
+  type ContainsAnyTokenFilterParams,
   type DistanceMetric,
   type FullTextSearch,
   type FullTextSearchConfig,
