@@ -224,6 +224,16 @@ export interface ContainsAllTokensFilterParams {
 }
 
 /**
+ * Additional (optional) parameters for the ContainsAnyToken filter.
+ */
+export interface ContainsAnyTokenFilterParams {
+  /**
+   * Whether to treat the last token in the query input as a literal prefix.
+   */
+  last_as_prefix?: boolean;
+}
+
+/**
  * A function used to calculate vector similarity.
  *
  * - `cosine_distance` - Defined as `1 - cosine_similarity` and ranges from 0 to 2.
@@ -1182,6 +1192,7 @@ export declare namespace Namespaces {
     type Bm25ClauseParams as Bm25ClauseParams,
     type Columns as Columns,
     type ContainsAllTokensFilterParams as ContainsAllTokensFilterParams,
+    type ContainsAnyTokenFilterParams as ContainsAnyTokenFilterParams,
     type DistanceMetric as DistanceMetric,
     type FullTextSearch as FullTextSearch,
     type FullTextSearchConfig as FullTextSearchConfig,
