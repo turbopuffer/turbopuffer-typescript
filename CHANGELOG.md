@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.15.0 (2026-02-03)
+
+Full Changelog: [v1.14.10...v1.15.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.14.10...v1.15.0)
+
+### Features
+
+* ContainsAnyToken last_as_prefix docs ([4fa3782](https://github.com/turbopuffer/turbopuffer-typescript/commit/4fa37825e036636b695a29c28c0dc90b8bda3dd3))
+
+
+### Chores
+
+* regenerate custom types ([f54ce53](https://github.com/turbopuffer/turbopuffer-typescript/commit/f54ce534e6a000ceabf365c00df88485a2c9ad74))
+
 ## 1.14.10 (2026-02-03)
 
 Full Changelog: [v1.14.9...v1.14.10](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.14.9...v1.14.10)
