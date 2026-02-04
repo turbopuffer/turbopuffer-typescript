@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.15.2 (2026-02-04)
+
+Full Changelog: [v1.15.1...v1.15.2](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.15.1...v1.15.2)
+
+### Chores
+
+* **client:** restructure abort controller binding ([1994913](https://github.com/turbopuffer/turbopuffer-typescript/commit/1994913914fb9b27a8477ca72054d1b9f6b883b9))
+* **internal:** refactor flag parsing for MCP servers and add debug flag ([029a82c](https://github.com/turbopuffer/turbopuffer-typescript/commit/029a82c251d65a760303bc585ba3ca67649e1774))
+
 ## 1.15.1 (2026-02-04)
 
 Full Changelog: [v1.15.0...v1.15.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.15.0...v1.15.1)
