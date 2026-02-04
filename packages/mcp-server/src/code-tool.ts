@@ -80,7 +80,7 @@ export function codeTool(): McpTool {
             'set TURBOPUFFER_API_KEY environment variable or provide apiKey client option',
           ),
           TURBOPUFFER_REGION: readEnv('TURBOPUFFER_REGION') ?? client.region ?? undefined,
-          TURBOPUFFER_BASE_URL: readEnv('TURBOPUFFER_BASE_URL') ?? client.baseURL ?? undefined,
+          TURBOPUFFER_BASE_URL: readEnv('TURBOPUFFER_BASE_URL') ?? 'https://{region}.turbopuffer.com',
         }),
       },
       body: JSON.stringify({
