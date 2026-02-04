@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.15.1 (2026-02-04)
+
+Full Changelog: [v1.15.0...v1.15.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.15.0...v1.15.1)
+
+### Bug Fixes
+
+* **code-tool:** use templated baseURL when env unset ([#176](https://github.com/turbopuffer/turbopuffer-typescript/issues/176)) ([3ef9a0c](https://github.com/turbopuffer/turbopuffer-typescript/commit/3ef9a0c352c46fb31c8d1469b1951ce93d20056b))
+
 ## 1.15.0 (2026-02-03)
 
 Full Changelog: [v1.14.10...v1.15.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.14.10...v1.15.0)
