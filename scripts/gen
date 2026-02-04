@@ -4,7 +4,7 @@ set -e
 
 cd "$(dirname "$0")/.."
 
-apigen_image=ghcr.io/turbopuffer/turbopuffer-apigen:f79d750b33aa7e8cb7cb79ebc03f92404a4514ff
+apigen_image=ghcr.io/turbopuffer/turbopuffer-apigen:32179d88dae67b5509bdcf1eb330b45be6efc5a6
 
 apigen() {
     if [[ "$TURBOPUFFER_DEV_APIGEN" ]]; then
@@ -16,4 +16,4 @@ apigen() {
 
 echo "==> Generating code"
 apigen typescript > src/resources/custom.ts
-./node_modules/.bin/eslint --fix .
+./scripts/format
