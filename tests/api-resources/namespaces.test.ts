@@ -46,6 +46,7 @@ describe('resource namespaces', () => {
       exclude_attributes: ['string'],
       group_by: ['string'],
       include_attributes: true,
+      limit: 0,
       top_k: 0,
       vector_encoding: 'float',
     });
@@ -109,6 +110,7 @@ describe('resource namespaces', () => {
           exclude_attributes: ['string'],
           group_by: ['string'],
           include_attributes: true,
+          limit: 0,
           rank_by: ['id', 'asc'],
           top_k: 0,
         },
@@ -139,6 +141,7 @@ describe('resource namespaces', () => {
       exclude_attributes: ['string'],
       group_by: ['string'],
       include_attributes: true,
+      limit: 0,
       rank_by: ['id', 'asc'],
       top_k: 0,
       vector_encoding: 'float',

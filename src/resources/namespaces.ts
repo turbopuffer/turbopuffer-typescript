@@ -474,6 +474,11 @@ export interface Query {
   include_attributes?: IncludeAttributes;
 
   /**
+   * Limit configuration for query results.
+   */
+  limit?: number | Query.Limit;
+
+  /**
    * How to rank the documents in the namespace.
    */
   rank_by?: RankBy;
@@ -482,6 +487,25 @@ export interface Query {
    * The number of results to return.
    */
   top_k?: number;
+}
+
+export namespace Query {
+  export interface Limit {
+    /**
+     * The total number of results to return.
+     */
+    total: number;
+
+    per?: Limit.Per;
+  }
+
+  export namespace Limit {
+    export interface Per {
+      attributes: Array<string>;
+
+      limit: number;
+    }
+  }
 }
 
 /**
@@ -837,6 +861,11 @@ export interface NamespaceExplainQueryParams {
   include_attributes?: IncludeAttributes;
 
   /**
+   * Body param: Limit configuration for query results.
+   */
+  limit?: number | NamespaceExplainQueryParams.Limit;
+
+  /**
    * Body param: How to rank the documents in the namespace.
    */
   rank_by?: RankBy;
@@ -866,6 +895,23 @@ export namespace NamespaceExplainQueryParams {
      *   storage, but may not see the latest writes.
      */
     level?: 'strong' | 'eventual';
+  }
+
+  export interface Limit {
+    /**
+     * The total number of results to return.
+     */
+    total: number;
+
+    per?: Limit.Per;
+  }
+
+  export namespace Limit {
+    export interface Per {
+      attributes: Array<string>;
+
+      limit: number;
+    }
   }
 }
 
@@ -968,6 +1014,11 @@ export interface NamespaceQueryParams {
   include_attributes?: IncludeAttributes;
 
   /**
+   * Body param: Limit configuration for query results.
+   */
+  limit?: number | NamespaceQueryParams.Limit;
+
+  /**
    * Body param: How to rank the documents in the namespace.
    */
   rank_by?: RankBy;
@@ -997,6 +1048,23 @@ export namespace NamespaceQueryParams {
      *   storage, but may not see the latest writes.
      */
     level?: 'strong' | 'eventual';
+  }
+
+  export interface Limit {
+    /**
+     * The total number of results to return.
+     */
+    total: number;
+
+    per?: Limit.Per;
+  }
+
+  export namespace Limit {
+    export interface Per {
+      attributes: Array<string>;
+
+      limit: number;
+    }
   }
 }
 
