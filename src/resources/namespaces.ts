@@ -358,6 +358,40 @@ export type Language =
   | 'turkish';
 
 /**
+ * Limits the documents returned by a query.
+ */
+export interface Limit {
+  /**
+   * Limits the total number of documents returned.
+   */
+  total: number;
+
+  /**
+   * Limits the number of documents with the same value for a set of attributes (the
+   * "limit key") that can appear in the results.
+   */
+  per?: Limit.Per;
+}
+
+export namespace Limit {
+  /**
+   * Limits the number of documents with the same value for a set of attributes (the
+   * "limit key") that can appear in the results.
+   */
+  export interface Per {
+    /**
+     * The attributes to include in the limit key.
+     */
+    attributes: Array<string>;
+
+    /**
+     * The maximum number of documents to return for each value of the limit key.
+     */
+    limit: number;
+  }
+}
+
+/**
  * Metadata about a namespace.
  */
 export interface NamespaceMetadata {
@@ -474,9 +508,9 @@ export interface Query {
   include_attributes?: IncludeAttributes;
 
   /**
-   * Limit configuration for query results.
+   * Limits the documents returned by a query.
    */
-  limit?: number | Query.Limit;
+  limit?: number | Limit;
 
   /**
    * How to rank the documents in the namespace.
@@ -487,25 +521,6 @@ export interface Query {
    * The number of results to return.
    */
   top_k?: number;
-}
-
-export namespace Query {
-  export interface Limit {
-    /**
-     * The total number of results to return.
-     */
-    total: number;
-
-    per?: Limit.Per;
-  }
-
-  export namespace Limit {
-    export interface Per {
-      attributes: Array<string>;
-
-      limit: number;
-    }
-  }
 }
 
 /**
@@ -861,9 +876,9 @@ export interface NamespaceExplainQueryParams {
   include_attributes?: IncludeAttributes;
 
   /**
-   * Body param: Limit configuration for query results.
+   * Body param: Limits the documents returned by a query.
    */
-  limit?: number | NamespaceExplainQueryParams.Limit;
+  limit?: number | Limit;
 
   /**
    * Body param: How to rank the documents in the namespace.
@@ -895,23 +910,6 @@ export namespace NamespaceExplainQueryParams {
      *   storage, but may not see the latest writes.
      */
     level?: 'strong' | 'eventual';
-  }
-
-  export interface Limit {
-    /**
-     * The total number of results to return.
-     */
-    total: number;
-
-    per?: Limit.Per;
-  }
-
-  export namespace Limit {
-    export interface Per {
-      attributes: Array<string>;
-
-      limit: number;
-    }
   }
 }
 
@@ -1014,9 +1012,9 @@ export interface NamespaceQueryParams {
   include_attributes?: IncludeAttributes;
 
   /**
-   * Body param: Limit configuration for query results.
+   * Body param: Limits the documents returned by a query.
    */
-  limit?: number | NamespaceQueryParams.Limit;
+  limit?: number | Limit;
 
   /**
    * Body param: How to rank the documents in the namespace.
@@ -1048,23 +1046,6 @@ export namespace NamespaceQueryParams {
      *   storage, but may not see the latest writes.
      */
     level?: 'strong' | 'eventual';
-  }
-
-  export interface Limit {
-    /**
-     * The total number of results to return.
-     */
-    total: number;
-
-    per?: Limit.Per;
-  }
-
-  export namespace Limit {
-    export interface Per {
-      attributes: Array<string>;
-
-      limit: number;
-    }
   }
 }
 
@@ -1291,6 +1272,7 @@ export declare namespace Namespaces {
     type ID as ID,
     type IncludeAttributes as IncludeAttributes,
     type Language as Language,
+    type Limit as Limit,
     type NamespaceMetadata as NamespaceMetadata,
     type Query as Query,
     type QueryBilling as QueryBilling,
