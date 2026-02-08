@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.16.0 (2026-02-08)
+
+Full Changelog: [v1.15.2...v1.16.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.15.2...v1.16.0)
+
+### Features
+
+* add support for `limit` query parameter ([712b664](https://github.com/turbopuffer/turbopuffer-typescript/commit/712b664eb93956b476defc56dc741ac983cf9508))
+* spec: clean up limit codegen ([d0e16e9](https://github.com/turbopuffer/turbopuffer-typescript/commit/d0e16e97f25de7ecab923409cf4e2d97b09af720))
+
 ## 1.15.2 (2026-02-04)
 
 Full Changelog: [v1.15.1...v1.15.2](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.15.1...v1.15.2)
