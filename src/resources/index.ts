@@ -16,6 +16,7 @@ export {
   type ID,
   type IncludeAttributes,
   type Language,
+  type Limit,
   type NamespaceMetadata,
   type Query,
   type QueryBilling,
