@@ -234,6 +234,21 @@ export interface ContainsAnyTokenFilterParams {
 }
 
 /**
+ * Additional parameters for the Decay operator.
+ */
+export interface DecayParams {
+  /**
+   * An exponent that helps further control the shape of the Decay function.
+   */
+  exponent?: number;
+
+  /**
+   * The midpoint of the Decay operator.
+   */
+  midpoint?: unknown;
+}
+
+/**
  * A function used to calculate vector similarity.
  *
  * - `cosine_distance` - Defined as `1 - cosine_similarity` and ranges from 0 to 2.
@@ -572,6 +587,21 @@ export interface Row {
   vector?: Vector;
 
   [k: string]: unknown;
+}
+
+/**
+ * Additional parameters for the Saturate operator.
+ */
+export interface SaturateParams {
+  /**
+   * An exponent that helps further control the shape of the Saturate function.
+   */
+  exponent?: number;
+
+  /**
+   * The midpoint of the Saturate operator.
+   */
+  midpoint?: unknown;
 }
 
 /**
@@ -1242,6 +1272,7 @@ export declare namespace Namespaces {
     type Columns as Columns,
     type ContainsAllTokensFilterParams as ContainsAllTokensFilterParams,
     type ContainsAnyTokenFilterParams as ContainsAnyTokenFilterParams,
+    type DecayParams as DecayParams,
     type DistanceMetric as DistanceMetric,
     type FullTextSearch as FullTextSearch,
     type FullTextSearchConfig as FullTextSearchConfig,
@@ -1254,6 +1285,7 @@ export declare namespace Namespaces {
     type QueryBilling as QueryBilling,
     type QueryPerformance as QueryPerformance,
     type Row as Row,
+    type SaturateParams as SaturateParams,
     type Tokenizer as Tokenizer,
     type Vector as Vector,
     type VectorEncoding as VectorEncoding,
