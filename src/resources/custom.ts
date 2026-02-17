@@ -3,6 +3,8 @@
 import Bm25ClauseParams from '../index';
 import ContainsAllTokensFilterParams from '../index';
 import ContainsAnyTokenFilterParams from '../index';
+import DecayParams from '../index';
+import SaturateParams from '../index';
 
 export type AggregateBy = ['Count'] | ['Sum', string] | ['Count', string];
 export type Expr = ExprRefNew;
@@ -56,5 +58,9 @@ export type RankByText =
   | ['Max', RankByText[]]
   | ['Product', number, RankByText]
   | ['Product', RankByText, number]
-  | Filter;
+  | Filter
+  | ['Attribute', string]
+  | ['Saturate', RankByText, SaturateParams]
+  | ['Decay', RankByText, DecayParams]
+  | ['Dist', RankByText, any];
 export type RankByVector = [string, 'ANN', number[]];
