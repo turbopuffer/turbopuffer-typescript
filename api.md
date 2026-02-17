@@ -20,6 +20,7 @@ Types:
 - <code><a href="./src/resources/namespaces.ts">Columns</a></code>
 - <code><a href="./src/resources/namespaces.ts">ContainsAllTokensFilterParams</a></code>
 - <code><a href="./src/resources/namespaces.ts">ContainsAnyTokenFilterParams</a></code>
+- <code><a href="./src/resources/namespaces.ts">DecayParams</a></code>
 - <code><a href="./src/resources/namespaces.ts">DistanceMetric</a></code>
 - <code><a href="./src/resources/namespaces.ts">FullTextSearch</a></code>
 - <code><a href="./src/resources/namespaces.ts">FullTextSearchConfig</a></code>
@@ -32,6 +33,7 @@ Types:
 - <code><a href="./src/resources/namespaces.ts">QueryBilling</a></code>
 - <code><a href="./src/resources/namespaces.ts">QueryPerformance</a></code>
 - <code><a href="./src/resources/namespaces.ts">Row</a></code>
+- <code><a href="./src/resources/namespaces.ts">SaturateParams</a></code>
 - <code><a href="./src/resources/namespaces.ts">Tokenizer</a></code>
 - <code><a href="./src/resources/namespaces.ts">Vector</a></code>
 - <code><a href="./src/resources/namespaces.ts">VectorEncoding</a></code>
