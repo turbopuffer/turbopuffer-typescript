@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.17.0 (2026-02-19)
+
+Full Changelog: [v1.16.0...v1.17.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.16.0...v1.17.0)
+
+### Features
+
+* Add ranking-by-attribute to the spec. ([cd1c10f](https://github.com/turbopuffer/turbopuffer-typescript/commit/cd1c10f7d3446728c7cf1a8523f212a42da80a3f))
+
 ## 1.16.0 (2026-02-08)
 
 Full Changelog: [v1.15.2...v1.16.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.15.2...v1.16.0)
