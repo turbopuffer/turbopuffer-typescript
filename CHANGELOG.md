@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.18.0 (2026-02-27)
+
+Full Changelog: [v1.17.0...v1.18.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.17.0...v1.18.0)
+
+### Features
+
+* Remove `queries` from recall endpoint ([2387e39](https://github.com/turbopuffer/turbopuffer-typescript/commit/2387e390c7dfdd22b5210633722f8e15d968b801))
+
 ## 1.17.0 (2026-02-19)
 
 Full Changelog: [v1.16.0...v1.17.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.16.0...v1.17.0)
