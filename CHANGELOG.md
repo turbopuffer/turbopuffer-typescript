@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.19.0 (2026-03-11)
+
+Full Changelog: [v1.18.0...v1.19.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.18.0...v1.19.0)
+
+### Features
+
+* spec: host MCP on stainless ([3ddaad6](https://github.com/turbopuffer/turbopuffer-typescript/commit/3ddaad6a605a45e479dad12b18f9084411c9b793))
+
 ## 1.18.0 (2026-02-27)
 
 Full Changelog: [v1.17.0...v1.18.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.17.0...v1.18.0)
