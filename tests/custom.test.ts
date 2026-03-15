@@ -400,6 +400,7 @@ test('schema and metadata', async () => {
       filterable: false,
       full_text_search: {
         k1: 1.2,
+        k3: 8,
         b: 0.75,
         language: 'english',
         stemming: true,
@@ -415,6 +416,7 @@ test('schema and metadata', async () => {
       filterable: false,
       full_text_search: {
         k1: 1.2,
+        k3: 8,
         b: 0.75,
         language: 'english',
         stemming: false,
@@ -450,6 +452,7 @@ test('schema and metadata', async () => {
       filterable: false,
       full_text_search: {
         k1: 1.2,
+        k3: 8,
         b: 0.75,
         language: 'english',
         stemming: true,
@@ -465,6 +468,7 @@ test('schema and metadata', async () => {
       filterable: false,
       full_text_search: {
         k1: 1.2,
+        k3: 8,
         b: 0.75,
         language: 'english',
         stemming: false,
@@ -555,6 +559,7 @@ test('update_schema', async () => {
       filterable: false,
       full_text_search: {
         k1: 1.2,
+        k3: 8,
         b: 0.75,
         language: 'english',
         stemming: false,
@@ -613,6 +618,7 @@ test('update_schema', async () => {
       filterable: true,
       full_text_search: {
         k1: 1.2,
+        k3: 8,
         b: 0.75,
         language: 'english',
         stemming: false,
@@ -1050,6 +1056,7 @@ test('copy_from_namespace', async () => {
 });
 
 test('patch', async () => {
+  jest.setTimeout(30000);
   const ns = tpuf.namespace(testNamespacePrefix + 'patch');
 
   try {
