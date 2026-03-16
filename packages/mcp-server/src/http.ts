@@ -54,15 +54,15 @@ const post =
     await transport.handleRequest(req, res, req.body);
   };
 
-const get = async (req: express.Request, res: express.Response) => {
-  res.status(405).json({
-    jsonrpc: '2.0',
-    error: {
-      code: -32000,
-      message: 'Method not supported',
-    },
-  });
-};
+const get =
+  (options: { clientOptions: ClientOptions; mcpOptions: McpOptions }) =>
+  async (req: express.Request, res: express.Response) => {
+    const server = newServer({ ...options, req, res });
+    if (server === null) return;
+    const transport = new StreamableHTTPServerTransport();
+    await server.connect(transport as any);
+    await transport.handleRequest(req, res);
+  };
 
 const del = async (req: express.Request, res: express.Response) => {
   res.status(405).json({
@@ -98,7 +98,7 @@ export const streamableHTTPApp = ({
     app.use(morgan('combined'));
   }
 
-  app.get('/', get);
+  app.get('/', get({ clientOptions, mcpOptions }));
   app.post('/', post({ clientOptions, mcpOptions }));
   app.delete('/', del);
 
