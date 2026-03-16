@@ -43,26 +43,26 @@ const newServer = ({
   return server;
 };
 
-const post =
-  (options: { clientOptions: ClientOptions; mcpOptions: McpOptions }) =>
+const handler =
+  (options: { clientOptions: ClientOptions; mcpOptions: McpOptions }, includeBody: boolean) =>
   async (req: express.Request, res: express.Response) => {
     const server = newServer({ ...options, req, res });
     // If we return null, we already set the authorization error.
     if (server === null) return;
     const transport = new StreamableHTTPServerTransport();
     await server.connect(transport as any);
-    await transport.handleRequest(req, res, req.body);
+    if (includeBody) {
+      await transport.handleRequest(req, res, req.body);
+      return;
+    }
+    await transport.handleRequest(req, res);
   };
+
+const post = (options: { clientOptions: ClientOptions; mcpOptions: McpOptions }) => handler(options, true);
 
 const get =
   (options: { clientOptions: ClientOptions; mcpOptions: McpOptions }) =>
-  async (req: express.Request, res: express.Response) => {
-    const server = newServer({ ...options, req, res });
-    if (server === null) return;
-    const transport = new StreamableHTTPServerTransport();
-    await server.connect(transport as any);
-    await transport.handleRequest(req, res);
-  };
+    handler(options, false);
 
 const del = async (req: express.Request, res: express.Response) => {
   res.status(405).json({
