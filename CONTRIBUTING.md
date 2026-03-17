@@ -60,16 +60,10 @@ $ yarn link @turbopuffer/turbopuffer
 # With pnpm
 $ pnpm link --global
 $ cd ../my-package
-$ pnpm link -—global @turbopuffer/turbopuffer
+$ pnpm link --global @turbopuffer/turbopuffer
 ```
 
 ## Running tests
-
-Most tests require you to [set up a mock server](https://github.com/stoplightio/prism) against the OpenAPI spec to run the tests.
-
-```sh
-$ npx prism mock path/to/your/openapi.yml
-```
 
 ```sh
 $ yarn run test

@@ -1,8 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { Metadata, asTextContentResult } from './types';
-
 import { Tool } from '@modelcontextprotocol/sdk/types.js';
+import { Metadata, McpRequestContext, asTextContentResult } from './types';
+import { getLogger } from './logger';
 
 export const metadata: Metadata = {
   resource: 'all',
@@ -13,7 +13,8 @@ export const metadata: Metadata = {
 
 export const tool: Tool = {
   name: 'search_docs',
-  description: 'Search for documentation for how to use the client to interact with the API.',
+  description:
+    'Search SDK documentation to find methods, parameters, and usage examples for interacting with the API. Use this before writing code when you need to discover the right approach.',
   inputSchema: {
     type: 'object',
     properties: {
@@ -42,18 +43,58 @@ export const tool: Tool = {
 const docsSearchURL =
   process.env['DOCS_SEARCH_URL'] || 'https://api.stainless.com/api/projects/turbopuffer/docs/search';
 
-export const handler = async (_: unknown, args: Record<string, unknown> | undefined) => {
+export const handler = async ({
+  reqContext,
+  args,
+}: {
+  reqContext: McpRequestContext;
+  args: Record<string, unknown> | undefined;
+}) => {
   const body = args as any;
   const query = new URLSearchParams(body).toString();
-  const result = await fetch(`${docsSearchURL}?${query}`);
+
+  const startTime = Date.now();
+  const result = await fetch(`${docsSearchURL}?${query}`, {
+    headers: {
+      ...(reqContext.stainlessApiKey && { Authorization: reqContext.stainlessApiKey }),
+    },
+  });
+
+  const logger = getLogger();
 
   if (!result.ok) {
+    const errorText = await result.text();
+    logger.warn(
+      {
+        durationMs: Date.now() - startTime,
+        query: body.query,
+        status: result.status,
+        statusText: result.statusText,
+        errorText,
+      },
+      'Got error response from docs search tool',
+    );
+
+    if (result.status === 404 && !reqContext.stainlessApiKey) {
+      throw new Error(
+        'Could not find docs for this project. You may need to provide a Stainless API key via the STAINLESS_API_KEY environment variable, the --stainless-api-key flag, or the x-stainless-api-key HTTP header.',
+      );
+    }
+
     throw new Error(
-      `${result.status}: ${result.statusText} when using doc search tool. Details: ${await result.text()}`,
+      `${result.status}: ${result.statusText} when using doc search tool. Details: ${errorText}`,
     );
   }
 
-  return asTextContentResult(await result.json());
+  const resultBody = await result.json();
+  logger.info(
+    {
+      durationMs: Date.now() - startTime,
+      query: body.query,
+    },
+    'Got docs search result',
+  );
+  return asTextContentResult(resultBody);
 };
 
 export default { metadata, tool, handler };
