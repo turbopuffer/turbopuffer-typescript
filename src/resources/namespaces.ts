@@ -660,6 +660,16 @@ export interface WriteBilling {
 }
 
 /**
+ * The performance information for a write request.
+ */
+export interface WritePerformance {
+  /**
+   * Request time measured on the server, in milliseconds.
+   */
+  server_total_ms: number;
+}
+
+/**
  * The response to a successful namespace deletion request.
  */
 export interface NamespaceDeleteAllResponse {
@@ -825,6 +835,11 @@ export interface NamespaceWriteResponse {
    * is true and at least one document was patched.
    */
   patched_ids?: Array<ID>;
+
+  /**
+   * The performance information for a write request.
+   */
+  performance?: WritePerformance;
 
   /**
    * The number of rows deleted by the write request.
@@ -1308,6 +1323,7 @@ export declare namespace Namespaces {
     type Vector as Vector,
     type VectorEncoding as VectorEncoding,
     type WriteBilling as WriteBilling,
+    type WritePerformance as WritePerformance,
     type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
     type NamespaceExplainQueryResponse as NamespaceExplainQueryResponse,
     type NamespaceHintCacheWarmResponse as NamespaceHintCacheWarmResponse,

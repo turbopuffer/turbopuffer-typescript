@@ -28,6 +28,7 @@ export {
   type Vector,
   type VectorEncoding,
   type WriteBilling,
+  type WritePerformance,
   type NamespaceDeleteAllResponse,
   type NamespaceExplainQueryResponse,
   type NamespaceHintCacheWarmResponse,
