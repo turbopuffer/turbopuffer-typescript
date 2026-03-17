@@ -42,10 +42,19 @@ export type ToolCallResult = {
   isError?: boolean;
 };
 
-export type HandlerFunction = (
-  client: Turbopuffer,
-  args: Record<string, unknown> | undefined,
-) => Promise<ToolCallResult>;
+export type McpRequestContext = {
+  client: Turbopuffer;
+  stainlessApiKey?: string | undefined;
+  upstreamClientEnvs?: Record<string, string> | undefined;
+};
+
+export type HandlerFunction = ({
+  reqContext,
+  args,
+}: {
+  reqContext: McpRequestContext;
+  args: Record<string, unknown> | undefined;
+}) => Promise<ToolCallResult>;
 
 export function asTextContentResult(result: unknown): ToolCallResult {
   return {

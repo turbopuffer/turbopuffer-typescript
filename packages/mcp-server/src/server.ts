@@ -11,39 +11,34 @@ import { ClientOptions } from '@turbopuffer/turbopuffer';
 import Turbopuffer from '@turbopuffer/turbopuffer';
 import { codeTool } from './code-tool';
 import docsSearchTool from './docs-search-tool';
+import { getInstructions } from './instructions';
 import { McpOptions } from './options';
-import { HandlerFunction, McpTool } from './types';
+import { blockedMethodsForCodeTool } from './methods';
+import { HandlerFunction, McpRequestContext, ToolCallResult, McpTool } from './types';
+import { readEnv } from './util';
 
-export { McpOptions } from './options';
-export { ClientOptions } from '@turbopuffer/turbopuffer';
-
-export const newMcpServer = () =>
+export const newMcpServer = async (stainlessApiKey: string | undefined) =>
   new McpServer(
     {
       name: 'turbopuffer_turbopuffer_api',
       version: '1.19.0',
     },
     {
-      capabilities: {
-        tools: {},
-        logging: {},
-      },
-      instructions:
-        "Runs JavaScript code to interact with the Turbopuffer API.\n\nDefine an async function named \"run\" that takes a single parameter of an initialized SDK client.\n\n## Listing namespaces\n\n```\nasync function run(client) {\n  for await (const ns of client.namespaces()) {\n    console.log(ns.id);\n  }\n}\n```\n\n## Checking a namespace's schema\n\n```\nasync function run(client) {\n  const ns = client.namespace('your-namespace');\n  const schema = await ns.schema();\n  console.log(JSON.stringify(schema, null, 2));\n}\n```\n\n## Querying (BM25 full-text search)\n\n```\nasync function run(client) {\n  const ns = client.namespace('your-namespace');\n  const response = await ns.query({\n    top_k: 10,\n    rank_by: ['text', 'BM25', 'your search query'],\n    include_attributes: ['summary', 'text']\n  });\n\n  if (response.rows) {\n    for (const row of response.rows) {\n      console.log(\"ID:\", row.id);\n      const summary = row.summary as string;\n      console.log(\"Summary:\", summary ? summary.substring(0, 800) : \"N/A\");\n    }\n  }\n}\n```\n\n## Writing documents\n\n```\nasync function run(client) {\n  const ns = client.namespace('your-namespace');\n  const response = await ns.write({\n    distance_metric: 'cosine_distance',\n    upsert_rows: [{ id: '1', vector: [0.1, 0.2] }],\n  });\n  console.log(response.rows_affected);\n}\n```\n\n## Deleting a namespace\n\n```\nasync function run(client) {\n  const ns = client.namespace('your-namespace');\n  await ns.deleteAll();\n}\n```\n\n## Important\n\n- If you don't know what namespaces exist, list them first with `client.namespaces()`\n- Before querying, check the namespace schema with `ns.schema()` to see available attributes\n- Only use attributes that exist in the schema for `include_attributes`\n- Always use client.namespace('name') to get a namespace object first\n- Then call methods on it: .query(), .write(), .deleteAll(), .schema()\n- Always truncate output with substring() to avoid token limits\n- Cast attributes before using string methods: `row.field as string`\n- Do not add try-catch; the tool handles errors\n- Variables do not persist between calls\n",
+      instructions: await getInstructions(stainlessApiKey),
+      capabilities: { tools: {}, logging: {} },
     },
   );
-
-// Create server instance
-export const server = newMcpServer();
 
 /**
  * Initializes the provided MCP Server with the given tools and handlers.
  * If not provided, the default client, tools and handlers will be used.
  */
-export function initMcpServer(params: {
+export async function initMcpServer(params: {
   server: Server | McpServer;
   clientOptions?: ClientOptions;
   mcpOptions?: McpOptions;
+  stainlessApiKey?: string | undefined;
+  upstreamClientEnvs?: Record<string, string> | undefined;
 }) {
   const server = params.server instanceof McpServer ? params.server.server : params.server;
 
@@ -62,15 +57,33 @@ export function initMcpServer(params: {
     error: logAtLevel('error'),
   };
 
-  let client = new Turbopuffer({
-    ...{ defaultNamespace: readEnv('TURBOPUFFER_DEFAULT_NAMESPACE') },
-    logger,
-    ...params.clientOptions,
-    defaultHeaders: {
-      ...params.clientOptions?.defaultHeaders,
-      'X-Stainless-MCP': 'true',
-    },
-  });
+  let _client: Turbopuffer | undefined;
+  let _clientError: Error | undefined;
+  let _logLevel: 'debug' | 'info' | 'warn' | 'error' | 'off' | undefined;
+
+  const getClient = (): Turbopuffer => {
+    if (_clientError) throw _clientError;
+    if (!_client) {
+      try {
+        _client = new Turbopuffer({
+          ...{ defaultNamespace: readEnv('TURBOPUFFER_DEFAULT_NAMESPACE') },
+          logger,
+          ...params.clientOptions,
+          defaultHeaders: {
+            ...params.clientOptions?.defaultHeaders,
+            'X-Stainless-MCP': 'true',
+          },
+        });
+        if (_logLevel) {
+          _client = _client.withOptions({ logLevel: _logLevel });
+        }
+      } catch (e) {
+        _clientError = e instanceof Error ? e : new Error(String(e));
+        throw _clientError;
+      }
+    }
+    return _client;
+  };
 
   const providedTools = selectTools(params.mcpOptions);
   const toolMap = Object.fromEntries(providedTools.map((mcpTool) => [mcpTool.tool.name, mcpTool]));
@@ -88,28 +101,56 @@ export function initMcpServer(params: {
       throw new Error(`Unknown tool: ${name}`);
     }
 
-    return executeHandler(mcpTool.handler, client, args);
+    let client: Turbopuffer;
+    try {
+      client = getClient();
+    } catch (error) {
+      return {
+        content: [
+          {
+            type: 'text' as const,
+            text: `Failed to initialize client: ${error instanceof Error ? error.message : String(error)}`,
+          },
+        ],
+        isError: true,
+      };
+    }
+
+    return executeHandler({
+      handler: mcpTool.handler,
+      reqContext: {
+        client,
+        stainlessApiKey: params.stainlessApiKey ?? params.mcpOptions?.stainlessApiKey,
+        upstreamClientEnvs: params.upstreamClientEnvs,
+      },
+      args,
+    });
   });
 
   server.setRequestHandler(SetLevelRequestSchema, async (request) => {
     const { level } = request.params;
+    let logLevel: 'debug' | 'info' | 'warn' | 'error' | 'off';
     switch (level) {
       case 'debug':
-        client = client.withOptions({ logLevel: 'debug' });
+        logLevel = 'debug';
         break;
       case 'info':
-        client = client.withOptions({ logLevel: 'info' });
+        logLevel = 'info';
         break;
       case 'notice':
       case 'warning':
-        client = client.withOptions({ logLevel: 'warn' });
+        logLevel = 'warn';
         break;
       case 'error':
-        client = client.withOptions({ logLevel: 'error' });
+        logLevel = 'error';
         break;
       default:
-        client = client.withOptions({ logLevel: 'off' });
+        logLevel = 'off';
         break;
+    }
+    _logLevel = logLevel;
+    if (_client) {
+      _client = _client.withOptions({ logLevel });
     }
     return {};
   });
@@ -119,7 +160,16 @@ export function initMcpServer(params: {
  * Selects the tools to include in the MCP Server based on the provided options.
  */
 export function selectTools(options?: McpOptions): McpTool[] {
-  const includedTools = [codeTool()];
+  const includedTools = [];
+
+  if (options?.includeCodeTool ?? true) {
+    includedTools.push(
+      codeTool({
+        blockedMethods: blockedMethodsForCodeTool(options),
+        codeExecutionMode: options?.codeExecutionMode ?? 'stainless-sandbox',
+      }),
+    );
+  }
   if (options?.includeDocsTools ?? true) {
     includedTools.push(docsSearchTool);
   }
@@ -129,34 +179,14 @@ export function selectTools(options?: McpOptions): McpTool[] {
 /**
  * Runs the provided handler with the given client and arguments.
  */
-export async function executeHandler(
-  handler: HandlerFunction,
-  client: Turbopuffer,
-  args: Record<string, unknown> | undefined,
-) {
-  return await handler(client, args || {});
+export async function executeHandler({
+  handler,
+  reqContext,
+  args,
+}: {
+  handler: HandlerFunction;
+  reqContext: McpRequestContext;
+  args: Record<string, unknown> | undefined;
+}): Promise<ToolCallResult> {
+  return await handler({ reqContext, args: args || {} });
 }
-
-export const readEnv = (env: string): string | undefined => {
-  if (typeof (globalThis as any).process !== 'undefined') {
-    return (globalThis as any).process.env?.[env]?.trim();
-  } else if (typeof (globalThis as any).Deno !== 'undefined') {
-    return (globalThis as any).Deno.env?.get?.(env)?.trim();
-  }
-  return;
-};
-
-export const readEnvOrError = (env: string): string => {
-  let envValue = readEnv(env);
-  if (envValue === undefined) {
-    throw new Error(`Environment variable ${env} is not set`);
-  }
-  return envValue;
-};
-
-export const requireValue = <T>(value: T | undefined, description: string): T => {
-  if (value === undefined) {
-    throw new Error(`Missing required value: ${description}`);
-  }
-  return value;
-};
