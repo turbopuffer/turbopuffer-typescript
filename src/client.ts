@@ -67,6 +67,7 @@ import {
   Vector,
   VectorEncoding,
   WriteBilling,
+  WritePerformance,
 } from './resources/namespaces';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
@@ -872,6 +873,7 @@ export declare namespace Turbopuffer {
     type Vector as Vector,
     type VectorEncoding as VectorEncoding,
     type WriteBilling as WriteBilling,
+    type WritePerformance as WritePerformance,
     type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
     type NamespaceExplainQueryResponse as NamespaceExplainQueryResponse,
     type NamespaceHintCacheWarmResponse as NamespaceHintCacheWarmResponse,
