@@ -38,6 +38,7 @@ Types:
 - <code><a href="./src/resources/namespaces.ts">Vector</a></code>
 - <code><a href="./src/resources/namespaces.ts">VectorEncoding</a></code>
 - <code><a href="./src/resources/namespaces.ts">WriteBilling</a></code>
+- <code><a href="./src/resources/namespaces.ts">WritePerformance</a></code>
 - <code><a href="./src/resources/namespaces.ts">NamespaceDeleteAllResponse</a></code>
 - <code><a href="./src/resources/namespaces.ts">NamespaceExplainQueryResponse</a></code>
 - <code><a href="./src/resources/namespaces.ts">NamespaceHintCacheWarmResponse</a></code>
