@@ -224,6 +224,7 @@ describe('resource namespaces', () => {
   test.skip('write: required and optional params', async () => {
     const response = await client.namespace('namespace').write({
       namespace: 'namespace',
+      branch_from_namespace: 'branch_from_namespace',
       copy_from_namespace: 'string',
       deletes: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
       disable_backpressure: true,
