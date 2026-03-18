@@ -26,6 +26,7 @@ webpack(
     entry: '../scripts/utils/smoke-test-webpack.import.mjs',
     output,
     target: 'node',
+    node: { __filename: false, __dirname: false },
     experiments: { outputModule: true },
     devtool: false,
   },
