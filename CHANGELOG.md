@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.20.0 (2026-03-18)
+
+Full Changelog: [v1.19.0...v1.20.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.19.0...v1.20.0)
+
+### Features
+
+* Response performance object ([e8b2866](https://github.com/turbopuffer/turbopuffer-typescript/commit/e8b2866ca68089dc5c105f1e362d7d4eee5de79c))
+* tpuf: add branching to openapi spec ([b3a28e5](https://github.com/turbopuffer/turbopuffer-typescript/commit/b3a28e5242af46f2de75884de41e0de439a12799))
+
+
+### Bug Fixes
+
+* **client:** use higher retry delay precision ([7f54552](https://github.com/turbopuffer/turbopuffer-typescript/commit/7f5455264042b2037fff601dd0f02c22f30070b1))
+* escape MCP `instructions` backticks as necessary ([4f84252](https://github.com/turbopuffer/turbopuffer-typescript/commit/4f842527f2b26a1878c9fde77b80967f604ff616))
+
 ## 1.19.0 (2026-03-11)
 
 Full Changelog: [v1.18.0...v1.19.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.18.0...v1.19.0)
