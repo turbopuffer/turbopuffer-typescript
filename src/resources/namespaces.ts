@@ -1124,6 +1124,11 @@ export interface NamespaceWriteParams {
   namespace?: string;
 
   /**
+   * Body param: The namespace to create an instant, copy-on-write clone of.
+   */
+  branch_from_namespace?: string;
+
+  /**
    * Body param: The namespace to copy documents from.
    */
   copy_from_namespace?: string | NamespaceWriteParams.CopyFromNamespaceConfig;

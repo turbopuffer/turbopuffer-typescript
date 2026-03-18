@@ -229,6 +229,7 @@ describe('resource namespaces', () => {
   test.skip('write: required and optional params', async () => {
     const response = await client.namespaces.write({
       namespace: 'namespace',
+      branch_from_namespace: 'branch_from_namespace',
       copy_from_namespace: 'string',
       delete_by_filter: {},
       delete_by_filter_allow_partial: true,
