@@ -27,6 +27,7 @@ webpack(
     output,
     target: 'node',
     experiments: { outputModule: true },
+    node: { __filename: false, __dirname: false },
     devtool: false,
   },
   async (err, stats) => {
