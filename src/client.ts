@@ -741,7 +741,7 @@ export class Turbopuffer {
   }
 
   private calculateDefaultRetryTimeoutMillis(retriesRemaining: number, maxRetries: number): number {
-    const initialRetryDelay = 0.3;
+    const initialRetryDelay = 0.25;
     const maxRetryDelay = 8.0;
 
     const numRetries = maxRetries - retriesRemaining;
