@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "pako": "^2.1.0",
-    "undici": "^7.10.0"
+    "undici": "^7.24.4"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.17.0",
@@ -61,6 +61,7 @@
     "wrangler": "^4.25.1"
   },
   "resolutions": {
+    "minimatch": "^9.0.5",
     "webpack-v5.83.0/enhanced-resolve": "5.14.1"
   },
   "imports": {
@@ -96,9 +97,6 @@
     "overrides": {
       "minimatch": "^9.0.5"
     }
-  },
-  "resolutions": {
-    "minimatch": "^9.0.5"
   },
   "exports": {
     ".": {
