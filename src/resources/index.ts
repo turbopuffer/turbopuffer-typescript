@@ -7,6 +7,7 @@ export {
   type AttributeSchemaConfig,
   type AttributeType,
   type Bm25ClauseParams,
+  type BranchFromNamespaceParams,
   type Columns,
   type ContainsAllTokensFilterParams,
   type ContainsAnyTokenFilterParams,

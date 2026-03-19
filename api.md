@@ -17,6 +17,7 @@ Types:
 - <code><a href="./src/resources/namespaces.ts">AttributeSchemaConfig</a></code>
 - <code><a href="./src/resources/namespaces.ts">AttributeType</a></code>
 - <code><a href="./src/resources/namespaces.ts">Bm25ClauseParams</a></code>
+- <code><a href="./src/resources/namespaces.ts">BranchFromNamespaceParams</a></code>
 - <code><a href="./src/resources/namespaces.ts">Columns</a></code>
 - <code><a href="./src/resources/namespaces.ts">ContainsAllTokensFilterParams</a></code>
 - <code><a href="./src/resources/namespaces.ts">ContainsAnyTokenFilterParams</a></code>
