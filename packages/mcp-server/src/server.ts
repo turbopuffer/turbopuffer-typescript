@@ -67,6 +67,7 @@ export async function initMcpServer(params: {
       try {
         _client = new Turbopuffer({
           ...{ defaultNamespace: readEnv('TURBOPUFFER_DEFAULT_NAMESPACE') },
+          region: readEnv('TURBOPUFFER_REGION') ?? 'gcp-us-central1',
           logger,
           ...params.clientOptions,
           defaultHeaders: {
