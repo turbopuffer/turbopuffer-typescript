@@ -214,6 +214,20 @@ export interface Bm25ClauseParams {
 }
 
 /**
+ * The namespace to create an instant, copy-on-write clone of.
+ */
+export type BranchFromNamespaceParams = string | BranchFromNamespaceParams.BranchFromNamespaceConfig;
+
+export namespace BranchFromNamespaceParams {
+  export interface BranchFromNamespaceConfig {
+    /**
+     * The namespace to create an instant, copy-on-write clone of.
+     */
+    source_namespace: string;
+  }
+}
+
+/**
  * A list of documents in columnar format. Each key is a column name, mapped to an
  * array of values for that column.
  */
@@ -1150,7 +1164,7 @@ export interface NamespaceWriteParams {
   /**
    * Body param: The namespace to create an instant, copy-on-write clone of.
    */
-  branch_from_namespace?: string;
+  branch_from_namespace?: BranchFromNamespaceParams;
 
   /**
    * Body param: The namespace to copy documents from.
@@ -1307,6 +1321,7 @@ export declare namespace Namespaces {
     type AttributeSchemaConfig as AttributeSchemaConfig,
     type AttributeType as AttributeType,
     type Bm25ClauseParams as Bm25ClauseParams,
+    type BranchFromNamespaceParams as BranchFromNamespaceParams,
     type Columns as Columns,
     type ContainsAllTokensFilterParams as ContainsAllTokensFilterParams,
     type ContainsAnyTokenFilterParams as ContainsAnyTokenFilterParams,
