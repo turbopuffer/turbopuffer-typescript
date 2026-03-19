@@ -21,7 +21,7 @@ export const newMcpServer = async (stainlessApiKey: string | undefined) =>
   new McpServer(
     {
       name: 'turbopuffer_turbopuffer_api',
-      version: '1.20.0',
+      version: '1.21.0',
     },
     {
       instructions: await getInstructions(stainlessApiKey),

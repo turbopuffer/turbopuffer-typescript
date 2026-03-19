@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.21.0 (2026-03-19)
+
+Full Changelog: [v1.20.0...v1.21.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.20.0...v1.21.0)
+
+### Features
+
+* tpuf-engine: add verbose form of branch_from_namespace ([a108312](https://github.com/turbopuffer/turbopuffer-typescript/commit/a108312751c27739ea2b8449eecfb783541e41c5))
+
 ## 1.20.0 (2026-03-18)
 
 Full Changelog: [v1.19.0...v1.20.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.19.0...v1.20.0)
