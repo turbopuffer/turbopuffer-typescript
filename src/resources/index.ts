@@ -11,6 +11,7 @@ export {
   type Columns,
   type ContainsAllTokensFilterParams,
   type ContainsAnyTokenFilterParams,
+  type CopyFromNamespaceParams,
   type DecayParams,
   type DistanceMetric,
   type FullTextSearch,

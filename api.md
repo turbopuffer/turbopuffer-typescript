@@ -21,6 +21,7 @@ Types:
 - <code><a href="./src/resources/namespaces.ts">Columns</a></code>
 - <code><a href="./src/resources/namespaces.ts">ContainsAllTokensFilterParams</a></code>
 - <code><a href="./src/resources/namespaces.ts">ContainsAnyTokenFilterParams</a></code>
+- <code><a href="./src/resources/namespaces.ts">CopyFromNamespaceParams</a></code>
 - <code><a href="./src/resources/namespaces.ts">DecayParams</a></code>
 - <code><a href="./src/resources/namespaces.ts">DistanceMetric</a></code>
 - <code><a href="./src/resources/namespaces.ts">FullTextSearch</a></code>
