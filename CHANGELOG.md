@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.22.0 (2026-03-20)
+
+Full Changelog: [v1.21.0...v1.22.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.21.0...v1.22.0)
+
+### Features
+
+* spec: disable CopyFromNamespace syntax sugar in Go ([87b07c8](https://github.com/turbopuffer/turbopuffer-typescript/commit/87b07c8a313dbc56d269c9f6f10717c1d145c57c))
+
 ## 1.21.0 (2026-03-19)
 
 Full Changelog: [v1.20.0...v1.21.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.20.0...v1.21.0)
