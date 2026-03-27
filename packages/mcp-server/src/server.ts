@@ -11,6 +11,8 @@ import { ClientOptions } from '@turbopuffer/turbopuffer';
 import Turbopuffer from '@turbopuffer/turbopuffer';
 import { codeTool } from './code-tool';
 import docsSearchTool from './docs-search-tool';
+import { setLocalSearch } from './docs-search-tool';
+import { LocalDocsSearch } from './local-docs-search';
 import { getInstructions } from './instructions';
 import { McpOptions } from './options';
 import { blockedMethodsForCodeTool } from './methods';
@@ -62,6 +64,12 @@ export async function initMcpServer(params: {
     warn: logAtLevel('warning'),
     error: logAtLevel('error'),
   };
+
+  if (params.mcpOptions?.docsSearchMode === 'local') {
+    const docsDir = params.mcpOptions?.docsDir;
+    const localSearch = await LocalDocsSearch.create(docsDir ? { docsDir } : undefined);
+    setLocalSearch(localSearch);
+  }
 
   let _client: Turbopuffer | undefined;
   let _clientError: Error | undefined;
