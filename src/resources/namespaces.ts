@@ -266,6 +266,30 @@ export interface ContainsAnyTokenFilterParams {
 }
 
 /**
+ * The namespace to copy documents from.
+ */
+export type CopyFromNamespaceParams = string | CopyFromNamespaceParams.CopyFromNamespaceConfig;
+
+export namespace CopyFromNamespaceParams {
+  export interface CopyFromNamespaceConfig {
+    /**
+     * The namespace to copy documents from.
+     */
+    source_namespace: string;
+
+    /**
+     * (Optional) An API key for the organization containing the source namespace
+     */
+    source_api_key?: string;
+
+    /**
+     * (Optional) The region of the source namespace.
+     */
+    source_region?: string;
+  }
+}
+
+/**
  * Additional parameters for the Decay operator.
  */
 export interface DecayParams {
@@ -1169,7 +1193,7 @@ export interface NamespaceWriteParams {
   /**
    * Body param: The namespace to copy documents from.
    */
-  copy_from_namespace?: string | NamespaceWriteParams.CopyFromNamespaceConfig;
+  copy_from_namespace?: CopyFromNamespaceParams;
 
   /**
    * Body param: The filter specifying which documents to delete.
@@ -1267,23 +1291,6 @@ export interface NamespaceWriteParams {
 }
 
 export namespace NamespaceWriteParams {
-  export interface CopyFromNamespaceConfig {
-    /**
-     * The namespace to copy documents from.
-     */
-    source_namespace: string;
-
-    /**
-     * (Optional) An API key for the organization containing the source namespace
-     */
-    source_api_key?: string;
-
-    /**
-     * (Optional) The region of the source namespace.
-     */
-    source_region?: string;
-  }
-
   /**
    * The encryption configuration for a namespace.
    */
@@ -1325,6 +1332,7 @@ export declare namespace Namespaces {
     type Columns as Columns,
     type ContainsAllTokensFilterParams as ContainsAllTokensFilterParams,
     type ContainsAnyTokenFilterParams as ContainsAnyTokenFilterParams,
+    type CopyFromNamespaceParams as CopyFromNamespaceParams,
     type DecayParams as DecayParams,
     type DistanceMetric as DistanceMetric,
     type FullTextSearch as FullTextSearch,
