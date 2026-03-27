@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.22.0 (2026-03-27)
+
+Full Changelog: [v1.21.0...v1.22.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.21.0...v1.22.0)
+
+### Features
+
+* spec: disable CopyFromNamespace syntax sugar in Go ([87b07c8](https://github.com/turbopuffer/turbopuffer-typescript/commit/87b07c8a313dbc56d269c9f6f10717c1d145c57c))
+
+
+### Chores
+
+* **ci:** escape input path in publish-npm workflow ([c3ef81a](https://github.com/turbopuffer/turbopuffer-typescript/commit/c3ef81ac2ca763272754c81dde61e76988adee69))
+* **ci:** skip lint on metadata-only changes ([3018358](https://github.com/turbopuffer/turbopuffer-typescript/commit/30183586d35c24e2748bf3a5dcbc1055623bd43f))
+* **internal:** codegen related update ([a4da17a](https://github.com/turbopuffer/turbopuffer-typescript/commit/a4da17a8b1efaaffd05bc5fd904b6050bb55771a))
+* **internal:** fix MCP server TS errors that occur with required client options ([c64e321](https://github.com/turbopuffer/turbopuffer-typescript/commit/c64e32106c0f44e6116d6779d78d2fda9d69254e))
+* **internal:** support custom-instructions-path flag in MCP servers ([f3e26b2](https://github.com/turbopuffer/turbopuffer-typescript/commit/f3e26b2356fd88f73b50bc147cd1909d54fce4bf))
+* **internal:** support local docs search in MCP servers ([445c462](https://github.com/turbopuffer/turbopuffer-typescript/commit/445c4624cdc0b92cc3ce91eb1b502a0936a4826b))
+* **internal:** update gitignore ([3fc364c](https://github.com/turbopuffer/turbopuffer-typescript/commit/3fc364c594b0f178ed742b3effe4d3336c3d74f8))
+
 ## 1.21.0 (2026-03-19)
 
 Full Changelog: [v1.20.0...v1.21.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.20.0...v1.21.0)
