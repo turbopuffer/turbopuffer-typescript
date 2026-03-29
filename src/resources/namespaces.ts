@@ -179,6 +179,11 @@ export interface AttributeSchemaConfig {
   full_text_search?: FullTextSearch;
 
   /**
+   * Whether to enable Glob filters on this attribute.
+   */
+  glob?: boolean;
+
+  /**
    * Whether to enable Regex filters on this attribute.
    */
   regex?: boolean;
