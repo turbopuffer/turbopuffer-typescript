@@ -21,6 +21,8 @@ export {
   type Language,
   type Limit,
   type NamespaceMetadata,
+  type NamespaceMetadataPatch,
+  type PinningConfig,
   type Query,
   type QueryBilling,
   type QueryPerformance,
@@ -48,6 +50,7 @@ export {
   type NamespaceQueryParams,
   type NamespaceRecallParams,
   type NamespaceSchemaParams,
+  type NamespaceUpdateMetadataParams,
   type NamespaceUpdateSchemaParams,
   type NamespaceWriteParams,
 } from './namespaces';

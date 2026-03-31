@@ -189,6 +189,23 @@ describe('resource namespaces', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('updateMetadata: only required params', async () => {
+    const responsePromise = client.namespaces.updateMetadata({ namespace: 'namespace' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('updateMetadata: required and optional params', async () => {
+    const response = await client.namespaces.updateMetadata({ namespace: 'namespace', pinning: true });
+  });
+
+  // Mock server tests are disabled
   test.skip('updateSchema: only required params', async () => {
     const responsePromise = client.namespace('namespace').updateSchema();
     const rawResponse = await responsePromise.asResponse();
