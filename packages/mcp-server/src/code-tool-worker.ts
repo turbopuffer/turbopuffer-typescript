@@ -113,6 +113,7 @@ const fuse = new Fuse(
     'client.namespaces.query',
     'client.namespaces.recall',
     'client.namespaces.schema',
+    'client.namespaces.updateMetadata',
     'client.namespaces.updateSchema',
     'client.namespaces.write',
   ],

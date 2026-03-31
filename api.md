@@ -31,6 +31,8 @@ Types:
 - <code><a href="./src/resources/namespaces.ts">Language</a></code>
 - <code><a href="./src/resources/namespaces.ts">Limit</a></code>
 - <code><a href="./src/resources/namespaces.ts">NamespaceMetadata</a></code>
+- <code><a href="./src/resources/namespaces.ts">NamespaceMetadataPatch</a></code>
+- <code><a href="./src/resources/namespaces.ts">PinningConfig</a></code>
 - <code><a href="./src/resources/namespaces.ts">Query</a></code>
 - <code><a href="./src/resources/namespaces.ts">QueryBilling</a></code>
 - <code><a href="./src/resources/namespaces.ts">QueryPerformance</a></code>
@@ -61,5 +63,6 @@ Methods:
 - <code title="post /v2/namespaces/{namespace}/query">client.namespaces.<a href="./src/resources/namespaces.ts">query</a>({ ...params }) -> NamespaceQueryResponse</code>
 - <code title="post /v1/namespaces/{namespace}/_debug/recall">client.namespaces.<a href="./src/resources/namespaces.ts">recall</a>({ ...params }) -> NamespaceRecallResponse</code>
 - <code title="get /v1/namespaces/{namespace}/schema">client.namespaces.<a href="./src/resources/namespaces.ts">schema</a>({ ...params }) -> NamespaceSchemaResponse</code>
+- <code title="patch /v1/namespaces/{namespace}/metadata">client.namespaces.<a href="./src/resources/namespaces.ts">updateMetadata</a>({ ...params }) -> NamespaceMetadata</code>
 - <code title="post /v1/namespaces/{namespace}/schema">client.namespaces.<a href="./src/resources/namespaces.ts">updateSchema</a>({ ...params }) -> NamespaceUpdateSchemaResponse</code>
 - <code title="post /v2/namespaces/{namespace}">client.namespaces.<a href="./src/resources/namespaces.ts">write</a>({ ...params }) -> NamespaceWriteResponse</code>
