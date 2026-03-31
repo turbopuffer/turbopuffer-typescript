@@ -125,9 +125,9 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     qualified: 'client.namespaces.metadata',
     params: ['namespace: string;'],
     response:
-      "{ approx_logical_bytes: number; approx_row_count: number; created_at: string; encryption: { sse: boolean; } | { cmek: { key_name: string; }; }; index: { status: 'up-to-date'; } | { status: 'updating'; unindexed_bytes: number; }; schema: object; updated_at: string; }",
+      "{ approx_logical_bytes: number; approx_row_count: number; created_at: string; encryption: { sse: boolean; } | { cmek: { key_name: string; }; }; index: { status: 'up-to-date'; } | { status: 'updating'; unindexed_bytes: number; }; schema: object; updated_at: string; pinning?: { replicas?: number; }; }",
     markdown:
-      "## metadata\n\n`client.namespaces.metadata(namespace: string): { approx_logical_bytes: number; approx_row_count: number; created_at: string; encryption: object | object; index: object | object; schema: object; updated_at: string; }`\n\n**get** `/v1/namespaces/{namespace}/metadata`\n\nGet metadata about a namespace.\n\n### Parameters\n\n- `namespace: string`\n\n### Returns\n\n- `{ approx_logical_bytes: number; approx_row_count: number; created_at: string; encryption: { sse: boolean; } | { cmek: { key_name: string; }; }; index: { status: 'up-to-date'; } | { status: 'updating'; unindexed_bytes: number; }; schema: object; updated_at: string; }`\n  Metadata about a namespace.\n\n  - `approx_logical_bytes: number`\n  - `approx_row_count: number`\n  - `created_at: string`\n  - `encryption: { sse: boolean; } | { cmek: { key_name: string; }; }`\n  - `index: { status: 'up-to-date'; } | { status: 'updating'; unindexed_bytes: number; }`\n  - `schema: object`\n  - `updated_at: string`\n\n### Example\n\n```typescript\nimport Turbopuffer from '@turbopuffer/turbopuffer';\n\nconst client = new Turbopuffer();\n\nconst namespaceMetadata = await client.namespaces.metadata({ namespace: 'namespace' });\n\nconsole.log(namespaceMetadata);\n```",
+      "## metadata\n\n`client.namespaces.metadata(namespace: string): { approx_logical_bytes: number; approx_row_count: number; created_at: string; encryption: object | object; index: object | object; schema: object; updated_at: string; pinning?: pinning_config; }`\n\n**get** `/v1/namespaces/{namespace}/metadata`\n\nGet metadata about a namespace.\n\n### Parameters\n\n- `namespace: string`\n\n### Returns\n\n- `{ approx_logical_bytes: number; approx_row_count: number; created_at: string; encryption: { sse: boolean; } | { cmek: { key_name: string; }; }; index: { status: 'up-to-date'; } | { status: 'updating'; unindexed_bytes: number; }; schema: object; updated_at: string; pinning?: { replicas?: number; }; }`\n  Metadata about a namespace.\n\n  - `approx_logical_bytes: number`\n  - `approx_row_count: number`\n  - `created_at: string`\n  - `encryption: { sse: boolean; } | { cmek: { key_name: string; }; }`\n  - `index: { status: 'up-to-date'; } | { status: 'updating'; unindexed_bytes: number; }`\n  - `schema: object`\n  - `updated_at: string`\n  - `pinning?: { replicas?: number; }`\n\n### Example\n\n```typescript\nimport Turbopuffer from '@turbopuffer/turbopuffer';\n\nconst client = new Turbopuffer();\n\nconst namespaceMetadata = await client.namespaces.metadata({ namespace: 'namespace' });\n\nconsole.log(namespaceMetadata);\n```",
   },
   {
     name: 'multi_query',
@@ -207,6 +207,20 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response: 'object',
     markdown:
       "## schema\n\n`client.namespaces.schema(namespace: string): object`\n\n**get** `/v1/namespaces/{namespace}/schema`\n\nGet namespace schema.\n\n### Parameters\n\n- `namespace: string`\n\n### Returns\n\n- `object`\n  The response to a successful namespace schema request.\n\n### Example\n\n```typescript\nimport Turbopuffer from '@turbopuffer/turbopuffer';\n\nconst client = new Turbopuffer();\n\nconst response = await client.namespaces.schema({ namespace: 'namespace' });\n\nconsole.log(response);\n```",
+  },
+  {
+    name: 'update_metadata',
+    endpoint: '/v1/namespaces/{namespace}/metadata',
+    httpMethod: 'patch',
+    summary: '',
+    description: 'Update metadata configuration for a namespace.',
+    stainlessPath: '(resource) namespaces > (method) update_metadata',
+    qualified: 'client.namespaces.updateMetadata',
+    params: ['namespace: string;', 'pinning?: boolean | { replicas?: number; };'],
+    response:
+      "{ approx_logical_bytes: number; approx_row_count: number; created_at: string; encryption: { sse: boolean; } | { cmek: { key_name: string; }; }; index: { status: 'up-to-date'; } | { status: 'updating'; unindexed_bytes: number; }; schema: object; updated_at: string; pinning?: { replicas?: number; }; }",
+    markdown:
+      "## update_metadata\n\n`client.namespaces.updateMetadata(namespace: string, pinning?: boolean | { replicas?: number; }): { approx_logical_bytes: number; approx_row_count: number; created_at: string; encryption: object | object; index: object | object; schema: object; updated_at: string; pinning?: pinning_config; }`\n\n**patch** `/v1/namespaces/{namespace}/metadata`\n\nUpdate metadata configuration for a namespace.\n\n### Parameters\n\n- `namespace: string`\n\n- `pinning?: boolean | { replicas?: number; }`\n  Configuration for namespace pinning.\n- Missing field: no change to pinning configuration\n- `null` or `false`: explicitly remove pinning\n- `true`: enable pinning with default configuration\n- Object: set pinning configuration\n\n\n### Returns\n\n- `{ approx_logical_bytes: number; approx_row_count: number; created_at: string; encryption: { sse: boolean; } | { cmek: { key_name: string; }; }; index: { status: 'up-to-date'; } | { status: 'updating'; unindexed_bytes: number; }; schema: object; updated_at: string; pinning?: { replicas?: number; }; }`\n  Metadata about a namespace.\n\n  - `approx_logical_bytes: number`\n  - `approx_row_count: number`\n  - `created_at: string`\n  - `encryption: { sse: boolean; } | { cmek: { key_name: string; }; }`\n  - `index: { status: 'up-to-date'; } | { status: 'updating'; unindexed_bytes: number; }`\n  - `schema: object`\n  - `updated_at: string`\n  - `pinning?: { replicas?: number; }`\n\n### Example\n\n```typescript\nimport Turbopuffer from '@turbopuffer/turbopuffer';\n\nconst client = new Turbopuffer();\n\nconst namespaceMetadata = await client.namespaces.updateMetadata({ namespace: 'namespace' });\n\nconsole.log(namespaceMetadata);\n```",
   },
   {
     name: 'update_schema',

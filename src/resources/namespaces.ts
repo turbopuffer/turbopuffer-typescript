@@ -99,6 +99,17 @@ export class Namespaces extends APIResource {
   }
 
   /**
+   * Update metadata configuration for a namespace.
+   */
+  updateMetadata(
+    params: NamespaceUpdateMetadataParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<NamespaceMetadata> {
+    const { namespace = this._client.defaultNamespace, ...body } = params ?? {};
+    return this._client.patch(path`/v1/namespaces/${namespace}/metadata`, { body, ...options });
+  }
+
+  /**
    * Update namespace schema.
    */
   updateSchema(
@@ -467,6 +478,11 @@ export interface NamespaceMetadata {
    * The timestamp when the namespace was last modified by a write operation.
    */
   updated_at: string;
+
+  /**
+   * Configuration for namespace pinning.
+   */
+  pinning?: PinningConfig;
 }
 
 export namespace NamespaceMetadata {
@@ -507,6 +523,31 @@ export namespace NamespaceMetadata {
      */
     unindexed_bytes: number;
   }
+}
+
+/**
+ * Request to update namespace metadata configuration.
+ */
+export interface NamespaceMetadataPatch {
+  /**
+   * Configuration for namespace pinning.
+   *
+   * - Missing field: no change to pinning configuration
+   * - `null` or `false`: explicitly remove pinning
+   * - `true`: enable pinning with default configuration
+   * - Object: set pinning configuration
+   */
+  pinning?: boolean | PinningConfig | null;
+}
+
+/**
+ * Configuration for namespace pinning.
+ */
+export interface PinningConfig {
+  /**
+   * The number of read replicas to provision. Defaults to 1 if not specified.
+   */
+  replicas?: number;
 }
 
 /**
@@ -1148,6 +1189,23 @@ export interface NamespaceSchemaParams {
   namespace?: string;
 }
 
+export interface NamespaceUpdateMetadataParams {
+  /**
+   * Path param: The name of the namespace.
+   */
+  namespace?: string;
+
+  /**
+   * Body param: Configuration for namespace pinning.
+   *
+   * - Missing field: no change to pinning configuration
+   * - `null` or `false`: explicitly remove pinning
+   * - `true`: enable pinning with default configuration
+   * - Object: set pinning configuration
+   */
+  pinning?: boolean | PinningConfig | null;
+}
+
 export interface NamespaceUpdateSchemaParams {
   /**
    * Path param: The name of the namespace.
@@ -1323,6 +1381,8 @@ export declare namespace Namespaces {
     type Language as Language,
     type Limit as Limit,
     type NamespaceMetadata as NamespaceMetadata,
+    type NamespaceMetadataPatch as NamespaceMetadataPatch,
+    type PinningConfig as PinningConfig,
     type Query as Query,
     type QueryBilling as QueryBilling,
     type QueryPerformance as QueryPerformance,
@@ -1350,6 +1410,7 @@ export declare namespace Namespaces {
     type NamespaceQueryParams as NamespaceQueryParams,
     type NamespaceRecallParams as NamespaceRecallParams,
     type NamespaceSchemaParams as NamespaceSchemaParams,
+    type NamespaceUpdateMetadataParams as NamespaceUpdateMetadataParams,
     type NamespaceUpdateSchemaParams as NamespaceUpdateSchemaParams,
     type NamespaceWriteParams as NamespaceWriteParams,
   };
