@@ -172,6 +172,7 @@ describe('resource namespaces', () => {
       filters: {},
       include_ground_truth: true,
       num: 0,
+      rank_by: {},
       top_k: 0,
     });
   });

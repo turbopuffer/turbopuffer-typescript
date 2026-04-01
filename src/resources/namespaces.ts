@@ -1177,6 +1177,12 @@ export interface NamespaceRecallParams {
   num?: number;
 
   /**
+   * Body param: The ranking function to evaluate recall for. If provided, `num` must
+   * be either null or 1.
+   */
+  rank_by?: unknown;
+
+  /**
    * Body param: Search for `top_k` nearest neighbors.
    */
   top_k?: number;
