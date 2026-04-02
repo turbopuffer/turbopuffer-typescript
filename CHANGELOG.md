@@ -1,5 +1,39 @@
 # Changelog
 
+## 1.22.0 (2026-04-02)
+
+Full Changelog: [v1.21.0...v1.22.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.21.0...v1.22.0)
+
+### Features
+
+* add update_metadata method to configure pinning ([6981e22](https://github.com/turbopuffer/turbopuffer-typescript/commit/6981e2203dcb37852d6ef0ae034dabd068402cb2))
+* docs for glob/regex acceleration ([07706f0](https://github.com/turbopuffer/turbopuffer-typescript/commit/07706f0a6a2995a7c7fe48dc8bd0313febb3388b))
+* Multiple Vector Columns Docs ([2723cf9](https://github.com/turbopuffer/turbopuffer-typescript/commit/2723cf912b9a2a98b953a3de764dddddb49ba56c))
+* spec: disable CopyFromNamespace syntax sugar in Go ([87b07c8](https://github.com/turbopuffer/turbopuffer-typescript/commit/87b07c8a313dbc56d269c9f6f10717c1d145c57c))
+
+
+### Bug Fixes
+
+* **internal:** gitignore generated `oidc` dir ([b2836ba](https://github.com/turbopuffer/turbopuffer-typescript/commit/b2836bac07f8dfac5db907abae0f676b53cd1e8d))
+
+
+### Chores
+
+* **ci:** escape input path in publish-npm workflow ([c3ef81a](https://github.com/turbopuffer/turbopuffer-typescript/commit/c3ef81ac2ca763272754c81dde61e76988adee69))
+* **ci:** skip lint on metadata-only changes ([3018358](https://github.com/turbopuffer/turbopuffer-typescript/commit/30183586d35c24e2748bf3a5dcbc1055623bd43f))
+* **internal:** codegen related update ([a4da17a](https://github.com/turbopuffer/turbopuffer-typescript/commit/a4da17a8b1efaaffd05bc5fd904b6050bb55771a))
+* **internal:** fix MCP docker image builds in yarn projects ([c7bb7f0](https://github.com/turbopuffer/turbopuffer-typescript/commit/c7bb7f09e5ca97a5926127590b09568a9ae19b47))
+* **internal:** fix MCP server TS errors that occur with required client options ([c64e321](https://github.com/turbopuffer/turbopuffer-typescript/commit/c64e32106c0f44e6116d6779d78d2fda9d69254e))
+* **internal:** improve local docs search for MCP servers ([0418fb9](https://github.com/turbopuffer/turbopuffer-typescript/commit/0418fb966ecd82866215b084d2ee9f41fc1b33bc))
+* **internal:** improve local docs search for MCP servers ([9b9f73d](https://github.com/turbopuffer/turbopuffer-typescript/commit/9b9f73d24e5f6c1d588068c2fea69d12642467d8))
+* **internal:** support custom-instructions-path flag in MCP servers ([f3e26b2](https://github.com/turbopuffer/turbopuffer-typescript/commit/f3e26b2356fd88f73b50bc147cd1909d54fce4bf))
+* **internal:** support local docs search in MCP servers ([445c462](https://github.com/turbopuffer/turbopuffer-typescript/commit/445c4624cdc0b92cc3ce91eb1b502a0936a4826b))
+* **internal:** support type annotations when running MCP in local execution mode ([2c1054b](https://github.com/turbopuffer/turbopuffer-typescript/commit/2c1054b66d6dd59162cdc0c5bd7c46edf7f77d8f))
+* **internal:** update gitignore ([3fc364c](https://github.com/turbopuffer/turbopuffer-typescript/commit/3fc364c594b0f178ed742b3effe4d3336c3d74f8))
+* **internal:** use link instead of file in MCP server package.json files ([96a56d1](https://github.com/turbopuffer/turbopuffer-typescript/commit/96a56d127d061b6a75319c83a73bbb1169df3c0a))
+* **mcp-server:** add support for session id, forward client info ([6a260da](https://github.com/turbopuffer/turbopuffer-typescript/commit/6a260da10bacd517683f71b6a7037c8fa0ced2d0))
+* **mcp-server:** log client info ([040d7fd](https://github.com/turbopuffer/turbopuffer-typescript/commit/040d7fdfa64465c6efecd4828f2eebd3b39c28e8))
+
 ## 1.21.0 (2026-03-19)
 
 Full Changelog: [v1.20.0...v1.21.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.20.0...v1.21.0)

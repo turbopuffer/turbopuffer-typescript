@@ -117,6 +117,17 @@ export class Namespace extends APIResource {
   }
 
   /**
+   * Update metadata configuration for a namespace.
+   */
+  updateMetadata(
+    params: NamespaceUpdateMetadataParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<NamespaceMetadata> {
+    const { namespace = this._client.defaultNamespace, ...body } = params ?? {};
+    return this._client.patch(path`/v1/namespaces/${namespace}/metadata`, { body, ...options });
+  }
+
+  /**
    * Update namespace schema.
    */
   updateSchema(
@@ -177,6 +188,11 @@ export interface AttributeSchemaConfig {
    * filterable. You can override this by setting `filterable: true`.
    */
   full_text_search?: FullTextSearch;
+
+  /**
+   * Whether to enable Glob filters on this attribute.
+   */
+  glob?: boolean;
 
   /**
    * Whether to enable Regex filters on this attribute.
@@ -263,6 +279,30 @@ export interface ContainsAnyTokenFilterParams {
    * Whether to treat the last token in the query input as a literal prefix.
    */
   last_as_prefix?: boolean;
+}
+
+/**
+ * The namespace to copy documents from.
+ */
+export type CopyFromNamespaceParams = string | CopyFromNamespaceParams.CopyFromNamespaceConfig;
+
+export namespace CopyFromNamespaceParams {
+  export interface CopyFromNamespaceConfig {
+    /**
+     * The namespace to copy documents from.
+     */
+    source_namespace: string;
+
+    /**
+     * (Optional) An API key for the organization containing the source namespace
+     */
+    source_api_key?: string;
+
+    /**
+     * (Optional) The region of the source namespace.
+     */
+    source_region?: string;
+  }
 }
 
 /**
@@ -456,6 +496,11 @@ export interface NamespaceMetadata {
    * The timestamp when the namespace was last modified by a write operation.
    */
   updated_at: string;
+
+  /**
+   * Configuration for namespace pinning.
+   */
+  pinning?: PinningConfig;
 }
 
 export namespace NamespaceMetadata {
@@ -496,6 +541,31 @@ export namespace NamespaceMetadata {
      */
     unindexed_bytes: number;
   }
+}
+
+/**
+ * Request to update namespace metadata configuration.
+ */
+export interface NamespaceMetadataPatch {
+  /**
+   * Configuration for namespace pinning.
+   *
+   * - Missing field: no change to pinning configuration
+   * - `null` or `false`: explicitly remove pinning
+   * - `true`: enable pinning with default configuration
+   * - Object: set pinning configuration
+   */
+  pinning?: boolean | PinningConfig | null;
+}
+
+/**
+ * Configuration for namespace pinning.
+ */
+export interface PinningConfig {
+  /**
+   * The number of read replicas to provision. Defaults to 1 if not specified.
+   */
+  replicas?: number;
 }
 
 /**
@@ -1131,6 +1201,12 @@ export interface NamespaceRecallParams {
   num?: number;
 
   /**
+   * Body param: The ranking function to evaluate recall for. If provided, `num` must
+   * be either null or 1.
+   */
+  rank_by?: unknown;
+
+  /**
    * Body param: Search for `top_k` nearest neighbors.
    */
   top_k?: number;
@@ -1141,6 +1217,23 @@ export interface NamespaceSchemaParams {
    * The name of the namespace.
    */
   namespace?: string;
+}
+
+export interface NamespaceUpdateMetadataParams {
+  /**
+   * Path param: The name of the namespace.
+   */
+  namespace?: string;
+
+  /**
+   * Body param: Configuration for namespace pinning.
+   *
+   * - Missing field: no change to pinning configuration
+   * - `null` or `false`: explicitly remove pinning
+   * - `true`: enable pinning with default configuration
+   * - Object: set pinning configuration
+   */
+  pinning?: boolean | PinningConfig | null;
 }
 
 export interface NamespaceUpdateSchemaParams {
@@ -1169,7 +1262,7 @@ export interface NamespaceWriteParams {
   /**
    * Body param: The namespace to copy documents from.
    */
-  copy_from_namespace?: string | NamespaceWriteParams.CopyFromNamespaceConfig;
+  copy_from_namespace?: CopyFromNamespaceParams;
 
   /**
    * Body param: The filter specifying which documents to delete.
@@ -1267,23 +1360,6 @@ export interface NamespaceWriteParams {
 }
 
 export namespace NamespaceWriteParams {
-  export interface CopyFromNamespaceConfig {
-    /**
-     * The namespace to copy documents from.
-     */
-    source_namespace: string;
-
-    /**
-     * (Optional) An API key for the organization containing the source namespace
-     */
-    source_api_key?: string;
-
-    /**
-     * (Optional) The region of the source namespace.
-     */
-    source_region?: string;
-  }
-
   /**
    * The encryption configuration for a namespace.
    */
@@ -1325,6 +1401,7 @@ export declare namespace Namespaces {
     type Columns as Columns,
     type ContainsAllTokensFilterParams as ContainsAllTokensFilterParams,
     type ContainsAnyTokenFilterParams as ContainsAnyTokenFilterParams,
+    type CopyFromNamespaceParams as CopyFromNamespaceParams,
     type DecayParams as DecayParams,
     type DistanceMetric as DistanceMetric,
     type FullTextSearch as FullTextSearch,
@@ -1334,6 +1411,8 @@ export declare namespace Namespaces {
     type Language as Language,
     type Limit as Limit,
     type NamespaceMetadata as NamespaceMetadata,
+    type NamespaceMetadataPatch as NamespaceMetadataPatch,
+    type PinningConfig as PinningConfig,
     type Query as Query,
     type QueryBilling as QueryBilling,
     type QueryPerformance as QueryPerformance,
@@ -1361,6 +1440,7 @@ export declare namespace Namespaces {
     type NamespaceQueryParams as NamespaceQueryParams,
     type NamespaceRecallParams as NamespaceRecallParams,
     type NamespaceSchemaParams as NamespaceSchemaParams,
+    type NamespaceUpdateMetadataParams as NamespaceUpdateMetadataParams,
     type NamespaceUpdateSchemaParams as NamespaceUpdateSchemaParams,
     type NamespaceWriteParams as NamespaceWriteParams,
   };

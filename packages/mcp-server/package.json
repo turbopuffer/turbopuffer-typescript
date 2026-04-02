@@ -1,6 +1,6 @@
 {
   "name": "@turbopuffer/turbopuffer-mcp",
-  "version": "1.21.0",
+  "version": "1.22.0",
   "description": "The official MCP Server for the Turbopuffer API",
   "author": "Turbopuffer <info@turbopuffer.com>",
   "types": "dist/index.d.ts",
@@ -30,7 +30,7 @@
     "fix": "eslint --fix ."
   },
   "dependencies": {
-    "@turbopuffer/turbopuffer": "file:../../dist/",
+    "@turbopuffer/turbopuffer": "link:../../dist/",
     "ajv": "^8.18.0",
     "@cloudflare/cabidela": "^0.2.4",
     "@hono/node-server": "^1.19.10",
@@ -41,6 +41,7 @@
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "fuse.js": "^7.1.0",
+    "minisearch": "^7.2.0",
     "jq-web": "https://github.com/stainless-api/jq-web/releases/download/v0.8.8/jq-web.tar.gz",
     "pino": "^10.3.1",
     "pino-http": "^11.0.0",

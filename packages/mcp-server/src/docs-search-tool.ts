@@ -3,6 +3,7 @@
 import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import { Metadata, McpRequestContext, asTextContentResult } from './types';
 import { getLogger } from './logger';
+import type { LocalDocsSearch } from './local-docs-search';
 
 export const metadata: Metadata = {
   resource: 'all',
@@ -43,13 +44,30 @@ export const tool: Tool = {
 const docsSearchURL =
   process.env['DOCS_SEARCH_URL'] || 'https://api.stainless.com/api/projects/turbopuffer/docs/search';
 
-export const handler = async ({
-  reqContext,
-  args,
-}: {
-  reqContext: McpRequestContext;
-  args: Record<string, unknown> | undefined;
-}) => {
+let _localSearch: LocalDocsSearch | undefined;
+
+export function setLocalSearch(search: LocalDocsSearch): void {
+  _localSearch = search;
+}
+
+async function searchLocal(args: Record<string, unknown>): Promise<unknown> {
+  if (!_localSearch) {
+    throw new Error('Local search not initialized');
+  }
+
+  const query = (args['query'] as string) ?? '';
+  const language = (args['language'] as string) ?? 'typescript';
+  const detail = (args['detail'] as string) ?? 'default';
+
+  return _localSearch.search({
+    query,
+    language,
+    detail,
+    maxResults: 5,
+  }).results;
+}
+
+async function searchRemote(args: Record<string, unknown>, reqContext: McpRequestContext): Promise<unknown> {
   const body = args as any;
   const query = new URLSearchParams(body).toString();
 
@@ -57,6 +75,10 @@ export const handler = async ({
   const result = await fetch(`${docsSearchURL}?${query}`, {
     headers: {
       ...(reqContext.stainlessApiKey && { Authorization: reqContext.stainlessApiKey }),
+      ...(reqContext.mcpSessionId && { 'x-stainless-mcp-session-id': reqContext.mcpSessionId }),
+      ...(reqContext.mcpClientInfo && {
+        'x-stainless-mcp-client-info': JSON.stringify(reqContext.mcpClientInfo),
+      }),
     },
   });
 
@@ -94,7 +116,23 @@ export const handler = async ({
     },
     'Got docs search result',
   );
-  return asTextContentResult(resultBody);
+  return resultBody;
+}
+
+export const handler = async ({
+  reqContext,
+  args,
+}: {
+  reqContext: McpRequestContext;
+  args: Record<string, unknown> | undefined;
+}) => {
+  const body = args ?? {};
+
+  if (_localSearch) {
+    return asTextContentResult(await searchLocal(body));
+  }
+
+  return asTextContentResult(await searchRemote(body, reqContext));
 };
 
 export default { metadata, tool, handler };

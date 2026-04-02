@@ -1,4 +1,5 @@
 .prism.log
+.stdy.log
 node_modules
 yarn-error.log
 codegen.log
@@ -10,3 +11,4 @@ dist-deno
 .eslintcache
 dist-bundle
 *.mcpb
+oidc

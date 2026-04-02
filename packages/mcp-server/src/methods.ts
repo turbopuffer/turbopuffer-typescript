@@ -65,6 +65,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/namespaces/{namespace}/schema',
   },
   {
+    clientCallName: 'client.namespaces.updateMetadata',
+    fullyQualifiedName: 'namespaces.updateMetadata',
+    httpMethod: 'patch',
+    httpPath: '/v1/namespaces/{namespace}/metadata',
+  },
+  {
     clientCallName: 'client.namespaces.updateSchema',
     fullyQualifiedName: 'namespaces.updateSchema',
     httpMethod: 'post',
