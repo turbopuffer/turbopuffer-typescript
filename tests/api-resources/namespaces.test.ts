@@ -191,7 +191,7 @@ describe('resource namespaces', () => {
 
   // Mock server tests are disabled
   test.skip('updateMetadata: only required params', async () => {
-    const responsePromise = client.namespaces.updateMetadata({ namespace: 'namespace' });
+    const responsePromise = client.namespace('namespace').updateMetadata({});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -203,7 +203,7 @@ describe('resource namespaces', () => {
 
   // Mock server tests are disabled
   test.skip('updateMetadata: required and optional params', async () => {
-    const response = await client.namespaces.updateMetadata({ namespace: 'namespace', pinning: true });
+    const response = await client.namespace('namespace').updateMetadata({ pinning: true });
   });
 
   // Mock server tests are disabled
