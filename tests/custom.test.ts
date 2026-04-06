@@ -507,6 +507,7 @@ test('schema and metadata', async () => {
     },
     schema: expectedMetadata,
     updated_at: expect.any(String),
+    last_write_at: expect.any(String),
   });
 });
 
