@@ -480,9 +480,10 @@ export interface NamespaceMetadata {
   updated_at: string;
 
   /**
-   * Configuration for namespace pinning.
+   * Configuration for namespace pinning, along with the current status of the pinned
+   * namespace.
    */
-  pinning?: PinningConfig;
+  pinning?: NamespaceMetadata.Pinning;
 }
 
 export namespace NamespaceMetadata {
@@ -522,6 +523,40 @@ export namespace NamespaceMetadata {
      * not yet been indexed.
      */
     unindexed_bytes: number;
+  }
+
+  /**
+   * Configuration for namespace pinning, along with the current status of the pinned
+   * namespace.
+   */
+  export interface Pinning extends NamespacesAPI.PinningConfig {
+    /**
+     * Operational status for a pinned namespace.
+     */
+    status?: Pinning.Status;
+  }
+
+  export namespace Pinning {
+    /**
+     * Operational status for a pinned namespace.
+     */
+    export interface Status {
+      /**
+       * The number of replicas that are warm and serving traffic.
+       */
+      ready_replicas: number;
+
+      /**
+       * The timestamp of the latest pinning status snapshot.
+       */
+      updated_at: string;
+
+      /**
+       * Aggregate utilization for the pinned namespace, reported as a value between 0.0
+       * and 1.0.
+       */
+      utilization: number;
+    }
   }
 }
 
