@@ -13,6 +13,8 @@ export const makeFetch = (clientOptions: HttpClientOptions) => {
     keepAliveMaxTimeout: 24 * 60 * 60 * 1000, // maximum configurable idle timeout with server hint
     connect: {
       timeout: clientOptions.connectTimeout,
+      // TCP_NODELAY — disable Nagle for lower latency on small request bodies.
+      noDelay: true,
     },
   });
 
