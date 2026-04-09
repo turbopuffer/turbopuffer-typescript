@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.22.1 (2026-04-09)
+
+Full Changelog: [v1.22.0...v1.22.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.22.0...v1.22.1)
+
+### Chores
+
+* **internal:** codegen related update ([b0e506d](https://github.com/turbopuffer/turbopuffer-typescript/commit/b0e506da6cb0ca80c4e211a45c368ca91b05a77c))
+* **internal:** show error causes in MCP servers when running in local mode ([c73ff5b](https://github.com/turbopuffer/turbopuffer-typescript/commit/c73ff5b38d69d00c01ee184bb4913fff7f3c02dd))
+* **mcp-server:** increase local docs search result count from 5 to 10 ([b99f6cb](https://github.com/turbopuffer/turbopuffer-typescript/commit/b99f6cb60dfaa525569aa7396b467ba377b9123a))
+
 ## 1.22.0 (2026-04-06)
 
 Full Changelog: [v1.21.0...v1.22.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.21.0...v1.22.0)
