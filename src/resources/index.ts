@@ -23,7 +23,6 @@ export {
   type NamespaceMetadata,
   type NamespaceMetadataPatch,
   type PinningConfig,
-  type Query,
   type QueryBilling,
   type QueryPerformance,
   type Row,

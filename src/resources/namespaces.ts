@@ -238,9 +238,9 @@ export interface Columns {
   /**
    * The vector embeddings of the documents.
    */
-  vector?: Array<Vector> | Array<number> | string;
+  vector?: Array<Vector> | Vector;
 
-  [k: string]: Array<unknown> | Array<ID> | Array<Vector> | Array<number> | string | undefined;
+  [k: string]: Array<unknown> | Array<ID> | Array<Vector> | Vector | undefined;
 }
 
 /**
@@ -583,60 +583,6 @@ export interface PinningConfig {
    * The number of read replicas to provision. Defaults to 1 if not specified.
    */
   replicas?: number;
-}
-
-/**
- * Query, filter, full-text search and vector search documents.
- */
-export interface Query {
-  /**
-   * Aggregations to compute over all documents in the namespace that match the
-   * filters.
-   */
-  aggregate_by?: { [key: string]: unknown };
-
-  /**
-   * A function used to calculate vector similarity.
-   */
-  distance_metric?: DistanceMetric;
-
-  /**
-   * List of attribute names to exclude from the response. All other attributes will
-   * be included in the response.
-   */
-  exclude_attributes?: Array<string>;
-
-  /**
-   * Exact filters for attributes to refine search results for. Think of it as a SQL
-   * WHERE clause.
-   */
-  filters?: unknown;
-
-  /**
-   * Groups documents by the specified attributes (the "group key") before computing
-   * aggregates. Aggregates are computed separately for each group.
-   */
-  group_by?: Array<string>;
-
-  /**
-   * Whether to include attributes in the response.
-   */
-  include_attributes?: IncludeAttributes;
-
-  /**
-   * Limits the documents returned by a query.
-   */
-  limit?: number | Limit;
-
-  /**
-   * How to rank the documents in the namespace.
-   */
-  rank_by?: unknown;
-
-  /**
-   * The number of results to return.
-   */
-  top_k?: number;
 }
 
 /**
@@ -1076,7 +1022,7 @@ export interface NamespaceMultiQueryParams {
   /**
    * Body param
    */
-  queries: Array<Query>;
+  queries: Array<NamespaceMultiQueryParams.Query>;
 
   /**
    * Body param: The consistency level for a query.
@@ -1090,6 +1036,60 @@ export interface NamespaceMultiQueryParams {
 }
 
 export namespace NamespaceMultiQueryParams {
+  /**
+   * Query, filter, full-text search and vector search documents.
+   */
+  export interface Query {
+    /**
+     * Aggregations to compute over all documents in the namespace that match the
+     * filters.
+     */
+    aggregate_by?: { [key: string]: unknown };
+
+    /**
+     * A function used to calculate vector similarity.
+     */
+    distance_metric?: NamespacesAPI.DistanceMetric;
+
+    /**
+     * List of attribute names to exclude from the response. All other attributes will
+     * be included in the response.
+     */
+    exclude_attributes?: Array<string>;
+
+    /**
+     * Exact filters for attributes to refine search results for. Think of it as a SQL
+     * WHERE clause.
+     */
+    filters?: unknown;
+
+    /**
+     * Groups documents by the specified attributes (the "group key") before computing
+     * aggregates. Aggregates are computed separately for each group.
+     */
+    group_by?: Array<string>;
+
+    /**
+     * Whether to include attributes in the response.
+     */
+    include_attributes?: NamespacesAPI.IncludeAttributes;
+
+    /**
+     * Limits the documents returned by a query.
+     */
+    limit?: number | NamespacesAPI.Limit;
+
+    /**
+     * How to rank the documents in the namespace.
+     */
+    rank_by?: unknown;
+
+    /**
+     * The number of results to return.
+     */
+    top_k?: number;
+  }
+
   /**
    * The consistency level for a query.
    */
@@ -1424,7 +1424,6 @@ export declare namespace Namespaces {
     type NamespaceMetadata as NamespaceMetadata,
     type NamespaceMetadataPatch as NamespaceMetadataPatch,
     type PinningConfig as PinningConfig,
-    type Query as Query,
     type QueryBilling as QueryBilling,
     type QueryPerformance as QueryPerformance,
     type Row as Row,
