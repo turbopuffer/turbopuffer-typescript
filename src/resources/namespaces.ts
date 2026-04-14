@@ -172,6 +172,11 @@ export interface AttributeSchemaConfig {
   full_text_search?: FullTextSearch;
 
   /**
+   * Whether to enable Fuzzy filters on this attribute.
+   */
+  fuzzy?: boolean;
+
+  /**
    * Whether to enable Glob filters on this attribute.
    */
   glob?: boolean;
