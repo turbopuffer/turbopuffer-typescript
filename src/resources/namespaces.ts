@@ -8,6 +8,31 @@ import { path } from '../internal/utils/path';
 
 export class Namespaces extends APIResource {
   /**
+   * Creates an instant, copy-on-write clone of a namespace.
+   */
+  branchFrom(
+    params: NamespaceBranchFromParams,
+    options?: RequestOptions,
+  ): APIPromise<NamespaceBranchFromResponse> {
+    const { namespace = this._client.defaultNamespace, ...body } = params;
+    return this._client.post(path`/v2/namespaces/${namespace}?stainless_overload=branchFrom`, {
+      body,
+      ...options,
+    });
+  }
+
+  /**
+   * Copy all documents from another namespace into this one.
+   */
+  copyFrom(params: NamespaceCopyFromParams, options?: RequestOptions): APIPromise<NamespaceCopyFromResponse> {
+    const { namespace = this._client.defaultNamespace, ...body } = params;
+    return this._client.post(path`/v2/namespaces/${namespace}?stainless_overload=copyFrom`, {
+      body,
+      ...options,
+    });
+  }
+
+  /**
    * Delete namespace.
    */
   deleteAll(
@@ -716,6 +741,142 @@ export interface WritePerformance {
 }
 
 /**
+ * The response to a successful write request.
+ */
+export interface NamespaceBranchFromResponse {
+  /**
+   * The billing information for a write request.
+   */
+  billing: WriteBilling;
+
+  /**
+   * A message describing the result of the write request.
+   */
+  message: string;
+
+  /**
+   * The number of rows affected by the write request.
+   */
+  rows_affected: number;
+
+  /**
+   * The status of the request.
+   */
+  status: 'OK';
+
+  /**
+   * The IDs of documents that were deleted. Only included when `return_affected_ids`
+   * is true and at least one document was deleted.
+   */
+  deleted_ids?: Array<ID>;
+
+  /**
+   * The IDs of documents that were patched. Only included when `return_affected_ids`
+   * is true and at least one document was patched.
+   */
+  patched_ids?: Array<ID>;
+
+  /**
+   * The performance information for a write request.
+   */
+  performance?: WritePerformance;
+
+  /**
+   * The number of rows deleted by the write request.
+   */
+  rows_deleted?: number;
+
+  /**
+   * The number of rows patched by the write request.
+   */
+  rows_patched?: number;
+
+  /**
+   * Whether more documents match the filter for partial operations.
+   */
+  rows_remaining?: boolean;
+
+  /**
+   * The number of rows upserted by the write request.
+   */
+  rows_upserted?: number;
+
+  /**
+   * The IDs of documents that were upserted. Only included when
+   * `return_affected_ids` is true and at least one document was upserted.
+   */
+  upserted_ids?: Array<ID>;
+}
+
+/**
+ * The response to a successful write request.
+ */
+export interface NamespaceCopyFromResponse {
+  /**
+   * The billing information for a write request.
+   */
+  billing: WriteBilling;
+
+  /**
+   * A message describing the result of the write request.
+   */
+  message: string;
+
+  /**
+   * The number of rows affected by the write request.
+   */
+  rows_affected: number;
+
+  /**
+   * The status of the request.
+   */
+  status: 'OK';
+
+  /**
+   * The IDs of documents that were deleted. Only included when `return_affected_ids`
+   * is true and at least one document was deleted.
+   */
+  deleted_ids?: Array<ID>;
+
+  /**
+   * The IDs of documents that were patched. Only included when `return_affected_ids`
+   * is true and at least one document was patched.
+   */
+  patched_ids?: Array<ID>;
+
+  /**
+   * The performance information for a write request.
+   */
+  performance?: WritePerformance;
+
+  /**
+   * The number of rows deleted by the write request.
+   */
+  rows_deleted?: number;
+
+  /**
+   * The number of rows patched by the write request.
+   */
+  rows_patched?: number;
+
+  /**
+   * Whether more documents match the filter for partial operations.
+   */
+  rows_remaining?: boolean;
+
+  /**
+   * The number of rows upserted by the write request.
+   */
+  rows_upserted?: number;
+
+  /**
+   * The IDs of documents that were upserted. Only included when
+   * `return_affected_ids` is true and at least one document was upserted.
+   */
+  upserted_ids?: Array<ID>;
+}
+
+/**
  * The response to a successful namespace deletion request.
  */
 export interface NamespaceDeleteAllResponse {
@@ -912,6 +1073,30 @@ export interface NamespaceWriteResponse {
    * `return_affected_ids` is true and at least one document was upserted.
    */
   upserted_ids?: Array<ID>;
+}
+
+export interface NamespaceBranchFromParams {
+  /**
+   * Path param: The name of the namespace.
+   */
+  namespace?: string;
+
+  /**
+   * Body param: The namespace to create an instant, copy-on-write clone of.
+   */
+  branch_from_namespace: BranchFromNamespaceParams;
+}
+
+export interface NamespaceCopyFromParams {
+  /**
+   * Path param: The name of the namespace.
+   */
+  namespace?: string;
+
+  /**
+   * Body param: The namespace to copy documents from.
+   */
+  copy_from_namespace: CopyFromNamespaceParams;
 }
 
 export interface NamespaceDeleteAllParams {
@@ -1438,6 +1623,8 @@ export declare namespace Namespaces {
     type VectorEncoding as VectorEncoding,
     type WriteBilling as WriteBilling,
     type WritePerformance as WritePerformance,
+    type NamespaceBranchFromResponse as NamespaceBranchFromResponse,
+    type NamespaceCopyFromResponse as NamespaceCopyFromResponse,
     type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
     type NamespaceExplainQueryResponse as NamespaceExplainQueryResponse,
     type NamespaceHintCacheWarmResponse as NamespaceHintCacheWarmResponse,
@@ -1447,6 +1634,8 @@ export declare namespace Namespaces {
     type NamespaceSchemaResponse as NamespaceSchemaResponse,
     type NamespaceUpdateSchemaResponse as NamespaceUpdateSchemaResponse,
     type NamespaceWriteResponse as NamespaceWriteResponse,
+    type NamespaceBranchFromParams as NamespaceBranchFromParams,
+    type NamespaceCopyFromParams as NamespaceCopyFromParams,
     type NamespaceDeleteAllParams as NamespaceDeleteAllParams,
     type NamespaceExplainQueryParams as NamespaceExplainQueryParams,
     type NamespaceHintCacheWarmParams as NamespaceHintCacheWarmParams,

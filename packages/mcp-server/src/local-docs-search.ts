@@ -643,6 +643,99 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
     },
   },
+  {
+    name: 'branch_from',
+    endpoint: '/v2/namespaces/{namespace}?stainless_overload=branchFrom',
+    httpMethod: 'post',
+    summary: '',
+    description: 'Creates an instant, copy-on-write clone of a namespace.',
+    stainlessPath: '(resource) namespaces > (method) branch_from',
+    qualified: 'client.namespaces.branchFrom',
+    params: ['namespace: string;', 'branch_from_namespace: string | { source_namespace: string; };'],
+    response:
+      "{ billing: { billable_logical_bytes_written: number; query?: query_billing; }; message: string; rows_affected: number; status: 'OK'; deleted_ids?: string | number[]; patched_ids?: string | number[]; performance?: { server_total_ms: number; }; rows_deleted?: number; rows_patched?: number; rows_remaining?: boolean; rows_upserted?: number; upserted_ids?: string | number[]; }",
+    markdown:
+      "## branch_from\n\n`client.namespaces.branchFrom(namespace: string, branch_from_namespace: string | { source_namespace: string; }): { billing: write_billing; message: string; rows_affected: number; status: 'OK'; deleted_ids?: id[]; patched_ids?: id[]; performance?: write_performance; rows_deleted?: number; rows_patched?: number; rows_remaining?: boolean; rows_upserted?: number; upserted_ids?: id[]; }`\n\n**post** `/v2/namespaces/{namespace}?stainless_overload=branchFrom`\n\nCreates an instant, copy-on-write clone of a namespace.\n\n### Parameters\n\n- `namespace: string`\n\n- `branch_from_namespace: string | { source_namespace: string; }`\n  The namespace to create an instant, copy-on-write clone of.\n\n### Returns\n\n- `{ billing: { billable_logical_bytes_written: number; query?: query_billing; }; message: string; rows_affected: number; status: 'OK'; deleted_ids?: string | number[]; patched_ids?: string | number[]; performance?: { server_total_ms: number; }; rows_deleted?: number; rows_patched?: number; rows_remaining?: boolean; rows_upserted?: number; upserted_ids?: string | number[]; }`\n  The response to a successful write request.\n\n  - `billing: { billable_logical_bytes_written: number; query?: { billable_logical_bytes_queried: number; billable_logical_bytes_returned: number; }; }`\n  - `message: string`\n  - `rows_affected: number`\n  - `status: 'OK'`\n  - `deleted_ids?: string | number[]`\n  - `patched_ids?: string | number[]`\n  - `performance?: { server_total_ms: number; }`\n  - `rows_deleted?: number`\n  - `rows_patched?: number`\n  - `rows_remaining?: boolean`\n  - `rows_upserted?: number`\n  - `upserted_ids?: string | number[]`\n\n### Example\n\n```typescript\nimport Turbopuffer from '@turbopuffer/turbopuffer';\n\nconst client = new Turbopuffer();\n\nconst response = await client.namespaces.branchFrom({ namespace: 'namespace', branch_from_namespace: 'string' });\n\nconsole.log(response);\n```",
+    perLanguage: {
+      go: {
+        method: 'client.Namespaces.BranchFrom',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/turbopuffer/turbopuffer-go"\n\t"github.com/turbopuffer/turbopuffer-go/option"\n)\n\nfunc main() {\n\tclient := turbopuffer.NewClient(\n\t\toption.WithAPIKey("tpuf_A1..."),\n\t)\n\tresponse, err := client.Namespaces.BranchFrom(context.TODO(), turbopuffer.NamespaceBranchFromParams{\n\t\tNamespace: turbopuffer.String("namespace"),\n\t\tBranchFromNamespace: turbopuffer.BranchFromNamespaceParams{\n\t\t\tSourceNamespace: "source_namespace",\n\t\t},\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.DeletedIDs)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://$TURBOPUFFER_REGION.turbopuffer.com/v2/namespaces/$NAMESPACE \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $TURBOPUFFER_API_KEY" \\\n    -d \'{\n          "branch_from_namespace": "string"\n        }\'',
+      },
+      java: {
+        method: 'namespaces().branchFrom',
+        example:
+          'package com.turbopuffer.example;\n\nimport com.turbopuffer.client.TurbopufferClient;\nimport com.turbopuffer.client.okhttp.TurbopufferOkHttpClient;\nimport com.turbopuffer.models.namespaces.NamespaceBranchFromParams;\nimport com.turbopuffer.models.namespaces.NamespaceBranchFromResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        TurbopufferClient client = TurbopufferOkHttpClient.builder()\n            .fromEnv()\n            .defaultNamespace("My Default Namespace")\n            .build();\n\n        NamespaceBranchFromParams params = NamespaceBranchFromParams.builder()\n            .branchFromNamespace("string")\n            .build();\n        NamespaceBranchFromResponse response = client.namespaces().branchFrom(params);\n    }\n}',
+      },
+      python: {
+        method: 'namespaces.branch_from',
+        example:
+          'import os\nfrom turbopuffer import Turbopuffer\n\nclient = Turbopuffer(\n    api_key=os.environ.get("TURBOPUFFER_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.namespaces.branch_from(\n    namespace="namespace",\n    branch_from_namespace="string",\n)\nprint(response.deleted_ids)',
+      },
+      ruby: {
+        method: 'namespaces.branch_from',
+        example:
+          'require "turbopuffer"\n\nturbopuffer = Turbopuffer::Client.new(api_key: "tpuf_A1...")\n\nresponse = turbopuffer.namespaces.branch_from(namespace: "namespace", branch_from_namespace: "string")\n\nputs(response)',
+      },
+      typescript: {
+        method: 'client.namespaces.branchFrom',
+        example:
+          "import Turbopuffer from '@turbopuffer/turbopuffer';\n\nconst client = new Turbopuffer({\n  apiKey: process.env['TURBOPUFFER_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.namespaces.branchFrom({\n  namespace: 'namespace',\n  branch_from_namespace: 'string',\n});\n\nconsole.log(response.deleted_ids);",
+      },
+    },
+  },
+  {
+    name: 'copy_from',
+    endpoint: '/v2/namespaces/{namespace}?stainless_overload=copyFrom',
+    httpMethod: 'post',
+    summary: '',
+    description: 'Copy all documents from another namespace into this one.',
+    stainlessPath: '(resource) namespaces > (method) copy_from',
+    qualified: 'client.namespaces.copyFrom',
+    params: [
+      'namespace: string;',
+      'copy_from_namespace: string | { source_namespace: string; source_api_key?: string; source_region?: string; };',
+    ],
+    response:
+      "{ billing: { billable_logical_bytes_written: number; query?: query_billing; }; message: string; rows_affected: number; status: 'OK'; deleted_ids?: string | number[]; patched_ids?: string | number[]; performance?: { server_total_ms: number; }; rows_deleted?: number; rows_patched?: number; rows_remaining?: boolean; rows_upserted?: number; upserted_ids?: string | number[]; }",
+    markdown:
+      "## copy_from\n\n`client.namespaces.copyFrom(namespace: string, copy_from_namespace: string | { source_namespace: string; source_api_key?: string; source_region?: string; }): { billing: write_billing; message: string; rows_affected: number; status: 'OK'; deleted_ids?: id[]; patched_ids?: id[]; performance?: write_performance; rows_deleted?: number; rows_patched?: number; rows_remaining?: boolean; rows_upserted?: number; upserted_ids?: id[]; }`\n\n**post** `/v2/namespaces/{namespace}?stainless_overload=copyFrom`\n\nCopy all documents from another namespace into this one.\n\n### Parameters\n\n- `namespace: string`\n\n- `copy_from_namespace: string | { source_namespace: string; source_api_key?: string; source_region?: string; }`\n  The namespace to copy documents from.\n\n### Returns\n\n- `{ billing: { billable_logical_bytes_written: number; query?: query_billing; }; message: string; rows_affected: number; status: 'OK'; deleted_ids?: string | number[]; patched_ids?: string | number[]; performance?: { server_total_ms: number; }; rows_deleted?: number; rows_patched?: number; rows_remaining?: boolean; rows_upserted?: number; upserted_ids?: string | number[]; }`\n  The response to a successful write request.\n\n  - `billing: { billable_logical_bytes_written: number; query?: { billable_logical_bytes_queried: number; billable_logical_bytes_returned: number; }; }`\n  - `message: string`\n  - `rows_affected: number`\n  - `status: 'OK'`\n  - `deleted_ids?: string | number[]`\n  - `patched_ids?: string | number[]`\n  - `performance?: { server_total_ms: number; }`\n  - `rows_deleted?: number`\n  - `rows_patched?: number`\n  - `rows_remaining?: boolean`\n  - `rows_upserted?: number`\n  - `upserted_ids?: string | number[]`\n\n### Example\n\n```typescript\nimport Turbopuffer from '@turbopuffer/turbopuffer';\n\nconst client = new Turbopuffer();\n\nconst response = await client.namespaces.copyFrom({ namespace: 'namespace', copy_from_namespace: 'string' });\n\nconsole.log(response);\n```",
+    perLanguage: {
+      go: {
+        method: 'client.Namespaces.CopyFrom',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/turbopuffer/turbopuffer-go"\n\t"github.com/turbopuffer/turbopuffer-go/option"\n)\n\nfunc main() {\n\tclient := turbopuffer.NewClient(\n\t\toption.WithAPIKey("tpuf_A1..."),\n\t)\n\tresponse, err := client.Namespaces.CopyFrom(context.TODO(), turbopuffer.NamespaceCopyFromParams{\n\t\tNamespace: turbopuffer.String("namespace"),\n\t\tCopyFromNamespace: turbopuffer.CopyFromNamespaceParams{\n\t\t\tSourceNamespace: "source_namespace",\n\t\t},\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.DeletedIDs)\n}\n',
+      },
+      http: {
+        example:
+          'curl https://$TURBOPUFFER_REGION.turbopuffer.com/v2/namespaces/$NAMESPACE \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $TURBOPUFFER_API_KEY" \\\n    -d \'{\n          "copy_from_namespace": "string"\n        }\'',
+      },
+      java: {
+        method: 'namespaces().copyFrom',
+        example:
+          'package com.turbopuffer.example;\n\nimport com.turbopuffer.client.TurbopufferClient;\nimport com.turbopuffer.client.okhttp.TurbopufferOkHttpClient;\nimport com.turbopuffer.models.namespaces.NamespaceCopyFromParams;\nimport com.turbopuffer.models.namespaces.NamespaceCopyFromResponse;\n\npublic final class Main {\n    private Main() {}\n\n    public static void main(String[] args) {\n        TurbopufferClient client = TurbopufferOkHttpClient.builder()\n            .fromEnv()\n            .defaultNamespace("My Default Namespace")\n            .build();\n\n        NamespaceCopyFromParams params = NamespaceCopyFromParams.builder()\n            .copyFromNamespace("string")\n            .build();\n        NamespaceCopyFromResponse response = client.namespaces().copyFrom(params);\n    }\n}',
+      },
+      python: {
+        method: 'namespaces.copy_from',
+        example:
+          'import os\nfrom turbopuffer import Turbopuffer\n\nclient = Turbopuffer(\n    api_key=os.environ.get("TURBOPUFFER_API_KEY"),  # This is the default and can be omitted\n)\nresponse = client.namespaces.copy_from(\n    namespace="namespace",\n    copy_from_namespace="string",\n)\nprint(response.deleted_ids)',
+      },
+      ruby: {
+        method: 'namespaces.copy_from',
+        example:
+          'require "turbopuffer"\n\nturbopuffer = Turbopuffer::Client.new(api_key: "tpuf_A1...")\n\nresponse = turbopuffer.namespaces.copy_from(namespace: "namespace", copy_from_namespace: "string")\n\nputs(response)',
+      },
+      typescript: {
+        method: 'client.namespaces.copyFrom',
+        example:
+          "import Turbopuffer from '@turbopuffer/turbopuffer';\n\nconst client = new Turbopuffer({\n  apiKey: process.env['TURBOPUFFER_API_KEY'], // This is the default and can be omitted\n});\n\nconst response = await client.namespaces.copyFrom({\n  namespace: 'namespace',\n  copy_from_namespace: 'string',\n});\n\nconsole.log(response.deleted_ids);",
+      },
+    },
+  },
 ];
 
 const EMBEDDED_READMES: { language: string; content: string }[] = [

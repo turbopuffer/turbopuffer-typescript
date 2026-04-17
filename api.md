@@ -42,6 +42,8 @@ Types:
 - <code><a href="./src/resources/namespaces.ts">VectorEncoding</a></code>
 - <code><a href="./src/resources/namespaces.ts">WriteBilling</a></code>
 - <code><a href="./src/resources/namespaces.ts">WritePerformance</a></code>
+- <code><a href="./src/resources/namespaces.ts">NamespaceBranchFromResponse</a></code>
+- <code><a href="./src/resources/namespaces.ts">NamespaceCopyFromResponse</a></code>
 - <code><a href="./src/resources/namespaces.ts">NamespaceDeleteAllResponse</a></code>
 - <code><a href="./src/resources/namespaces.ts">NamespaceExplainQueryResponse</a></code>
 - <code><a href="./src/resources/namespaces.ts">NamespaceHintCacheWarmResponse</a></code>
@@ -54,6 +56,8 @@ Types:
 
 Methods:
 
+- <code title="post /v2/namespaces/{namespace}?stainless_overload=branchFrom">client.namespaces.<a href="./src/resources/namespaces.ts">branchFrom</a>({ ...params }) -> NamespaceBranchFromResponse</code>
+- <code title="post /v2/namespaces/{namespace}?stainless_overload=copyFrom">client.namespaces.<a href="./src/resources/namespaces.ts">copyFrom</a>({ ...params }) -> NamespaceCopyFromResponse</code>
 - <code title="delete /v2/namespaces/{namespace}">client.namespaces.<a href="./src/resources/namespaces.ts">deleteAll</a>({ ...params }) -> NamespaceDeleteAllResponse</code>
 - <code title="post /v2/namespaces/{namespace}/explain_query">client.namespaces.<a href="./src/resources/namespaces.ts">explainQuery</a>({ ...params }) -> NamespaceExplainQueryResponse</code>
 - <code title="get /v1/namespaces/{namespace}/hint_cache_warm">client.namespaces.<a href="./src/resources/namespaces.ts">hintCacheWarm</a>({ ...params }) -> NamespaceHintCacheWarmResponse</code>
