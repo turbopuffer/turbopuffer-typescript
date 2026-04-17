@@ -109,6 +109,8 @@ function getTSDiagnostics(code: string): string[] {
 const fuse = new Fuse(
   [
     'client.namespaces',
+    'client.namespaces.branchFrom',
+    'client.namespaces.copyFrom',
     'client.namespaces.deleteAll',
     'client.namespaces.explainQuery',
     'client.namespaces.hintCacheWarm',

@@ -17,6 +17,18 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/v1/namespaces',
   },
   {
+    clientCallName: 'client.namespaces.branchFrom',
+    fullyQualifiedName: 'namespaces.branchFrom',
+    httpMethod: 'post',
+    httpPath: '/v2/namespaces/{namespace}?stainless_overload=branchFrom',
+  },
+  {
+    clientCallName: 'client.namespaces.copyFrom',
+    fullyQualifiedName: 'namespaces.copyFrom',
+    httpMethod: 'post',
+    httpPath: '/v2/namespaces/{namespace}?stainless_overload=copyFrom',
+  },
+  {
     clientCallName: 'client.namespaces.deleteAll',
     fullyQualifiedName: 'namespaces.deleteAll',
     httpMethod: 'delete',
