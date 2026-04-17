@@ -9,6 +9,52 @@ const client = new Turbopuffer({
 
 describe('resource namespaces', () => {
   // Mock server tests are disabled
+  test.skip('branchFrom: only required params', async () => {
+    const responsePromise = client.namespaces.branchFrom({
+      namespace: 'namespace',
+      branch_from_namespace: 'string',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('branchFrom: required and optional params', async () => {
+    const response = await client.namespaces.branchFrom({
+      namespace: 'namespace',
+      branch_from_namespace: 'string',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('copyFrom: only required params', async () => {
+    const responsePromise = client.namespaces.copyFrom({
+      namespace: 'namespace',
+      copy_from_namespace: 'string',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('copyFrom: required and optional params', async () => {
+    const response = await client.namespaces.copyFrom({
+      namespace: 'namespace',
+      copy_from_namespace: 'string',
+    });
+  });
+
+  // Mock server tests are disabled
   test.skip('deleteAll: only required params', async () => {
     const responsePromise = client.namespace('namespace').deleteAll();
     const rawResponse = await responsePromise.asResponse();
