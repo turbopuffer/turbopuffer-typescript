@@ -57,10 +57,6 @@ export {
   type NamespaceUpdateMetadataParams,
   type NamespaceUpdateSchemaParams,
   type NamespaceWriteParams,
-} from './namespaces';
-export {
-  type NamespaceSummary,
-  type NamespacesParams,
-  type NamespaceSummariesNamespacePage,
-} from './top-level';
+} from './namespaces';;
+export { type NamespaceSummary, type NamespacesParams, type NamespaceSummariesNamespacePage } from './top-level';
 export * from './custom';
