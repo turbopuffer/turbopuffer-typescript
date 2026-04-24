@@ -44,7 +44,12 @@ export type Filter =
   | ['Not', Filter]
   | ['And', Filter[]]
   | ['Or', Filter[]];
-export type RankBy = RankByVector | RankByKnn | RankByText | RankByAttribute | RankByAttributes;
+export type RankBy =
+  | RankByVector
+  | RankByKnn
+  | RankByText
+  | RankByAttribute
+  | RankByAttributes;
 export type RankByAttribute = [string, RankByAttributeOrder];
 export type RankByAttributeOrder = 'asc' | 'desc';
 export type RankByAttributes = RankByAttribute[];
