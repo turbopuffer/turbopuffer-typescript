@@ -2,18 +2,12 @@
 
 import Turbopuffer from '@turbopuffer/turbopuffer';
 
-const client = new Turbopuffer({
-  apiKey: 'tpuf_A1...',
-  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
-});
+const client = new Turbopuffer({ apiKey: 'tpuf_A1...', baseURL: process.env["TEST_API_BASE_URL"] ?? 'http://127.0.0.1:4010' });
 
 describe('resource namespaces', () => {
   // Mock server tests are disabled
   test.skip('branchFrom: only required params', async () => {
-    const responsePromise = client.namespaces.branchFrom({
-      namespace: 'namespace',
-      branch_from_namespace: 'string',
-    });
+    const responsePromise = client.namespaces.branchFrom({ namespace: 'namespace', branch_from_namespace: 'string' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -25,18 +19,12 @@ describe('resource namespaces', () => {
 
   // Mock server tests are disabled
   test.skip('branchFrom: required and optional params', async () => {
-    const response = await client.namespaces.branchFrom({
-      namespace: 'namespace',
-      branch_from_namespace: 'string',
-    });
+    const response = await client.namespaces.branchFrom({ namespace: 'namespace', branch_from_namespace: 'string' });
   });
 
   // Mock server tests are disabled
   test.skip('copyFrom: only required params', async () => {
-    const responsePromise = client.namespaces.copyFrom({
-      namespace: 'namespace',
-      copy_from_namespace: 'string',
-    });
+    const responsePromise = client.namespaces.copyFrom({ namespace: 'namespace', copy_from_namespace: 'string' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -48,10 +36,7 @@ describe('resource namespaces', () => {
 
   // Mock server tests are disabled
   test.skip('copyFrom: required and optional params', async () => {
-    const response = await client.namespaces.copyFrom({
-      namespace: 'namespace',
-      copy_from_namespace: 'string',
-    });
+    const response = await client.namespaces.copyFrom({ namespace: 'namespace', copy_from_namespace: 'string' });
   });
 
   // Mock server tests are disabled
@@ -86,19 +71,19 @@ describe('resource namespaces', () => {
   // Mock server tests are disabled
   test.skip('explainQuery: required and optional params', async () => {
     const response = await client.namespaces.explainQuery({
-      namespace: 'namespace',
-      aggregate_by: { foo: 'bar' },
-      consistency: { level: 'strong' },
-      distance_metric: 'cosine_distance',
-      exclude_attributes: ['string'],
-      filters: {},
-      group_by: ['string'],
-      include_attributes: true,
-      limit: 0,
-      rank_by: {},
-      top_k: 0,
-      vector_encoding: 'float',
-    });
+    namespace: 'namespace',
+    aggregate_by: { foo: 'bar' },
+    consistency: { level: 'strong' },
+    distance_metric: 'cosine_distance',
+    exclude_attributes: ['string'],
+    filters: {},
+    group_by: ['string'],
+    include_attributes: true,
+    limit: 0,
+    rank_by: {},
+    top_k: 0,
+    vector_encoding: 'float',
+  });
   });
 
   // Mock server tests are disabled
@@ -150,23 +135,21 @@ describe('resource namespaces', () => {
   // Mock server tests are disabled
   test.skip('multiQuery: required and optional params', async () => {
     const response = await client.namespaces.multiQuery({
-      namespace: 'namespace',
-      queries: [
-        {
-          aggregate_by: { foo: 'bar' },
-          distance_metric: 'cosine_distance',
-          exclude_attributes: ['string'],
-          filters: {},
-          group_by: ['string'],
-          include_attributes: true,
-          limit: 0,
-          rank_by: {},
-          top_k: 0,
-        },
-      ],
-      consistency: { level: 'strong' },
-      vector_encoding: 'float',
-    });
+    namespace: 'namespace',
+    queries: [{
+    aggregate_by: { foo: 'bar' },
+    distance_metric: 'cosine_distance',
+    exclude_attributes: ['string'],
+    filters: {},
+    group_by: ['string'],
+    include_attributes: true,
+    limit: 0,
+    rank_by: {},
+    top_k: 0,
+  }],
+    consistency: { level: 'strong' },
+    vector_encoding: 'float',
+  });
   });
 
   // Mock server tests are disabled
@@ -184,19 +167,19 @@ describe('resource namespaces', () => {
   // Mock server tests are disabled
   test.skip('query: required and optional params', async () => {
     const response = await client.namespaces.query({
-      namespace: 'namespace',
-      aggregate_by: { foo: 'bar' },
-      consistency: { level: 'strong' },
-      distance_metric: 'cosine_distance',
-      exclude_attributes: ['string'],
-      filters: {},
-      group_by: ['string'],
-      include_attributes: true,
-      limit: 0,
-      rank_by: {},
-      top_k: 0,
-      vector_encoding: 'float',
-    });
+    namespace: 'namespace',
+    aggregate_by: { foo: 'bar' },
+    consistency: { level: 'strong' },
+    distance_metric: 'cosine_distance',
+    exclude_attributes: ['string'],
+    filters: {},
+    group_by: ['string'],
+    include_attributes: true,
+    limit: 0,
+    rank_by: {},
+    top_k: 0,
+    vector_encoding: 'float',
+  });
   });
 
   // Mock server tests are disabled
@@ -214,13 +197,13 @@ describe('resource namespaces', () => {
   // Mock server tests are disabled
   test.skip('recall: required and optional params', async () => {
     const response = await client.namespaces.recall({
-      namespace: 'namespace',
-      filters: {},
-      include_ground_truth: true,
-      num: 0,
-      rank_by: {},
-      top_k: 0,
-    });
+    namespace: 'namespace',
+    filters: {},
+    include_ground_truth: true,
+    num: 0,
+    rank_by: {},
+    top_k: 0,
+  });
   });
 
   // Mock server tests are disabled
@@ -272,9 +255,9 @@ describe('resource namespaces', () => {
   // Mock server tests are disabled
   test.skip('updateSchema: required and optional params', async () => {
     const response = await client.namespaces.updateSchema({
-      namespace: 'namespace',
-      schema: { foo: 'string' },
-    });
+    namespace: 'namespace',
+    schema: { foo: 'string' },
+  });
   });
 
   // Mock server tests are disabled
@@ -292,29 +275,29 @@ describe('resource namespaces', () => {
   // Mock server tests are disabled
   test.skip('write: required and optional params', async () => {
     const response = await client.namespaces.write({
-      namespace: 'namespace',
-      branch_from_namespace: 'string',
-      copy_from_namespace: 'string',
-      delete_by_filter: {},
-      delete_by_filter_allow_partial: true,
-      delete_condition: {},
-      deletes: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
-      disable_backpressure: true,
-      distance_metric: 'cosine_distance',
-      encryption: { cmek: { key_name: 'key_name' } },
-      patch_by_filter: {
-        filters: {},
-        patch: { foo: 'bar' },
-      },
-      patch_by_filter_allow_partial: true,
-      patch_columns: { id: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'], vector: [[0]] },
-      patch_condition: {},
-      patch_rows: [{ id: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', vector: [0] }],
-      return_affected_ids: true,
-      schema: { foo: 'string' },
-      upsert_columns: { id: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'], vector: [[0]] },
-      upsert_condition: {},
-      upsert_rows: [{ id: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', vector: [0] }],
-    });
+    namespace: 'namespace',
+    branch_from_namespace: 'string',
+    copy_from_namespace: 'string',
+    delete_by_filter: {},
+    delete_by_filter_allow_partial: true,
+    delete_condition: {},
+    deletes: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
+    disable_backpressure: true,
+    distance_metric: 'cosine_distance',
+    encryption: { cmek: { key_name: 'key_name' } },
+    patch_by_filter: {
+    filters: {},
+    patch: { foo: 'bar' },
+  },
+    patch_by_filter_allow_partial: true,
+    patch_columns: { id: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'], vector: [[0]] },
+    patch_condition: {},
+    patch_rows: [{ id: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', vector: [0] }],
+    return_affected_ids: true,
+    schema: { foo: 'string' },
+    upsert_columns: { id: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'], vector: [[0]] },
+    upsert_condition: {},
+    upsert_rows: [{ id: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', vector: [0] }],
+  });
   });
 });

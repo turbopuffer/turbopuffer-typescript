@@ -7,94 +7,79 @@ export type SdkMethod = {
   fullyQualifiedName: string;
   httpMethod?: 'get' | 'post' | 'put' | 'patch' | 'delete' | 'query';
   httpPath?: string;
-};
+}
 
-export const sdkMethods: SdkMethod[] = [
-  {
-    clientCallName: 'client.namespaces',
-    fullyQualifiedName: 'namespaces',
-    httpMethod: 'get',
-    httpPath: '/v1/namespaces',
-  },
-  {
-    clientCallName: 'client.namespaces.branchFrom',
-    fullyQualifiedName: 'namespaces.branchFrom',
-    httpMethod: 'post',
-    httpPath: '/v2/namespaces/{namespace}?stainless_overload=branchFrom',
-  },
-  {
-    clientCallName: 'client.namespaces.copyFrom',
-    fullyQualifiedName: 'namespaces.copyFrom',
-    httpMethod: 'post',
-    httpPath: '/v2/namespaces/{namespace}?stainless_overload=copyFrom',
-  },
-  {
-    clientCallName: 'client.namespaces.deleteAll',
-    fullyQualifiedName: 'namespaces.deleteAll',
-    httpMethod: 'delete',
-    httpPath: '/v2/namespaces/{namespace}',
-  },
-  {
-    clientCallName: 'client.namespaces.explainQuery',
-    fullyQualifiedName: 'namespaces.explainQuery',
-    httpMethod: 'post',
-    httpPath: '/v2/namespaces/{namespace}/explain_query',
-  },
-  {
-    clientCallName: 'client.namespaces.hintCacheWarm',
-    fullyQualifiedName: 'namespaces.hintCacheWarm',
-    httpMethod: 'get',
-    httpPath: '/v1/namespaces/{namespace}/hint_cache_warm',
-  },
-  {
-    clientCallName: 'client.namespaces.metadata',
-    fullyQualifiedName: 'namespaces.metadata',
-    httpMethod: 'get',
-    httpPath: '/v1/namespaces/{namespace}/metadata',
-  },
-  {
-    clientCallName: 'client.namespaces.multiQuery',
-    fullyQualifiedName: 'namespaces.multiQuery',
-    httpMethod: 'post',
-    httpPath: '/v2/namespaces/{namespace}/query?stainless_overload=multiQuery',
-  },
-  {
-    clientCallName: 'client.namespaces.query',
-    fullyQualifiedName: 'namespaces.query',
-    httpMethod: 'post',
-    httpPath: '/v2/namespaces/{namespace}/query',
-  },
-  {
-    clientCallName: 'client.namespaces.recall',
-    fullyQualifiedName: 'namespaces.recall',
-    httpMethod: 'post',
-    httpPath: '/v1/namespaces/{namespace}/_debug/recall',
-  },
-  {
-    clientCallName: 'client.namespaces.schema',
-    fullyQualifiedName: 'namespaces.schema',
-    httpMethod: 'get',
-    httpPath: '/v1/namespaces/{namespace}/schema',
-  },
-  {
-    clientCallName: 'client.namespaces.updateMetadata',
-    fullyQualifiedName: 'namespaces.updateMetadata',
-    httpMethod: 'patch',
-    httpPath: '/v1/namespaces/{namespace}/metadata',
-  },
-  {
-    clientCallName: 'client.namespaces.updateSchema',
-    fullyQualifiedName: 'namespaces.updateSchema',
-    httpMethod: 'post',
-    httpPath: '/v1/namespaces/{namespace}/schema',
-  },
-  {
-    clientCallName: 'client.namespaces.write',
-    fullyQualifiedName: 'namespaces.write',
-    httpMethod: 'post',
-    httpPath: '/v2/namespaces/{namespace}',
-  },
-];
+export const sdkMethods: SdkMethod[] = [{
+  clientCallName: 'client.namespaces',
+  fullyQualifiedName: 'namespaces',
+  httpMethod: 'get',
+  httpPath: '/v1/namespaces',
+},{
+  clientCallName: 'client.namespaces.branchFrom',
+  fullyQualifiedName: 'namespaces.branchFrom',
+  httpMethod: 'post',
+  httpPath: '/v2/namespaces/{namespace}?stainless_overload=branchFrom',
+},{
+  clientCallName: 'client.namespaces.copyFrom',
+  fullyQualifiedName: 'namespaces.copyFrom',
+  httpMethod: 'post',
+  httpPath: '/v2/namespaces/{namespace}?stainless_overload=copyFrom',
+},{
+  clientCallName: 'client.namespaces.deleteAll',
+  fullyQualifiedName: 'namespaces.deleteAll',
+  httpMethod: 'delete',
+  httpPath: '/v2/namespaces/{namespace}',
+},{
+  clientCallName: 'client.namespaces.explainQuery',
+  fullyQualifiedName: 'namespaces.explainQuery',
+  httpMethod: 'post',
+  httpPath: '/v2/namespaces/{namespace}/explain_query',
+},{
+  clientCallName: 'client.namespaces.hintCacheWarm',
+  fullyQualifiedName: 'namespaces.hintCacheWarm',
+  httpMethod: 'get',
+  httpPath: '/v1/namespaces/{namespace}/hint_cache_warm',
+},{
+  clientCallName: 'client.namespaces.metadata',
+  fullyQualifiedName: 'namespaces.metadata',
+  httpMethod: 'get',
+  httpPath: '/v1/namespaces/{namespace}/metadata',
+},{
+  clientCallName: 'client.namespaces.multiQuery',
+  fullyQualifiedName: 'namespaces.multiQuery',
+  httpMethod: 'post',
+  httpPath: '/v2/namespaces/{namespace}/query?stainless_overload=multiQuery',
+},{
+  clientCallName: 'client.namespaces.query',
+  fullyQualifiedName: 'namespaces.query',
+  httpMethod: 'post',
+  httpPath: '/v2/namespaces/{namespace}/query',
+},{
+  clientCallName: 'client.namespaces.recall',
+  fullyQualifiedName: 'namespaces.recall',
+  httpMethod: 'post',
+  httpPath: '/v1/namespaces/{namespace}/_debug/recall',
+},{
+  clientCallName: 'client.namespaces.schema',
+  fullyQualifiedName: 'namespaces.schema',
+  httpMethod: 'get',
+  httpPath: '/v1/namespaces/{namespace}/schema',
+},{
+  clientCallName: 'client.namespaces.updateMetadata',
+  fullyQualifiedName: 'namespaces.updateMetadata',
+  httpMethod: 'patch',
+  httpPath: '/v1/namespaces/{namespace}/metadata',
+},{
+  clientCallName: 'client.namespaces.updateSchema',
+  fullyQualifiedName: 'namespaces.updateSchema',
+  httpMethod: 'post',
+  httpPath: '/v1/namespaces/{namespace}/schema',
+},{
+  clientCallName: 'client.namespaces.write',
+  fullyQualifiedName: 'namespaces.write',
+  httpMethod: 'post',
+  httpPath: '/v2/namespaces/{namespace}',
+}];
 
 function allowedMethodsForCodeTool(options: McpOptions | undefined): SdkMethod[] | undefined {
   if (!options) {
@@ -109,9 +94,9 @@ function allowedMethodsForCodeTool(options: McpOptions | undefined): SdkMethod[]
 
     if (options.codeAllowHttpGets) {
       // Add all methods that map to an HTTP GET
-      sdkMethods
-        .filter((method) => method.httpMethod === 'get')
-        .forEach((method) => allowedMethodsSet.add(method));
+      sdkMethods.filter((method) => method.httpMethod === 'get').forEach(
+        (method) => allowedMethodsSet.add(method)
+      );
     }
 
     if (options.codeAllowedMethods) {
@@ -120,15 +105,13 @@ function allowedMethodsForCodeTool(options: McpOptions | undefined): SdkMethod[]
         try {
           return new RegExp(pattern);
         } catch (e) {
-          throw new Error(
-            `Invalid regex pattern for allowed method: "${pattern}": ${e instanceof Error ? e.message : e}`,
-          );
+          throw new Error(`Invalid regex pattern for allowed method: "${pattern}": ${e instanceof Error ? e.message : e}`);
         }
       });
 
-      sdkMethods
-        .filter((method) => allowedRegexps.some((regexp) => regexp.test(method.fullyQualifiedName)))
-        .forEach((method) => allowedMethodsSet.add(method));
+      sdkMethods.filter((method) =>
+          allowedRegexps.some((regexp) => regexp.test(method.fullyQualifiedName))
+        ).forEach((method) => allowedMethodsSet.add(method));
     }
 
     allowedMethods = Array.from(allowedMethodsSet);
@@ -143,14 +126,12 @@ function allowedMethodsForCodeTool(options: McpOptions | undefined): SdkMethod[]
       try {
         return new RegExp(pattern);
       } catch (e) {
-        throw new Error(
-          `Invalid regex pattern for blocked method: "${pattern}": ${e instanceof Error ? e.message : e}`,
-        );
+        throw new Error(`Invalid regex pattern for blocked method: "${pattern}": ${e instanceof Error ? e.message : e}`);
       }
     });
 
-    allowedMethods = allowedMethods.filter(
-      (method) => !blockedRegexps.some((regexp) => regexp.test(method.fullyQualifiedName)),
+    allowedMethods = allowedMethods.filter((method) =>
+      !blockedRegexps.some((regexp) => regexp.test(method.fullyQualifiedName))
     );
   }
 
