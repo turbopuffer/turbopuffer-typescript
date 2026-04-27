@@ -10,104 +10,149 @@ export class Namespaces extends APIResource {
   /**
    * Creates an instant, copy-on-write clone of a namespace.
    */
-  branchFrom(params: NamespaceBranchFromParams, options?: RequestOptions): APIPromise<NamespaceBranchFromResponse> {
-    const { namespace = this._client.defaultNamespace, ...body } = params
-    return this._client.post(path`/v2/namespaces/${namespace}?stainless_overload=branchFrom`, { body, ...options });
+  branchFrom(
+    params: NamespaceBranchFromParams,
+    options?: RequestOptions,
+  ): APIPromise<NamespaceBranchFromResponse> {
+    const { namespace = this._client.defaultNamespace, ...body } = params;
+    return this._client.post(path`/v2/namespaces/${namespace}?stainless_overload=branchFrom`, {
+      body,
+      ...options,
+    });
   }
 
   /**
    * Copy all documents from another namespace into this one.
    */
   copyFrom(params: NamespaceCopyFromParams, options?: RequestOptions): APIPromise<NamespaceCopyFromResponse> {
-    const { namespace = this._client.defaultNamespace, ...body } = params
-    return this._client.post(path`/v2/namespaces/${namespace}?stainless_overload=copyFrom`, { body, ...options });
+    const { namespace = this._client.defaultNamespace, ...body } = params;
+    return this._client.post(path`/v2/namespaces/${namespace}?stainless_overload=copyFrom`, {
+      body,
+      ...options,
+    });
   }
 
   /**
    * Delete namespace.
    */
-  deleteAll(params: NamespaceDeleteAllParams | null | undefined = {}, options?: RequestOptions): APIPromise<NamespaceDeleteAllResponse> {
-    const { namespace = this._client.defaultNamespace } = params ?? {}
+  deleteAll(
+    params: NamespaceDeleteAllParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<NamespaceDeleteAllResponse> {
+    const { namespace = this._client.defaultNamespace } = params ?? {};
     return this._client.delete(path`/v2/namespaces/${namespace}`, options);
   }
 
   /**
    * Explain a query plan.
    */
-  explainQuery(params: NamespaceExplainQueryParams | null | undefined = {}, options?: RequestOptions): APIPromise<NamespaceExplainQueryResponse> {
-    const { namespace = this._client.defaultNamespace, ...body } = params ?? {}
+  explainQuery(
+    params: NamespaceExplainQueryParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<NamespaceExplainQueryResponse> {
+    const { namespace = this._client.defaultNamespace, ...body } = params ?? {};
     return this._client.post(path`/v2/namespaces/${namespace}/explain_query`, { body, ...options });
   }
 
   /**
    * Signal turbopuffer to prepare for low-latency requests.
    */
-  hintCacheWarm(params: NamespaceHintCacheWarmParams | null | undefined = {}, options?: RequestOptions): APIPromise<NamespaceHintCacheWarmResponse> {
-    const { namespace = this._client.defaultNamespace } = params ?? {}
+  hintCacheWarm(
+    params: NamespaceHintCacheWarmParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<NamespaceHintCacheWarmResponse> {
+    const { namespace = this._client.defaultNamespace } = params ?? {};
     return this._client.get(path`/v1/namespaces/${namespace}/hint_cache_warm`, options);
   }
 
   /**
    * Get metadata about a namespace.
    */
-  metadata(params: NamespaceMetadataParams | null | undefined = {}, options?: RequestOptions): APIPromise<NamespaceMetadata> {
-    const { namespace = this._client.defaultNamespace } = params ?? {}
+  metadata(
+    params: NamespaceMetadataParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<NamespaceMetadata> {
+    const { namespace = this._client.defaultNamespace } = params ?? {};
     return this._client.get(path`/v1/namespaces/${namespace}/metadata`, options);
   }
 
   /**
    * Issue multiple concurrent queries filter or search documents.
    */
-  multiQuery(params: NamespaceMultiQueryParams, options?: RequestOptions): APIPromise<NamespaceMultiQueryResponse> {
-    const { namespace = this._client.defaultNamespace, ...body } = params
-    return this._client.post(path`/v2/namespaces/${namespace}/query?stainless_overload=multiQuery`, { body, ...options });
+  multiQuery(
+    params: NamespaceMultiQueryParams,
+    options?: RequestOptions,
+  ): APIPromise<NamespaceMultiQueryResponse> {
+    const { namespace = this._client.defaultNamespace, ...body } = params;
+    return this._client.post(path`/v2/namespaces/${namespace}/query?stainless_overload=multiQuery`, {
+      body,
+      ...options,
+    });
   }
 
   /**
    * Query, filter, full-text search and vector search documents.
    */
-  query(params: NamespaceQueryParams | null | undefined = {}, options?: RequestOptions): APIPromise<NamespaceQueryResponse> {
-    const { namespace = this._client.defaultNamespace, ...body } = params ?? {}
+  query(
+    params: NamespaceQueryParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<NamespaceQueryResponse> {
+    const { namespace = this._client.defaultNamespace, ...body } = params ?? {};
     return this._client.post(path`/v2/namespaces/${namespace}/query`, { body, ...options });
   }
 
   /**
    * Evaluate recall.
    */
-  recall(params: NamespaceRecallParams | null | undefined = {}, options?: RequestOptions): APIPromise<NamespaceRecallResponse> {
-    const { namespace = this._client.defaultNamespace, ...body } = params ?? {}
+  recall(
+    params: NamespaceRecallParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<NamespaceRecallResponse> {
+    const { namespace = this._client.defaultNamespace, ...body } = params ?? {};
     return this._client.post(path`/v1/namespaces/${namespace}/_debug/recall`, { body, ...options });
   }
 
   /**
    * Get namespace schema.
    */
-  schema(params: NamespaceSchemaParams | null | undefined = {}, options?: RequestOptions): APIPromise<NamespaceSchemaResponse> {
-    const { namespace = this._client.defaultNamespace } = params ?? {}
+  schema(
+    params: NamespaceSchemaParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<NamespaceSchemaResponse> {
+    const { namespace = this._client.defaultNamespace } = params ?? {};
     return this._client.get(path`/v1/namespaces/${namespace}/schema`, options);
   }
 
   /**
    * Update metadata configuration for a namespace.
    */
-  updateMetadata(params: NamespaceUpdateMetadataParams | null | undefined = {}, options?: RequestOptions): APIPromise<NamespaceMetadata> {
-    const { namespace = this._client.defaultNamespace, ...body } = params ?? {}
+  updateMetadata(
+    params: NamespaceUpdateMetadataParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<NamespaceMetadata> {
+    const { namespace = this._client.defaultNamespace, ...body } = params ?? {};
     return this._client.patch(path`/v1/namespaces/${namespace}/metadata`, { body, ...options });
   }
 
   /**
    * Update namespace schema.
    */
-  updateSchema(params: NamespaceUpdateSchemaParams | null | undefined = undefined, options?: RequestOptions): APIPromise<NamespaceUpdateSchemaResponse> {
-    const { namespace = this._client.defaultNamespace, schema } = params ?? {}
+  updateSchema(
+    params: NamespaceUpdateSchemaParams | null | undefined = undefined,
+    options?: RequestOptions,
+  ): APIPromise<NamespaceUpdateSchemaResponse> {
+    const { namespace = this._client.defaultNamespace, schema } = params ?? {};
     return this._client.post(path`/v1/namespaces/${namespace}/schema`, { body: schema, ...options });
   }
 
   /**
    * Create, update, or delete documents.
    */
-  write(params: NamespaceWriteParams | null | undefined = {}, options?: RequestOptions): APIPromise<NamespaceWriteResponse> {
-    const { namespace = this._client.defaultNamespace, ...body } = params ?? {}
+  write(
+    params: NamespaceWriteParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<NamespaceWriteResponse> {
+    const { namespace = this._client.defaultNamespace, ...body } = params ?? {};
     return this._client.post(path`/v2/namespaces/${namespace}`, { body, maxRetries: 6, ...options });
   }
 }
@@ -115,12 +160,12 @@ export class Namespaces extends APIResource {
 /**
  * A single aggregation group.
  */
-export type AggregationGroup = { [key: string]: unknown }
+export type AggregationGroup = { [key: string]: unknown };
 
 /**
  * The schema for an attribute attached to a document.
  */
-export type AttributeSchema = AttributeType | AttributeSchemaConfig
+export type AttributeSchema = AttributeType | AttributeSchemaConfig;
 
 /**
  * Detailed configuration for an attribute attached to a document.
@@ -184,7 +229,7 @@ export namespace AttributeSchemaConfig {
  * datetime, bool, []string, []int, []uint, []float, []uuid, []datetime, []bool,
  * [DIMS]f16, [DIMS]f32.
  */
-export type AttributeType = string
+export type AttributeType = string;
 
 /**
  * Additional (optional) parameters for a single BM25 query clause.
@@ -199,7 +244,7 @@ export interface Bm25ClauseParams {
 /**
  * The namespace to create an instant, copy-on-write clone of.
  */
-export type BranchFromNamespaceParams = string | BranchFromNamespaceParams.BranchFromNamespaceConfig
+export type BranchFromNamespaceParams = string | BranchFromNamespaceParams.BranchFromNamespaceConfig;
 
 export namespace BranchFromNamespaceParams {
   export interface BranchFromNamespaceConfig {
@@ -225,7 +270,7 @@ export interface Columns {
    */
   vector?: Array<Vector> | Vector;
 
-[k: string]: Array<unknown> | Array<ID> | Array<Vector> | Vector | undefined
+  [k: string]: Array<unknown> | Array<ID> | Array<Vector> | Vector | undefined;
 }
 
 /**
@@ -251,7 +296,7 @@ export interface ContainsAnyTokenFilterParams {
 /**
  * The namespace to copy documents from.
  */
-export type CopyFromNamespaceParams = string | CopyFromNamespaceParams.CopyFromNamespaceConfig
+export type CopyFromNamespaceParams = string | CopyFromNamespaceParams.CopyFromNamespaceConfig;
 
 export namespace CopyFromNamespaceParams {
   export interface CopyFromNamespaceConfig {
@@ -294,14 +339,14 @@ export interface DecayParams {
  *   Lower is better.
  * - `euclidean_squared` - Defined as `sum((x - y)^2)`. Lower is better.
  */
-export type DistanceMetric = 'cosine_distance' | 'euclidean_squared'
+export type DistanceMetric = 'cosine_distance' | 'euclidean_squared';
 
 /**
  * Whether this attribute can be used as part of a BM25 full-text search. Requires
  * the `string` or `[]string` type, and by default, BM25-enabled attributes are not
  * filterable. You can override this by setting `filterable: true`.
  */
-export type FullTextSearch = boolean | FullTextSearchConfig
+export type FullTextSearch = boolean | FullTextSearchConfig;
 
 /**
  * Configuration options for full-text search.
@@ -363,17 +408,35 @@ export interface FullTextSearchConfig {
 /**
  * An identifier for a document.
  */
-export type ID = string | number
+export type ID = string | number;
 
 /**
  * Whether to include attributes in the response.
  */
-export type IncludeAttributes = boolean | Array<string>
+export type IncludeAttributes = boolean | Array<string>;
 
 /**
  * Describes the language of a text attribute. Defaults to `english`.
  */
-export type Language = 'arabic' | 'danish' | 'dutch' | 'english' | 'finnish' | 'french' | 'german' | 'greek' | 'hungarian' | 'italian' | 'norwegian' | 'portuguese' | 'romanian' | 'russian' | 'spanish' | 'swedish' | 'tamil' | 'turkish'
+export type Language =
+  | 'arabic'
+  | 'danish'
+  | 'dutch'
+  | 'english'
+  | 'finnish'
+  | 'french'
+  | 'german'
+  | 'greek'
+  | 'hungarian'
+  | 'italian'
+  | 'norwegian'
+  | 'portuguese'
+  | 'romanian'
+  | 'russian'
+  | 'spanish'
+  | 'swedish'
+  | 'tamil'
+  | 'turkish';
 
 /**
  * Limits the documents returned by a query.
@@ -618,7 +681,7 @@ export interface Row {
    */
   vector?: Vector;
 
-[k: string]: unknown
+  [k: string]: unknown;
 }
 
 /**
@@ -640,17 +703,17 @@ export interface SaturateParams {
  * The tokenizer to use for full-text search on an attribute. Defaults to
  * `word_v3`.
  */
-export type Tokenizer = 'pre_tokenized_array' | 'word_v0' | 'word_v1' | 'word_v2' | 'word_v3'
+export type Tokenizer = 'pre_tokenized_array' | 'word_v0' | 'word_v1' | 'word_v2' | 'word_v3';
 
 /**
  * A vector embedding associated with a document.
  */
-export type Vector = Array<number> | string
+export type Vector = Array<number> | string;
 
 /**
  * The encoding to use for vectors in the response.
  */
-export type VectorEncoding = 'float' | 'base64'
+export type VectorEncoding = 'float' | 'base64';
 
 /**
  * The billing information for a write request.
@@ -937,12 +1000,12 @@ export namespace NamespaceRecallResponse {
 /**
  * The response to a successful namespace schema request.
  */
-export type NamespaceSchemaResponse = { [key: string]: AttributeSchemaConfig }
+export type NamespaceSchemaResponse = { [key: string]: AttributeSchemaConfig };
 
 /**
  * The updated schema for the namespace.
  */
-export type NamespaceUpdateSchemaResponse = { [key: string]: AttributeSchemaConfig }
+export type NamespaceUpdateSchemaResponse = { [key: string]: AttributeSchemaConfig };
 
 /**
  * The response to a successful write request.
@@ -1583,6 +1646,6 @@ export declare namespace Namespaces {
     type NamespaceSchemaParams as NamespaceSchemaParams,
     type NamespaceUpdateMetadataParams as NamespaceUpdateMetadataParams,
     type NamespaceUpdateSchemaParams as NamespaceUpdateSchemaParams,
-    type NamespaceWriteParams as NamespaceWriteParams
+    type NamespaceWriteParams as NamespaceWriteParams,
   };
 }

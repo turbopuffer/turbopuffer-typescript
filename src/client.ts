@@ -21,12 +21,74 @@ import * as API from './resources/index';
 import * as TopLevelAPI from './resources/top-level';
 import { NamespaceSummariesNamespacePage, NamespaceSummary, NamespacesParams } from './resources/top-level';
 import { APIPromise } from './core/api-promise';
-import { AggregationGroup, AttributeSchema, AttributeSchemaConfig, AttributeType, Bm25ClauseParams, BranchFromNamespaceParams, Columns, ContainsAllTokensFilterParams, ContainsAnyTokenFilterParams, CopyFromNamespaceParams, DecayParams, DistanceMetric, FullTextSearch, FullTextSearchConfig, ID, IncludeAttributes, Language, Limit, NamespaceBranchFromParams, NamespaceBranchFromResponse, NamespaceCopyFromParams, NamespaceCopyFromResponse, NamespaceDeleteAllParams, NamespaceDeleteAllResponse, NamespaceExplainQueryParams, NamespaceExplainQueryResponse, NamespaceHintCacheWarmParams, NamespaceHintCacheWarmResponse, NamespaceMetadata, NamespaceMetadataParams, NamespaceMetadataPatch, NamespaceMultiQueryParams, NamespaceMultiQueryResponse, NamespaceQueryParams, NamespaceQueryResponse, NamespaceRecallParams, NamespaceRecallResponse, NamespaceSchemaParams, NamespaceSchemaResponse, NamespaceUpdateMetadataParams, NamespaceUpdateSchemaParams, NamespaceUpdateSchemaResponse, NamespaceWriteParams, NamespaceWriteResponse, Namespaces, PinningConfig, QueryBilling, QueryPerformance, Row, SaturateParams, Tokenizer, Vector, VectorEncoding, WriteBilling, WritePerformance } from './resources/namespaces';
+import {
+  AggregationGroup,
+  AttributeSchema,
+  AttributeSchemaConfig,
+  AttributeType,
+  Bm25ClauseParams,
+  BranchFromNamespaceParams,
+  Columns,
+  ContainsAllTokensFilterParams,
+  ContainsAnyTokenFilterParams,
+  CopyFromNamespaceParams,
+  DecayParams,
+  DistanceMetric,
+  FullTextSearch,
+  FullTextSearchConfig,
+  ID,
+  IncludeAttributes,
+  Language,
+  Limit,
+  NamespaceBranchFromParams,
+  NamespaceBranchFromResponse,
+  NamespaceCopyFromParams,
+  NamespaceCopyFromResponse,
+  NamespaceDeleteAllParams,
+  NamespaceDeleteAllResponse,
+  NamespaceExplainQueryParams,
+  NamespaceExplainQueryResponse,
+  NamespaceHintCacheWarmParams,
+  NamespaceHintCacheWarmResponse,
+  NamespaceMetadata,
+  NamespaceMetadataParams,
+  NamespaceMetadataPatch,
+  NamespaceMultiQueryParams,
+  NamespaceMultiQueryResponse,
+  NamespaceQueryParams,
+  NamespaceQueryResponse,
+  NamespaceRecallParams,
+  NamespaceRecallResponse,
+  NamespaceSchemaParams,
+  NamespaceSchemaResponse,
+  NamespaceUpdateMetadataParams,
+  NamespaceUpdateSchemaParams,
+  NamespaceUpdateSchemaResponse,
+  NamespaceWriteParams,
+  NamespaceWriteResponse,
+  Namespaces,
+  PinningConfig,
+  QueryBilling,
+  QueryPerformance,
+  Row,
+  SaturateParams,
+  Tokenizer,
+  Vector,
+  VectorEncoding,
+  WriteBilling,
+  WritePerformance,
+} from './resources/namespaces';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
 import { readEnv } from './internal/utils/env';
-import { type LogLevel, type Logger, formatRequestDetails, loggerFor, parseLogLevel } from './internal/utils/log';
+import {
+  type LogLevel,
+  type Logger,
+  formatRequestDetails,
+  loggerFor,
+  parseLogLevel,
+} from './internal/utils/log';
 import { isEmptyObj } from './internal/utils/values';
 
 export interface ClientOptions {
@@ -112,7 +174,7 @@ export interface ClientOptions {
 }
 
 /**
- * API Client for interfacing with the Turbopuffer API. 
+ * API Client for interfacing with the Turbopuffer API.
  */
 export class Turbopuffer {
   apiKey: string;
@@ -154,7 +216,7 @@ export class Turbopuffer {
   }: ClientOptions = {}) {
     if (apiKey === undefined) {
       throw new Errors.TurbopufferError(
-        'The TURBOPUFFER_API_KEY environment variable is missing or empty; either provide it, or instantiate the Turbopuffer client with an apiKey option, like new Turbopuffer({ apiKey: \'tpuf_A1...\' }).'
+        "The TURBOPUFFER_API_KEY environment variable is missing or empty; either provide it, or instantiate the Turbopuffer client with an apiKey option, like new Turbopuffer({ apiKey: 'tpuf_A1...' }).",
       );
     }
 
@@ -172,7 +234,10 @@ export class Turbopuffer {
     const defaultLogLevel = 'warn';
     // Set default logLevel early so that we can log a warning in parseLogLevel.
     this.logLevel = defaultLogLevel;
-    this.logLevel = parseLogLevel(options.logLevel, 'ClientOptions.logLevel', this) ?? parseLogLevel(readEnv('TURBOPUFFER_LOG'), 'process.env[\'TURBOPUFFER_LOG\']', this) ?? defaultLogLevel;
+    this.logLevel =
+      parseLogLevel(options.logLevel, 'ClientOptions.logLevel', this) ??
+      parseLogLevel(readEnv('TURBOPUFFER_LOG'), "process.env['TURBOPUFFER_LOG']", this) ??
+      defaultLogLevel;
     this.fetchOptions = options.fetchOptions;
     this.maxRetries = options.maxRetries ?? 4;
     this.fetch = options.fetch ?? Shims.getDefaultFetch();
@@ -201,7 +266,7 @@ export class Turbopuffer {
       apiKey: this.apiKey,
       region: this.region,
       defaultNamespace: this.defaultNamespace,
-      ...options
+      ...options,
     });
     return client;
   }
@@ -216,12 +281,18 @@ export class Turbopuffer {
   /**
    * List namespaces.
    */
-  namespaces(query: TopLevelAPI.NamespacesParams | null | undefined = {}, options?: RequestOptions): Pagination.PagePromise<NamespaceSummariesNamespacePage, TopLevelAPI.NamespaceSummary> {
-    return this.getAPIList('/v1/namespaces', Pagination.NamespacePage<TopLevelAPI.NamespaceSummary>, { query, ...options });
+  namespaces(
+    query: TopLevelAPI.NamespacesParams | null | undefined = {},
+    options?: RequestOptions,
+  ): Pagination.PagePromise<NamespaceSummariesNamespacePage, TopLevelAPI.NamespaceSummary> {
+    return this.getAPIList('/v1/namespaces', Pagination.NamespacePage<TopLevelAPI.NamespaceSummary>, {
+      query,
+      ...options,
+    });
   }
 
   protected defaultQuery(): Record<string, string | undefined> | undefined {
-    return this._options.defaultQuery
+    return this._options.defaultQuery;
   }
 
   protected validateHeaders({ values, nulls }: NullableHeaders) {
@@ -256,7 +327,11 @@ export class Turbopuffer {
     return Errors.APIError.generate(status, error, message, headers);
   }
 
-  buildURL(path: string, query: Record<string, unknown> | null | undefined, defaultBaseURL?: string | undefined): string {
+  buildURL(
+    path: string,
+    query: Record<string, unknown> | null | undefined,
+    defaultBaseURL?: string | undefined,
+  ): string {
     const baseURL = (!this.#baseURLOverridden() && defaultBaseURL) || this.baseURL;
     const url =
       isAbsoluteURL(path) ?
@@ -344,7 +419,9 @@ export class Turbopuffer {
 
     await this.prepareOptions(options);
 
-    const { req, url, timeout } = await this.buildRequest(options, { retryCount: maxRetries - retriesRemaining });
+    const { req, url, timeout } = await this.buildRequest(options, {
+      retryCount: maxRetries - retriesRemaining,
+    });
 
     await this.prepareRequest(req, { url, options });
 
@@ -353,7 +430,16 @@ export class Turbopuffer {
     const retryLogStr = retryOfRequestLogID === undefined ? '' : `, retryOf: ${retryOfRequestLogID}`;
     const startTime = Date.now();
 
-    loggerFor(this).debug(`[${requestLogID}] sending request`, formatRequestDetails({ retryOfRequestLogID, method: options.method, url, options, headers: req.headers }));
+    loggerFor(this).debug(
+      `[${requestLogID}] sending request`,
+      formatRequestDetails({
+        retryOfRequestLogID,
+        method: options.method,
+        url,
+        options,
+        headers: req.headers,
+      }),
+    );
 
     if (options.signal?.aborted) {
       throw new Errors.APIUserAbortError();
@@ -372,21 +458,45 @@ export class Turbopuffer {
       // deno throws "TypeError: error sending request for url (https://example/): client error (Connect): tcp connect error: Operation timed out (os error 60): Operation timed out (os error 60)"
       // undici throws "TypeError: fetch failed" with cause "ConnectTimeoutError: Connect Timeout Error (attempted address: example:443, timeout: 1ms)"
       // others do not provide enough information to distinguish timeouts from other connection errors
-      const isTimeout = isAbortError(response) || /timed? ?out/i.test(String(response) + ('cause' in response ? String(response.cause) : ''))
+      const isTimeout =
+        isAbortError(response) ||
+        /timed? ?out/i.test(String(response) + ('cause' in response ? String(response.cause) : ''));
       if (retriesRemaining) {
-        loggerFor(this).info(`[${requestLogID}] connection ${isTimeout ? 'timed out' : 'failed'} - ${retryMessage}`)
-        loggerFor(this).debug(`[${requestLogID}] connection ${isTimeout ? 'timed out' : 'failed'} (${retryMessage})`, formatRequestDetails({ retryOfRequestLogID, url, durationMs: headersTime - startTime, message: response.message }));
+        loggerFor(this).info(
+          `[${requestLogID}] connection ${isTimeout ? 'timed out' : 'failed'} - ${retryMessage}`,
+        );
+        loggerFor(this).debug(
+          `[${requestLogID}] connection ${isTimeout ? 'timed out' : 'failed'} (${retryMessage})`,
+          formatRequestDetails({
+            retryOfRequestLogID,
+            url,
+            durationMs: headersTime - startTime,
+            message: response.message,
+          }),
+        );
         return this.retryRequest(options, retriesRemaining, retryOfRequestLogID ?? requestLogID);
       }
-      loggerFor(this).info(`[${requestLogID}] connection ${isTimeout ? 'timed out' : 'failed'} - error; no more retries left`)
-      loggerFor(this).debug(`[${requestLogID}] connection ${isTimeout ? 'timed out' : 'failed'} (error; no more retries left)`, formatRequestDetails({ retryOfRequestLogID, url, durationMs: headersTime - startTime, message: response.message }));
+      loggerFor(this).info(
+        `[${requestLogID}] connection ${isTimeout ? 'timed out' : 'failed'} - error; no more retries left`,
+      );
+      loggerFor(this).debug(
+        `[${requestLogID}] connection ${isTimeout ? 'timed out' : 'failed'} (error; no more retries left)`,
+        formatRequestDetails({
+          retryOfRequestLogID,
+          url,
+          durationMs: headersTime - startTime,
+          message: response.message,
+        }),
+      );
       if (isTimeout) {
         throw new Errors.APIConnectionTimeoutError();
       }
       throw new Errors.APIConnectionError({ cause: response });
     }
 
-    const responseInfo = `[${requestLogID}${retryLogStr}] ${req.method} ${url} ${response.ok ? 'succeeded' : 'failed'} with status ${response.status} in ${headersTime - startTime}ms`;
+    const responseInfo = `[${requestLogID}${retryLogStr}] ${req.method} ${url} ${
+      response.ok ? 'succeeded' : 'failed'
+    } with status ${response.status} in ${headersTime - startTime}ms`;
 
     if (!response.ok) {
       const shouldRetry = await this.shouldRetry(response);
@@ -395,27 +505,60 @@ export class Turbopuffer {
 
         // We don't need the body of this response.
         await Shims.CancelReadableStream(response.body);
-        loggerFor(this).info(`${responseInfo} - ${retryMessage}`)
-        loggerFor(this).debug(`[${requestLogID}] response error (${retryMessage})`, formatRequestDetails({ retryOfRequestLogID, url: response.url, status: response.status, headers: response.headers, durationMs: headersTime - startTime }));
-        return this.retryRequest(options, retriesRemaining, retryOfRequestLogID ?? requestLogID, response.headers);
+        loggerFor(this).info(`${responseInfo} - ${retryMessage}`);
+        loggerFor(this).debug(
+          `[${requestLogID}] response error (${retryMessage})`,
+          formatRequestDetails({
+            retryOfRequestLogID,
+            url: response.url,
+            status: response.status,
+            headers: response.headers,
+            durationMs: headersTime - startTime,
+          }),
+        );
+        return this.retryRequest(
+          options,
+          retriesRemaining,
+          retryOfRequestLogID ?? requestLogID,
+          response.headers,
+        );
       }
 
       const retryMessage = shouldRetry ? `error; no more retries left` : `error; not retryable`;
 
-      loggerFor(this).info(`${responseInfo} - ${retryMessage}`)
+      loggerFor(this).info(`${responseInfo} - ${retryMessage}`);
 
       const errText = await response.text().catch((err: any) => castToError(err).message);
       const errJSON = safeJSON(errText) as any;
       const errMessage = errJSON ? undefined : errText;
 
-      loggerFor(this).debug(`[${requestLogID}] response error (${retryMessage})`, formatRequestDetails({ retryOfRequestLogID, url: response.url, status: response.status, headers: response.headers, message: errMessage, durationMs: Date.now() - startTime }));
+      loggerFor(this).debug(
+        `[${requestLogID}] response error (${retryMessage})`,
+        formatRequestDetails({
+          retryOfRequestLogID,
+          url: response.url,
+          status: response.status,
+          headers: response.headers,
+          message: errMessage,
+          durationMs: Date.now() - startTime,
+        }),
+      );
 
       const err = this.makeStatusError(response.status, errJSON, errMessage, response.headers);
       throw err;
     }
 
-    loggerFor(this).info(responseInfo)
-    loggerFor(this).debug(`[${requestLogID}] response start`, formatRequestDetails({ retryOfRequestLogID, url: response.url, status: response.status, headers: response.headers, durationMs: headersTime - startTime }));
+    loggerFor(this).info(responseInfo);
+    loggerFor(this).debug(
+      `[${requestLogID}] response start`,
+      formatRequestDetails({
+        retryOfRequestLogID,
+        url: response.url,
+        status: response.status,
+        headers: response.headers,
+        durationMs: headersTime - startTime,
+      }),
+    );
 
     return { response, options, controller, requestLogID, retryOfRequestLogID, startTime };
   }
@@ -433,7 +576,10 @@ export class Turbopuffer {
     );
   }
 
-  requestAPIList<Item = unknown, PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>>(
+  requestAPIList<
+    Item = unknown,
+    PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>,
+  >(
     Page: new (...args: ConstructorParameters<typeof Pagination.AbstractPage>) => PageClass,
     options: PromiseOrValue<FinalRequestOptions>,
   ): Pagination.PagePromise<PageClass, Item> {
@@ -453,7 +599,9 @@ export class Turbopuffer {
 
     const timeout = setTimeout(abort, ms);
 
-    const isReadableBody = ((globalThis as any).ReadableStream && options.body instanceof (globalThis as any).ReadableStream) || (typeof options.body === "object" && options.body !== null && Symbol.asyncIterator in options.body);
+    const isReadableBody =
+      ((globalThis as any).ReadableStream && options.body instanceof (globalThis as any).ReadableStream) ||
+      (typeof options.body === 'object' && options.body !== null && Symbol.asyncIterator in options.body);
 
     const fetchOptions: RequestInit = {
       signal: controller.signal as any,
@@ -468,7 +616,6 @@ export class Turbopuffer {
     }
 
     try {
-
       // use undefined this binding; fetch errors if bound to something else in browser/cloudflare
       return await this.fetch.call(undefined, url, fetchOptions);
     } finally {
@@ -569,11 +716,12 @@ export class Turbopuffer {
     const req: FinalizedRequestInit = {
       method,
       headers: reqHeaders,
-      ...(options.signal && { signal: options.signal}),
-      ...((globalThis as any).ReadableStream && body instanceof (globalThis as any).ReadableStream && { duplex: "half" }),
+      ...(options.signal && { signal: options.signal }),
+      ...((globalThis as any).ReadableStream &&
+        body instanceof (globalThis as any).ReadableStream && { duplex: 'half' }),
       ...(body && { body }),
-      ...(this.fetchOptions as any ?? {}),
-      ...(options.fetchOptions as any ?? {}),
+      ...((this.fetchOptions as any) ?? {}),
+      ...((options.fetchOptions as any) ?? {}),
     };
 
     return { req, url, timeout: options.timeout };
@@ -598,15 +746,17 @@ export class Turbopuffer {
 
     const headers = buildHeaders([
       idempotencyHeaders,
-      {Accept: 'application/json',
-      'User-Agent': this.getUserAgent(),
-      'X-Stainless-Retry-Count': String(retryCount),
-      ...(options.timeout ? { 'X-Stainless-Timeout': String(Math.trunc(options.timeout / 1000)) } : {}),
-      ...getPlatformHeaders()},
+      {
+        Accept: 'application/json',
+        'User-Agent': this.getUserAgent(),
+        'X-Stainless-Retry-Count': String(retryCount),
+        ...(options.timeout ? { 'X-Stainless-Timeout': String(Math.trunc(options.timeout / 1000)) } : {}),
+        ...getPlatformHeaders(),
+      },
       await this.authHeaders(options),
       this._options.defaultHeaders,
       bodyHeaders,
-      options.headers
+      options.headers,
     ]);
 
     this.validateHeaders(headers);
@@ -633,11 +783,9 @@ export class Turbopuffer {
       ArrayBuffer.isView(body) ||
       body instanceof ArrayBuffer ||
       body instanceof DataView ||
-      (
-        typeof body === 'string' &&
+      (typeof body === 'string' &&
         // Preserve legacy string encoding behavior for now
-        headers.values.has('content-type')
-      ) ||
+        headers.values.has('content-type')) ||
       // `Blob` is superset of `File`
       ((globalThis as any).Blob && body instanceof (globalThis as any).Blob) ||
       // `FormData` -> `multipart/form-data`
@@ -668,7 +816,7 @@ export class Turbopuffer {
   }
 
   static Turbopuffer = this;
-  static DEFAULT_TIMEOUT = 60000 // 1 minute
+  static DEFAULT_TIMEOUT = 60000; // 1 minute
 
   static TurbopufferError = Errors.TurbopufferError;
   static APIError = Errors.APIError;
@@ -692,75 +840,75 @@ export class Turbopuffer {
 Turbopuffer.Namespaces = Namespaces;
 
 export declare namespace Turbopuffer {
-      export type RequestOptions = Opts.RequestOptions;
+  export type RequestOptions = Opts.RequestOptions;
 
-      export import NamespacePage = Pagination.NamespacePage;
-export {
-  type NamespacePageParams as NamespacePageParams,
-  type NamespacePageResponse as NamespacePageResponse
-};
+  export import NamespacePage = Pagination.NamespacePage;
+  export {
+    type NamespacePageParams as NamespacePageParams,
+    type NamespacePageResponse as NamespacePageResponse,
+  };
 
-export {
-  type NamespaceSummary as NamespaceSummary,
-  type NamespaceSummariesNamespacePage as NamespaceSummariesNamespacePage,
-  type NamespacesParams as NamespacesParams
-};
+  export {
+    type NamespaceSummary as NamespaceSummary,
+    type NamespaceSummariesNamespacePage as NamespaceSummariesNamespacePage,
+    type NamespacesParams as NamespacesParams,
+  };
 
-export {
-  Namespaces as Namespaces,
-  type AggregationGroup as AggregationGroup,
-  type AttributeSchema as AttributeSchema,
-  type AttributeSchemaConfig as AttributeSchemaConfig,
-  type AttributeType as AttributeType,
-  type Bm25ClauseParams as Bm25ClauseParams,
-  type BranchFromNamespaceParams as BranchFromNamespaceParams,
-  type Columns as Columns,
-  type ContainsAllTokensFilterParams as ContainsAllTokensFilterParams,
-  type ContainsAnyTokenFilterParams as ContainsAnyTokenFilterParams,
-  type CopyFromNamespaceParams as CopyFromNamespaceParams,
-  type DecayParams as DecayParams,
-  type DistanceMetric as DistanceMetric,
-  type FullTextSearch as FullTextSearch,
-  type FullTextSearchConfig as FullTextSearchConfig,
-  type ID as ID,
-  type IncludeAttributes as IncludeAttributes,
-  type Language as Language,
-  type Limit as Limit,
-  type NamespaceMetadata as NamespaceMetadata,
-  type NamespaceMetadataPatch as NamespaceMetadataPatch,
-  type PinningConfig as PinningConfig,
-  type QueryBilling as QueryBilling,
-  type QueryPerformance as QueryPerformance,
-  type Row as Row,
-  type SaturateParams as SaturateParams,
-  type Tokenizer as Tokenizer,
-  type Vector as Vector,
-  type VectorEncoding as VectorEncoding,
-  type WriteBilling as WriteBilling,
-  type WritePerformance as WritePerformance,
-  type NamespaceBranchFromResponse as NamespaceBranchFromResponse,
-  type NamespaceCopyFromResponse as NamespaceCopyFromResponse,
-  type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
-  type NamespaceExplainQueryResponse as NamespaceExplainQueryResponse,
-  type NamespaceHintCacheWarmResponse as NamespaceHintCacheWarmResponse,
-  type NamespaceMultiQueryResponse as NamespaceMultiQueryResponse,
-  type NamespaceQueryResponse as NamespaceQueryResponse,
-  type NamespaceRecallResponse as NamespaceRecallResponse,
-  type NamespaceSchemaResponse as NamespaceSchemaResponse,
-  type NamespaceUpdateSchemaResponse as NamespaceUpdateSchemaResponse,
-  type NamespaceWriteResponse as NamespaceWriteResponse,
-  type NamespaceBranchFromParams as NamespaceBranchFromParams,
-  type NamespaceCopyFromParams as NamespaceCopyFromParams,
-  type NamespaceDeleteAllParams as NamespaceDeleteAllParams,
-  type NamespaceExplainQueryParams as NamespaceExplainQueryParams,
-  type NamespaceHintCacheWarmParams as NamespaceHintCacheWarmParams,
-  type NamespaceMetadataParams as NamespaceMetadataParams,
-  type NamespaceMultiQueryParams as NamespaceMultiQueryParams,
-  type NamespaceQueryParams as NamespaceQueryParams,
-  type NamespaceRecallParams as NamespaceRecallParams,
-  type NamespaceSchemaParams as NamespaceSchemaParams,
-  type NamespaceUpdateMetadataParams as NamespaceUpdateMetadataParams,
-  type NamespaceUpdateSchemaParams as NamespaceUpdateSchemaParams,
-  type NamespaceWriteParams as NamespaceWriteParams
-};
-    }
+  export {
+    Namespaces as Namespaces,
+    type AggregationGroup as AggregationGroup,
+    type AttributeSchema as AttributeSchema,
+    type AttributeSchemaConfig as AttributeSchemaConfig,
+    type AttributeType as AttributeType,
+    type Bm25ClauseParams as Bm25ClauseParams,
+    type BranchFromNamespaceParams as BranchFromNamespaceParams,
+    type Columns as Columns,
+    type ContainsAllTokensFilterParams as ContainsAllTokensFilterParams,
+    type ContainsAnyTokenFilterParams as ContainsAnyTokenFilterParams,
+    type CopyFromNamespaceParams as CopyFromNamespaceParams,
+    type DecayParams as DecayParams,
+    type DistanceMetric as DistanceMetric,
+    type FullTextSearch as FullTextSearch,
+    type FullTextSearchConfig as FullTextSearchConfig,
+    type ID as ID,
+    type IncludeAttributes as IncludeAttributes,
+    type Language as Language,
+    type Limit as Limit,
+    type NamespaceMetadata as NamespaceMetadata,
+    type NamespaceMetadataPatch as NamespaceMetadataPatch,
+    type PinningConfig as PinningConfig,
+    type QueryBilling as QueryBilling,
+    type QueryPerformance as QueryPerformance,
+    type Row as Row,
+    type SaturateParams as SaturateParams,
+    type Tokenizer as Tokenizer,
+    type Vector as Vector,
+    type VectorEncoding as VectorEncoding,
+    type WriteBilling as WriteBilling,
+    type WritePerformance as WritePerformance,
+    type NamespaceBranchFromResponse as NamespaceBranchFromResponse,
+    type NamespaceCopyFromResponse as NamespaceCopyFromResponse,
+    type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
+    type NamespaceExplainQueryResponse as NamespaceExplainQueryResponse,
+    type NamespaceHintCacheWarmResponse as NamespaceHintCacheWarmResponse,
+    type NamespaceMultiQueryResponse as NamespaceMultiQueryResponse,
+    type NamespaceQueryResponse as NamespaceQueryResponse,
+    type NamespaceRecallResponse as NamespaceRecallResponse,
+    type NamespaceSchemaResponse as NamespaceSchemaResponse,
+    type NamespaceUpdateSchemaResponse as NamespaceUpdateSchemaResponse,
+    type NamespaceWriteResponse as NamespaceWriteResponse,
+    type NamespaceBranchFromParams as NamespaceBranchFromParams,
+    type NamespaceCopyFromParams as NamespaceCopyFromParams,
+    type NamespaceDeleteAllParams as NamespaceDeleteAllParams,
+    type NamespaceExplainQueryParams as NamespaceExplainQueryParams,
+    type NamespaceHintCacheWarmParams as NamespaceHintCacheWarmParams,
+    type NamespaceMetadataParams as NamespaceMetadataParams,
+    type NamespaceMultiQueryParams as NamespaceMultiQueryParams,
+    type NamespaceQueryParams as NamespaceQueryParams,
+    type NamespaceRecallParams as NamespaceRecallParams,
+    type NamespaceSchemaParams as NamespaceSchemaParams,
+    type NamespaceUpdateMetadataParams as NamespaceUpdateMetadataParams,
+    type NamespaceUpdateSchemaParams as NamespaceUpdateSchemaParams,
+    type NamespaceWriteParams as NamespaceWriteParams,
+  };
+}

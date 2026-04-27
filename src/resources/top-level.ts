@@ -3,7 +3,7 @@
 import { NamespacePage, type NamespacePageParams } from '../core/pagination';
 
 // Namespace pagination.
-export type NamespaceSummariesNamespacePage = NamespacePage<NamespaceSummary>
+export type NamespaceSummariesNamespacePage = NamespacePage<NamespaceSummary>;
 
 /**
  * A summary of a namespace.
@@ -31,6 +31,6 @@ export declare namespace TopLevel {
   export {
     type NamespaceSummary as NamespaceSummary,
     type NamespaceSummariesNamespacePage as NamespaceSummariesNamespacePage,
-    type NamespacesParams as NamespacesParams
+    type NamespacesParams as NamespacesParams,
   };
 }
