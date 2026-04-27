@@ -10,9 +10,7 @@ const config: JestConfigWithTsJest = {
     '^@turbopuffer/turbopuffer-mcp$': '<rootDir>/src/index.ts',
     '^@turbopuffer/turbopuffer-mcp/(.*)$': '<rootDir>/src/$1',
   },
-  modulePathIgnorePatterns: [
-    '<rootDir>/dist/',
-  ],
+  modulePathIgnorePatterns: ['<rootDir>/dist/'],
   testPathIgnorePatterns: ['scripts'],
 };
 
