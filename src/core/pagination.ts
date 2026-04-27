@@ -87,7 +87,8 @@ export class PagePromise<
     super(
       client,
       request,
-      async (client, props) => new Page(client, props.response, await defaultParseResponse(client, props), props.options)
+      async (client, props) =>
+        new Page(client, props.response, await defaultParseResponse(client, props), props.options),
     );
   }
 
@@ -124,7 +125,12 @@ export class NamespacePage<Item> extends AbstractPage<Item> implements Namespace
 
   next_cursor: string;
 
-  constructor(client: Turbopuffer, response: Response, body: NamespacePageResponse<Item>, options: FinalRequestOptions) {
+  constructor(
+    client: Turbopuffer,
+    response: Response,
+    body: NamespacePageResponse<Item>,
+    options: FinalRequestOptions,
+  ) {
     super(client, response, body, options);
 
     this.namespaces = body.namespaces || [];
@@ -136,7 +142,7 @@ export class NamespacePage<Item> extends AbstractPage<Item> implements Namespace
   }
 
   nextPageRequestOptions(): PageRequestOptions | null {
-    const cursor = this.next_cursor
+    const cursor = this.next_cursor;
     if (!cursor) {
       return null;
     }
