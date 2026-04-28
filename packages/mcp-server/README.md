@@ -103,3 +103,27 @@ A configuration JSON for this server might look like this, assuming the server i
   }
 }
 ```
+
+### Setting environment variables on the hosted server
+
+When connecting to the hosted MCP server (e.g. `https://turbopuffer.stlmcp.com`), pass environment variables such as `TURBOPUFFER_REGION` or `TURBOPUFFER_DEFAULT_NAMESPACE` via the `x-stainless-mcp-client-envs` header. The value must be a JSON-encoded object:
+
+```
+x-stainless-mcp-client-envs: {"TURBOPUFFER_REGION": "gcp-us-central1"}
+```
+
+In a client configuration JSON, this looks like:
+
+```json
+{
+  "mcpServers": {
+    "turbopuffer_turbopuffer_api": {
+      "url": "https://turbopuffer.stlmcp.com",
+      "headers": {
+        "x-turbopuffer-api-key": "tpuf_A1...",
+        "x-stainless-mcp-client-envs": "{\"TURBOPUFFER_REGION\": \"gcp-us-central1\"}"
+      }
+    }
+  }
+}
+```
