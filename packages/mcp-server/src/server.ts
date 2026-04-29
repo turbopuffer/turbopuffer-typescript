@@ -29,7 +29,7 @@ export const newMcpServer = async ({
   new McpServer(
     {
       name: 'turbopuffer_turbopuffer_api',
-      version: '1.22.0',
+      version: '2.0.0-alpha.1',
     },
     {
       instructions: await getInstructions({ stainlessApiKey, customInstructionsPath }),
