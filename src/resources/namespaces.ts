@@ -174,7 +174,7 @@ export interface AttributeSchemaConfig {
   /**
    * The data type of the attribute. Valid values: string, int, uint, float, uuid,
    * datetime, bool, []string, []int, []uint, []float, []uuid, []datetime, []bool,
-   * [DIMS]f16, [DIMS]f32.
+   * [DIMS]f16, [DIMS]f32, {}f16.
    */
   type: AttributeType;
 
@@ -210,6 +210,12 @@ export interface AttributeSchemaConfig {
    * Whether to enable Regex filters on this attribute.
    */
   regex?: boolean;
+
+  /**
+   * Whether to create a sparse kNN index for the attribute. Requires the `{}f16`
+   * type.
+   */
+  sparse_knn?: AttributeSchemaConfig.SparseKnn;
 }
 
 export namespace AttributeSchemaConfig {
@@ -222,12 +228,23 @@ export namespace AttributeSchemaConfig {
      */
     distance_metric?: NamespacesAPI.DistanceMetric;
   }
+
+  /**
+   * Whether to create a sparse kNN index for the attribute. Requires the `{}f16`
+   * type.
+   */
+  export interface SparseKnn {
+    /**
+     * A function used to calculate sparse vector similarity.
+     */
+    distance_metric: 'dot_product';
+  }
 }
 
 /**
  * The data type of the attribute. Valid values: string, int, uint, float, uuid,
  * datetime, bool, []string, []int, []uint, []float, []uuid, []datetime, []bool,
- * [DIMS]f16, [DIMS]f32.
+ * [DIMS]f16, [DIMS]f32, {}f16.
  */
 export type AttributeType = string;
 
