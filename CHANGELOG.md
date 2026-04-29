@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.0-alpha.3 (2026-04-29)
+
+Full Changelog: [v2.0.0-alpha.2...v2.0.0-alpha.3](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.0.0-alpha.2...v2.0.0-alpha.3)
+
+### Chores
+
+* avoid formatting file that gets changed during releases ([122524f](https://github.com/turbopuffer/turbopuffer-typescript/commit/122524f0e0e6d8ceb0f6ebad2efa00d0d7bbdc47))
+
 ## 2.0.0-alpha.2 (2026-04-29)
 
 Full Changelog: [v2.0.0-alpha.1...v2.0.0-alpha.2](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.0.0-alpha.1...v2.0.0-alpha.2)
