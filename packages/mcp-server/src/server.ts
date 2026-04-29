@@ -87,9 +87,9 @@ export async function initMcpServer(params: {
           logger,
           ...params.clientOptions,
           defaultHeaders: {
-                  ...params.clientOptions?.defaultHeaders,
-                  'X-Stainless-MCP': 'true',
-                },
+            ...params.clientOptions?.defaultHeaders,
+            'X-Stainless-MCP': 'true',
+          },
         });
         if (_logLevel) {
           _client = _client.withOptions({ logLevel: _logLevel });
