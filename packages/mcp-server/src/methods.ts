@@ -50,7 +50,7 @@ export const sdkMethods: SdkMethod[] = [
     clientCallName: 'client.namespaces.metadata',
     fullyQualifiedName: 'namespaces.metadata',
     httpMethod: 'get',
-    httpPath: '/v1/namespaces/{namespace}/metadata',
+    httpPath: '/v2/namespaces/{namespace}/metadata',
   },
   {
     clientCallName: 'client.namespaces.multiQuery',
@@ -80,7 +80,7 @@ export const sdkMethods: SdkMethod[] = [
     clientCallName: 'client.namespaces.updateMetadata',
     fullyQualifiedName: 'namespaces.updateMetadata',
     httpMethod: 'patch',
-    httpPath: '/v1/namespaces/{namespace}/metadata',
+    httpPath: '/v2/namespaces/{namespace}/metadata',
   },
   {
     clientCallName: 'client.namespaces.updateSchema',

@@ -14,6 +14,7 @@ export {
   type CopyFromNamespaceParams,
   type DecayParams,
   type DistanceMetric,
+  type Encryption,
   type FullTextSearch,
   type FullTextSearchConfig,
   type ID,
