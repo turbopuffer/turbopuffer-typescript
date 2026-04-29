@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.0-alpha.4 (2026-04-29)
+
+Full Changelog: [v2.0.0-alpha.3...v2.0.0-alpha.4](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.0.0-alpha.3...v2.0.0-alpha.4)
+
+### Features
+
+* Spec: Add sparse_distance_metric to the list of models. ([ea11b44](https://github.com/turbopuffer/turbopuffer-typescript/commit/ea11b44d5752d0d4d3682d547354f4f9de306456))
+
 ## 2.0.0-alpha.3 (2026-04-29)
 
 Full Changelog: [v2.0.0-alpha.2...v2.0.0-alpha.3](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.0.0-alpha.2...v2.0.0-alpha.3)
