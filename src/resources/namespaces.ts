@@ -76,7 +76,7 @@ export class Namespace extends APIResource {
     options?: RequestOptions,
   ): APIPromise<NamespaceMetadata> {
     const { namespace = this._client.defaultNamespace } = params ?? {};
-    return this._client.get(path`/v1/namespaces/${namespace}/metadata`, options);
+    return this._client.get(path`/v2/namespaces/${namespace}/metadata`, options);
   }
 
   /**
@@ -149,7 +149,7 @@ export class Namespace extends APIResource {
     options?: RequestOptions,
   ): APIPromise<NamespaceMetadata> {
     const { namespace = this._client.defaultNamespace, ...body } = params ?? {};
-    return this._client.patch(path`/v1/namespaces/${namespace}/metadata`, { body, ...options });
+    return this._client.patch(path`/v2/namespaces/${namespace}/metadata`, { body, ...options });
   }
 
   /**
@@ -377,6 +377,33 @@ export interface DecayParams {
 export type DistanceMetric = 'cosine_distance' | 'euclidean_squared';
 
 /**
+ * The encryption configuration for a namespace.
+ */
+export type Encryption = Encryption.CustomerManaged | Encryption.Default;
+
+export namespace Encryption {
+  /**
+   * Encrypt the namespace with a customer-managed encryption key (CMEK).
+   */
+  export interface CustomerManaged {
+    /**
+     * The identifier of the CMEK key to use for encryption. For GCP, the
+     * fully-qualified resource name of the key. For AWS, the ARN of the key.
+     */
+    key_name: string;
+
+    mode: 'customer-managed';
+  }
+
+  /**
+   * Use the default server-side encryption (SSE).
+   */
+  export interface Default {
+    mode: 'default';
+  }
+}
+
+/**
  * Whether this attribute can be used as part of a BM25 full-text search. Requires
  * the `string` or `[]string` type, and by default, BM25-enabled attributes are not
  * filterable. You can override this by setting `filterable: true`.
@@ -527,10 +554,9 @@ export interface NamespaceMetadata {
   created_at: string;
 
   /**
-   * Indicates that the namespace is encrypted with a customer-managed encryption key
-   * (CMEK).
+   * The encryption configuration for a namespace.
    */
-  encryption: NamespaceMetadata.Sse | NamespaceMetadata.Cmek;
+  encryption: Encryption;
 
   index: NamespaceMetadata.IndexUpToDate | NamespaceMetadata.IndexUpdating;
 
@@ -552,30 +578,6 @@ export interface NamespaceMetadata {
 }
 
 export namespace NamespaceMetadata {
-  export interface Sse {
-    /**
-     * Always true. Indicates that the namespace is encrypted with SSE.
-     */
-    sse: boolean;
-  }
-
-  /**
-   * Indicates that the namespace is encrypted with a customer-managed encryption key
-   * (CMEK).
-   */
-  export interface Cmek {
-    cmek: Cmek.Cmek;
-  }
-
-  export namespace Cmek {
-    export interface Cmek {
-      /**
-       * The name of the CMEK key in use.
-       */
-      key_name: string;
-    }
-  }
-
   export interface IndexUpToDate {
     status: 'up-to-date';
   }
@@ -1541,7 +1543,7 @@ export interface NamespaceWriteParams {
   /**
    * Body param: The encryption configuration for a namespace.
    */
-  encryption?: NamespaceWriteParams.Encryption;
+  encryption?: Encryption;
 
   /**
    * Body param: The patch and filter specifying which documents to patch.
@@ -1603,23 +1605,6 @@ export interface NamespaceWriteParams {
 
 export namespace NamespaceWriteParams {
   /**
-   * The encryption configuration for a namespace.
-   */
-  export interface Encryption {
-    cmek?: Encryption.Cmek;
-  }
-
-  export namespace Encryption {
-    export interface Cmek {
-      /**
-       * The identifier of the CMEK key to use for encryption. For GCP, the
-       * fully-qualified resource name of the key. For AWS, the ARN of the key.
-       */
-      key_name: string;
-    }
-  }
-
-  /**
    * The patch and filter specifying which documents to patch.
    */
   export interface PatchByFilter {
@@ -1646,6 +1631,7 @@ export declare namespace Namespaces {
     type CopyFromNamespaceParams as CopyFromNamespaceParams,
     type DecayParams as DecayParams,
     type DistanceMetric as DistanceMetric,
+    type Encryption as Encryption,
     type FullTextSearch as FullTextSearch,
     type FullTextSearchConfig as FullTextSearchConfig,
     type ID as ID,
