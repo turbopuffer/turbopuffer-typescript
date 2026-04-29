@@ -12,6 +12,9 @@ if ! git diff --exit-code; then
     exit 1
 fi
 
+echo "==> Running prettier --check"
+./node_modules/.bin/prettier --check .
+
 echo "==> Running eslint"
 ./node_modules/.bin/eslint .
 
