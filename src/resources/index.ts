@@ -28,6 +28,7 @@ export {
   type QueryPerformance,
   type Row,
   type SaturateParams,
+  type SparseDistanceMetric,
   type Tokenizer,
   type Vector,
   type VectorEncoding,
