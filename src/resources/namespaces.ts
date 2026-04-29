@@ -237,7 +237,7 @@ export namespace AttributeSchemaConfig {
     /**
      * A function used to calculate sparse vector similarity.
      */
-    distance_metric: 'dot_product';
+    distance_metric: NamespacesAPI.SparseDistanceMetric;
   }
 }
 
@@ -717,6 +717,11 @@ export interface SaturateParams {
    */
   midpoint?: unknown;
 }
+
+/**
+ * A function used to calculate sparse vector similarity.
+ */
+export type SparseDistanceMetric = 'dot_product';
 
 /**
  * The tokenizer to use for full-text search on an attribute. Defaults to
@@ -1632,6 +1637,7 @@ export declare namespace Namespaces {
     type QueryPerformance as QueryPerformance,
     type Row as Row,
     type SaturateParams as SaturateParams,
+    type SparseDistanceMetric as SparseDistanceMetric,
     type Tokenizer as Tokenizer,
     type Vector as Vector,
     type VectorEncoding as VectorEncoding,
