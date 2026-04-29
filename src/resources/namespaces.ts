@@ -19,7 +19,7 @@ export class Namespace extends APIResource {
   ): APIPromise<NamespaceBranchFromResponse> {
     const { namespace = this._client.defaultNamespace, ...body } = params;
     return this._client.post(path`/v2/namespaces/${namespace}?stainless_overload=branchFrom`, {
-      body,
+      body: { branch_from_namespace: body },
       ...options,
     });
   }
@@ -30,7 +30,7 @@ export class Namespace extends APIResource {
   copyFrom(params: NamespaceCopyFromParams, options?: RequestOptions): APIPromise<NamespaceCopyFromResponse> {
     const { namespace = this._client.defaultNamespace, ...body } = params;
     return this._client.post(path`/v2/namespaces/${namespace}?stainless_overload=copyFrom`, {
-      body,
+      body: { copy_from_namespace: body },
       ...options,
     });
   }
