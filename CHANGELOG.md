@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.0-alpha.2 (2026-04-29)
+
+Full Changelog: [v2.0.0-alpha.1...v2.0.0-alpha.2](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.0.0-alpha.1...v2.0.0-alpha.2)
+
+### Bug Fixes
+
+* wrap branchFrom/copyFrom body in named object ([8f1c61a](https://github.com/turbopuffer/turbopuffer-typescript/commit/8f1c61a272cd9f1a3211cbc68b847318ca36fe95))
+
 ## 2.0.0-alpha.1 (2026-04-29)
 
 Full Changelog: [v1.22.0...v2.0.0-alpha.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.22.0...v2.0.0-alpha.1)
