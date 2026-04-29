@@ -1103,7 +1103,7 @@ export interface NamespaceBranchFromParams {
   /**
    * Body param: The namespace to create an instant, copy-on-write clone of.
    */
-  branch_from_namespace: BranchFromNamespaceParams;
+  source_namespace: string;
 }
 
 export interface NamespaceCopyFromParams {
@@ -1115,7 +1115,18 @@ export interface NamespaceCopyFromParams {
   /**
    * Body param: The namespace to copy documents from.
    */
-  copy_from_namespace: CopyFromNamespaceParams;
+  source_namespace: string;
+
+  /**
+   * Body param: (Optional) An API key for the organization containing the source
+   * namespace
+   */
+  source_api_key?: string;
+
+  /**
+   * Body param: (Optional) The region of the source namespace.
+   */
+  source_region?: string;
 }
 
 export interface NamespaceDeleteAllParams {

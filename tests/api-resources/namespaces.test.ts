@@ -12,7 +12,7 @@ describe('resource namespaces', () => {
   test.skip('branchFrom: only required params', async () => {
     const responsePromise = client.namespaces.branchFrom({
       namespace: 'namespace',
-      branch_from_namespace: 'string',
+      source_namespace: 'source_namespace',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -27,7 +27,7 @@ describe('resource namespaces', () => {
   test.skip('branchFrom: required and optional params', async () => {
     const response = await client.namespaces.branchFrom({
       namespace: 'namespace',
-      branch_from_namespace: 'string',
+      source_namespace: 'source_namespace',
     });
   });
 
@@ -35,7 +35,7 @@ describe('resource namespaces', () => {
   test.skip('copyFrom: only required params', async () => {
     const responsePromise = client.namespaces.copyFrom({
       namespace: 'namespace',
-      copy_from_namespace: 'string',
+      source_namespace: 'source_namespace',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -50,7 +50,9 @@ describe('resource namespaces', () => {
   test.skip('copyFrom: required and optional params', async () => {
     const response = await client.namespaces.copyFrom({
       namespace: 'namespace',
-      copy_from_namespace: 'string',
+      source_namespace: 'source_namespace',
+      source_api_key: 'source_api_key',
+      source_region: 'source_region',
     });
   });
 
