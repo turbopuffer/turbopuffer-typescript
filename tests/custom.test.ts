@@ -500,7 +500,7 @@ test('schema and metadata', async () => {
     approx_logical_bytes: 0,
     approx_row_count: 0,
     encryption: {
-      sse: true,
+      mode: 'default',
     },
     index: {
       status: 'up-to-date',
