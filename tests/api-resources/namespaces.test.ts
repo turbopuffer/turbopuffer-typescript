@@ -2,18 +2,12 @@
 
 import Turbopuffer from '@turbopuffer/turbopuffer';
 
-const client = new Turbopuffer({
-  apiKey: 'tpuf_A1...',
-  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
-});
+const client = new Turbopuffer({ apiKey: 'tpuf_A1...', baseURL: process.env["TEST_API_BASE_URL"] ?? 'http://127.0.0.1:4010' });
 
 describe('resource namespaces', () => {
   // Mock server tests are disabled
   test.skip('branchFrom: only required params', async () => {
-    const responsePromise = client.namespaces.branchFrom({
-      namespace: 'namespace',
-      branch_from_namespace: 'string',
-    });
+    const responsePromise = client.namespaces.branchFrom({ namespace: 'namespace', branch_from_namespace: 'string' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -25,18 +19,12 @@ describe('resource namespaces', () => {
 
   // Mock server tests are disabled
   test.skip('branchFrom: required and optional params', async () => {
-    const response = await client.namespaces.branchFrom({
-      namespace: 'namespace',
-      branch_from_namespace: 'string',
-    });
+    const response = await client.namespaces.branchFrom({ namespace: 'namespace', branch_from_namespace: 'string' });
   });
 
   // Mock server tests are disabled
   test.skip('copyFrom: only required params', async () => {
-    const responsePromise = client.namespaces.copyFrom({
-      namespace: 'namespace',
-      copy_from_namespace: 'string',
-    });
+    const responsePromise = client.namespaces.copyFrom({ namespace: 'namespace', copy_from_namespace: 'string' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -48,10 +36,7 @@ describe('resource namespaces', () => {
 
   // Mock server tests are disabled
   test.skip('copyFrom: required and optional params', async () => {
-    const response = await client.namespaces.copyFrom({
-      namespace: 'namespace',
-      copy_from_namespace: 'string',
-    });
+    const response = await client.namespaces.copyFrom({ namespace: 'namespace', copy_from_namespace: 'string' });
   });
 
   // Mock server tests are disabled
