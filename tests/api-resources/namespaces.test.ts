@@ -10,7 +10,7 @@ const client = new Turbopuffer({
 describe('resource namespaces', () => {
   // Mock server tests are disabled
   test.skip('branchFrom: only required params', async () => {
-    const responsePromise = client.namespaces.branchFrom({
+    const responsePromise = client.namespace('namespace').branchFrom({
       namespace: 'namespace',
       source_namespace: 'source_namespace',
     });
@@ -25,7 +25,7 @@ describe('resource namespaces', () => {
 
   // Mock server tests are disabled
   test.skip('branchFrom: required and optional params', async () => {
-    const response = await client.namespaces.branchFrom({
+    const response = await client.namespace('namespace').branchFrom({
       namespace: 'namespace',
       source_namespace: 'source_namespace',
     });
@@ -33,7 +33,7 @@ describe('resource namespaces', () => {
 
   // Mock server tests are disabled
   test.skip('copyFrom: only required params', async () => {
-    const responsePromise = client.namespaces.copyFrom({
+    const responsePromise = client.namespace('namespace').copyFrom({
       namespace: 'namespace',
       source_namespace: 'source_namespace',
     });
@@ -48,7 +48,7 @@ describe('resource namespaces', () => {
 
   // Mock server tests are disabled
   test.skip('copyFrom: required and optional params', async () => {
-    const response = await client.namespaces.copyFrom({
+    const response = await client.namespace('namespace').copyFrom({
       namespace: 'namespace',
       source_namespace: 'source_namespace',
       source_api_key: 'source_api_key',

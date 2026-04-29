@@ -1008,9 +1008,8 @@ test('no_cmek', async () => {
       ],
       distance_metric: 'cosine_distance',
       encryption: {
-        cmek: {
-          key_name: 'mykey',
-        },
+        mode: 'customer-managed',
+        key_name: 'mykey',
       },
     }),
     APIError,

@@ -23,7 +23,7 @@ import { NamespaceSummariesNamespacePage, NamespaceSummary, NamespacesParams } f
 import { APIPromise } from './core/api-promise';
 import {
   AggregationGroup,
-AttributeSchema,
+  AttributeSchema,
   AttributeSchemaConfig,
   AttributeType,
   Bm25ClauseParams,
