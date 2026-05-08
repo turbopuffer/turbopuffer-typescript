@@ -1,5 +1,26 @@
 # Changelog
 
+## 2.0.0-alpha.5 (2026-05-08)
+
+Full Changelog: [v2.0.0-alpha.4...v2.0.0-alpha.5](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.0.0-alpha.4...v2.0.0-alpha.5)
+
+### Features
+
+* spec: move update_metadata to v1 ([a463a1e](https://github.com/turbopuffer/turbopuffer-typescript/commit/a463a1ed9d337552ff4254f8f0f614e1b39bb9ed))
+
+
+### Chores
+
+* redact api-key headers in debug logs ([90bae26](https://github.com/turbopuffer/turbopuffer-typescript/commit/90bae2623b5cbd014ee15a54d67de16c54a6d222))
+
+
+### Documentation
+
+* clarify forwards compat behavior ([765b7cf](https://github.com/turbopuffer/turbopuffer-typescript/commit/765b7cf53c817923b6970afbba70645d5dca75c6))
+* update logging docs ([6cf5a2f](https://github.com/turbopuffer/turbopuffer-typescript/commit/6cf5a2f435bac1753cd247271fe4784b2b1426eb))
+* Update supported Node.js to 22 ([#201](https://github.com/turbopuffer/turbopuffer-typescript/issues/201)) ([5d0fe91](https://github.com/turbopuffer/turbopuffer-typescript/commit/5d0fe9143b2ad16a55a353132fd876798abe71f7))
+* update with proxy auth info ([e92d8ba](https://github.com/turbopuffer/turbopuffer-typescript/commit/e92d8bab8389bbedfadb7393069d9e7a1bc10f1d))
+
 ## 2.0.0-alpha.4 (2026-04-29)
 
 Full Changelog: [v2.0.0-alpha.3...v2.0.0-alpha.4](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.0.0-alpha.3...v2.0.0-alpha.4)
