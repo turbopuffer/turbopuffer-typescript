@@ -460,7 +460,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
   },
   {
     name: 'update_metadata',
-    endpoint: '/v2/namespaces/{namespace}/metadata',
+    endpoint: '/v1/namespaces/{namespace}/metadata',
     httpMethod: 'patch',
     summary: '',
     description: 'Update metadata configuration for a namespace.',
@@ -470,7 +470,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     response:
       "{ approx_logical_bytes: number; approx_row_count: number; created_at: string; encryption: { key_name: string; mode: 'customer-managed'; } | { mode: 'default'; }; index: { status: 'up-to-date'; } | { status: 'updating'; unindexed_bytes: number; }; schema: object; updated_at: string; pinning?: { replicas?: number; }; }",
     markdown:
-      "## update_metadata\n\n`client.namespaces.updateMetadata(namespace: string, pinning?: boolean | { replicas?: number; }): { approx_logical_bytes: number; approx_row_count: number; created_at: string; encryption: encryption; index: object | object; schema: object; updated_at: string; pinning?: pinning_config; }`\n\n**patch** `/v2/namespaces/{namespace}/metadata`\n\nUpdate metadata configuration for a namespace.\n\n### Parameters\n\n- `namespace: string`\n\n- `pinning?: boolean | { replicas?: number; }`\n  Configuration for namespace pinning.\n- Missing field: no change to pinning configuration\n- `null` or `false`: explicitly remove pinning\n- `true`: enable pinning with default configuration\n- Object: set pinning configuration\n\n### Returns\n\n- `{ approx_logical_bytes: number; approx_row_count: number; created_at: string; encryption: { key_name: string; mode: 'customer-managed'; } | { mode: 'default'; }; index: { status: 'up-to-date'; } | { status: 'updating'; unindexed_bytes: number; }; schema: object; updated_at: string; pinning?: { replicas?: number; }; }`\n  Metadata about a namespace.\n\n  - `approx_logical_bytes: number`\n  - `approx_row_count: number`\n  - `created_at: string`\n  - `encryption: { key_name: string; mode: 'customer-managed'; } | { mode: 'default'; }`\n  - `index: { status: 'up-to-date'; } | { status: 'updating'; unindexed_bytes: number; }`\n  - `schema: object`\n  - `updated_at: string`\n  - `pinning?: { replicas?: number; }`\n\n### Example\n\n```typescript\nimport Turbopuffer from '@turbopuffer/turbopuffer';\n\nconst client = new Turbopuffer();\n\nconst namespaceMetadata = await client.namespaces.updateMetadata({ namespace: 'namespace' });\n\nconsole.log(namespaceMetadata);\n```",
+      "## update_metadata\n\n`client.namespaces.updateMetadata(namespace: string, pinning?: boolean | { replicas?: number; }): { approx_logical_bytes: number; approx_row_count: number; created_at: string; encryption: encryption; index: object | object; schema: object; updated_at: string; pinning?: pinning_config; }`\n\n**patch** `/v1/namespaces/{namespace}/metadata`\n\nUpdate metadata configuration for a namespace.\n\n### Parameters\n\n- `namespace: string`\n\n- `pinning?: boolean | { replicas?: number; }`\n  Configuration for namespace pinning.\n- Missing field: no change to pinning configuration\n- `null` or `false`: explicitly remove pinning\n- `true`: enable pinning with default configuration\n- Object: set pinning configuration\n\n### Returns\n\n- `{ approx_logical_bytes: number; approx_row_count: number; created_at: string; encryption: { key_name: string; mode: 'customer-managed'; } | { mode: 'default'; }; index: { status: 'up-to-date'; } | { status: 'updating'; unindexed_bytes: number; }; schema: object; updated_at: string; pinning?: { replicas?: number; }; }`\n  Metadata about a namespace.\n\n  - `approx_logical_bytes: number`\n  - `approx_row_count: number`\n  - `created_at: string`\n  - `encryption: { key_name: string; mode: 'customer-managed'; } | { mode: 'default'; }`\n  - `index: { status: 'up-to-date'; } | { status: 'updating'; unindexed_bytes: number; }`\n  - `schema: object`\n  - `updated_at: string`\n  - `pinning?: { replicas?: number; }`\n\n### Example\n\n```typescript\nimport Turbopuffer from '@turbopuffer/turbopuffer';\n\nconst client = new Turbopuffer();\n\nconst namespaceMetadata = await client.namespaces.updateMetadata({ namespace: 'namespace' });\n\nconsole.log(namespaceMetadata);\n```",
     perLanguage: {
       typescript: {
         method: 'client.namespaces.updateMetadata',
@@ -499,7 +499,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
       http: {
         example:
-          'curl https://$TURBOPUFFER_REGION.turbopuffer.com/v2/namespaces/$NAMESPACE/metadata \\\n    -X PATCH \\\n    -H "Authorization: Bearer $TURBOPUFFER_API_KEY"',
+          'curl https://$TURBOPUFFER_REGION.turbopuffer.com/v1/namespaces/$NAMESPACE/metadata \\\n    -X PATCH \\\n    -H "Authorization: Bearer $TURBOPUFFER_API_KEY"',
       },
     },
   },
