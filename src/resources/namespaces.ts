@@ -149,7 +149,7 @@ export class Namespace extends APIResource {
     options?: RequestOptions,
   ): APIPromise<NamespaceMetadata> {
     const { namespace = this._client.defaultNamespace, ...body } = params ?? {};
-    return this._client.patch(path`/v2/namespaces/${namespace}/metadata`, { body, ...options });
+    return this._client.patch(path`/v1/namespaces/${namespace}/metadata`, { body, ...options });
   }
 
   /**
