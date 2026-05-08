@@ -44,10 +44,9 @@ list of changes.
   await tpuf.namespace('ns').branchFrom({ source_namespace: 'src' });
   ```
 
-- The `encryption` parameter has been restructured. The `cmek` wrapper has been
-  removed in favor of a flat object with a required `mode` discriminator. A new
-  `{ mode: 'default' }` variant lets you explicitly opt out of CMEK on writes to
-  a CMEK-enabled namespace.
+- The `encryption` parameter has been restructured. A new `{ mode: 'default' }`
+  variant lets you explicitly opt out of CMEK on writes to a CMEK-enabled
+  namespace.
 
   Old:
 
