@@ -1179,7 +1179,7 @@ export interface NamespaceExplainQueryParams {
    * Body param: Groups documents by the specified attributes (the "group key")
    * before computing aggregates. Aggregates are computed separately for each group.
    */
-  group_by?: Array<string>;
+  group_by?: Array<unknown>;
 
   /**
    * Body param: Whether to include attributes in the response.
@@ -1292,7 +1292,7 @@ export namespace NamespaceMultiQueryParams {
      * Groups documents by the specified attributes (the "group key") before computing
      * aggregates. Aggregates are computed separately for each group.
      */
-    group_by?: Array<string>;
+    group_by?: Array<unknown>;
 
     /**
      * Whether to include attributes in the response.
@@ -1369,7 +1369,7 @@ export interface NamespaceQueryParams {
    * Body param: Groups documents by the specified attributes (the "group key")
    * before computing aggregates. Aggregates are computed separately for each group.
    */
-  group_by?: Array<string>;
+  group_by?: Array<unknown>;
 
   /**
    * Body param: Whether to include attributes in the response.
