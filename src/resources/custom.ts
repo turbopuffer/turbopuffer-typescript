@@ -11,7 +11,7 @@ export type AggregateBy<T = Record<string, any>> =
   | ['Sum', keyof T & string]
   | ['Count', keyof T & string];
 export type Expr<T = Record<string, any>> = ExprRefNew<T>;
-export type ExprRefNew<T = Record<string, any>> = { $ref_new: string };
+export type ExprRefNew<T = Record<string, any>> = { $ref_new: keyof T & string };
 export type Filter<T = Record<string, any>> =
   | [keyof T & string, 'Eq', any]
   | [keyof T & string, 'NotEq', any]
