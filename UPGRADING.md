@@ -67,10 +67,23 @@ list of changes.
   A new `{ mode: 'default' }` variant lets you migrate a namespace from CMEK
   to default encryption.
 
-- The `RankByVector` and `RankBySparseVector` types have been renamed to
-  `RankByAnn` and `RankBySparseKnn`. The wire-format strings (`'ANN'` and
-  `'SparseKNN'`) are unchanged, so any code that passes plain arrays to
-  `rank_by` is unaffected.
+- The `RankByVector` type has been renamed to `RankByAnn`.
+
+  Old:
+
+  ```ts
+  import type { RankByVector } from '@turbopuffer/turbopuffer';
+
+  const rankBy: RankByVector = ['vector', 'ANN', [0.1, 0.2]];
+  ```
+
+  New:
+
+  ```ts
+  import type { RankByAnn } from '@turbopuffer/turbopuffer';
+
+  const rankBy: RankByAnn = ['vector', 'ANN', [0.1, 0.2]];
+  ```
 
 ## v1.0
 
