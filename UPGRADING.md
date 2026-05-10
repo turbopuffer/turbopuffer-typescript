@@ -4,6 +4,73 @@ This document describes the notable breaking changes, if any, in each version of
 the TypeScript client. See [CHANGELOG.md](./CHANGELOG.md) for a comprehensive
 list of changes.
 
+## v2.0
+
+- The `encryption` parameter has been restructured.
+
+  Old:
+
+  ```ts
+  await tpuf.namespace('ns').write({
+    upsert_rows: [/* ... */],
+    encryption: { cmek: { key_name: '...' } },
+  });
+  ```
+
+  New:
+
+  ```ts
+  await tpuf.namespace('ns').write({
+    upsert_rows: [/* ... */],
+    encryption: { mode: 'customer-managed', key_name: '...' },
+  });
+  ```
+
+  A new `{ mode: 'default' }` variant lets you migrate a namespace from CMEK
+  to default encryption.
+
+- The `copy_from_namespace` parameter to the `write` method has been replaced
+  with a dedicated `copyFrom` method.
+
+  Old:
+
+  ```ts
+  await tpuf.namespace('ns').write({
+    copy_from_namespace: {
+      source_namespace: 'src',
+      source_region: 'gcp-us-central1',
+    },
+  });
+  ```
+
+  New:
+
+  ```ts
+  await tpuf.namespace('ns').copyFrom({
+    source_namespace: 'src',
+    source_region: 'gcp-us-central1',
+  });
+  ```
+
+- The `branch_from_namespace` parameter to the `write` method has been replaced
+  with a dedicated `branchFrom` method.
+
+  Old:
+
+  ```ts
+  await tpuf.namespace('ns').write({ branch_from_namespace: 'src' });
+  ```
+
+  New:
+
+  ```ts
+  await tpuf.namespace('ns').branchFrom({ source_namespace: 'src' });
+  ```
+
+## v1.0
+
+No significant changes.
+
 ## v0.10
 
 v0.10 is a complete rewrite of the TypeScript client. The new client is
