@@ -1,5 +1,25 @@
 # Changelog
 
+## 2.0.0-alpha.6 (2026-05-10)
+
+Full Changelog: [v2.0.0-alpha.5...v2.0.0-alpha.6](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.0.0-alpha.5...v2.0.0-alpha.6)
+
+### Features
+
+* spec: rename RankByVector/RankBySparseVector to RankByAnn/RankBySparseKnn ([fdb2677](https://github.com/turbopuffer/turbopuffer-typescript/commit/fdb2677708e4b6352e1d4df9051c0b100d958fbd))
+* spec: rename RankByVector/RankBySparseVector to RankByAnn/RankBySparseKnn ([02fbc67](https://github.com/turbopuffer/turbopuffer-typescript/commit/02fbc672a7eea72f6c3624f5ed5ddfaa390f80c4))
+
+
+### Bug Fixes
+
+* import GroupBy from custom types in namespaces ([db1f30d](https://github.com/turbopuffer/turbopuffer-typescript/commit/db1f30dae450e12aa7b3f01ec823ad5f2658b188))
+
+
+### Chores
+
+* regenerate custom types ([0087d07](https://github.com/turbopuffer/turbopuffer-typescript/commit/0087d07e91cdd76e72737e0b560b33ca34cd3740))
+* remove unreferenced top-level Query interface ([07c7fa6](https://github.com/turbopuffer/turbopuffer-typescript/commit/07c7fa6505ff37762b972ea63f808bee56b20663))
+
 ## 2.0.0-alpha.5 (2026-05-08)
 
 Full Changelog: [v2.0.0-alpha.4...v2.0.0-alpha.5](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.0.0-alpha.4...v2.0.0-alpha.5)
