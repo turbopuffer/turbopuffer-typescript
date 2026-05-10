@@ -683,7 +683,7 @@ export interface Query {
    * Groups documents by the specified attributes (the "group key") before computing
    * aggregates. Aggregates are computed separately for each group.
    */
-  group_by?: Array<string>;
+  group_by?: Array<GroupBy>;
 
   /**
    * Whether to include attributes in the response.
@@ -1257,7 +1257,7 @@ export interface NamespaceExplainQueryParams {
    * Body param: Groups documents by the specified attributes (the "group key")
    * before computing aggregates. Aggregates are computed separately for each group.
    */
-  group_by?: Array<string>;
+  group_by?: Array<GroupBy>;
 
   /**
    * Body param: Whether to include attributes in the response.
@@ -1325,7 +1325,7 @@ export interface NamespaceMultiQueryParams {
   /**
    * Body param
    */
-  queries: Array<Query>;
+  queries: Array<NamespaceMultiQueryParams.Query>;
 
   /**
    * Body param: The consistency level for a query.
@@ -1339,6 +1339,60 @@ export interface NamespaceMultiQueryParams {
 }
 
 export namespace NamespaceMultiQueryParams {
+  /**
+   * Query, filter, full-text search and vector search documents.
+   */
+  export interface Query {
+    /**
+     * Aggregations to compute over all documents in the namespace that match the
+     * filters.
+     */
+    aggregate_by?: Record<string, AggregateBy>;
+
+    /**
+     * A function used to calculate vector similarity.
+     */
+    distance_metric?: NamespacesAPI.DistanceMetric;
+
+    /**
+     * List of attribute names to exclude from the response. All other attributes will
+     * be included in the response.
+     */
+    exclude_attributes?: Array<string>;
+
+    /**
+     * Exact filters for attributes to refine search results for. Think of it as a SQL
+     * WHERE clause.
+     */
+    filters?: Filter;
+
+    /**
+     * Groups documents by the specified attributes (the "group key") before computing
+     * aggregates. Aggregates are computed separately for each group.
+     */
+    group_by?: Array<GroupBy>;
+
+    /**
+     * Whether to include attributes in the response.
+     */
+    include_attributes?: NamespacesAPI.IncludeAttributes;
+
+    /**
+     * Limits the documents returned by a query.
+     */
+    limit?: number | NamespacesAPI.Limit;
+
+    /**
+     * How to rank the documents in the namespace.
+     */
+    rank_by?: RankBy;
+
+    /**
+     * The number of results to return.
+     */
+    top_k?: number;
+  }
+
   /**
    * The consistency level for a query.
    */
@@ -1393,7 +1447,7 @@ export interface NamespaceQueryParams {
    * Body param: Groups documents by the specified attributes (the "group key")
    * before computing aggregates. Aggregates are computed separately for each group.
    */
-  group_by?: Array<string>;
+  group_by?: Array<GroupBy>;
 
   /**
    * Body param: Whether to include attributes in the response.
