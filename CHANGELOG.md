@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.0-alpha.7 (2026-05-10)
+
+Full Changelog: [v2.0.0-alpha.6...v2.0.0-alpha.7](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.0.0-alpha.6...v2.0.0-alpha.7)
+
+### Features
+
+* **types:** add generic support to Filters type ([#178](https://github.com/turbopuffer/turbopuffer-typescript/issues/178)) ([62a7c40](https://github.com/turbopuffer/turbopuffer-typescript/commit/62a7c403fc667c2de01d1def9e608f19faef036c))
+
 ## 2.0.0-alpha.6 (2026-05-10)
 
 Full Changelog: [v2.0.0-alpha.5...v2.0.0-alpha.6](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.0.0-alpha.5...v2.0.0-alpha.6)
