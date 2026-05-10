@@ -6,6 +6,47 @@ list of changes.
 
 ## v2.0
 
+- The `RankByVector` type has been renamed to `RankByAnn`.
+
+  Old:
+
+  ```ts
+  import type { RankByVector } from '@turbopuffer/turbopuffer';
+
+  const rankBy: RankByVector = ['vector', 'ANN', [0.1, 0.2]];
+  ```
+
+  New:
+
+  ```ts
+  import type { RankByAnn } from '@turbopuffer/turbopuffer';
+
+  const rankBy: RankByAnn = ['vector', 'ANN', [0.1, 0.2]];
+  ```
+
+- The `encryption` parameter has been restructured.
+
+  Old:
+
+  ```ts
+  await tpuf.namespace('ns').write({
+    upsert_rows: [/* ... */],
+    encryption: { cmek: { key_name: '...' } },
+  });
+  ```
+
+  New:
+
+  ```ts
+  await tpuf.namespace('ns').write({
+    upsert_rows: [/* ... */],
+    encryption: { mode: 'customer-managed', key_name: '...' },
+  });
+  ```
+
+  A new `{ mode: 'default' }` variant lets you migrate a namespace from CMEK
+  to default encryption.
+
 - The `copy_from_namespace` parameter to the `write` method has been replaced
   with a dedicated `copyFrom` method.
 
@@ -42,47 +83,6 @@ list of changes.
 
   ```ts
   await tpuf.namespace('ns').branchFrom({ source_namespace: 'src' });
-  ```
-
-- The `encryption` parameter has been restructured.
-
-  Old:
-
-  ```ts
-  await tpuf.namespace('ns').write({
-    upsert_rows: [/* ... */],
-    encryption: { cmek: { key_name: '...' } },
-  });
-  ```
-
-  New:
-
-  ```ts
-  await tpuf.namespace('ns').write({
-    upsert_rows: [/* ... */],
-    encryption: { mode: 'customer-managed', key_name: '...' },
-  });
-  ```
-
-  A new `{ mode: 'default' }` variant lets you migrate a namespace from CMEK
-  to default encryption.
-
-- The `RankByVector` type has been renamed to `RankByAnn`.
-
-  Old:
-
-  ```ts
-  import type { RankByVector } from '@turbopuffer/turbopuffer';
-
-  const rankBy: RankByVector = ['vector', 'ANN', [0.1, 0.2]];
-  ```
-
-  New:
-
-  ```ts
-  import type { RankByAnn } from '@turbopuffer/turbopuffer';
-
-  const rankBy: RankByAnn = ['vector', 'ANN', [0.1, 0.2]];
   ```
 
 ## v1.0
