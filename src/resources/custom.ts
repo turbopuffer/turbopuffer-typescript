@@ -44,18 +44,21 @@ export type Filter =
   | ['Not', Filter]
   | ['And', Filter[]]
   | ['Or', Filter[]];
+export type GroupBy = string | Record<string, GroupByFunction>;
+export type GroupByFunction = ['ForEachUnique', string];
 export type RankBy =
-  | RankByVector
+  | RankByAnn
   | RankByKnn
-  | RankBySparseVector
+  | RankBySparseKnn
   | RankByText
   | RankByAttribute
   | RankByAttributes;
+export type RankByAnn = [string, 'ANN', number[]];
 export type RankByAttribute = [string, RankByAttributeOrder];
 export type RankByAttributeOrder = 'asc' | 'desc';
 export type RankByAttributes = RankByAttribute[];
 export type RankByKnn = [string, 'kNN', number[]];
-export type RankBySparseVector = [string, 'SparseKNN', Record<string, number>];
+export type RankBySparseKnn = [string, 'SparseKNN', Record<string, number>];
 export type RankByText =
   | [string, 'BM25', string]
   | [string, 'BM25', string[]]
@@ -70,4 +73,3 @@ export type RankByText =
   | ['Saturate', RankByText, SaturateParams]
   | ['Decay', RankByText, DecayParams]
   | ['Dist', RankByText, any];
-export type RankByVector = [string, 'ANN', number[]];
