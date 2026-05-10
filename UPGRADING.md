@@ -6,24 +6,6 @@ list of changes.
 
 ## v2.0
 
-- The `RankByVector` type has been renamed to `RankByAnn`.
-
-  Old:
-
-  ```ts
-  import type { RankByVector } from '@turbopuffer/turbopuffer';
-
-  const rankBy: RankByVector = ['vector', 'ANN', [0.1, 0.2]];
-  ```
-
-  New:
-
-  ```ts
-  import type { RankByAnn } from '@turbopuffer/turbopuffer';
-
-  const rankBy: RankByAnn = ['vector', 'ANN', [0.1, 0.2]];
-  ```
-
 - The `encryption` parameter has been restructured.
 
   Old:
