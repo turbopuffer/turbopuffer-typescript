@@ -6,70 +6,77 @@ import { ContainsAnyTokenFilterParams } from '../index';
 import { DecayParams } from '../index';
 import { SaturateParams } from '../index';
 
-export type AggregateBy = ['Count'] | ['Sum', string] | ['Count', string];
-export type Expr = ExprRefNew;
-export type ExprRefNew = { $ref_new: string };
-export type Filter =
-  | [string, 'Eq', any]
-  | [string, 'NotEq', any]
-  | [string, 'In', any[]]
-  | [string, 'NotIn', any[]]
-  | [string, 'Contains', any]
-  | [string, 'NotContains', any]
-  | [string, 'ContainsAny', any[]]
-  | [string, 'NotContainsAny', any[]]
-  | [string, 'Lt', any]
-  | [string, 'Lte', any]
-  | [string, 'Gt', any]
-  | [string, 'Gte', any]
-  | [string, 'AnyLt', any]
-  | [string, 'AnyLte', any]
-  | [string, 'AnyGt', any]
-  | [string, 'AnyGte', any]
-  | [string, 'Glob', string]
-  | [string, 'NotGlob', string]
-  | [string, 'IGlob', string]
-  | [string, 'NotIGlob', string]
-  | [string, 'Regex', string]
-  | [string, 'ContainsAllTokens', string]
-  | [string, 'ContainsAllTokens', string[]]
-  | [string, 'ContainsAllTokens', string, ContainsAllTokensFilterParams]
-  | [string, 'ContainsAllTokens', string[], ContainsAllTokensFilterParams]
-  | [string, 'ContainsAnyToken', string]
-  | [string, 'ContainsAnyToken', string[]]
-  | [string, 'ContainsAnyToken', string, ContainsAnyTokenFilterParams]
-  | [string, 'ContainsAnyToken', string[], ContainsAnyTokenFilterParams]
-  | [string, 'ContainsTokenSequence', string]
-  | [string, 'ContainsTokenSequence', string[]]
-  | ['Not', Filter]
-  | ['And', Filter[]]
-  | ['Or', Filter[]];
-export type GroupBy = string | Record<string, GroupByFunction>;
-export type GroupByFunction = ['ForEachUnique', string];
-export type RankBy =
-  | RankByAnn
-  | RankByKnn
-  | RankBySparseKnn
-  | RankByText
-  | RankByAttribute
-  | RankByAttributes;
-export type RankByAnn = [string, 'ANN', number[]];
-export type RankByAttribute = [string, RankByAttributeOrder];
-export type RankByAttributeOrder = 'asc' | 'desc';
-export type RankByAttributes = RankByAttribute[];
-export type RankByKnn = [string, 'kNN', number[]];
-export type RankBySparseKnn = [string, 'SparseKNN', Record<string, number>];
-export type RankByText =
-  | [string, 'BM25', string]
-  | [string, 'BM25', string[]]
-  | [string, 'BM25', string, Bm25ClauseParams]
-  | [string, 'BM25', string[], Bm25ClauseParams]
-  | ['Sum', RankByText[]]
-  | ['Max', RankByText[]]
-  | ['Product', number, RankByText]
-  | ['Product', RankByText, number]
-  | Filter
-  | ['Attribute', string]
-  | ['Saturate', RankByText, SaturateParams]
-  | ['Decay', RankByText, DecayParams]
-  | ['Dist', RankByText, any];
+export type AggregateBy<T = Record<string, any>> =
+  | ['Count']
+  | ['Sum', keyof T & string]
+  | ['Count', keyof T & string];
+export type Expr<T = Record<string, any>> = ExprRefNew<T>;
+export type ExprRefNew<T = Record<string, any>> = { $ref_new: string };
+export type Filter<T = Record<string, any>> =
+  | [keyof T & string, 'Eq', any]
+  | [keyof T & string, 'NotEq', any]
+  | [keyof T & string, 'In', any[]]
+  | [keyof T & string, 'NotIn', any[]]
+  | [keyof T & string, 'Contains', any]
+  | [keyof T & string, 'NotContains', any]
+  | [keyof T & string, 'ContainsAny', any[]]
+  | [keyof T & string, 'NotContainsAny', any[]]
+  | [keyof T & string, 'Lt', any]
+  | [keyof T & string, 'Lte', any]
+  | [keyof T & string, 'Gt', any]
+  | [keyof T & string, 'Gte', any]
+  | [keyof T & string, 'AnyLt', any]
+  | [keyof T & string, 'AnyLte', any]
+  | [keyof T & string, 'AnyGt', any]
+  | [keyof T & string, 'AnyGte', any]
+  | [keyof T & string, 'Glob', string]
+  | [keyof T & string, 'NotGlob', string]
+  | [keyof T & string, 'IGlob', string]
+  | [keyof T & string, 'NotIGlob', string]
+  | [keyof T & string, 'Regex', string]
+  | [keyof T & string, 'ContainsAllTokens', string]
+  | [keyof T & string, 'ContainsAllTokens', string[]]
+  | [keyof T & string, 'ContainsAllTokens', string, ContainsAllTokensFilterParams]
+  | [keyof T & string, 'ContainsAllTokens', string[], ContainsAllTokensFilterParams]
+  | [keyof T & string, 'ContainsAnyToken', string]
+  | [keyof T & string, 'ContainsAnyToken', string[]]
+  | [keyof T & string, 'ContainsAnyToken', string, ContainsAnyTokenFilterParams]
+  | [keyof T & string, 'ContainsAnyToken', string[], ContainsAnyTokenFilterParams]
+  | [keyof T & string, 'ContainsTokenSequence', string]
+  | [keyof T & string, 'ContainsTokenSequence', string[]]
+  | ['Not', Filter<T>]
+  | ['And', Filter<T>[]]
+  | ['Or', Filter<T>[]];
+export type GroupBy<T = Record<string, any>> = string | Record<string, GroupByFunction<T>>;
+export type GroupByFunction<T = Record<string, any>> = ['ForEachUnique', keyof T & string];
+export type RankBy<T = Record<string, any>> =
+  | RankByAnn<T>
+  | RankByKnn<T>
+  | RankBySparseKnn<T>
+  | RankByText<T>
+  | RankByAttribute<T>
+  | RankByAttributes<T>;
+export type RankByAnn<T = Record<string, any>> = [keyof T & string, 'ANN', number[]];
+export type RankByAttribute<T = Record<string, any>> = [keyof T & string, RankByAttributeOrder<T>];
+export type RankByAttributeOrder<T = Record<string, any>> = 'asc' | 'desc';
+export type RankByAttributes<T = Record<string, any>> = RankByAttribute<T>[];
+export type RankByKnn<T = Record<string, any>> = [keyof T & string, 'kNN', number[]];
+export type RankBySparseKnn<T = Record<string, any>> = [
+  keyof T & string,
+  'SparseKNN',
+  Record<string, number>,
+];
+export type RankByText<T = Record<string, any>> =
+  | [keyof T & string, 'BM25', string]
+  | [keyof T & string, 'BM25', string[]]
+  | [keyof T & string, 'BM25', string, Bm25ClauseParams]
+  | [keyof T & string, 'BM25', string[], Bm25ClauseParams]
+  | ['Sum', RankByText<T>[]]
+  | ['Max', RankByText<T>[]]
+  | ['Product', number, RankByText<T>]
+  | ['Product', RankByText<T>, number]
+  | Filter<T>
+  | ['Attribute', keyof T & string]
+  | ['Saturate', RankByText<T>, SaturateParams]
+  | ['Decay', RankByText<T>, DecayParams]
+  | ['Dist', RankByText<T>, any];
