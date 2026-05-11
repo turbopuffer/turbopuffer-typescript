@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.0.0 (2026-05-11)
+
+Full Changelog: [v2.0.0-alpha.7...v2.0.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.0.0-alpha.7...v2.0.0)
+
+### Documentation
+
+* document v2.0 breaking changes in UPGRADING.md ([7f44961](https://github.com/turbopuffer/turbopuffer-typescript/commit/7f449616b9d8ef8784d59bcc09bcbfe4f51203f6))
+* format UPGRADING.md ([d7f81a2](https://github.com/turbopuffer/turbopuffer-typescript/commit/d7f81a2834d5870ccddb58d632a91acaec66c4c2))
+
 ## 2.0.0-alpha.7 (2026-05-10)
 
 Full Changelog: [v2.0.0-alpha.6...v2.0.0-alpha.7](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.0.0-alpha.6...v2.0.0-alpha.7)
