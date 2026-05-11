@@ -12,7 +12,9 @@ list of changes.
 
   ```ts
   await tpuf.namespace('ns').write({
-    upsert_rows: [/* ... */],
+    upsert_rows: [
+      /* ... */
+    ],
     encryption: { cmek: { key_name: '...' } },
   });
   ```
@@ -21,7 +23,9 @@ list of changes.
 
   ```ts
   await tpuf.namespace('ns').write({
-    upsert_rows: [/* ... */],
+    upsert_rows: [
+      /* ... */
+    ],
     encryption: { mode: 'customer-managed', key_name: '...' },
   });
   ```
