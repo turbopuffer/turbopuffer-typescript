@@ -88,6 +88,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "turbopuffer"\n\nturbopuffer = Turbopuffer::Client.new(api_key: "tpuf_A1...")\n\npage = turbopuffer.namespaces\n\nputs(page)',
       },
+      csharp: {
+        method: 'Namespaces',
+        example:
+          'ClientNamespacesParams parameters = new();\n\nvar page = await client.Namespaces(parameters);\nawait foreach (var item in page.Paginate())\n{\n    Console.WriteLine(item);\n}',
+      },
       http: {
         example:
           'curl https://$TURBOPUFFER_REGION.turbopuffer.com/v1/namespaces \\\n    -H "Authorization: Bearer $TURBOPUFFER_API_KEY"',
@@ -154,6 +159,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "turbopuffer"\n\nturbopuffer = Turbopuffer::Client.new(api_key: "tpuf_A1...")\n\nresponse = turbopuffer.namespaces.write(namespace: "namespace")\n\nputs(response)',
       },
+      csharp: {
+        method: 'Namespaces.Write',
+        example:
+          'NamespaceWriteParams parameters = new() { Namespace = "namespace" };\n\nvar response = await client.Namespaces.Write(parameters);\n\nConsole.WriteLine(response);',
+      },
       http: {
         example:
           'curl https://$TURBOPUFFER_REGION.turbopuffer.com/v2/namespaces/$NAMESPACE \\\n    -X POST \\\n    -H "Authorization: Bearer $TURBOPUFFER_API_KEY" \\\n    --retry 6',
@@ -212,6 +222,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "turbopuffer"\n\nturbopuffer = Turbopuffer::Client.new(api_key: "tpuf_A1...")\n\nresponse = turbopuffer.namespaces.query(namespace: "namespace")\n\nputs(response)',
       },
+      csharp: {
+        method: 'Namespaces.Query',
+        example:
+          'NamespaceQueryParams parameters = new() { Namespace = "namespace" };\n\nvar response = await client.Namespaces.Query(parameters);\n\nConsole.WriteLine(response);',
+      },
       http: {
         example:
           'curl https://$TURBOPUFFER_REGION.turbopuffer.com/v2/namespaces/$NAMESPACE/query \\\n    -X POST \\\n    -H "Authorization: Bearer $TURBOPUFFER_API_KEY"',
@@ -261,6 +276,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'namespaces.multi_query',
         example:
           'require "turbopuffer"\n\nturbopuffer = Turbopuffer::Client.new(api_key: "tpuf_A1...")\n\nresponse = turbopuffer.namespaces.multi_query(namespace: "namespace", queries: [{}])\n\nputs(response)',
+      },
+      csharp: {
+        method: 'Namespaces.MultiQuery',
+        example:
+          'NamespaceMultiQueryParams parameters = new()\n{\n    Namespace = "namespace",\n    Queries =\n    [\n        new()\n        {\n            AggregateBy = new Dictionary<string, JsonElement>()\n            {\n                { "foo", JsonSerializer.SerializeToElement("bar") }\n            },\n            DistanceMetric = DistanceMetric.CosineDistance,\n            ExcludeAttributes =\n            [\n                "string"\n            ],\n            Filters = JsonSerializer.Deserialize<JsonElement>("{}"),\n            GroupBy =\n            [\n                JsonSerializer.Deserialize<JsonElement>("{}")\n            ],\n            IncludeAttributes = true,\n            Limit = 0,\n            RankBy = JsonSerializer.Deserialize<JsonElement>("{}"),\n            TopK = 0,\n        },\n    ],\n};\n\nvar response = await client.Namespaces.MultiQuery(parameters);\n\nConsole.WriteLine(response);',
       },
       http: {
         example:
@@ -319,6 +339,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "turbopuffer"\n\nturbopuffer = Turbopuffer::Client.new(api_key: "tpuf_A1...")\n\nresponse = turbopuffer.namespaces.explain_query(namespace: "namespace")\n\nputs(response)',
       },
+      csharp: {
+        method: 'Namespaces.ExplainQuery',
+        example:
+          'NamespaceExplainQueryParams parameters = new() { Namespace = "namespace" };\n\nvar response = await client.Namespaces.ExplainQuery(parameters);\n\nConsole.WriteLine(response);',
+      },
       http: {
         example:
           'curl https://$TURBOPUFFER_REGION.turbopuffer.com/v2/namespaces/$NAMESPACE/explain_query \\\n    -X POST \\\n    -H "Authorization: Bearer $TURBOPUFFER_API_KEY"',
@@ -363,6 +388,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "turbopuffer"\n\nturbopuffer = Turbopuffer::Client.new(api_key: "tpuf_A1...")\n\nresponse = turbopuffer.namespaces.schema(namespace: "namespace")\n\nputs(response)',
       },
+      csharp: {
+        method: 'Namespaces.Schema',
+        example:
+          'NamespaceSchemaParams parameters = new() { Namespace = "namespace" };\n\nvar response = await client.Namespaces.Schema(parameters);\n\nConsole.WriteLine(response);',
+      },
       http: {
         example:
           'curl https://$TURBOPUFFER_REGION.turbopuffer.com/v1/namespaces/$NAMESPACE/schema \\\n    -H "Authorization: Bearer $TURBOPUFFER_API_KEY"',
@@ -406,6 +436,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'namespaces.update_schema',
         example:
           'require "turbopuffer"\n\nturbopuffer = Turbopuffer::Client.new(api_key: "tpuf_A1...")\n\nresponse = turbopuffer.namespaces.update_schema(namespace: "namespace")\n\nputs(response)',
+      },
+      csharp: {
+        method: 'Namespaces.UpdateSchema',
+        example:
+          'NamespaceUpdateSchemaParams parameters = new() { Namespace = "namespace" };\n\nvar response = await client.Namespaces.UpdateSchema(parameters);\n\nConsole.WriteLine(response);',
       },
       http: {
         example:
@@ -452,6 +487,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "turbopuffer"\n\nturbopuffer = Turbopuffer::Client.new(api_key: "tpuf_A1...")\n\nnamespace_metadata = turbopuffer.namespaces.metadata(namespace: "namespace")\n\nputs(namespace_metadata)',
       },
+      csharp: {
+        method: 'Namespaces.Metadata',
+        example:
+          'NamespaceMetadataParams parameters = new() { Namespace = "namespace" };\n\nvar namespaceMetadata = await client.Namespaces.Metadata(parameters);\n\nConsole.WriteLine(namespaceMetadata);',
+      },
       http: {
         example:
           'curl https://$TURBOPUFFER_REGION.turbopuffer.com/v2/namespaces/$NAMESPACE/metadata \\\n    -H "Authorization: Bearer $TURBOPUFFER_API_KEY"',
@@ -497,6 +537,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "turbopuffer"\n\nturbopuffer = Turbopuffer::Client.new(api_key: "tpuf_A1...")\n\nnamespace_metadata = turbopuffer.namespaces.update_metadata(namespace: "namespace")\n\nputs(namespace_metadata)',
       },
+      csharp: {
+        method: 'Namespaces.UpdateMetadata',
+        example:
+          'NamespaceUpdateMetadataParams parameters = new() { Namespace = "namespace" };\n\nvar namespaceMetadata = await client.Namespaces.UpdateMetadata(parameters);\n\nConsole.WriteLine(namespaceMetadata);',
+      },
       http: {
         example:
           'curl https://$TURBOPUFFER_REGION.turbopuffer.com/v1/namespaces/$NAMESPACE/metadata \\\n    -X PATCH \\\n    -H "Authorization: Bearer $TURBOPUFFER_API_KEY"',
@@ -541,6 +586,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "turbopuffer"\n\nturbopuffer = Turbopuffer::Client.new(api_key: "tpuf_A1...")\n\nresponse = turbopuffer.namespaces.hint_cache_warm(namespace: "namespace")\n\nputs(response)',
       },
+      csharp: {
+        method: 'Namespaces.HintCacheWarm',
+        example:
+          'NamespaceHintCacheWarmParams parameters = new() { Namespace = "namespace" };\n\nvar response = await client.Namespaces.HintCacheWarm(parameters);\n\nConsole.WriteLine(response);',
+      },
       http: {
         example:
           'curl https://$TURBOPUFFER_REGION.turbopuffer.com/v1/namespaces/$NAMESPACE/hint_cache_warm \\\n    -H "Authorization: Bearer $TURBOPUFFER_API_KEY"',
@@ -584,6 +634,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'namespaces.delete_all',
         example:
           'require "turbopuffer"\n\nturbopuffer = Turbopuffer::Client.new(api_key: "tpuf_A1...")\n\nresponse = turbopuffer.namespaces.delete_all(namespace: "namespace")\n\nputs(response)',
+      },
+      csharp: {
+        method: 'Namespaces.DeleteAll',
+        example:
+          'NamespaceDeleteAllParams parameters = new() { Namespace = "namespace" };\n\nvar response = await client.Namespaces.DeleteAll(parameters);\n\nConsole.WriteLine(response);',
       },
       http: {
         example:
@@ -637,6 +692,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "turbopuffer"\n\nturbopuffer = Turbopuffer::Client.new(api_key: "tpuf_A1...")\n\nresponse = turbopuffer.namespaces.recall(namespace: "namespace")\n\nputs(response)',
       },
+      csharp: {
+        method: 'Namespaces.Recall',
+        example:
+          'NamespaceRecallParams parameters = new() { Namespace = "namespace" };\n\nvar response = await client.Namespaces.Recall(parameters);\n\nConsole.WriteLine(response);',
+      },
       http: {
         example:
           'curl https://$TURBOPUFFER_REGION.turbopuffer.com/v1/namespaces/$NAMESPACE/_debug/recall \\\n    -X POST \\\n    -H "Authorization: Bearer $TURBOPUFFER_API_KEY"',
@@ -681,6 +741,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'namespaces.branch_from',
         example:
           'require "turbopuffer"\n\nturbopuffer = Turbopuffer::Client.new(api_key: "tpuf_A1...")\n\nresponse = turbopuffer.namespaces.branch_from(namespace: "namespace", source_namespace: "source_namespace")\n\nputs(response)',
+      },
+      csharp: {
+        method: 'Namespaces.BranchFrom',
+        example:
+          'NamespaceBranchFromParams parameters = new()\n{\n    Namespace = "namespace",\n    SourceNamespace = "source_namespace",\n};\n\nvar response = await client.Namespaces.BranchFrom(parameters);\n\nConsole.WriteLine(response);',
       },
       http: {
         example:
@@ -732,6 +797,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "turbopuffer"\n\nturbopuffer = Turbopuffer::Client.new(api_key: "tpuf_A1...")\n\nresponse = turbopuffer.namespaces.copy_from(namespace: "namespace", source_namespace: "source_namespace")\n\nputs(response)',
       },
+      csharp: {
+        method: 'Namespaces.CopyFrom',
+        example:
+          'NamespaceCopyFromParams parameters = new()\n{\n    Namespace = "namespace",\n    SourceNamespace = "source_namespace",\n};\n\nvar response = await client.Namespaces.CopyFrom(parameters);\n\nConsole.WriteLine(response);',
+      },
       http: {
         example:
           'curl https://$TURBOPUFFER_REGION.turbopuffer.com/v2/namespaces/$NAMESPACE \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $TURBOPUFFER_API_KEY" \\\n    -d \'{\n          "source_namespace": "source_namespace"\n        }\'',
@@ -741,6 +811,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
 ];
 
 const EMBEDDED_READMES: { language: string; content: string }[] = [
+  {
+    language: 'csharp',
+    content:
+      '# Turbopuffer C# API Library\n\nThe Turbopuffer C# SDK provides convenient access to the [Turbopuffer REST API](https://turbopuffer.com/docs/auth) from applications written in   C#.\n\n## Installation\n\n```bash\ngit clone git@github.com:turbopuffer/turbopuffer-csharp.git\ndotnet add reference turbopuffer-csharp/src/Turbopuffer\n```\n\n## Requirements\n\nThis library requires .NET Standard 2.0 or later.\n\n## Usage\n\nSee the [`examples`](examples) directory for complete and runnable examples.\n\n```csharp\nTurbopufferClient client = new();\n\nNamespaceWriteParams parameters = new()\n{\n    Namespace = "products",\n    DistanceMetric = DistanceMetric.CosineDistance,\n    UpsertRows =\n    [\n        new()\n        {\n            ID = "2108ed60-6851-49a0-9016-8325434f3845",\n            Vector = new(\n\n                [\n                    0.1, 0.2\n                ]\n            ),\n        },\n    ],\n};\n\nvar response = await client.Namespaces1.Write(parameters);\n\nConsole.WriteLine(response);\n```',
+  },
   {
     language: 'go',
     content:
