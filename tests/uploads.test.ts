@@ -1,7 +1,6 @@
 import fs from 'fs';
 import type { ResponseLike } from '@turbopuffer/turbopuffer/internal/to-file';
 import { toFile } from '@turbopuffer/turbopuffer/core/uploads';
-import { File } from 'node:buffer';
 
 class MyClass {
   name: string = 'foo';
