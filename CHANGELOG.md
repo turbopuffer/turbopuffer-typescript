@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.1.0 (2026-05-18)
+
+Full Changelog: [v2.0.0...v2.1.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.0.0...v2.1.0)
+
+### Features
+
+* publish csharp ([012c29c](https://github.com/turbopuffer/turbopuffer-typescript/commit/012c29ce00335306766941d31c1bbf1572972857))
+* spec: add C# stainless target ([c2483a7](https://github.com/turbopuffer/turbopuffer-typescript/commit/c2483a7ffec586b5e19a465a01313b9c1780e84f))
+* spec: rename C# package to Turbopuffer.Client ([50d040c](https://github.com/turbopuffer/turbopuffer-typescript/commit/50d040c11e36fac864ed34eeee9de1ab5d1c5c0b))
+
 ## 2.0.0 (2026-05-11)
 
 Full Changelog: [v2.0.0-alpha.7...v2.0.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.0.0-alpha.7...v2.0.0)
