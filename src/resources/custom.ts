@@ -4,6 +4,7 @@ import { Bm25ClauseParams } from '../index';
 import { ContainsAllTokensFilterParams } from '../index';
 import { ContainsAnyTokenFilterParams } from '../index';
 import { DecayParams } from '../index';
+import { FuzzyParams } from '../index';
 import { SaturateParams } from '../index';
 
 export type AggregateBy<T = Record<string, any>> =
@@ -34,6 +35,7 @@ export type Filter<T = Record<string, any>> =
   | [keyof T & string, 'IGlob', string]
   | [keyof T & string, 'NotIGlob', string]
   | [keyof T & string, 'Regex', string]
+  | [keyof T & string, 'Fuzzy', string, FuzzyParams]
   | [keyof T & string, 'ContainsAllTokens', string]
   | [keyof T & string, 'ContainsAllTokens', string[]]
   | [keyof T & string, 'ContainsAllTokens', string, ContainsAllTokensFilterParams]
