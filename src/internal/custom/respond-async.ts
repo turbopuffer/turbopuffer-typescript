@@ -73,7 +73,7 @@ export async function maybePoll(
 function resolvePollResponse(body: PollBody, clock: RequestClock): Response | null {
   if (body.status === 'running') return null;
 
-  if (body.result?.success) {
+  if (body.result && 'success' in body.result) {
     const resp = new Response(JSON.stringify(body.result.success), {
       status: 200,
       headers: { 'content-type': 'application/json' },
