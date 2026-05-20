@@ -1,5 +1,6 @@
 import Turbopuffer, {
   APIConnectionTimeoutError,
+  APIUserAbortError,
   InternalServerError,
   NotFoundError,
 } from '@turbopuffer/turbopuffer';
@@ -186,4 +187,25 @@ test('persistent poll error throws', async () => {
     client.namespace('test').write({ upsert_columns: { id: [1], vector: [[0.1]] } }),
   ).rejects.toThrow(InternalServerError);
   expect(polls).toEqual(1);
+});
+
+test('abort during polling throws', async () => {
+  const controller = new AbortController();
+  let polls = 0;
+  const testFetch = async (url: string | URL | Request): Promise<Response> => {
+    if (String(url) === POLL_URL) {
+      polls++;
+      if (polls === 2) controller.abort();
+      return jsonResponse(200, { status: 'running' });
+    }
+    return asyncAppliedResponse(POLL_URL);
+  };
+
+  const client = new Turbopuffer({ baseURL: BASE_URL, apiKey: 'tpuf_A1...', fetch: testFetch });
+
+  await expect(
+    client
+      .namespace('test')
+      .write({ upsert_columns: { id: [1], vector: [[0.1]] } }, { signal: controller.signal }),
+  ).rejects.toThrow(APIUserAbortError);
 });

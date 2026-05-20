@@ -61,6 +61,7 @@ export async function maybePoll(
     const poll = await client.get<PollBody>(location, {
       headers: { [HEADER_PREFER]: null },
       timeout: timeout.pollTimeoutMs(),
+      signal: options.signal,
     });
 
     const resp = resolvePollResponse(poll, clock);
