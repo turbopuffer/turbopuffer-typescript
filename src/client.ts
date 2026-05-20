@@ -94,6 +94,7 @@ import {
 import { isEmptyObj } from './internal/utils/values';
 import { compress } from './internal/custom/compress';
 import { RequestClock } from './internal/custom/performance';
+import * as RespondAsync from './internal/custom/respond-async';
 import { makeFetch } from '#fetch';
 
 export interface ClientOptions {
@@ -423,7 +424,9 @@ export class Turbopuffer {
   /**
    * Used as a callback for mutating the given `FinalRequestOptions` object.
    */
-  protected async prepareOptions(options: FinalRequestOptions): Promise<void> {}
+  protected async prepareOptions(options: FinalRequestOptions): Promise<void> {
+    RespondAsync.prepareOptions(options);
+  }
 
   /**
    * Used as a callback for mutating the given `RequestInit` object.
@@ -520,7 +523,7 @@ export class Turbopuffer {
     }
 
     const controller = new AbortController();
-    const response = await this.fetchWithTimeout(url, req, timeout, controller).catch(castToError);
+    let response = await this.fetchWithTimeout(url, req, timeout, controller).catch(castToError);
     const headersTime = Date.now();
 
     if (response instanceof globalThis.Error) {
@@ -633,6 +636,8 @@ export class Turbopuffer {
         durationMs: headersTime - startTime,
       }),
     );
+
+    response = await RespondAsync.maybePoll(this, response, options, clock);
 
     clock.deserializeStart = performance.now();
 
