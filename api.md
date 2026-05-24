@@ -27,6 +27,8 @@ Types:
 - <code><a href="./src/resources/namespaces.ts">Encryption</a></code>
 - <code><a href="./src/resources/namespaces.ts">FullTextSearch</a></code>
 - <code><a href="./src/resources/namespaces.ts">FullTextSearchConfig</a></code>
+- <code><a href="./src/resources/namespaces.ts">FuzzyMaxEditDistance</a></code>
+- <code><a href="./src/resources/namespaces.ts">FuzzyParams</a></code>
 - <code><a href="./src/resources/namespaces.ts">ID</a></code>
 - <code><a href="./src/resources/namespaces.ts">IncludeAttributes</a></code>
 - <code><a href="./src/resources/namespaces.ts">Language</a></code>
