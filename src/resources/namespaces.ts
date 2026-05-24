@@ -450,6 +450,33 @@ export interface FullTextSearchConfig {
 }
 
 /**
+ * An edit distance threshold for the Fuzzy filter.
+ */
+export interface FuzzyMaxEditDistance {
+  /**
+   * The maximum edit distance to allow.
+   */
+  distance: number;
+
+  /**
+   * Minimum number of characters in a query where this distance applies. Must be at
+   * least 3 · (distance + 1).
+   */
+  min_query_chars: number;
+}
+
+/**
+ * Additional parameters for the Fuzzy filter.
+ */
+export interface FuzzyParams {
+  /**
+   * Maximum edit distance allowed at each query length. Queries shorter than the
+   * first threshold return no matches.
+   */
+  max_edit_distance: Array<FuzzyMaxEditDistance>;
+}
+
+/**
  * An identifier for a document.
  */
 export type ID = string | number;
@@ -1626,6 +1653,8 @@ export declare namespace Namespaces {
     type Encryption as Encryption,
     type FullTextSearch as FullTextSearch,
     type FullTextSearchConfig as FullTextSearchConfig,
+    type FuzzyMaxEditDistance as FuzzyMaxEditDistance,
+    type FuzzyParams as FuzzyParams,
     type ID as ID,
     type IncludeAttributes as IncludeAttributes,
     type Language as Language,

@@ -17,6 +17,8 @@ export {
   type Encryption,
   type FullTextSearch,
   type FullTextSearchConfig,
+  type FuzzyMaxEditDistance,
+  type FuzzyParams,
   type ID,
   type IncludeAttributes,
   type Language,
