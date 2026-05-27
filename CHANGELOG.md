@@ -1,5 +1,25 @@
 # Changelog
 
+## 2.2.0 (2026-05-27)
+
+Full Changelog: [v2.1.0...v2.2.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.1.0...v2.2.0)
+
+### Features
+
+* spec: force generation of FuzzyParams stainless models ([60fe9e1](https://github.com/turbopuffer/turbopuffer-typescript/commit/60fe9e1b44caa0dd4b51db8d3079999688699549))
+* spec: rename csharp SDK package to Turbopuffer ([a818ca8](https://github.com/turbopuffer/turbopuffer-typescript/commit/a818ca8e13f3a42c3474909b3c103f1339f32540))
+* transparent async polling ([#210](https://github.com/turbopuffer/turbopuffer-typescript/issues/210)) ([e3dadf2](https://github.com/turbopuffer/turbopuffer-typescript/commit/e3dadf229a19b6e434525ba19a9892e776da78d5))
+
+
+### Bug Fixes
+
+* **typescript:** upgrade tsc-multi so that it works with Node 26 ([71f3d8e](https://github.com/turbopuffer/turbopuffer-typescript/commit/71f3d8e91173247880cbd862f637bbb32fc56468))
+
+
+### Chores
+
+* **internal:** codegen related update ([925f4bc](https://github.com/turbopuffer/turbopuffer-typescript/commit/925f4bc90c8bd803d2ed916ba9c62e241f233fd3))
+
 ## 2.1.0 (2026-05-18)
 
 Full Changelog: [v2.0.0...v2.1.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.0.0...v2.1.0)
