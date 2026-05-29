@@ -1,8 +1,8 @@
-# Turbopuffer TypeScript API Library <a href="https://turbopuffer.com"><img src="https://github.com/user-attachments/assets/8d6cca4c-10b7-4d3a-9782-696053baf44e" align="right"></a>
+# turbopuffer TypeScript API Library <a href="https://turbopuffer.com"><img src="https://github.com/user-attachments/assets/8d6cca4c-10b7-4d3a-9782-696053baf44e" align="right"></a>
 
 <a href="https://npmjs.org/package/@turbopuffer/turbopuffer"><img src="https://img.shields.io/npm/v/@turbopuffer/turbopuffer.svg?label=npm%20(stable)" alt="NPM version" align="right"></a> <img src="https://img.shields.io/bundlephobia/minzip/@turbopuffer/turbopuffer" alt="npm bundle size" align="right">
 
-This library provides convenient access to the Turbopuffer HTTP API from server-side TypeScript or JavaScript.
+This library provides convenient access to the [turbopuffer HTTP API](https://turbopuffer.com/docs/overview) from server-side TypeScript or JavaScript.
 
 It is generated with [Stainless](https://www.stainless.com/).
 
@@ -20,7 +20,7 @@ Use the turbopuffer MCP Server to enable AI assistants to interact with this API
 
 ## Documentation
 
-The HTTP API documentation can be found at [turbopuffer.com/docs](https://turbopuffer.com/docs).
+The HTTP API documentation can be found at [turbopuffer.com/docs/overview](https://turbopuffer.com/docs/overview).
 
 ## Installation
 
@@ -163,7 +163,7 @@ Note that requests which time out will be [retried twice by default](#retries).
 
 ## Auto-pagination
 
-List methods in the Turbopuffer API are paginated.
+List methods in the turbopuffer API are paginated.
 You can use the `for await … of` syntax to iterate through items across all pages:
 
 ```ts
