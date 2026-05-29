@@ -12,7 +12,7 @@
     "url": "git+https://github.com/turbopuffer/turbopuffer-typescript.git"
   },
   "homepage": "https://github.com/turbopuffer/turbopuffer-typescript/tree/main/packages/mcp-server#readme",
-  "documentation": "https://turbopuffer.com/docs/auth",
+  "documentation": "https://turbopuffer.com/docs/overview",
   "server": {
     "type": "node",
     "entry_point": "index.js",
