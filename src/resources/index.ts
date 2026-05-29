@@ -3,6 +3,8 @@
 export {
   Namespaces,
   type AggregationGroup,
+  type AttributeEmbed,
+  type AttributeEmbedConfig,
   type AttributeSchema,
   type AttributeSchemaConfig,
   type AttributeType,
@@ -14,6 +16,7 @@ export {
   type CopyFromNamespaceParams,
   type DecayParams,
   type DistanceMetric,
+  type EmbedParams,
   type Encryption,
   type FullTextSearch,
   type FullTextSearchConfig,

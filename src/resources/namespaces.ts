@@ -163,6 +163,39 @@ export class Namespaces extends APIResource {
 export type AggregationGroup = { [key: string]: unknown };
 
 /**
+ * Whether to automatically embed this string attribute into a vector attribute.
+ * Can be a model name, a detailed configuration object, or `null` to remove an
+ * existing embedding configuration.
+ */
+export type AttributeEmbed = string | AttributeEmbedConfig;
+
+/**
+ * Configuration options for automatic embedding.
+ */
+export interface AttributeEmbedConfig {
+  /**
+   * The model to use for embedding. See our documentation for a list of models
+   * supported in each region.
+   */
+  model: string;
+
+  /**
+   * The name of an existing vector attribute to store embeddings in. If omitted,
+   * turbopuffer will generate a computed vector attribute named
+   * `$embed_<attribute>`.
+   */
+  attribute?: string;
+
+  /**
+   * The dimensionality to embed at. If not set, will pick the default for this
+   * model. If you're storing embeddings in an existing attribute, this can be
+   * omitted, and may not be set to a value other than the dimensions of that
+   * attribute.
+   */
+  dims?: number;
+}
+
+/**
  * The schema for an attribute attached to a document.
  */
 export type AttributeSchema = AttributeType | AttributeSchemaConfig;
@@ -183,6 +216,13 @@ export interface AttributeSchemaConfig {
    * be a boolean or a detailed configuration object.
    */
   ann?: boolean | AttributeSchemaConfig.AnnConfig;
+
+  /**
+   * Whether to automatically embed this string attribute into a vector attribute.
+   * Can be a model name, a detailed configuration object, or `null` to remove an
+   * existing embedding configuration.
+   */
+  embed?: AttributeEmbed | null;
 
   /**
    * Whether or not the attributes can be used in filters.
@@ -357,6 +397,17 @@ export interface DecayParams {
  * - `euclidean_squared` - Defined as `sum((x - y)^2)`. Lower is better.
  */
 export type DistanceMetric = 'cosine_distance' | 'euclidean_squared';
+
+/**
+ * Additional (optional) parameters for the Embed expression.
+ */
+export interface EmbedParams {
+  /**
+   * The model to use for embedding, overriding the model configured for the
+   * attribute.
+   */
+  model?: string;
+}
 
 /**
  * The encryption configuration for a namespace.
@@ -1639,6 +1690,8 @@ export namespace NamespaceWriteParams {
 export declare namespace Namespaces {
   export {
     type AggregationGroup as AggregationGroup,
+    type AttributeEmbed as AttributeEmbed,
+    type AttributeEmbedConfig as AttributeEmbedConfig,
     type AttributeSchema as AttributeSchema,
     type AttributeSchemaConfig as AttributeSchemaConfig,
     type AttributeType as AttributeType,
@@ -1650,6 +1703,7 @@ export declare namespace Namespaces {
     type CopyFromNamespaceParams as CopyFromNamespaceParams,
     type DecayParams as DecayParams,
     type DistanceMetric as DistanceMetric,
+    type EmbedParams as EmbedParams,
     type Encryption as Encryption,
     type FullTextSearch as FullTextSearch,
     type FullTextSearchConfig as FullTextSearchConfig,

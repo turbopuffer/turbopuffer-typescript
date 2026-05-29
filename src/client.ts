@@ -23,6 +23,8 @@ import { NamespaceSummariesNamespacePage, NamespaceSummary, NamespacesParams } f
 import { APIPromise } from './core/api-promise';
 import {
   AggregationGroup,
+  AttributeEmbed,
+  AttributeEmbedConfig,
   AttributeSchema,
   AttributeSchemaConfig,
   AttributeType,
@@ -34,6 +36,7 @@ import {
   CopyFromNamespaceParams,
   DecayParams,
   DistanceMetric,
+  EmbedParams,
   Encryption,
   FullTextSearch,
   FullTextSearchConfig,
@@ -873,6 +876,8 @@ export declare namespace Turbopuffer {
   export {
     Namespaces as Namespaces,
     type AggregationGroup as AggregationGroup,
+    type AttributeEmbed as AttributeEmbed,
+    type AttributeEmbedConfig as AttributeEmbedConfig,
     type AttributeSchema as AttributeSchema,
     type AttributeSchemaConfig as AttributeSchemaConfig,
     type AttributeType as AttributeType,
@@ -884,6 +889,7 @@ export declare namespace Turbopuffer {
     type CopyFromNamespaceParams as CopyFromNamespaceParams,
     type DecayParams as DecayParams,
     type DistanceMetric as DistanceMetric,
+    type EmbedParams as EmbedParams,
     type Encryption as Encryption,
     type FullTextSearch as FullTextSearch,
     type FullTextSearchConfig as FullTextSearchConfig,
