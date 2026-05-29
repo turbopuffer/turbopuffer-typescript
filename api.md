@@ -13,6 +13,8 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/namespaces.ts">AggregationGroup</a></code>
+- <code><a href="./src/resources/namespaces.ts">AttributeEmbed</a></code>
+- <code><a href="./src/resources/namespaces.ts">AttributeEmbedConfig</a></code>
 - <code><a href="./src/resources/namespaces.ts">AttributeSchema</a></code>
 - <code><a href="./src/resources/namespaces.ts">AttributeSchemaConfig</a></code>
 - <code><a href="./src/resources/namespaces.ts">AttributeType</a></code>
@@ -24,6 +26,7 @@ Types:
 - <code><a href="./src/resources/namespaces.ts">CopyFromNamespaceParams</a></code>
 - <code><a href="./src/resources/namespaces.ts">DecayParams</a></code>
 - <code><a href="./src/resources/namespaces.ts">DistanceMetric</a></code>
+- <code><a href="./src/resources/namespaces.ts">EmbedParams</a></code>
 - <code><a href="./src/resources/namespaces.ts">Encryption</a></code>
 - <code><a href="./src/resources/namespaces.ts">FullTextSearch</a></code>
 - <code><a href="./src/resources/namespaces.ts">FullTextSearchConfig</a></code>

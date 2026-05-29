@@ -4,6 +4,7 @@ import { Bm25ClauseParams } from '../index';
 import { ContainsAllTokensFilterParams } from '../index';
 import { ContainsAnyTokenFilterParams } from '../index';
 import { DecayParams } from '../index';
+import { EmbedParams } from '../index';
 import { FuzzyParams } from '../index';
 import { SaturateParams } from '../index';
 
@@ -11,7 +12,10 @@ export type AggregateBy<T = Record<string, any>> =
   | ['Count']
   | ['Sum', keyof T & string]
   | ['Count', keyof T & string];
-export type Expr<T = Record<string, any>> = ExprRefNew<T>;
+export type Expr<T = Record<string, any>> =
+  | ExprRefNew<T>
+  | ['Embed', string]
+  | ['Embed', string, EmbedParams];
 export type ExprRefNew<T = Record<string, any>> = { $ref_new: keyof T & string };
 export type Filter<T = Record<string, any>> =
   | [keyof T & string, 'Eq', any]
@@ -53,16 +57,20 @@ export type GroupBy<T = Record<string, any>> = string | Record<string, GroupByFu
 export type GroupByFunction<T = Record<string, any>> = ['ForEachUnique', keyof T & string];
 export type RankBy<T = Record<string, any>> =
   | RankByAnn<T>
+  | RankByAnnExpr<T>
   | RankByKnn<T>
+  | RankByKnnExpr<T>
   | RankBySparseKnn<T>
   | RankByText<T>
   | RankByAttribute<T>
   | RankByAttributes<T>;
 export type RankByAnn<T = Record<string, any>> = [keyof T & string, 'ANN', number[]];
+export type RankByAnnExpr<T = Record<string, any>> = [keyof T & string, 'ANN', Expr<T>];
 export type RankByAttribute<T = Record<string, any>> = [keyof T & string, RankByAttributeOrder<T>];
 export type RankByAttributeOrder<T = Record<string, any>> = 'asc' | 'desc';
 export type RankByAttributes<T = Record<string, any>> = RankByAttribute<T>[];
 export type RankByKnn<T = Record<string, any>> = [keyof T & string, 'kNN', number[]];
+export type RankByKnnExpr<T = Record<string, any>> = [keyof T & string, 'kNN', Expr<T>];
 export type RankBySparseKnn<T = Record<string, any>> = [
   keyof T & string,
   'SparseKNN',
