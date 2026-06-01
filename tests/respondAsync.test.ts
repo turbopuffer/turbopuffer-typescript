@@ -3,6 +3,7 @@ import Turbopuffer, {
   APIUserAbortError,
   InternalServerError,
   NotFoundError,
+  TurbopufferError,
 } from '@turbopuffer/turbopuffer';
 import * as RespondAsync from '@turbopuffer/turbopuffer/internal/custom/respond-async';
 
@@ -110,6 +111,25 @@ test('async response is polled to success', async () => {
     expect(fetches[i]?.headers.has('prefer')).toBe(false);
     expect(String(fetches[i]?.url)).toEqual(POLL_URL);
   }
+});
+
+test.each([
+  'https://evil.example.com/v1/ops/op-x',
+  '//evil.example.com/v1/ops/op-x',
+  'http://api.turbopuffer.com/v1/ops/op-x',
+  'http://host:notaport/x',
+])('bad poll location is rejected: %s', async (badLocation) => {
+  let calls = 0;
+  const testFetch = async (): Promise<Response> => {
+    calls++;
+    return asyncAppliedResponse(badLocation);
+  };
+
+  const client = new Turbopuffer({ baseURL: BASE_URL, apiKey: 'tpuf_A1...', fetch: testFetch });
+  await expect(
+    client.namespace('test').write({ upsert_columns: { id: [1], vector: [[0.1]] } }),
+  ).rejects.toThrow(TurbopufferError);
+  expect(calls).toEqual(1);
 });
 
 test('poll error result throws matching status error', async () => {
