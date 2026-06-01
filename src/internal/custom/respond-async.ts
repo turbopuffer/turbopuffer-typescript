@@ -41,16 +41,13 @@ export function prepareOptions(options: FinalRequestOptions): void {
 export async function maybePoll(
   client: Turbopuffer,
   response: Response,
+  requestURL: string,
   options: FinalRequestOptions,
   clock: RequestClock,
 ): Promise<Response> {
   if (!respondAsyncApplied(response)) return response;
 
-  const location = response.headers.get(HEADER_LOCATION);
-  if (!location) {
-    throw new Errors.TurbopufferError('server returned async response without a `location` header');
-  }
-
+  const location = extractLocation(response, requestURL);
   const timeout = new Timeout(options.timeout ?? client.timeout);
 
   while (true) {
@@ -69,6 +66,29 @@ export async function maybePoll(
 
     await sleep(timeout.sleepDurationMs());
   }
+}
+
+function extractLocation(response: Response, origURL: string): string {
+  const rawLocation = response.headers.get(HEADER_LOCATION);
+  if (!rawLocation) {
+    throw new Errors.TurbopufferError("server returned async response without a 'Location' header");
+  }
+
+  // Resolve the Location against the original request URL.
+  let resolved: URL;
+  try {
+    resolved = new URL(rawLocation, origURL);
+  } catch {
+    throw new Errors.TurbopufferError(`malformed 'Location' header: ${rawLocation}`);
+  }
+
+  // Reject a Location pointing at a different origin, to prevent API key exfiltration.
+  const requestOrigin = new URL(origURL).origin;
+  if (resolved.origin !== requestOrigin) {
+    throw new Errors.TurbopufferError(`'Location' origin does not match request origin: ${rawLocation}`);
+  }
+
+  return resolved.toString();
 }
 
 function resolvePollResponse(body: PollBody, clock: RequestClock): Response | null {
