@@ -642,7 +642,7 @@ export class Turbopuffer {
       }),
     );
 
-    response = await RespondAsync.maybePoll(this, response, options, clock);
+    response = await RespondAsync.maybePoll(this, response, url, options, clock);
 
     clock.deserializeStart = performance.now();
 
