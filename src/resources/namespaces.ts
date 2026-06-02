@@ -5,7 +5,7 @@ import * as NamespacesAPI from './namespaces';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
-import { AggregateBy, Filter, GroupBy, RankBy } from './custom';
+import { AggregateBy, Filter, GroupBy, RankBy, RerankBy } from './custom';
 import { ClientPerformance } from '../internal/custom/performance';
 import { NotFoundError } from '../error';
 
@@ -1370,7 +1370,7 @@ export interface NamespaceMultiQueryParams {
    * Body param: How to combine the rows returned by each sub-query into a single
    * ranked list.
    */
-  rerank_by?: unknown;
+  rerank_by?: RerankBy;
 
   /**
    * Body param: The encoding to use for vectors in the response.
