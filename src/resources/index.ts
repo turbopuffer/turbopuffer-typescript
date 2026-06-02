@@ -32,6 +32,7 @@ export {
   type QueryBilling,
   type QueryPerformance,
   type Row,
+  type RrfParams,
   type SaturateParams,
   type SparseDistanceMetric,
   type Tokenizer,

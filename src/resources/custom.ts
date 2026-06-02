@@ -6,6 +6,7 @@ import { ContainsAnyTokenFilterParams } from '../index';
 import { DecayParams } from '../index';
 import { EmbedParams } from '../index';
 import { FuzzyParams } from '../index';
+import { RrfParams } from '../index';
 import { SaturateParams } from '../index';
 
 export type AggregateBy<T = Record<string, any>> =
@@ -90,3 +91,4 @@ export type RankByText<T = Record<string, any>> =
   | ['Saturate', RankByText<T>, SaturateParams]
   | ['Decay', RankByText<T>, DecayParams]
   | ['Dist', RankByText<T>, any];
+export type RerankBy<T = Record<string, any>> = ['RRF'] | ['RRF', RrfParams];
