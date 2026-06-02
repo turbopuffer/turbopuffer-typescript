@@ -806,6 +806,16 @@ export interface Row {
 }
 
 /**
+ * Configuration options for RRF.
+ */
+export interface RrfParams {
+  /**
+   * RRF rank constant (`k`). Must be greater than zero. Defaults to `60`.
+   */
+  rank_constant?: number;
+}
+
+/**
  * Additional parameters for the Saturate operator.
  */
 export interface SaturateParams {
@@ -1357,6 +1367,12 @@ export interface NamespaceMultiQueryParams {
   consistency?: NamespaceMultiQueryParams.Consistency;
 
   /**
+   * Body param: How to combine the rows returned by each sub-query into a single
+   * ranked list.
+   */
+  rerank_by?: unknown;
+
+  /**
    * Body param: The encoding to use for vectors in the response.
    */
   vector_encoding?: VectorEncoding;
@@ -1743,6 +1759,7 @@ export declare namespace Namespaces {
     type QueryBilling as QueryBilling,
     type QueryPerformance as QueryPerformance,
     type Row as Row,
+    type RrfParams as RrfParams,
     type SaturateParams as SaturateParams,
     type SparseDistanceMetric as SparseDistanceMetric,
     type Tokenizer as Tokenizer,
