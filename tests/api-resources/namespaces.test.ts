@@ -164,7 +164,7 @@ describe('resource namespaces', () => {
         },
       ],
       consistency: { level: 'strong' },
-      rerank_by: {},
+      rerank_by: ['RRF'],
       vector_encoding: 'float',
     });
   });
