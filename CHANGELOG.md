@@ -1,5 +1,28 @@
 # Changelog
 
+## 2.3.0-alpha.1 (2026-06-02)
+
+Full Changelog: [v2.2.0...v2.3.0-alpha.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.2.0...v2.3.0-alpha.1)
+
+### Features
+
+* openapi: spec for `rerank_by: ["RRF"]` ([d851430](https://github.com/turbopuffer/turbopuffer-typescript/commit/d85143096eaeb309a8a90294bade1ad2e0748a4d))
+* rename /docs/auth to /docs/overview ([b7bf769](https://github.com/turbopuffer/turbopuffer-typescript/commit/b7bf76928ec210d71d7e410bd377d59105cde1b9))
+* spec: add SDK support for native embedding ([87c7f6b](https://github.com/turbopuffer/turbopuffer-typescript/commit/87c7f6b17f1172b5d901cf0e89b1ee0f20cb991c))
+
+
+### Bug Fixes
+
+* **mcp:** use `pure-lockfile` when building mcp server ([1ee5a2e](https://github.com/turbopuffer/turbopuffer-typescript/commit/1ee5a2ef4e970f46c03ac1b6e3f4148c2ac16441))
+* reject malicious poll locations ([#213](https://github.com/turbopuffer/turbopuffer-typescript/issues/213)) ([e9dcdcc](https://github.com/turbopuffer/turbopuffer-typescript/commit/e9dcdccc7b7eccea82b3532f9a4cb6ae14cb887b))
+* type rerank_by parameter as RerankBy ([#216](https://github.com/turbopuffer/turbopuffer-typescript/issues/216)) ([6513298](https://github.com/turbopuffer/turbopuffer-typescript/commit/65132988c2583c89764f31c4afa9cf23ba0d96d0))
+
+
+### Chores
+
+* bump apigen ([#214](https://github.com/turbopuffer/turbopuffer-typescript/issues/214)) ([0ffa35a](https://github.com/turbopuffer/turbopuffer-typescript/commit/0ffa35a1354fffa4015b8315b41fdb4b139ae828))
+* fix API docs links ([#212](https://github.com/turbopuffer/turbopuffer-typescript/issues/212)) ([c5c1d0c](https://github.com/turbopuffer/turbopuffer-typescript/commit/c5c1d0ca047fd6c5a4a3d0959c2c1d5e41a6481c))
+
 ## 2.2.0 (2026-05-27)
 
 Full Changelog: [v2.1.0...v2.2.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.1.0...v2.2.0)
