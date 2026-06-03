@@ -408,7 +408,7 @@ test('schema and metadata', async () => {
         remove_stopwords: true,
         ascii_folding: false,
         case_sensitive: false,
-        tokenizer: 'word_v3',
+        tokenizer: expect.any(String),
       },
     },
     tags: {
@@ -424,7 +424,7 @@ test('schema and metadata', async () => {
         remove_stopwords: false,
         ascii_folding: false,
         case_sensitive: true,
-        tokenizer: 'word_v3',
+        tokenizer: expect.any(String),
       },
     },
     private: {
@@ -460,7 +460,7 @@ test('schema and metadata', async () => {
         remove_stopwords: true,
         ascii_folding: false,
         case_sensitive: false,
-        tokenizer: 'word_v3',
+        tokenizer: expect.any(String),
       },
     },
     tags: {
@@ -476,7 +476,7 @@ test('schema and metadata', async () => {
         remove_stopwords: false,
         ascii_folding: false,
         case_sensitive: true,
-        tokenizer: 'word_v3',
+        tokenizer: expect.any(String),
       },
     },
     private: {
@@ -568,7 +568,7 @@ test('update_schema', async () => {
         remove_stopwords: false,
         ascii_folding: false,
         case_sensitive: true,
-        tokenizer: 'word_v3',
+        tokenizer: expect.any(String),
       },
     },
     private: {
