@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.3.0 (2026-06-03)
+
+Full Changelog: [v2.3.0-alpha.1...v2.3.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.3.0-alpha.1...v2.3.0)
+
+### Features
+
+* spec: add support for word_v4 tokenizer ([cff8f1c](https://github.com/turbopuffer/turbopuffer-typescript/commit/cff8f1cd6d481f62aeebf409ead7ed5a9c862dbe))
+
+
+### Bug Fixes
+
+* make tests agnostic to the default tokenizer ([#219](https://github.com/turbopuffer/turbopuffer-typescript/issues/219)) ([f0ad7e0](https://github.com/turbopuffer/turbopuffer-typescript/commit/f0ad7e0bb6391d108bee242ebdec392752d30214))
+
 ## 2.3.0-alpha.1 (2026-06-02)
 
 Full Changelog: [v2.2.0...v2.3.0-alpha.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.2.0...v2.3.0-alpha.1)
