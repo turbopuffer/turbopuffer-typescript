@@ -513,7 +513,7 @@ export interface FullTextSearchConfig {
 
   /**
    * The tokenizer to use for full-text search on an attribute. Defaults to
-   * `word_v3`.
+   * `word_v4`.
    */
   tokenizer?: Tokenizer;
 }
@@ -837,9 +837,9 @@ export type SparseDistanceMetric = 'dot_product';
 
 /**
  * The tokenizer to use for full-text search on an attribute. Defaults to
- * `word_v3`.
+ * `word_v4`.
  */
-export type Tokenizer = 'pre_tokenized_array' | 'word_v0' | 'word_v1' | 'word_v2' | 'word_v3';
+export type Tokenizer = 'pre_tokenized_array' | 'word_v0' | 'word_v1' | 'word_v2' | 'word_v3' | 'word_v4';
 
 /**
  * A vector embedding associated with a document.
