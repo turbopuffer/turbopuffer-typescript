@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.4.0 (2026-06-08)
+
+Full Changelog: [v2.3.0...v2.4.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.3.0...v2.4.0)
+
+### Features
+
+* stainless: update sdks to support case-insensitive fuzzy filter ([f179d4e](https://github.com/turbopuffer/turbopuffer-typescript/commit/f179d4eb682a0f3b95a452bee0095e4fe1639c11))
+
 ## 2.3.0 (2026-06-03)
 
 Full Changelog: [v2.3.0-alpha.1...v2.3.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.3.0-alpha.1...v2.3.0)
