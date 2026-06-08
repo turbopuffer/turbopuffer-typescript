@@ -543,6 +543,12 @@ export interface FuzzyParams {
    * first threshold return no matches.
    */
   max_edit_distance: Array<FuzzyMaxEditDistance>;
+
+  /**
+   * Whether searching with Fuzzy filter is case-sensitive. Defaults to `true` (i.e.
+   * case-sensitive).
+   */
+  case_sensitive?: boolean;
 }
 
 /**
