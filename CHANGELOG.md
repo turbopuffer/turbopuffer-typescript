@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.5.0 (2026-06-09)
+
+Full Changelog: [v2.4.0...v2.5.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.4.0...v2.5.0)
+
+### Features
+
+* tpuf-engine: support dest_encryption in copy_from_namespace ([d5061b2](https://github.com/turbopuffer/turbopuffer-typescript/commit/d5061b2246e68d83ed8e7c0e80dac512c8f26c36))
+
 ## 2.4.0 (2026-06-08)
 
 Full Changelog: [v2.3.0...v2.4.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.3.0...v2.4.0)
