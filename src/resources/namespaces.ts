@@ -1241,6 +1241,12 @@ export interface NamespaceCopyFromParams {
   source_namespace: string;
 
   /**
+   * Body param: (Optional) The encryption configuration for the destination
+   * namespace.
+   */
+  dest_encryption?: Encryption;
+
+  /**
    * Body param: (Optional) An API key for the organization containing the source
    * namespace
    */
