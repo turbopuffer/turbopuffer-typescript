@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import MiniSearch from 'minisearch';
+import FrozenMiniSearch from '@yoch/frozenminisearch';
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 import { getLogger } from './logger';
@@ -873,18 +873,17 @@ const INDEX_OPTIONS = {
 };
 
 /**
- * Self-contained local search engine backed by MiniSearch.
+ * Self-contained local search engine backed by FrozenMiniSearch.
  * Method data is embedded at SDK build time; prose documents
  * can be loaded from an optional docs directory at runtime.
  */
 export class LocalDocsSearch {
-  private methodIndex: MiniSearch<MiniSearchDocument>;
-  private proseIndex: MiniSearch<MiniSearchDocument>;
+  private methodDocs: MiniSearchDocument[] = [];
+  private proseDocs: MiniSearchDocument[] = [];
+  private methodIndex!: FrozenMiniSearch<MiniSearchDocument>;
+  private proseIndex!: FrozenMiniSearch<MiniSearchDocument>;
 
-  private constructor() {
-    this.methodIndex = new MiniSearch<MiniSearchDocument>(INDEX_OPTIONS);
-    this.proseIndex = new MiniSearch<MiniSearchDocument>(INDEX_OPTIONS);
-  }
+  private constructor() {}
 
   static async create(opts?: { docsDir?: string }): Promise<LocalDocsSearch> {
     const instance = new LocalDocsSearch();
@@ -895,7 +894,13 @@ export class LocalDocsSearch {
     if (opts?.docsDir) {
       await instance.loadDocsDirectory(opts.docsDir);
     }
+    instance.freezeIndexes();
     return instance;
+  }
+
+  private freezeIndexes(): void {
+    this.methodIndex = FrozenMiniSearch.fromDocuments(this.methodDocs, INDEX_OPTIONS);
+    this.proseIndex = FrozenMiniSearch.fromDocuments(this.proseDocs, INDEX_OPTIONS);
   }
 
   search(props: {
@@ -992,7 +997,7 @@ export class LocalDocsSearch {
       _original: m as unknown as Record<string, unknown>,
     }));
     if (docs.length > 0) {
-      this.methodIndex.addAll(docs);
+      this.methodDocs.push(...docs);
     }
   }
 
@@ -1042,7 +1047,7 @@ export class LocalDocsSearch {
 
   private indexProse(markdown: string, source: string): void {
     const chunks = chunkMarkdown(markdown);
-    const baseId = this.proseIndex.documentCount;
+    const baseId = this.proseDocs.length;
 
     const docs: MiniSearchDocument[] = chunks.map((chunk, i) => ({
       id: `prose-${baseId + i}`,
@@ -1053,7 +1058,7 @@ export class LocalDocsSearch {
     }));
 
     if (docs.length > 0) {
-      this.proseIndex.addAll(docs);
+      this.proseDocs.push(...docs);
     }
   }
 }
