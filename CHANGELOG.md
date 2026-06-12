@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.5.1 (2026-06-12)
+
+Full Changelog: [v2.5.0...v2.5.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.5.0...v2.5.1)
+
+### Documentation
+
+* rename /docs/overview to /docs/api-overview ([1aada49](https://github.com/turbopuffer/turbopuffer-typescript/commit/1aada49a2c7698b1e7de97ac569c5728416c2ae4))
+
 ## 2.5.0 (2026-06-09)
 
 Full Changelog: [v2.4.0...v2.5.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.4.0...v2.5.0)
