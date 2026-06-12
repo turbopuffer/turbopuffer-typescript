@@ -2,7 +2,7 @@
 
 <a href="https://npmjs.org/package/@turbopuffer/turbopuffer"><img src="https://img.shields.io/npm/v/@turbopuffer/turbopuffer.svg?label=npm%20(stable)" alt="NPM version" align="right"></a> <img src="https://img.shields.io/bundlephobia/minzip/@turbopuffer/turbopuffer" alt="npm bundle size" align="right">
 
-This library provides convenient access to the [turbopuffer HTTP API](https://turbopuffer.com/docs/overview) from server-side TypeScript or JavaScript.
+This library provides convenient access to the [turbopuffer HTTP API](https://turbopuffer.com/docs/api-overview) from server-side TypeScript or JavaScript.
 
 It is generated with [Stainless](https://www.stainless.com/).
 
