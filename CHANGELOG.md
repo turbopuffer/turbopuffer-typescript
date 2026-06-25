@@ -1,5 +1,23 @@
 # Changelog
 
+## 2.5.1 (2026-06-25)
+
+Full Changelog: [v2.5.0...v2.5.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.5.0...v2.5.1)
+
+### Bug Fixes
+
+* **client:** send content-type header for requests with an omitted optional body ([cfc2fd3](https://github.com/turbopuffer/turbopuffer-typescript/commit/cfc2fd38493bf1d267e74026518e9a5ffbb1414a))
+
+
+### Chores
+
+* remove unused MCP package ([0e4bf8e](https://github.com/turbopuffer/turbopuffer-typescript/commit/0e4bf8e7d279bff88b4513adebe2e4efa237c42e))
+
+
+### Documentation
+
+* rename /docs/overview to /docs/api-overview ([1aada49](https://github.com/turbopuffer/turbopuffer-typescript/commit/1aada49a2c7698b1e7de97ac569c5728416c2ae4))
+
 ## 2.5.0 (2026-06-09)
 
 Full Changelog: [v2.4.0...v2.5.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.4.0...v2.5.0)
