@@ -58,6 +58,7 @@ export type GroupBy<T = Record<string, any>> = string | Record<string, GroupByFu
 export type GroupByFunction<T = Record<string, any>> = ['ForEachUnique', keyof T & string];
 export type RankBy<T = Record<string, any>> =
   | RankByAnn<T>
+  | RankByAnnMulti<T>
   | RankByAnnExpr<T>
   | RankByKnn<T>
   | RankByKnnExpr<T>
@@ -67,6 +68,7 @@ export type RankBy<T = Record<string, any>> =
   | RankByAttributes<T>;
 export type RankByAnn<T = Record<string, any>> = [keyof T & string, 'ANN', number[]];
 export type RankByAnnExpr<T = Record<string, any>> = [keyof T & string, 'ANN', Expr<T>];
+export type RankByAnnMulti<T = Record<string, any>> = [keyof T & string, 'ANN', number[][]];
 export type RankByAttribute<T = Record<string, any>> = [keyof T & string, RankByAttributeOrder<T>];
 export type RankByAttributeOrder<T = Record<string, any>> = 'asc' | 'desc';
 export type RankByAttributes<T = Record<string, any>> = RankByAttribute<T>[];
