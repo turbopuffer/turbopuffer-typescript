@@ -61,6 +61,7 @@ export type RankBy<T = Record<string, any>> =
   | RankByAnnMulti<T>
   | RankByAnnExpr<T>
   | RankByKnn<T>
+  | RankByKnnMulti<T>
   | RankByKnnExpr<T>
   | RankBySparseKnn<T>
   | RankByText<T>
@@ -74,6 +75,7 @@ export type RankByAttributeOrder<T = Record<string, any>> = 'asc' | 'desc';
 export type RankByAttributes<T = Record<string, any>> = RankByAttribute<T>[];
 export type RankByKnn<T = Record<string, any>> = [keyof T & string, 'kNN', number[]];
 export type RankByKnnExpr<T = Record<string, any>> = [keyof T & string, 'kNN', Expr<T>];
+export type RankByKnnMulti<T = Record<string, any>> = [keyof T & string, 'kNN', number[][]];
 export type RankBySparseKnn<T = Record<string, any>> = [
   keyof T & string,
   'SparseKNN',
