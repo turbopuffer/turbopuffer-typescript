@@ -285,6 +285,13 @@ export namespace AttributeSchemaConfig {
      * A function used to calculate vector similarity.
      */
     distance_metric?: NamespacesAPI.DistanceMetric;
+
+    /**
+     * Opt in to late-interaction (MUVERA) indexing. Only valid on fixed-dim `[][N]f32`
+     * vector array attributes, and is required to enable an ANN index on such
+     * attributes. Defaults to `false`.
+     */
+    late_interaction?: boolean;
   }
 
   /**
@@ -659,6 +666,14 @@ export interface NamespaceMetadata {
    * namespace.
    */
   pinning?: NamespaceMetadata.Pinning;
+
+  /**
+   * Configuration for namespace sharding, which partitions a namespace's documents
+   * across multiple internal shards to scale indexing and query throughput beyond a
+   * single machine. Sharding can only be configured on a namespace's inaugural
+   * write, and cannot be added to or changed on an existing namespace.
+   */
+  sharding?: ShardingConfig;
 }
 
 export namespace NamespaceMetadata {
@@ -834,6 +849,19 @@ export interface SaturateParams {
    * The midpoint of the Saturate operator.
    */
   midpoint?: unknown;
+}
+
+/**
+ * Configuration for namespace sharding, which partitions a namespace's documents
+ * across multiple internal shards to scale indexing and query throughput beyond a
+ * single machine. Sharding can only be configured on a namespace's inaugural
+ * write, and cannot be added to or changed on an existing namespace.
+ */
+export interface ShardingConfig {
+  /**
+   * The number of shards to partition the namespace into.
+   */
+  num_shards: number;
 }
 
 /**
@@ -1707,6 +1735,14 @@ export interface NamespaceWriteParams {
   schema?: { [key: string]: AttributeSchema };
 
   /**
+   * Body param: Configuration for namespace sharding, which partitions a namespace's
+   * documents across multiple internal shards to scale indexing and query throughput
+   * beyond a single machine. Sharding can only be configured on a namespace's
+   * inaugural write, and cannot be added to or changed on an existing namespace.
+   */
+  sharding?: ShardingConfig;
+
+  /**
    * Body param: A list of documents in columnar format. Each key is a column name,
    * mapped to an array of values for that column.
    */
@@ -1773,6 +1809,7 @@ export declare namespace Namespaces {
     type Row as Row,
     type RrfParams as RrfParams,
     type SaturateParams as SaturateParams,
+    type ShardingConfig as ShardingConfig,
     type SparseDistanceMetric as SparseDistanceMetric,
     type Tokenizer as Tokenizer,
     type Vector as Vector,
