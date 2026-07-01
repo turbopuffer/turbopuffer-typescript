@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.6.0 (2026-07-01)
+
+Full Changelog: [v2.5.1...v2.6.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.5.1...v2.6.0)
+
+### Features
+
+* spec: add sharding config to the openapi spec ([16c415c](https://github.com/turbopuffer/turbopuffer-typescript/commit/16c415c348621978777ecc3a147f2b6e0fa559cc))
+* support late_interaction parameter in sdks ([77e43b7](https://github.com/turbopuffer/turbopuffer-typescript/commit/77e43b7665165fae0e632a03e026d72e2c7bb892))
+
 ## 2.5.1 (2026-06-25)
 
 Full Changelog: [v2.5.0...v2.5.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.5.0...v2.5.1)
