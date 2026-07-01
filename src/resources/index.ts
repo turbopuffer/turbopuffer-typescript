@@ -34,6 +34,7 @@ export {
   type Row,
   type RrfParams,
   type SaturateParams,
+  type ShardingConfig,
   type SparseDistanceMetric,
   type Tokenizer,
   type Vector,

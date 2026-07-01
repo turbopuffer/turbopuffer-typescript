@@ -44,6 +44,7 @@ Types:
 - <code><a href="./src/resources/namespaces.ts">Row</a></code>
 - <code><a href="./src/resources/namespaces.ts">RrfParams</a></code>
 - <code><a href="./src/resources/namespaces.ts">SaturateParams</a></code>
+- <code><a href="./src/resources/namespaces.ts">ShardingConfig</a></code>
 - <code><a href="./src/resources/namespaces.ts">SparseDistanceMetric</a></code>
 - <code><a href="./src/resources/namespaces.ts">Tokenizer</a></code>
 - <code><a href="./src/resources/namespaces.ts">Vector</a></code>
