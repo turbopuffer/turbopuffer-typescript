@@ -91,6 +91,7 @@ describe('resource namespaces', () => {
     const response = await client.namespaces.explainQuery({
       namespace: 'namespace',
       aggregate_by: { foo: 'bar' },
+      compute_attributes: { foo: [{}] },
       consistency: { level: 'strong' },
       distance_metric: 'cosine_distance',
       exclude_attributes: ['string'],
@@ -157,6 +158,7 @@ describe('resource namespaces', () => {
       queries: [
         {
           aggregate_by: { foo: 'bar' },
+          compute_attributes: { foo: [{}] },
           distance_metric: 'cosine_distance',
           exclude_attributes: ['string'],
           filters: {},
@@ -190,6 +192,7 @@ describe('resource namespaces', () => {
     const response = await client.namespaces.query({
       namespace: 'namespace',
       aggregate_by: { foo: 'bar' },
+      compute_attributes: { foo: [{}] },
       consistency: { level: 'strong' },
       distance_metric: 'cosine_distance',
       exclude_attributes: ['string'],

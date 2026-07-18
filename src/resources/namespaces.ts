@@ -1282,6 +1282,13 @@ export interface NamespaceExplainQueryParams {
   aggregate_by?: { [key: string]: unknown };
 
   /**
+   * Body param: Computes additional values on documents returned by a query. Each
+   * key is the name of the computed attribute; each value is an expression
+   * describing how to compute it.
+   */
+  compute_attributes?: { [key: string]: Array<unknown> | Array<Array<unknown>> };
+
+  /**
    * Body param: The consistency level for a query.
    */
   consistency?: NamespaceExplainQueryParams.Consistency;
@@ -1406,6 +1413,13 @@ export namespace NamespaceMultiQueryParams {
     aggregate_by?: { [key: string]: unknown };
 
     /**
+     * Computes additional values on documents returned by a query. Each key is the
+     * name of the computed attribute; each value is an expression describing how to
+     * compute it.
+     */
+    compute_attributes?: { [key: string]: Array<unknown> | Array<Array<unknown>> };
+
+    /**
      * A function used to calculate vector similarity.
      */
     distance_metric?: NamespacesAPI.DistanceMetric;
@@ -1476,6 +1490,13 @@ export interface NamespaceQueryParams {
    * match the filters.
    */
   aggregate_by?: { [key: string]: unknown };
+
+  /**
+   * Body param: Computes additional values on documents returned by a query. Each
+   * key is the name of the computed attribute; each value is an expression
+   * describing how to compute it.
+   */
+  compute_attributes?: { [key: string]: Array<unknown> | Array<Array<unknown>> };
 
   /**
    * Body param: The consistency level for a query.
