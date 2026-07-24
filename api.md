@@ -32,7 +32,7 @@ Types:
 - <code><a href="./src/resources/namespaces.ts">FullTextSearchConfig</a></code>
 - <code><a href="./src/resources/namespaces.ts">FuzzyMaxEditDistance</a></code>
 - <code><a href="./src/resources/namespaces.ts">FuzzyParams</a></code>
-- <code><a href="./src/resources/namespaces.ts">HighlightConfig</a></code>
+- <code><a href="./src/resources/namespaces.ts">HighlightConfigParams</a></code>
 - <code><a href="./src/resources/namespaces.ts">HighlightFragmentBy</a></code>
 - <code><a href="./src/resources/namespaces.ts">HighlightOffsetUnits</a></code>
 - <code><a href="./src/resources/namespaces.ts">ID</a></code>

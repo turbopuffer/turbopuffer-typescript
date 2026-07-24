@@ -22,7 +22,7 @@ export {
   type FullTextSearchConfig,
   type FuzzyMaxEditDistance,
   type FuzzyParams,
-  type HighlightConfig,
+  type HighlightConfigParams,
   type HighlightFragmentBy,
   type HighlightOffsetUnits,
   type ID,

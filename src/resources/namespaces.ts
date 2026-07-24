@@ -561,7 +561,7 @@ export interface FuzzyParams {
 /**
  * Additional (optional) parameters for the Highlight compute expression.
  */
-export interface HighlightConfig {
+export interface HighlightConfigParams {
   /**
    * How to split a text attribute into fragments for highlighting.
    */
@@ -1859,7 +1859,7 @@ export declare namespace Namespaces {
     type FullTextSearchConfig as FullTextSearchConfig,
     type FuzzyMaxEditDistance as FuzzyMaxEditDistance,
     type FuzzyParams as FuzzyParams,
-    type HighlightConfig as HighlightConfig,
+    type HighlightConfigParams as HighlightConfigParams,
     type HighlightFragmentBy as HighlightFragmentBy,
     type HighlightOffsetUnits as HighlightOffsetUnits,
     type ID as ID,
