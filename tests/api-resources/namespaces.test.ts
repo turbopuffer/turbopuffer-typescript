@@ -90,7 +90,7 @@ describe('resource namespaces', () => {
   test.skip('explainQuery: required and optional params', async () => {
     const response = await client.namespace('namespace').explainQuery({
       namespace: 'namespace',
-      compute_attributes: { foo: [{}] },
+      compute_attributes: { foo: 'bar' },
       consistency: { level: 'strong' },
       distance_metric: 'cosine_distance',
       exclude_attributes: ['string'],
@@ -156,7 +156,7 @@ describe('resource namespaces', () => {
       namespace: 'namespace',
       queries: [
         {
-          compute_attributes: { foo: [{}] },
+          compute_attributes: { foo: 'bar' },
           distance_metric: 'cosine_distance',
           exclude_attributes: ['string'],
           group_by: [{}],
@@ -188,7 +188,7 @@ describe('resource namespaces', () => {
   test.skip('query: required and optional params', async () => {
     const response = await client.namespace('namespace').query({
       namespace: 'namespace',
-      compute_attributes: { foo: [{}] },
+      compute_attributes: { foo: 'bar' },
       consistency: { level: 'strong' },
       distance_metric: 'cosine_distance',
       exclude_attributes: ['string'],
