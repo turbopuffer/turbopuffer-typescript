@@ -1327,7 +1327,7 @@ export interface NamespaceExplainQueryParams {
    * key is the name of the computed attribute; each value is an expression
    * describing how to compute it.
    */
-  compute_attributes?: { [key: string]: Array<unknown> | Array<Array<unknown>> };
+  compute_attributes?: { [key: string]: unknown };
 
   /**
    * Body param: The consistency level for a query.
@@ -1458,7 +1458,7 @@ export namespace NamespaceMultiQueryParams {
      * name of the computed attribute; each value is an expression describing how to
      * compute it.
      */
-    compute_attributes?: { [key: string]: Array<unknown> | Array<Array<unknown>> };
+    compute_attributes?: { [key: string]: unknown };
 
     /**
      * A function used to calculate vector similarity.
@@ -1537,7 +1537,7 @@ export interface NamespaceQueryParams {
    * key is the name of the computed attribute; each value is an expression
    * describing how to compute it.
    */
-  compute_attributes?: { [key: string]: Array<unknown> | Array<Array<unknown>> };
+  compute_attributes?: { [key: string]: unknown };
 
   /**
    * Body param: The consistency level for a query.
