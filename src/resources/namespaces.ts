@@ -559,6 +559,47 @@ export interface FuzzyParams {
 }
 
 /**
+ * Additional (optional) parameters for the Highlight compute expression.
+ */
+export interface HighlightConfig {
+  /**
+   * How to split a text attribute into fragments for highlighting.
+   */
+  fragment_by?: HighlightFragmentBy;
+
+  /**
+   * The maximum number of fragments to return. Defaults to `3`.
+   */
+  fragment_limit?: number;
+
+  /**
+   * The units to report highlighted fragment offsets in.
+   */
+  include_offsets?: HighlightOffsetUnits;
+
+  /**
+   * How to rank candidate fragments within the attribute before selecting the top
+   * `fragment_limit`. Defaults to the query's `rank_by`.
+   */
+  rank_fragments_by?: unknown;
+}
+
+/**
+ * How to split a text attribute into fragments for highlighting.
+ *
+ * - `none` - Treat the whole attribute as a single fragment.
+ * - `sentence` - Split the attribute into sentences. This is the default.
+ * - `paragraph` - Split the attribute into paragraphs.
+ * - `word` - Split the attribute into individual words.
+ */
+export type HighlightFragmentBy = 'none' | 'sentence' | 'paragraph' | 'word';
+
+/**
+ * The units to report highlighted fragment offsets in.
+ */
+export type HighlightOffsetUnits = 'utf-8' | 'utf-16' | 'codepoints';
+
+/**
  * An identifier for a document.
  */
 export type ID = string | number;
@@ -1818,6 +1859,9 @@ export declare namespace Namespaces {
     type FullTextSearchConfig as FullTextSearchConfig,
     type FuzzyMaxEditDistance as FuzzyMaxEditDistance,
     type FuzzyParams as FuzzyParams,
+    type HighlightConfig as HighlightConfig,
+    type HighlightFragmentBy as HighlightFragmentBy,
+    type HighlightOffsetUnits as HighlightOffsetUnits,
     type ID as ID,
     type IncludeAttributes as IncludeAttributes,
     type Language as Language,
