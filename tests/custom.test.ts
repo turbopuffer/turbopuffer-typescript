@@ -2,6 +2,11 @@ import Turbopuffer, { APIConnectionError, APIError, NotFoundError } from '@turbo
 import { AttributeSchema, RankBy } from '@turbopuffer/turbopuffer/resources';
 import assert from 'assert';
 
+// The live integration tests below hit a real backend; Jest's default 5s
+// per-test timeout is too short and makes CI flaky. Raise the per-file default.
+// (The stray jest.setTimeout call inside the 'patch' test never applied globally.)
+jest.setTimeout(30_000);
+
 const tpuf = new Turbopuffer({
   region: 'gcp-us-central1',
 });
