@@ -6,6 +6,7 @@ import { ContainsAnyTokenFilterParams } from '../index';
 import { DecayParams } from '../index';
 import { EmbedParams } from '../index';
 import { FuzzyParams } from '../index';
+import { HighlightConfigParams } from '../index';
 import { RrfParams } from '../index';
 import { SaturateParams } from '../index';
 
@@ -13,6 +14,18 @@ export type AggregateBy<T = Record<string, any>> =
   | ['Count']
   | ['Sum', keyof T & string]
   | ['Count', keyof T & string];
+export type ComputeAttributes<T = Record<string, any>> =
+  | ComputeAttributesVectorDist<T>
+  | ComputeAttributesHighlight<T>
+  | ComputeAttributesHighlightWithConfig<T>
+  | RankBy<T>;
+export type ComputeAttributesHighlight<T = Record<string, any>> = ['Highlight', keyof T & string];
+export type ComputeAttributesHighlightWithConfig<T = Record<string, any>> = [
+  'Highlight',
+  keyof T & string,
+  HighlightConfigParams,
+];
+export type ComputeAttributesVectorDist<T = Record<string, any>> = [keyof T & string, 'VectorDist', number[]];
 export type Expr<T = Record<string, any>> =
   | ExprRefNew<T>
   | ['Embed', string]
