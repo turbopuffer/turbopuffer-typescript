@@ -1,5 +1,33 @@
 # Changelog
 
+## 2.7.0 (2026-07-30)
+
+Full Changelog: [v2.6.0...v2.7.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.6.0...v2.7.0)
+
+### Features
+
+* openapi: add RRF `weights` parameter ([6557c75](https://github.com/turbopuffer/turbopuffer-typescript/commit/6557c75fd0ce3af39e22cd90b63c0e9bf5989d99))
+* spec: expose computed attributes ([5d69180](https://github.com/turbopuffer/turbopuffer-typescript/commit/5d691802b07210917f7b9a681a275f2dd3392322))
+* spec: hide HighlightConfig.rank_fragments_by's RankBy ref from Stainless ([c1e60c5](https://github.com/turbopuffer/turbopuffer-typescript/commit/c1e60c54e73bf32908fe9e71c2037e53b0d23019))
+* spec: make compute_attributes value x-stainless-any ([ee82114](https://github.com/turbopuffer/turbopuffer-typescript/commit/ee82114d215d636f11752ed93c1d357c82243b70))
+* spec: merge Expr and ComputeAttributes into a single Expr union ([25586e6](https://github.com/turbopuffer/turbopuffer-typescript/commit/25586e630433bed81f81af5158cdd50886121a05))
+* spec: rename HighlightConfig -&gt; HighlightConfigParams ([77003d3](https://github.com/turbopuffer/turbopuffer-typescript/commit/77003d363ffc6b5638f16cd302f45a38f79b2fb0))
+* **stlc:** configurable CI runner and private-production-repo support in workflow templates ([94ef352](https://github.com/turbopuffer/turbopuffer-typescript/commit/94ef3527c2f7dc129afa543fd8114339af1375c8))
+* type compute_attributes as the Expr union (turbopuffer[#10694](https://github.com/turbopuffer/turbopuffer-typescript/issues/10694)) ([#231](https://github.com/turbopuffer/turbopuffer-typescript/issues/231)) ([ace42b0](https://github.com/turbopuffer/turbopuffer-typescript/commit/ace42b0d4001e1dc5010660aaf55524b2f6e0456))
+
+
+### Bug Fixes
+
+* **ci:** bump @arethetypeswrong/cli to ^0.18.0 and run CI workflows on Node 24 ([ba3c5da](https://github.com/turbopuffer/turbopuffer-typescript/commit/ba3c5da876c58055e269dc3006017fa5c7ca467d))
+* **ci:** bump @arethetypeswrong/cli to ^0.18.0 and run CI workflows on Node 24 ([10447f7](https://github.com/turbopuffer/turbopuffer-typescript/commit/10447f73d3833a7eb79e9f57f3f01bb13379d08e))
+
+
+### Chores
+
+* **internal:** codegen related update ([5714dea](https://github.com/turbopuffer/turbopuffer-typescript/commit/5714deab5e95116f1d2e0e72537b20c6ffa7941c))
+* **internal:** codegen related update ([b9be9da](https://github.com/turbopuffer/turbopuffer-typescript/commit/b9be9daa1ff69c5f585156d0719a5d37734dfc20))
+* regenerate custom types for compute attributes ([#226](https://github.com/turbopuffer/turbopuffer-typescript/issues/226)) ([c99c69b](https://github.com/turbopuffer/turbopuffer-typescript/commit/c99c69b7f30de91572926dd14b166df8ae9433b0))
+
 ## 2.6.0 (2026-07-01)
 
 Full Changelog: [v2.5.1...v2.6.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.5.1...v2.6.0)

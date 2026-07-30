@@ -5,7 +5,7 @@ import * as NamespacesAPI from './namespaces';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
-import { AggregateBy, Filter, GroupBy, RankBy, RerankBy } from './custom';
+import { AggregateBy, Expr, Filter, GroupBy, RankBy, RerankBy } from './custom';
 import { ClientPerformance } from '../internal/custom/performance';
 import { NotFoundError } from '../error';
 
@@ -559,6 +559,47 @@ export interface FuzzyParams {
 }
 
 /**
+ * Additional (optional) parameters for the Highlight compute expression.
+ */
+export interface HighlightConfigParams {
+  /**
+   * How to split a text attribute into fragments for highlighting.
+   */
+  fragment_by?: HighlightFragmentBy;
+
+  /**
+   * The maximum number of fragments to return. Defaults to `3`.
+   */
+  fragment_limit?: number;
+
+  /**
+   * The units to report highlighted fragment offsets in.
+   */
+  include_offsets?: HighlightOffsetUnits;
+
+  /**
+   * How to rank candidate fragments within the attribute before selecting the top
+   * `fragment_limit`. Defaults to the query's `rank_by`.
+   */
+  rank_fragments_by?: unknown;
+}
+
+/**
+ * How to split a text attribute into fragments for highlighting.
+ *
+ * - `none` - Treat the whole attribute as a single fragment.
+ * - `sentence` - Split the attribute into sentences. This is the default.
+ * - `paragraph` - Split the attribute into paragraphs.
+ * - `word` - Split the attribute into individual words.
+ */
+export type HighlightFragmentBy = 'none' | 'sentence' | 'paragraph' | 'word';
+
+/**
+ * The units to report highlighted fragment offsets in.
+ */
+export type HighlightOffsetUnits = 'utf-8' | 'utf-16' | 'codepoints';
+
+/**
  * An identifier for a document.
  */
 export type ID = string | number;
@@ -834,6 +875,13 @@ export interface RrfParams {
    * RRF rank constant (`k`). Must be greater than zero. Defaults to `60`.
    */
   rank_constant?: number;
+
+  /**
+   * A positive weight for each subquery, in the same order as `queries`. The number
+   * of weights must match the number of subqueries. When omitted, every subquery has
+   * a weight of `1`.
+   */
+  weights?: Array<number>;
 }
 
 /**
@@ -1306,6 +1354,13 @@ export interface NamespaceExplainQueryParams {
   aggregate_by?: Record<string, AggregateBy>;
 
   /**
+   * Body param: Computes additional values on documents returned by a query. Each
+   * key is the name of the computed attribute; each value is an expression
+   * describing how to compute it.
+   */
+  compute_attributes?: { [key: string]: Expr };
+
+  /**
    * Body param: The consistency level for a query.
    */
   consistency?: NamespaceExplainQueryParams.Consistency;
@@ -1430,6 +1485,13 @@ export namespace NamespaceMultiQueryParams {
     aggregate_by?: Record<string, AggregateBy>;
 
     /**
+     * Computes additional values on documents returned by a query. Each key is the
+     * name of the computed attribute; each value is an expression describing how to
+     * compute it.
+     */
+    compute_attributes?: { [key: string]: Expr };
+
+    /**
      * A function used to calculate vector similarity.
      */
     distance_metric?: NamespacesAPI.DistanceMetric;
@@ -1500,6 +1562,13 @@ export interface NamespaceQueryParams {
    * match the filters.
    */
   aggregate_by?: Record<string, AggregateBy>;
+
+  /**
+   * Body param: Computes additional values on documents returned by a query. Each
+   * key is the name of the computed attribute; each value is an expression
+   * describing how to compute it.
+   */
+  compute_attributes?: { [key: string]: Expr };
 
   /**
    * Body param: The consistency level for a query.
@@ -1797,6 +1866,9 @@ export declare namespace Namespaces {
     type FullTextSearchConfig as FullTextSearchConfig,
     type FuzzyMaxEditDistance as FuzzyMaxEditDistance,
     type FuzzyParams as FuzzyParams,
+    type HighlightConfigParams as HighlightConfigParams,
+    type HighlightFragmentBy as HighlightFragmentBy,
+    type HighlightOffsetUnits as HighlightOffsetUnits,
     type ID as ID,
     type IncludeAttributes as IncludeAttributes,
     type Language as Language,

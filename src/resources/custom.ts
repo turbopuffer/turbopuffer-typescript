@@ -6,6 +6,7 @@ import { ContainsAnyTokenFilterParams } from '../index';
 import { DecayParams } from '../index';
 import { EmbedParams } from '../index';
 import { FuzzyParams } from '../index';
+import { HighlightConfigParams } from '../index';
 import { RrfParams } from '../index';
 import { SaturateParams } from '../index';
 
@@ -16,8 +17,19 @@ export type AggregateBy<T = Record<string, any>> =
 export type Expr<T = Record<string, any>> =
   | ExprRefNew<T>
   | ['Embed', string]
-  | ['Embed', string, EmbedParams];
+  | ['Embed', string, EmbedParams]
+  | ExprVectorDist<T>
+  | ExprHighlight<T>
+  | ExprHighlightWithConfig<T>
+  | RankBy<T>;
+export type ExprHighlight<T = Record<string, any>> = ['Highlight', keyof T & string];
+export type ExprHighlightWithConfig<T = Record<string, any>> = [
+  'Highlight',
+  keyof T & string,
+  HighlightConfigParams,
+];
 export type ExprRefNew<T = Record<string, any>> = { $ref_new: keyof T & string };
+export type ExprVectorDist<T = Record<string, any>> = [keyof T & string, 'VectorDist', number[]];
 export type Filter<T = Record<string, any>> =
   | [keyof T & string, 'Eq', any]
   | [keyof T & string, 'NotEq', any]
