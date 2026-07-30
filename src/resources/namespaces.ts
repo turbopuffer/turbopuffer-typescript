@@ -851,6 +851,13 @@ export interface RrfParams {
    * RRF rank constant (`k`). Must be greater than zero. Defaults to `60`.
    */
   rank_constant?: number;
+
+  /**
+   * A positive weight for each subquery, in the same order as `queries`. The number
+   * of weights must match the number of subqueries. When omitted, every subquery has
+   * a weight of `1`.
+   */
+  weights?: Array<number>;
 }
 
 /**
