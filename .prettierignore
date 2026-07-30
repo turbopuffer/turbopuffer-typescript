@@ -6,3 +6,6 @@ CHANGELOG.md
 
 # don't format tsc output, will break source maps
 dist
+
+# preview-only: spec for unmerged turbopuffer#10694
+.spec-preview.openapi.yml

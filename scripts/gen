@@ -6,11 +6,19 @@ cd "$(dirname "$0")/.."
 
 apigen_image=ghcr.io/turbopuffer/turbopuffer-apigen:50f6977f4020491663b87ecfc2650cc737f03437
 
+# PREVIEW ONLY (turbopuffer#10694): if a vendored spec is present, generate
+# against it instead of the published spec. Delete this block + the spec file
+# once #10694 is merged and published.
+spec_override=()
+if [[ -f .spec-preview.openapi.yml ]]; then
+    spec_override=(-e SPEC_FILE_PATH=/work/.spec-preview.openapi.yml)
+fi
+
 apigen() {
     if [[ "$TURBOPUFFER_DEV_APIGEN" ]]; then
         cargo run --manifest-path=../turbopuffer-apigen/Cargo.toml "$@"
     else
-        docker run -v "$(pwd):/work" "$apigen_image" "$@"
+        docker run -v "$(pwd):/work" "${spec_override[@]}" "$apigen_image" "$@"
     fi
 }
 
