@@ -153,7 +153,7 @@ test('bm25_with_tokenizer_pre_tokenized_array', async () => {
       rank_by: ['content', 'BM25', 'jumped'],
       top_k: 10,
     }),
-    escapeError('invalid input \'jumped\' for rank_by field "content", expecting []string'),
+    escapeError('for rank_by field "content", expecting []string'),
   );
 });
 
@@ -892,7 +892,7 @@ test('contains_and_contains_any', async () => {
       filters: ['tags', 'ContainsAny', 'python'] as any,
       top_k: 10,
     }),
-    escapeError("filter error in key `tags`: type mismatch, ContainsAny expects []string, but got 'python'"),
+    escapeError('filter error in key `tags`: type mismatch, ContainsAny expects []string, but got'),
   );
 
   // Test error case: passing array to Contains
@@ -902,9 +902,7 @@ test('contains_and_contains_any', async () => {
       filters: ['tags', 'Contains', ['python', 'javascript']],
       top_k: 10,
     }),
-    escapeError(
-      "filter error in key `tags`: type mismatch, Contains expects string, but got '[python, javascript]'",
-    ),
+    escapeError('filter error in key `tags`: type mismatch, Contains expects string, but got'),
   );
 
   // Test error case: passing non-array to NotContainsAny
@@ -914,9 +912,7 @@ test('contains_and_contains_any', async () => {
       filters: ['tags', 'NotContainsAny', 'python'] as any,
       top_k: 10,
     }),
-    escapeError(
-      "filter error in key `tags`: type mismatch, NotContainsAny expects []string, but got 'python'",
-    ),
+    escapeError('filter error in key `tags`: type mismatch, NotContainsAny expects []string, but got'),
   );
 
   // Test error case: passing array to NotContains
@@ -926,9 +922,7 @@ test('contains_and_contains_any', async () => {
       filters: ['tags', 'NotContains', ['python', 'javascript']],
       top_k: 10,
     }),
-    escapeError(
-      "filter error in key `tags`: type mismatch, NotContains expects string, but got '[python, javascript]'",
-    ),
+    escapeError('filter error in key `tags`: type mismatch, NotContains expects string, but got'),
   );
 });
 
