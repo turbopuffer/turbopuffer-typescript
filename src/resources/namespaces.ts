@@ -5,7 +5,7 @@ import * as NamespacesAPI from './namespaces';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
-import { AggregateBy, ComputeAttributes, Filter, GroupBy, RankBy, RerankBy } from './custom';
+import { AggregateBy, Expr, Filter, GroupBy, RankBy, RerankBy } from './custom';
 import { ClientPerformance } from '../internal/custom/performance';
 import { NotFoundError } from '../error';
 
@@ -1358,7 +1358,7 @@ export interface NamespaceExplainQueryParams {
    * key is the name of the computed attribute; each value is an expression
    * describing how to compute it.
    */
-  compute_attributes?: { [key: string]: ComputeAttributes };
+  compute_attributes?: { [key: string]: Expr };
 
   /**
    * Body param: The consistency level for a query.
@@ -1489,7 +1489,7 @@ export namespace NamespaceMultiQueryParams {
      * name of the computed attribute; each value is an expression describing how to
      * compute it.
      */
-    compute_attributes?: { [key: string]: ComputeAttributes };
+    compute_attributes?: { [key: string]: Expr };
 
     /**
      * A function used to calculate vector similarity.
@@ -1568,7 +1568,7 @@ export interface NamespaceQueryParams {
    * key is the name of the computed attribute; each value is an expression
    * describing how to compute it.
    */
-  compute_attributes?: { [key: string]: ComputeAttributes };
+  compute_attributes?: { [key: string]: Expr };
 
   /**
    * Body param: The consistency level for a query.

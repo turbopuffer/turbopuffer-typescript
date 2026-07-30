@@ -14,23 +14,22 @@ export type AggregateBy<T = Record<string, any>> =
   | ['Count']
   | ['Sum', keyof T & string]
   | ['Count', keyof T & string];
-export type ComputeAttributes<T = Record<string, any>> =
-  | ComputeAttributesVectorDist<T>
-  | ComputeAttributesHighlight<T>
-  | ComputeAttributesHighlightWithConfig<T>
+export type Expr<T = Record<string, any>> =
+  | ExprRefNew<T>
+  | ['Embed', string]
+  | ['Embed', string, EmbedParams]
+  | ExprVectorDist<T>
+  | ExprHighlight<T>
+  | ExprHighlightWithConfig<T>
   | RankBy<T>;
-export type ComputeAttributesHighlight<T = Record<string, any>> = ['Highlight', keyof T & string];
-export type ComputeAttributesHighlightWithConfig<T = Record<string, any>> = [
+export type ExprHighlight<T = Record<string, any>> = ['Highlight', keyof T & string];
+export type ExprHighlightWithConfig<T = Record<string, any>> = [
   'Highlight',
   keyof T & string,
   HighlightConfigParams,
 ];
-export type ComputeAttributesVectorDist<T = Record<string, any>> = [keyof T & string, 'VectorDist', number[]];
-export type Expr<T = Record<string, any>> =
-  | ExprRefNew<T>
-  | ['Embed', string]
-  | ['Embed', string, EmbedParams];
 export type ExprRefNew<T = Record<string, any>> = { $ref_new: keyof T & string };
+export type ExprVectorDist<T = Record<string, any>> = [keyof T & string, 'VectorDist', number[]];
 export type Filter<T = Record<string, any>> =
   | [keyof T & string, 'Eq', any]
   | [keyof T & string, 'NotEq', any]
