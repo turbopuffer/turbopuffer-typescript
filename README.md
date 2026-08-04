@@ -6,10 +6,6 @@ This library provides convenient access to the [turbopuffer HTTP API](https://tu
 
 It is generated with [Stainless](https://www.stainless.com/).
 
-## Documentation
-
-The HTTP API documentation can be found at [turbopuffer.com/docs/overview](https://turbopuffer.com/docs/overview).
-
 ## Installation
 
 ```sh
