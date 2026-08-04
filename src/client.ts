@@ -105,7 +105,7 @@ import { isEmptyObj } from './internal/utils/values';
 
 export interface ClientOptions {
   /**
-   * API key used for authentication
+   * API key used for authentication.
    */
   apiKey?: string | undefined;
 
