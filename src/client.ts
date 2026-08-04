@@ -109,7 +109,7 @@ import { makeFetch } from '#fetch';
 
 export interface ClientOptions {
   /**
-   * API key used for authentication
+   * API key used for authentication.
    */
   apiKey?: string | undefined;
 
