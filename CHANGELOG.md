@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.8.0 (2026-08-04)
+
+Full Changelog: [v2.7.0...v2.8.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.7.0...v2.8.0)
+
+### Features
+
+* spec: no-op change to Stainless spec ([3c80c92](https://github.com/turbopuffer/turbopuffer-typescript/commit/3c80c92f604ab74c101d8fae6c368eb9478311b7))
+
 ## 2.7.0 (2026-07-30)
 
 Full Changelog: [v2.6.0...v2.7.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.6.0...v2.7.0)
