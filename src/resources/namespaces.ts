@@ -736,6 +736,14 @@ export namespace NamespaceMetadata {
       ready_replicas: number;
 
       /**
+       * The number of running replicas for the namespace. Replicas are billed once
+       * running, even before they finish warming their caches and become ready to serve
+       * traffic. This count is updated independently and may briefly disagree with the
+       * other status fields.
+       */
+      replicas: number;
+
+      /**
        * The timestamp of the latest pinning status snapshot.
        */
       updated_at: string;
@@ -1438,6 +1446,11 @@ export interface NamespaceMultiQueryParams {
   consistency?: NamespaceMultiQueryParams.Consistency;
 
   /**
+   * Body param: Limits the total number of reranked documents returned.
+   */
+  limit?: number | NamespaceMultiQueryParams.Total;
+
+  /**
    * Body param: How to combine the rows returned by each sub-query into a single
    * ranked list.
    */
@@ -1524,6 +1537,10 @@ export namespace NamespaceMultiQueryParams {
      *   storage, but may not see the latest writes.
      */
     level?: 'strong' | 'eventual';
+  }
+
+  export interface Total {
+    total: number;
   }
 }
 

@@ -170,6 +170,7 @@ describe('resource namespaces', () => {
         },
       ],
       consistency: { level: 'strong' },
+      limit: 0,
       rerank_by: {},
       vector_encoding: 'float',
     });
