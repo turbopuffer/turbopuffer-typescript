@@ -709,6 +709,11 @@ export interface NamespaceMetadata {
   pinning?: NamespaceMetadata.Pinning;
 
   /**
+   * Whether document and schema writes are rejected. Omitted when `false`.
+   */
+  read_only?: boolean;
+
+  /**
    * Configuration for namespace sharding, which partitions a namespace's documents
    * across multiple internal shards to scale indexing and query throughput beyond a
    * single machine. Sharding can only be configured on a namespace's inaugural
@@ -788,6 +793,12 @@ export interface NamespaceMetadataPatch {
    * - Object: set pinning configuration
    */
   pinning?: boolean | PinningConfig | null;
+
+  /**
+   * Set to `true` to reject document and schema writes, or `false` to allow them.
+   * Writes already in progress may still commit. Metadata updates remain available.
+   */
+  read_only?: boolean;
 }
 
 /**
@@ -1714,6 +1725,13 @@ export interface NamespaceUpdateMetadataParams {
    * - Object: set pinning configuration
    */
   pinning?: boolean | PinningConfig | null;
+
+  /**
+   * Body param: Set to `true` to reject document and schema writes, or `false` to
+   * allow them. Writes already in progress may still commit. Metadata updates remain
+   * available.
+   */
+  read_only?: boolean;
 }
 
 export interface NamespaceUpdateSchemaParams {
