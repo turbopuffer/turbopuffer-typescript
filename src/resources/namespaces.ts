@@ -709,6 +709,11 @@ export interface NamespaceMetadata {
   pinning?: NamespaceMetadata.Pinning;
 
   /**
+   * Whether document and schema writes are rejected. Omitted when `false`.
+   */
+  read_only?: boolean;
+
+  /**
    * Configuration for namespace sharding, which partitions a namespace's documents
    * across multiple internal shards to scale indexing and query throughput beyond a
    * single machine. Sharding can only be configured on a namespace's inaugural
@@ -754,6 +759,14 @@ export namespace NamespaceMetadata {
       ready_replicas: number;
 
       /**
+       * The number of running replicas for the namespace. Replicas are billed once
+       * running, even before they finish warming their caches and become ready to serve
+       * traffic. This count is updated independently and may briefly disagree with the
+       * other status fields.
+       */
+      replicas: number;
+
+      /**
        * The timestamp of the latest pinning status snapshot.
        */
       updated_at: string;
@@ -780,6 +793,12 @@ export interface NamespaceMetadataPatch {
    * - Object: set pinning configuration
    */
   pinning?: boolean | PinningConfig | null;
+
+  /**
+   * Set to `true` to reject document and schema writes, or `false` to allow them.
+   * Writes already in progress may still commit. Metadata updates remain available.
+   */
+  read_only?: boolean;
 }
 
 /**
@@ -1462,6 +1481,11 @@ export interface NamespaceMultiQueryParams {
   consistency?: NamespaceMultiQueryParams.Consistency;
 
   /**
+   * Body param: Limits the total number of reranked documents returned.
+   */
+  limit?: number | NamespaceMultiQueryParams.Total;
+
+  /**
    * Body param: How to combine the rows returned by each sub-query into a single
    * ranked list.
    */
@@ -1548,6 +1572,10 @@ export namespace NamespaceMultiQueryParams {
      *   storage, but may not see the latest writes.
      */
     level?: 'strong' | 'eventual';
+  }
+
+  export interface Total {
+    total: number;
   }
 }
 
@@ -1697,6 +1725,13 @@ export interface NamespaceUpdateMetadataParams {
    * - Object: set pinning configuration
    */
   pinning?: boolean | PinningConfig | null;
+
+  /**
+   * Body param: Set to `true` to reject document and schema writes, or `false` to
+   * allow them. Writes already in progress may still commit. Metadata updates remain
+   * available.
+   */
+  read_only?: boolean;
 }
 
 export interface NamespaceUpdateSchemaParams {

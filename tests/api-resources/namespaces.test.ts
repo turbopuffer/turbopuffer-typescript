@@ -167,6 +167,7 @@ describe('resource namespaces', () => {
         },
       ],
       consistency: { level: 'strong' },
+      limit: 0,
       rerank_by: ['RRF'],
       vector_encoding: 'float',
     });
@@ -256,7 +257,9 @@ describe('resource namespaces', () => {
 
   // Mock server tests are disabled
   test.skip('updateMetadata: required and optional params', async () => {
-    const response = await client.namespace('namespace').updateMetadata({ pinning: true });
+    const response = await client.namespace('namespace').updateMetadata({ pinning: true,
+      read_only: true,
+    });
   });
 
   // Mock server tests are disabled

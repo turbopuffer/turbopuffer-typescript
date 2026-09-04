@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.9.0 (2026-09-04)
+
+Full Changelog: [v2.8.0...v2.9.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.8.0...v2.9.0)
+
+### Features
+
+* Add `read_only` namespace field ([33c5264](https://github.com/turbopuffer/turbopuffer-typescript/commit/33c5264af1b8cc85e5a0854df6ef05521277cd0b))
+* tpuf-engine: expose billed_replicas in pinning metadata ([f7dd32f](https://github.com/turbopuffer/turbopuffer-typescript/commit/f7dd32f2fb9c754b803b865b09b9003ba22a2374))
+
 ## 2.8.0 (2026-08-04)
 
 Full Changelog: [v2.7.0...v2.8.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.7.0...v2.8.0)
