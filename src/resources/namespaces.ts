@@ -1394,6 +1394,12 @@ export interface NamespaceExplainQueryParams {
   limit?: number | Limit;
 
   /**
+   * Body param: Number of documents to skip before returning results. Supported only
+   * in v2 queries with an explicit `rank_by` and `top_k` or `limit`.
+   */
+  offset?: number;
+
+  /**
    * Body param: How to rank the documents in the namespace.
    */
   rank_by?: unknown;
@@ -1462,6 +1468,12 @@ export interface NamespaceMultiQueryParams {
   limit?: number | NamespaceMultiQueryParams.Total;
 
   /**
+   * Body param: Number of reranked documents to skip before returning results.
+   * Requires `rerank_by` and `limit`.
+   */
+  offset?: number;
+
+  /**
    * Body param: How to combine the rows returned by each sub-query into a single
    * ranked list.
    */
@@ -1523,6 +1535,12 @@ export namespace NamespaceMultiQueryParams {
      * Limits the documents returned by a query.
      */
     limit?: number | NamespacesAPI.Limit;
+
+    /**
+     * Number of documents to skip before returning results. Supported only in v2
+     * queries with an explicit `rank_by` and `top_k` or `limit`.
+     */
+    offset?: number;
 
     /**
      * How to rank the documents in the namespace.
@@ -1611,6 +1629,12 @@ export interface NamespaceQueryParams {
    * Body param: Limits the documents returned by a query.
    */
   limit?: number | Limit;
+
+  /**
+   * Body param: Number of documents to skip before returning results. Supported only
+   * in v2 queries with an explicit `rank_by` and `top_k` or `limit`.
+   */
+  offset?: number;
 
   /**
    * Body param: How to rank the documents in the namespace.
