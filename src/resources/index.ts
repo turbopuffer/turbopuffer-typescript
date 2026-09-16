@@ -34,6 +34,7 @@ export {
   type PinningConfig,
   type QueryBilling,
   type QueryPerformance,
+  type RerankLimit,
   type Row,
   type RrfParams,
   type SaturateParams,

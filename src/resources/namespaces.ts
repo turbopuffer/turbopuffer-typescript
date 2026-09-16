@@ -864,6 +864,16 @@ export interface QueryPerformance {
 }
 
 /**
+ * Limits the total number of reranked documents returned.
+ */
+export interface RerankLimit {
+  /**
+   * Limits the total number of documents returned after reranking.
+   */
+  total: number;
+}
+
+/**
  * A single document, in a row-based format.
  */
 export interface Row {
@@ -1489,7 +1499,7 @@ export interface NamespaceMultiQueryParams {
   /**
    * Body param: Limits the total number of reranked documents returned.
    */
-  limit?: number | NamespaceMultiQueryParams.Total;
+  limit?: number | RerankLimit;
 
   /**
    * Body param: Number of reranked documents to skip before returning results.
@@ -1590,10 +1600,6 @@ export namespace NamespaceMultiQueryParams {
      *   storage, but may not see the latest writes.
      */
     level?: 'strong' | 'eventual';
-  }
-
-  export interface Total {
-    total: number;
   }
 }
 
@@ -1937,6 +1943,7 @@ export declare namespace Namespaces {
     type PinningConfig as PinningConfig,
     type QueryBilling as QueryBilling,
     type QueryPerformance as QueryPerformance,
+    type RerankLimit as RerankLimit,
     type Row as Row,
     type RrfParams as RrfParams,
     type SaturateParams as SaturateParams,
