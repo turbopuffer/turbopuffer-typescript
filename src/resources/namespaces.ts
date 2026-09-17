@@ -91,6 +91,21 @@ export class Namespaces extends APIResource {
   }
 
   /**
+   * Retrieve the current status of a copy operation.
+   */
+  pollCopyFrom(
+    token: string,
+    params: NamespacePollCopyFromParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<CopyFromNamespaceOperation> {
+    const { namespace = this._client.defaultNamespace } = params ?? {};
+    return this._client.get(
+      path`/v1/namespaces/${namespace}/operations/${token}?stainless_overload=pollCopyFrom`,
+      options,
+    );
+  }
+
+  /**
    * Query, filter, full-text search and vector search documents.
    */
   query(
@@ -121,6 +136,22 @@ export class Namespaces extends APIResource {
   ): APIPromise<NamespaceSchemaResponse> {
     const { namespace = this._client.defaultNamespace } = params ?? {};
     return this._client.get(path`/v1/namespaces/${namespace}/schema`, options);
+  }
+
+  /**
+   * Start copying all documents from another namespace into this one. Returns an
+   * operation token without waiting for the copy to finish. Use the token to poll
+   * for progress and the result.
+   */
+  startCopyFrom(
+    params: NamespaceStartCopyFromParams,
+    options?: RequestOptions,
+  ): APIPromise<NamespaceStartCopyFromResponse> {
+    const { namespace = this._client.defaultNamespace, ...body } = params;
+    return this._client.post(path`/v2/namespaces/${namespace}/async?stainless_overload=startCopyFrom`, {
+      body,
+      ...options,
+    });
   }
 
   /**
@@ -355,6 +386,63 @@ export interface ContainsAnyTokenFilterParams {
    * Whether to treat the last token in the query input as a literal prefix.
    */
   last_as_prefix?: boolean;
+}
+
+/**
+ * The current status of a copy operation.
+ */
+export type CopyFromNamespaceOperation =
+  | CopyFromNamespaceOperation.Running
+  | CopyFromNamespaceOperation.Finished;
+
+export namespace CopyFromNamespaceOperation {
+  export interface Running {
+    /**
+     * The time at which the operation started.
+     */
+    start_time: string;
+
+    status: 'running';
+
+    /**
+     * A freeform description of the operation's progress. May be absent, and its
+     * format may change.
+     */
+    progress?: string;
+  }
+
+  export interface Finished {
+    /**
+     * The time at which the operation finished.
+     */
+    finish_time: string;
+
+    result: NamespacesAPI.CopyFromNamespaceOperationResult;
+
+    /**
+     * The time at which the operation started.
+     */
+    start_time: string;
+
+    status: 'finished';
+  }
+}
+
+export type CopyFromNamespaceOperationResult =
+  | CopyFromNamespaceOperationResult.Success
+  | CopyFromNamespaceOperationResult.Error;
+
+export namespace CopyFromNamespaceOperationResult {
+  export interface Success {
+    /**
+     * The response to a successful write request.
+     */
+    success: NamespacesAPI.WriteResult;
+  }
+
+  export interface Error {
+    error: NamespacesAPI.OperationError;
+  }
 }
 
 /**
@@ -783,6 +871,35 @@ export interface NamespaceMetadataPatch {
   read_only?: boolean;
 }
 
+export interface OperationError {
+  /**
+   * The response to an unsuccessful request.
+   */
+  detail: OperationError.Detail;
+
+  /**
+   * The HTTP status code of the operation's error.
+   */
+  status_code: number;
+}
+
+export namespace OperationError {
+  /**
+   * The response to an unsuccessful request.
+   */
+  export interface Detail {
+    /**
+     * The error message.
+     */
+    error: string;
+
+    /**
+     * The status of the request.
+     */
+    status: 'error';
+  }
+}
+
 /**
  * Configuration for namespace pinning.
  */
@@ -961,6 +1078,74 @@ export interface WritePerformance {
    * Request time measured on the server, in milliseconds.
    */
   server_total_ms: number;
+}
+
+/**
+ * The response to a successful write request.
+ */
+export interface WriteResult {
+  /**
+   * The billing information for a write request.
+   */
+  billing: WriteBilling;
+
+  /**
+   * A message describing the result of the write request.
+   */
+  message: string;
+
+  /**
+   * The number of rows affected by the write request.
+   */
+  rows_affected: number;
+
+  /**
+   * The status of the request.
+   */
+  status: 'OK';
+
+  /**
+   * The IDs of documents that were deleted. Only included when `return_affected_ids`
+   * is true and at least one document was deleted.
+   */
+  deleted_ids?: Array<ID>;
+
+  /**
+   * The IDs of documents that were patched. Only included when `return_affected_ids`
+   * is true and at least one document was patched.
+   */
+  patched_ids?: Array<ID>;
+
+  /**
+   * The performance information for a write request.
+   */
+  performance?: WritePerformance;
+
+  /**
+   * The number of rows deleted by the write request.
+   */
+  rows_deleted?: number;
+
+  /**
+   * The number of rows patched by the write request.
+   */
+  rows_patched?: number;
+
+  /**
+   * Whether more documents match the filter for partial operations.
+   */
+  rows_remaining?: boolean;
+
+  /**
+   * The number of rows upserted by the write request.
+   */
+  rows_upserted?: number;
+
+  /**
+   * The IDs of documents that were upserted. Only included when
+   * `return_affected_ids` is true and at least one document was upserted.
+   */
+  upserted_ids?: Array<ID>;
 }
 
 /**
@@ -1224,6 +1409,13 @@ export namespace NamespaceRecallResponse {
  * The response to a successful namespace schema request.
  */
 export type NamespaceSchemaResponse = { [key: string]: AttributeSchemaConfig };
+
+export interface NamespaceStartCopyFromResponse {
+  /**
+   * The token identifying the copy operation.
+   */
+  token: string;
+}
 
 /**
  * The updated schema for the namespace.
@@ -1579,6 +1771,13 @@ export namespace NamespaceMultiQueryParams {
   }
 }
 
+export interface NamespacePollCopyFromParams {
+  /**
+   * The name of the namespace.
+   */
+  namespace?: string;
+}
+
 export interface NamespaceQueryParams {
   /**
    * Path param: The name of the namespace.
@@ -1714,6 +1913,35 @@ export interface NamespaceSchemaParams {
    * The name of the namespace.
    */
   namespace?: string;
+}
+
+export interface NamespaceStartCopyFromParams {
+  /**
+   * Path param: The name of the namespace.
+   */
+  namespace?: string;
+
+  /**
+   * Body param: The namespace to copy documents from.
+   */
+  source_namespace: string;
+
+  /**
+   * Body param: (Optional) The encryption configuration for the destination
+   * namespace.
+   */
+  dest_encryption?: Encryption;
+
+  /**
+   * Body param: (Optional) An API key for the organization containing the source
+   * namespace
+   */
+  source_api_key?: string;
+
+  /**
+   * Body param: (Optional) The region of the source namespace.
+   */
+  source_region?: string;
 }
 
 export interface NamespaceUpdateMetadataParams {
@@ -1898,6 +2126,8 @@ export declare namespace Namespaces {
     type Columns as Columns,
     type ContainsAllTokensFilterParams as ContainsAllTokensFilterParams,
     type ContainsAnyTokenFilterParams as ContainsAnyTokenFilterParams,
+    type CopyFromNamespaceOperation as CopyFromNamespaceOperation,
+    type CopyFromNamespaceOperationResult as CopyFromNamespaceOperationResult,
     type CopyFromNamespaceParams as CopyFromNamespaceParams,
     type DecayParams as DecayParams,
     type DistanceMetric as DistanceMetric,
@@ -1916,6 +2146,7 @@ export declare namespace Namespaces {
     type Limit as Limit,
     type NamespaceMetadata as NamespaceMetadata,
     type NamespaceMetadataPatch as NamespaceMetadataPatch,
+    type OperationError as OperationError,
     type PinningConfig as PinningConfig,
     type QueryBilling as QueryBilling,
     type QueryPerformance as QueryPerformance,
@@ -1930,6 +2161,7 @@ export declare namespace Namespaces {
     type VectorEncoding as VectorEncoding,
     type WriteBilling as WriteBilling,
     type WritePerformance as WritePerformance,
+    type WriteResult as WriteResult,
     type NamespaceBranchFromResponse as NamespaceBranchFromResponse,
     type NamespaceCopyFromResponse as NamespaceCopyFromResponse,
     type NamespaceDeleteAllResponse as NamespaceDeleteAllResponse,
@@ -1939,6 +2171,7 @@ export declare namespace Namespaces {
     type NamespaceQueryResponse as NamespaceQueryResponse,
     type NamespaceRecallResponse as NamespaceRecallResponse,
     type NamespaceSchemaResponse as NamespaceSchemaResponse,
+    type NamespaceStartCopyFromResponse as NamespaceStartCopyFromResponse,
     type NamespaceUpdateSchemaResponse as NamespaceUpdateSchemaResponse,
     type NamespaceWriteResponse as NamespaceWriteResponse,
     type NamespaceBranchFromParams as NamespaceBranchFromParams,
@@ -1948,9 +2181,11 @@ export declare namespace Namespaces {
     type NamespaceHintCacheWarmParams as NamespaceHintCacheWarmParams,
     type NamespaceMetadataParams as NamespaceMetadataParams,
     type NamespaceMultiQueryParams as NamespaceMultiQueryParams,
+    type NamespacePollCopyFromParams as NamespacePollCopyFromParams,
     type NamespaceQueryParams as NamespaceQueryParams,
     type NamespaceRecallParams as NamespaceRecallParams,
     type NamespaceSchemaParams as NamespaceSchemaParams,
+    type NamespaceStartCopyFromParams as NamespaceStartCopyFromParams,
     type NamespaceUpdateMetadataParams as NamespaceUpdateMetadataParams,
     type NamespaceUpdateSchemaParams as NamespaceUpdateSchemaParams,
     type NamespaceWriteParams as NamespaceWriteParams,
