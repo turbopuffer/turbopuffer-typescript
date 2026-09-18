@@ -178,7 +178,7 @@ describe('resource namespaces', () => {
 
   // Mock server tests are disabled
   test.skip('pollCopyFrom: only required params', async () => {
-    const responsePromise = client.namespaces.pollCopyFrom('token', { namespace: 'namespace' });
+    const responsePromise = client.namespace('namespace').pollCopyFrom('token', { namespace: 'namespace' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -190,7 +190,7 @@ describe('resource namespaces', () => {
 
   // Mock server tests are disabled
   test.skip('pollCopyFrom: required and optional params', async () => {
-    const response = await client.namespaces.pollCopyFrom('token', { namespace: 'namespace' });
+    const response = await client.namespace('namespace').pollCopyFrom('token', { namespace: 'namespace' });
   });
 
   // Mock server tests are disabled
@@ -266,7 +266,7 @@ describe('resource namespaces', () => {
 
   // Mock server tests are disabled
   test.skip('startCopyFrom: only required params', async () => {
-    const responsePromise = client.namespaces.startCopyFrom({
+    const responsePromise = client.namespace('namespace').startCopyFrom({
       namespace: 'namespace',
       source_namespace: 'source_namespace',
     });
@@ -281,7 +281,7 @@ describe('resource namespaces', () => {
 
   // Mock server tests are disabled
   test.skip('startCopyFrom: required and optional params', async () => {
-    const response = await client.namespaces.startCopyFrom({
+    const response = await client.namespace('namespace').startCopyFrom({
       namespace: 'namespace',
       source_namespace: 'source_namespace',
       dest_encryption: { key_name: 'key_name', mode: 'customer-managed' },
@@ -304,9 +304,7 @@ describe('resource namespaces', () => {
 
   // Mock server tests are disabled
   test.skip('updateMetadata: required and optional params', async () => {
-    const response = await client.namespace('namespace').updateMetadata({ pinning: true,
-      read_only: true,
-    });
+    const response = await client.namespace('namespace').updateMetadata({ pinning: true, read_only: true });
   });
 
   // Mock server tests are disabled
