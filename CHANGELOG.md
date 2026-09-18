@@ -1,5 +1,22 @@
 # Changelog
 
+## 2.9.0 (2026-09-18)
+
+Full Changelog: [v2.8.0...v2.9.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.8.0...v2.9.0)
+
+### Features
+
+* Add `read_only` namespace field ([33c5264](https://github.com/turbopuffer/turbopuffer-typescript/commit/33c5264af1b8cc85e5a0854df6ef05521277cd0b))
+* **api:** Merge remote-tracking branch 'origin/preview/benesch/named-rerank-limit-schema' ([b4acd1b](https://github.com/turbopuffer/turbopuffer-typescript/commit/b4acd1bc699e58d6e96b6796ac0be1f814c3ab05))
+* engine,openapi: async copy_from_namespace endpoints ([e730b08](https://github.com/turbopuffer/turbopuffer-typescript/commit/e730b08017f230e9e1b6f7e3c8c6b8e61347cc03))
+* tpuf-engine: Adding pagination through `offset` ([d87e312](https://github.com/turbopuffer/turbopuffer-typescript/commit/d87e312c14c9f711857f7c20bd8f63bfa50b1613))
+* tpuf-engine: expose billed_replicas in pinning metadata ([f7dd32f](https://github.com/turbopuffer/turbopuffer-typescript/commit/f7dd32f2fb9c754b803b865b09b9003ba22a2374))
+
+
+### Bug Fixes
+
+* correct namespace tests and async copy requests ([#234](https://github.com/turbopuffer/turbopuffer-typescript/issues/234)) ([90dc1ca](https://github.com/turbopuffer/turbopuffer-typescript/commit/90dc1ca627e233935b4132223779c6c1ae3eb675))
+
 ## 2.8.0 (2026-08-04)
 
 Full Changelog: [v2.7.0...v2.8.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.7.0...v2.8.0)
