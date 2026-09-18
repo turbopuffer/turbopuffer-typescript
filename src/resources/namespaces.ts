@@ -167,7 +167,7 @@ export class Namespace extends APIResource {
   ): APIPromise<NamespaceStartCopyFromResponse> {
     const { namespace = this._client.defaultNamespace, ...body } = params;
     return this._client.post(path`/v2/namespaces/${namespace}/async?stainless_overload=startCopyFrom`, {
-      body,
+      body: { copy_from_namespace: body },
       ...options,
     });
   }
