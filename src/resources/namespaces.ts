@@ -229,7 +229,7 @@ export interface AttributeEmbedConfig {
 /**
  * The schema for an attribute attached to a document.
  */
-export type AttributeSchema = AttributeType | AttributeSchemaConfig;
+export type AttributeSchema = AttributeType | AttributeSchemaConfig | AttributeSchemaDrop;
 
 /**
  * Detailed configuration for an attribute attached to a document.
@@ -317,6 +317,17 @@ export namespace AttributeSchemaConfig {
      */
     distance_metric: NamespacesAPI.SparseDistanceMetric;
   }
+}
+
+/**
+ * Drops the attribute from the namespace. Cannot be combined with other schema
+ * settings.
+ */
+export interface AttributeSchemaDrop {
+  /**
+   * Must be `true`.
+   */
+  drop: boolean;
 }
 
 /**
@@ -1624,11 +1635,6 @@ export namespace NamespaceExplainQueryParams {
   export interface Consistency {
     /**
      * The query's consistency level.
-     *
-     * - `strong` - Strong consistency. Requires a round-trip to object storage to
-     *   fetch the latest writes.
-     * - `eventual` - Eventual consistency. Does not require a round-trip to object
-     *   storage, but may not see the latest writes.
      */
     level?: 'strong' | 'eventual';
   }
@@ -1761,11 +1767,6 @@ export namespace NamespaceMultiQueryParams {
   export interface Consistency {
     /**
      * The query's consistency level.
-     *
-     * - `strong` - Strong consistency. Requires a round-trip to object storage to
-     *   fetch the latest writes.
-     * - `eventual` - Eventual consistency. Does not require a round-trip to object
-     *   storage, but may not see the latest writes.
      */
     level?: 'strong' | 'eventual';
   }
@@ -1864,11 +1865,6 @@ export namespace NamespaceQueryParams {
   export interface Consistency {
     /**
      * The query's consistency level.
-     *
-     * - `strong` - Strong consistency. Requires a round-trip to object storage to
-     *   fetch the latest writes.
-     * - `eventual` - Eventual consistency. Does not require a round-trip to object
-     *   storage, but may not see the latest writes.
      */
     level?: 'strong' | 'eventual';
   }
@@ -1987,12 +1983,12 @@ export interface NamespaceWriteParams {
   namespace?: string;
 
   /**
-   * Body param: The namespace to create an instant, copy-on-write clone of.
+   * Body param
    */
   branch_from_namespace?: BranchFromNamespaceParams;
 
   /**
-   * Body param: The namespace to copy documents from.
+   * Body param
    */
   copy_from_namespace?: CopyFromNamespaceParams;
 
@@ -2120,6 +2116,7 @@ export declare namespace Namespaces {
     type AttributeEmbedConfig as AttributeEmbedConfig,
     type AttributeSchema as AttributeSchema,
     type AttributeSchemaConfig as AttributeSchemaConfig,
+    type AttributeSchemaDrop as AttributeSchemaDrop,
     type AttributeType as AttributeType,
     type Bm25ClauseParams as Bm25ClauseParams,
     type BranchFromNamespaceParams as BranchFromNamespaceParams,
