@@ -17,6 +17,7 @@ Types:
 - <code><a href="./src/resources/namespaces.ts">AttributeEmbedConfig</a></code>
 - <code><a href="./src/resources/namespaces.ts">AttributeSchema</a></code>
 - <code><a href="./src/resources/namespaces.ts">AttributeSchemaConfig</a></code>
+- <code><a href="./src/resources/namespaces.ts">AttributeSchemaDrop</a></code>
 - <code><a href="./src/resources/namespaces.ts">AttributeType</a></code>
 - <code><a href="./src/resources/namespaces.ts">Bm25ClauseParams</a></code>
 - <code><a href="./src/resources/namespaces.ts">BranchFromNamespaceParams</a></code>
