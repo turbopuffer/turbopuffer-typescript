@@ -7,6 +7,7 @@ export {
   type AttributeEmbedConfig,
   type AttributeSchema,
   type AttributeSchemaConfig,
+  type AttributeSchemaDrop,
   type AttributeType,
   type Bm25ClauseParams,
   type BranchFromNamespaceParams,
