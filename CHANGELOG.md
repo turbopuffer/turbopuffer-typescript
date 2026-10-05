@@ -1,0 +1,1207 @@
+# Changelog
+
+## 2.9.0 (2026-09-18)
+
+Full Changelog: [v2.8.0...v2.9.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.8.0...v2.9.0)
+
+### Features
+
+* Add `read_only` namespace field ([33c5264](https://github.com/turbopuffer/turbopuffer-typescript/commit/33c5264af1b8cc85e5a0854df6ef05521277cd0b))
+* **api:** Merge remote-tracking branch 'origin/preview/benesch/named-rerank-limit-schema' ([b4acd1b](https://github.com/turbopuffer/turbopuffer-typescript/commit/b4acd1bc699e58d6e96b6796ac0be1f814c3ab05))
+* engine,openapi: async copy_from_namespace endpoints ([e730b08](https://github.com/turbopuffer/turbopuffer-typescript/commit/e730b08017f230e9e1b6f7e3c8c6b8e61347cc03))
+* tpuf-engine: Adding pagination through `offset` ([d87e312](https://github.com/turbopuffer/turbopuffer-typescript/commit/d87e312c14c9f711857f7c20bd8f63bfa50b1613))
+* tpuf-engine: expose billed_replicas in pinning metadata ([f7dd32f](https://github.com/turbopuffer/turbopuffer-typescript/commit/f7dd32f2fb9c754b803b865b09b9003ba22a2374))
+
+
+### Bug Fixes
+
+* correct namespace tests and async copy requests ([#234](https://github.com/turbopuffer/turbopuffer-typescript/issues/234)) ([90dc1ca](https://github.com/turbopuffer/turbopuffer-typescript/commit/90dc1ca627e233935b4132223779c6c1ae3eb675))
+
+## 2.8.0 (2026-08-04)
+
+Full Changelog: [v2.7.0...v2.8.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.7.0...v2.8.0)
+
+### Features
+
+* spec: no-op change to Stainless spec ([3c80c92](https://github.com/turbopuffer/turbopuffer-typescript/commit/3c80c92f604ab74c101d8fae6c368eb9478311b7))
+
+## 2.7.0 (2026-07-30)
+
+Full Changelog: [v2.6.0...v2.7.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.6.0...v2.7.0)
+
+### Features
+
+* openapi: add RRF `weights` parameter ([6557c75](https://github.com/turbopuffer/turbopuffer-typescript/commit/6557c75fd0ce3af39e22cd90b63c0e9bf5989d99))
+* spec: expose computed attributes ([5d69180](https://github.com/turbopuffer/turbopuffer-typescript/commit/5d691802b07210917f7b9a681a275f2dd3392322))
+* spec: hide HighlightConfig.rank_fragments_by's RankBy ref from Stainless ([c1e60c5](https://github.com/turbopuffer/turbopuffer-typescript/commit/c1e60c54e73bf32908fe9e71c2037e53b0d23019))
+* spec: make compute_attributes value x-stainless-any ([ee82114](https://github.com/turbopuffer/turbopuffer-typescript/commit/ee82114d215d636f11752ed93c1d357c82243b70))
+* spec: merge Expr and ComputeAttributes into a single Expr union ([25586e6](https://github.com/turbopuffer/turbopuffer-typescript/commit/25586e630433bed81f81af5158cdd50886121a05))
+* spec: rename HighlightConfig -&gt; HighlightConfigParams ([77003d3](https://github.com/turbopuffer/turbopuffer-typescript/commit/77003d363ffc6b5638f16cd302f45a38f79b2fb0))
+* **stlc:** configurable CI runner and private-production-repo support in workflow templates ([94ef352](https://github.com/turbopuffer/turbopuffer-typescript/commit/94ef3527c2f7dc129afa543fd8114339af1375c8))
+* type compute_attributes as the Expr union (turbopuffer[#10694](https://github.com/turbopuffer/turbopuffer-typescript/issues/10694)) ([#231](https://github.com/turbopuffer/turbopuffer-typescript/issues/231)) ([ace42b0](https://github.com/turbopuffer/turbopuffer-typescript/commit/ace42b0d4001e1dc5010660aaf55524b2f6e0456))
+
+
+### Bug Fixes
+
+* **ci:** bump @arethetypeswrong/cli to ^0.18.0 and run CI workflows on Node 24 ([ba3c5da](https://github.com/turbopuffer/turbopuffer-typescript/commit/ba3c5da876c58055e269dc3006017fa5c7ca467d))
+* **ci:** bump @arethetypeswrong/cli to ^0.18.0 and run CI workflows on Node 24 ([10447f7](https://github.com/turbopuffer/turbopuffer-typescript/commit/10447f73d3833a7eb79e9f57f3f01bb13379d08e))
+
+
+### Chores
+
+* **internal:** codegen related update ([5714dea](https://github.com/turbopuffer/turbopuffer-typescript/commit/5714deab5e95116f1d2e0e72537b20c6ffa7941c))
+* **internal:** codegen related update ([b9be9da](https://github.com/turbopuffer/turbopuffer-typescript/commit/b9be9daa1ff69c5f585156d0719a5d37734dfc20))
+* regenerate custom types for compute attributes ([#226](https://github.com/turbopuffer/turbopuffer-typescript/issues/226)) ([c99c69b](https://github.com/turbopuffer/turbopuffer-typescript/commit/c99c69b7f30de91572926dd14b166df8ae9433b0))
+
+## 2.6.0 (2026-07-01)
+
+Full Changelog: [v2.5.1...v2.6.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.5.1...v2.6.0)
+
+### Features
+
+* spec: add sharding config to the openapi spec ([16c415c](https://github.com/turbopuffer/turbopuffer-typescript/commit/16c415c348621978777ecc3a147f2b6e0fa559cc))
+* support late_interaction parameter in sdks ([77e43b7](https://github.com/turbopuffer/turbopuffer-typescript/commit/77e43b7665165fae0e632a03e026d72e2c7bb892))
+
+## 2.5.1 (2026-06-25)
+
+Full Changelog: [v2.5.0...v2.5.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.5.0...v2.5.1)
+
+### Bug Fixes
+
+* **client:** send content-type header for requests with an omitted optional body ([cfc2fd3](https://github.com/turbopuffer/turbopuffer-typescript/commit/cfc2fd38493bf1d267e74026518e9a5ffbb1414a))
+
+
+### Chores
+
+* remove unused MCP package ([0e4bf8e](https://github.com/turbopuffer/turbopuffer-typescript/commit/0e4bf8e7d279bff88b4513adebe2e4efa237c42e))
+
+
+### Documentation
+
+* rename /docs/overview to /docs/api-overview ([1aada49](https://github.com/turbopuffer/turbopuffer-typescript/commit/1aada49a2c7698b1e7de97ac569c5728416c2ae4))
+
+## 2.5.0 (2026-06-09)
+
+Full Changelog: [v2.4.0...v2.5.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.4.0...v2.5.0)
+
+### Features
+
+* tpuf-engine: support dest_encryption in copy_from_namespace ([d5061b2](https://github.com/turbopuffer/turbopuffer-typescript/commit/d5061b2246e68d83ed8e7c0e80dac512c8f26c36))
+
+## 2.4.0 (2026-06-08)
+
+Full Changelog: [v2.3.0...v2.4.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.3.0...v2.4.0)
+
+### Features
+
+* stainless: update sdks to support case-insensitive fuzzy filter ([f179d4e](https://github.com/turbopuffer/turbopuffer-typescript/commit/f179d4eb682a0f3b95a452bee0095e4fe1639c11))
+
+## 2.3.0 (2026-06-03)
+
+Full Changelog: [v2.3.0-alpha.1...v2.3.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.3.0-alpha.1...v2.3.0)
+
+### Features
+
+* spec: add support for word_v4 tokenizer ([cff8f1c](https://github.com/turbopuffer/turbopuffer-typescript/commit/cff8f1cd6d481f62aeebf409ead7ed5a9c862dbe))
+
+
+### Bug Fixes
+
+* make tests agnostic to the default tokenizer ([#219](https://github.com/turbopuffer/turbopuffer-typescript/issues/219)) ([f0ad7e0](https://github.com/turbopuffer/turbopuffer-typescript/commit/f0ad7e0bb6391d108bee242ebdec392752d30214))
+
+## 2.3.0-alpha.1 (2026-06-02)
+
+Full Changelog: [v2.2.0...v2.3.0-alpha.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.2.0...v2.3.0-alpha.1)
+
+### Features
+
+* openapi: spec for `rerank_by: ["RRF"]` ([d851430](https://github.com/turbopuffer/turbopuffer-typescript/commit/d85143096eaeb309a8a90294bade1ad2e0748a4d))
+* rename /docs/auth to /docs/overview ([b7bf769](https://github.com/turbopuffer/turbopuffer-typescript/commit/b7bf76928ec210d71d7e410bd377d59105cde1b9))
+* spec: add SDK support for native embedding ([87c7f6b](https://github.com/turbopuffer/turbopuffer-typescript/commit/87c7f6b17f1172b5d901cf0e89b1ee0f20cb991c))
+
+
+### Bug Fixes
+
+* **mcp:** use `pure-lockfile` when building mcp server ([1ee5a2e](https://github.com/turbopuffer/turbopuffer-typescript/commit/1ee5a2ef4e970f46c03ac1b6e3f4148c2ac16441))
+* reject malicious poll locations ([#213](https://github.com/turbopuffer/turbopuffer-typescript/issues/213)) ([e9dcdcc](https://github.com/turbopuffer/turbopuffer-typescript/commit/e9dcdccc7b7eccea82b3532f9a4cb6ae14cb887b))
+* type rerank_by parameter as RerankBy ([#216](https://github.com/turbopuffer/turbopuffer-typescript/issues/216)) ([6513298](https://github.com/turbopuffer/turbopuffer-typescript/commit/65132988c2583c89764f31c4afa9cf23ba0d96d0))
+
+
+### Chores
+
+* bump apigen ([#214](https://github.com/turbopuffer/turbopuffer-typescript/issues/214)) ([0ffa35a](https://github.com/turbopuffer/turbopuffer-typescript/commit/0ffa35a1354fffa4015b8315b41fdb4b139ae828))
+* fix API docs links ([#212](https://github.com/turbopuffer/turbopuffer-typescript/issues/212)) ([c5c1d0c](https://github.com/turbopuffer/turbopuffer-typescript/commit/c5c1d0ca047fd6c5a4a3d0959c2c1d5e41a6481c))
+
+## 2.2.0 (2026-05-27)
+
+Full Changelog: [v2.1.0...v2.2.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.1.0...v2.2.0)
+
+### Features
+
+* spec: force generation of FuzzyParams stainless models ([60fe9e1](https://github.com/turbopuffer/turbopuffer-typescript/commit/60fe9e1b44caa0dd4b51db8d3079999688699549))
+* spec: rename csharp SDK package to Turbopuffer ([a818ca8](https://github.com/turbopuffer/turbopuffer-typescript/commit/a818ca8e13f3a42c3474909b3c103f1339f32540))
+* transparent async polling ([#210](https://github.com/turbopuffer/turbopuffer-typescript/issues/210)) ([e3dadf2](https://github.com/turbopuffer/turbopuffer-typescript/commit/e3dadf229a19b6e434525ba19a9892e776da78d5))
+
+
+### Bug Fixes
+
+* **typescript:** upgrade tsc-multi so that it works with Node 26 ([71f3d8e](https://github.com/turbopuffer/turbopuffer-typescript/commit/71f3d8e91173247880cbd862f637bbb32fc56468))
+
+
+### Chores
+
+* **internal:** codegen related update ([925f4bc](https://github.com/turbopuffer/turbopuffer-typescript/commit/925f4bc90c8bd803d2ed916ba9c62e241f233fd3))
+
+## 2.1.0 (2026-05-18)
+
+Full Changelog: [v2.0.0...v2.1.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.0.0...v2.1.0)
+
+### Features
+
+* publish csharp ([012c29c](https://github.com/turbopuffer/turbopuffer-typescript/commit/012c29ce00335306766941d31c1bbf1572972857))
+* spec: add C# stainless target ([c2483a7](https://github.com/turbopuffer/turbopuffer-typescript/commit/c2483a7ffec586b5e19a465a01313b9c1780e84f))
+* spec: rename C# package to Turbopuffer.Client ([50d040c](https://github.com/turbopuffer/turbopuffer-typescript/commit/50d040c11e36fac864ed34eeee9de1ab5d1c5c0b))
+
+## 2.0.0 (2026-05-11)
+
+Full Changelog: [v2.0.0-alpha.7...v2.0.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.0.0-alpha.7...v2.0.0)
+
+### Documentation
+
+* document v2.0 breaking changes in UPGRADING.md ([7f44961](https://github.com/turbopuffer/turbopuffer-typescript/commit/7f449616b9d8ef8784d59bcc09bcbfe4f51203f6))
+* format UPGRADING.md ([d7f81a2](https://github.com/turbopuffer/turbopuffer-typescript/commit/d7f81a2834d5870ccddb58d632a91acaec66c4c2))
+
+## 2.0.0-alpha.7 (2026-05-10)
+
+Full Changelog: [v2.0.0-alpha.6...v2.0.0-alpha.7](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.0.0-alpha.6...v2.0.0-alpha.7)
+
+### Features
+
+* **types:** add generic support to Filters type ([#178](https://github.com/turbopuffer/turbopuffer-typescript/issues/178)) ([62a7c40](https://github.com/turbopuffer/turbopuffer-typescript/commit/62a7c403fc667c2de01d1def9e608f19faef036c))
+
+## 2.0.0-alpha.6 (2026-05-10)
+
+Full Changelog: [v2.0.0-alpha.5...v2.0.0-alpha.6](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.0.0-alpha.5...v2.0.0-alpha.6)
+
+### Features
+
+* spec: rename RankByVector/RankBySparseVector to RankByAnn/RankBySparseKnn ([fdb2677](https://github.com/turbopuffer/turbopuffer-typescript/commit/fdb2677708e4b6352e1d4df9051c0b100d958fbd))
+* spec: rename RankByVector/RankBySparseVector to RankByAnn/RankBySparseKnn ([02fbc67](https://github.com/turbopuffer/turbopuffer-typescript/commit/02fbc672a7eea72f6c3624f5ed5ddfaa390f80c4))
+
+
+### Bug Fixes
+
+* import GroupBy from custom types in namespaces ([db1f30d](https://github.com/turbopuffer/turbopuffer-typescript/commit/db1f30dae450e12aa7b3f01ec823ad5f2658b188))
+
+
+### Chores
+
+* regenerate custom types ([0087d07](https://github.com/turbopuffer/turbopuffer-typescript/commit/0087d07e91cdd76e72737e0b560b33ca34cd3740))
+* remove unreferenced top-level Query interface ([07c7fa6](https://github.com/turbopuffer/turbopuffer-typescript/commit/07c7fa6505ff37762b972ea63f808bee56b20663))
+
+## 2.0.0-alpha.5 (2026-05-08)
+
+Full Changelog: [v2.0.0-alpha.4...v2.0.0-alpha.5](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.0.0-alpha.4...v2.0.0-alpha.5)
+
+### Features
+
+* spec: move update_metadata to v1 ([a463a1e](https://github.com/turbopuffer/turbopuffer-typescript/commit/a463a1ed9d337552ff4254f8f0f614e1b39bb9ed))
+
+
+### Chores
+
+* redact api-key headers in debug logs ([90bae26](https://github.com/turbopuffer/turbopuffer-typescript/commit/90bae2623b5cbd014ee15a54d67de16c54a6d222))
+
+
+### Documentation
+
+* clarify forwards compat behavior ([765b7cf](https://github.com/turbopuffer/turbopuffer-typescript/commit/765b7cf53c817923b6970afbba70645d5dca75c6))
+* update logging docs ([6cf5a2f](https://github.com/turbopuffer/turbopuffer-typescript/commit/6cf5a2f435bac1753cd247271fe4784b2b1426eb))
+* Update supported Node.js to 22 ([#201](https://github.com/turbopuffer/turbopuffer-typescript/issues/201)) ([5d0fe91](https://github.com/turbopuffer/turbopuffer-typescript/commit/5d0fe9143b2ad16a55a353132fd876798abe71f7))
+* update with proxy auth info ([e92d8ba](https://github.com/turbopuffer/turbopuffer-typescript/commit/e92d8bab8389bbedfadb7393069d9e7a1bc10f1d))
+
+## 2.0.0-alpha.4 (2026-04-29)
+
+Full Changelog: [v2.0.0-alpha.3...v2.0.0-alpha.4](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.0.0-alpha.3...v2.0.0-alpha.4)
+
+### Features
+
+* Spec: Add sparse_distance_metric to the list of models. ([ea11b44](https://github.com/turbopuffer/turbopuffer-typescript/commit/ea11b44d5752d0d4d3682d547354f4f9de306456))
+
+## 2.0.0-alpha.3 (2026-04-29)
+
+Full Changelog: [v2.0.0-alpha.2...v2.0.0-alpha.3](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.0.0-alpha.2...v2.0.0-alpha.3)
+
+### Chores
+
+* avoid formatting file that gets changed during releases ([122524f](https://github.com/turbopuffer/turbopuffer-typescript/commit/122524f0e0e6d8ceb0f6ebad2efa00d0d7bbdc47))
+
+## 2.0.0-alpha.2 (2026-04-29)
+
+Full Changelog: [v2.0.0-alpha.1...v2.0.0-alpha.2](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.0.0-alpha.1...v2.0.0-alpha.2)
+
+### Bug Fixes
+
+* wrap branchFrom/copyFrom body in named object ([8f1c61a](https://github.com/turbopuffer/turbopuffer-typescript/commit/8f1c61a272cd9f1a3211cbc68b847318ca36fe95))
+
+## 2.0.0-alpha.1 (2026-04-29)
+
+Full Changelog: [v1.22.0...v2.0.0-alpha.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.22.0...v2.0.0-alpha.1)
+
+### Features
+
+* Add sparse vectors to the spec. ([0acb80e](https://github.com/turbopuffer/turbopuffer-typescript/commit/0acb80e48b99ae68ff628056fe730b50c52d2b5a))
+* Enable Stainless normalizer v2 while keeping Query inlined ([2abb868](https://github.com/turbopuffer/turbopuffer-typescript/commit/2abb868d9a5bf4774a429ec753bd81981c92e1ad))
+* Require `fuzzy: true` in the schema to use the `Fuzzy` filter ([c22f962](https://github.com/turbopuffer/turbopuffer-typescript/commit/c22f96245767546e8479f75583b6fb93dbd30b7d))
+* set up branchFrom and copyFrom sugar in the OpenAPI spec ([102157b](https://github.com/turbopuffer/turbopuffer-typescript/commit/102157ba1187b73c479b1f16c507b9a06f75fd5f))
+* spec: flatten branchFrom/copyFrom sugar endpoint params ([166f742](https://github.com/turbopuffer/turbopuffer-typescript/commit/166f742ee065d412cf9e5264fdd947cb1eee70cf))
+* spec: update OpenAPI spec for v2 encryption API ([6febbfe](https://github.com/turbopuffer/turbopuffer-typescript/commit/6febbfe01a88ba921b9aba92d775395d5d2fe0b4))
+* support setting headers via env ([7023ad8](https://github.com/turbopuffer/turbopuffer-typescript/commit/7023ad87e88e6551d1ce360721aa8419040eee45))
+
+
+### Chores
+
+* **format:** run eslint and prettier separately ([c604477](https://github.com/turbopuffer/turbopuffer-typescript/commit/c604477d8e00c4450666848855c4e14bbb359f2d))
+* **formatter:** run prettier and eslint separately ([9d13e99](https://github.com/turbopuffer/turbopuffer-typescript/commit/9d13e99d96c6a960e976509a3e7765a2fced9477))
+* **formatter:** run prettier and eslint separately ([68e63f0](https://github.com/turbopuffer/turbopuffer-typescript/commit/68e63f0bcc0e74fc43d32c1c3ad19c38139f8939))
+* **internal:** codegen related update ([a37674d](https://github.com/turbopuffer/turbopuffer-typescript/commit/a37674ddab6aed5f6806c90e2175cc70fc95df95))
+* **internal:** codegen related update ([694709f](https://github.com/turbopuffer/turbopuffer-typescript/commit/694709fbe3c7b64c005c9e51f33247339287aff2))
+* **internal:** codegen related update ([378a739](https://github.com/turbopuffer/turbopuffer-typescript/commit/378a7397c7f19ca57c7bd17620ac4dc08c36c7f8))
+* **internal:** codegen related update ([b0e506d](https://github.com/turbopuffer/turbopuffer-typescript/commit/b0e506da6cb0ca80c4e211a45c368ca91b05a77c))
+* **internal:** more robust bootstrap script ([7caf57f](https://github.com/turbopuffer/turbopuffer-typescript/commit/7caf57fe9d6d18ef1cff19e4c3bafb203d195128))
+* **internal:** show error causes in MCP servers when running in local mode ([c73ff5b](https://github.com/turbopuffer/turbopuffer-typescript/commit/c73ff5b38d69d00c01ee184bb4913fff7f3c02dd))
+* **internal:** update docs ordering ([04d43ac](https://github.com/turbopuffer/turbopuffer-typescript/commit/04d43ac6428e6d1c9dff6548a07c8183b0962e2d))
+* **mcp-server:** increase local docs search result count from 5 to 10 ([b99f6cb](https://github.com/turbopuffer/turbopuffer-typescript/commit/b99f6cb60dfaa525569aa7396b467ba377b9123a))
+* regenerate custom types ([21f3a82](https://github.com/turbopuffer/turbopuffer-typescript/commit/21f3a82c10880556b9b0428aa86824744d9d50db))
+* regenerate custom types ([392f067](https://github.com/turbopuffer/turbopuffer-typescript/commit/392f0678dbeba4f6901b1e23eeef122901aaefe7))
+* restructure docs search code ([3ecc2a5](https://github.com/turbopuffer/turbopuffer-typescript/commit/3ecc2a5a8f6506040dea8b2ff5e8b72f90ad1956))
+* upgrade apigen to 2726d5f and fix tests ([2730c3d](https://github.com/turbopuffer/turbopuffer-typescript/commit/2730c3d333699637d9d88f12d063f7f731a13e7d))
+
+
+### Documentation
+
+* **mcp:** document x-stainless-mcp-client-envs header for hosted MCP ([#197](https://github.com/turbopuffer/turbopuffer-typescript/issues/197)) ([863b35e](https://github.com/turbopuffer/turbopuffer-typescript/commit/863b35e91b2f922f1fccc92597f7f2588ab888a8))
+
+## 1.22.0 (2026-04-06)
+
+Full Changelog: [v1.21.0...v1.22.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.21.0...v1.22.0)
+
+### Features
+
+* add update_metadata method to configure pinning ([6981e22](https://github.com/turbopuffer/turbopuffer-typescript/commit/6981e2203dcb37852d6ef0ae034dabd068402cb2))
+* docs for glob/regex acceleration ([07706f0](https://github.com/turbopuffer/turbopuffer-typescript/commit/07706f0a6a2995a7c7fe48dc8bd0313febb3388b))
+* Multiple Vector Columns Docs ([2723cf9](https://github.com/turbopuffer/turbopuffer-typescript/commit/2723cf912b9a2a98b953a3de764dddddb49ba56c))
+* spec: disable CopyFromNamespace syntax sugar in Go ([87b07c8](https://github.com/turbopuffer/turbopuffer-typescript/commit/87b07c8a313dbc56d269c9f6f10717c1d145c57c))
+* spec: include pinning status in /metadata response ([afa48e6](https://github.com/turbopuffer/turbopuffer-typescript/commit/afa48e6dfbe86c0e2807af2f4d9290a6760eabb7))
+
+
+### Bug Fixes
+
+* **internal:** gitignore generated `oidc` dir ([b2836ba](https://github.com/turbopuffer/turbopuffer-typescript/commit/b2836bac07f8dfac5db907abae0f676b53cd1e8d))
+
+
+### Chores
+
+* **ci:** escape input path in publish-npm workflow ([c3ef81a](https://github.com/turbopuffer/turbopuffer-typescript/commit/c3ef81ac2ca763272754c81dde61e76988adee69))
+* **ci:** skip lint on metadata-only changes ([3018358](https://github.com/turbopuffer/turbopuffer-typescript/commit/30183586d35c24e2748bf3a5dcbc1055623bd43f))
+* **internal:** codegen related update ([a4da17a](https://github.com/turbopuffer/turbopuffer-typescript/commit/a4da17a8b1efaaffd05bc5fd904b6050bb55771a))
+* **internal:** fix MCP docker image builds in yarn projects ([c7bb7f0](https://github.com/turbopuffer/turbopuffer-typescript/commit/c7bb7f09e5ca97a5926127590b09568a9ae19b47))
+* **internal:** fix MCP server import ordering ([3f3526e](https://github.com/turbopuffer/turbopuffer-typescript/commit/3f3526e4e44bcfee6a3f421ad9b00e5166e3bea3))
+* **internal:** fix MCP server TS errors that occur with required client options ([c64e321](https://github.com/turbopuffer/turbopuffer-typescript/commit/c64e32106c0f44e6116d6779d78d2fda9d69254e))
+* **internal:** improve local docs search for MCP servers ([0418fb9](https://github.com/turbopuffer/turbopuffer-typescript/commit/0418fb966ecd82866215b084d2ee9f41fc1b33bc))
+* **internal:** improve local docs search for MCP servers ([9b9f73d](https://github.com/turbopuffer/turbopuffer-typescript/commit/9b9f73d24e5f6c1d588068c2fea69d12642467d8))
+* **internal:** support custom-instructions-path flag in MCP servers ([f3e26b2](https://github.com/turbopuffer/turbopuffer-typescript/commit/f3e26b2356fd88f73b50bc147cd1909d54fce4bf))
+* **internal:** support local docs search in MCP servers ([445c462](https://github.com/turbopuffer/turbopuffer-typescript/commit/445c4624cdc0b92cc3ce91eb1b502a0936a4826b))
+* **internal:** support type annotations when running MCP in local execution mode ([2c1054b](https://github.com/turbopuffer/turbopuffer-typescript/commit/2c1054b66d6dd59162cdc0c5bd7c46edf7f77d8f))
+* **internal:** update gitignore ([3fc364c](https://github.com/turbopuffer/turbopuffer-typescript/commit/3fc364c594b0f178ed742b3effe4d3336c3d74f8))
+* **internal:** use link instead of file in MCP server package.json files ([96a56d1](https://github.com/turbopuffer/turbopuffer-typescript/commit/96a56d127d061b6a75319c83a73bbb1169df3c0a))
+* **mcp-server:** add support for session id, forward client info ([6a260da](https://github.com/turbopuffer/turbopuffer-typescript/commit/6a260da10bacd517683f71b6a7037c8fa0ced2d0))
+* **mcp-server:** log client info ([040d7fd](https://github.com/turbopuffer/turbopuffer-typescript/commit/040d7fdfa64465c6efecd4828f2eebd3b39c28e8))
+
+## 1.21.0 (2026-03-19)
+
+Full Changelog: [v1.20.0...v1.21.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.20.0...v1.21.0)
+
+### Features
+
+* tpuf-engine: add verbose form of branch_from_namespace ([a108312](https://github.com/turbopuffer/turbopuffer-typescript/commit/a108312751c27739ea2b8449eecfb783541e41c5))
+
+## 1.20.0 (2026-03-18)
+
+Full Changelog: [v1.19.0...v1.20.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.19.0...v1.20.0)
+
+### Features
+
+* Response performance object ([e8b2866](https://github.com/turbopuffer/turbopuffer-typescript/commit/e8b2866ca68089dc5c105f1e362d7d4eee5de79c))
+* tpuf: add branching to openapi spec ([b3a28e5](https://github.com/turbopuffer/turbopuffer-typescript/commit/b3a28e5242af46f2de75884de41e0de439a12799))
+
+
+### Bug Fixes
+
+* **client:** use higher retry delay precision ([7f54552](https://github.com/turbopuffer/turbopuffer-typescript/commit/7f5455264042b2037fff601dd0f02c22f30070b1))
+* escape MCP `instructions` backticks as necessary ([4f84252](https://github.com/turbopuffer/turbopuffer-typescript/commit/4f842527f2b26a1878c9fde77b80967f604ff616))
+
+## 1.19.0 (2026-03-11)
+
+Full Changelog: [v1.18.0...v1.19.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.18.0...v1.19.0)
+
+### Features
+
+* spec: host MCP on stainless ([3ddaad6](https://github.com/turbopuffer/turbopuffer-typescript/commit/3ddaad6a605a45e479dad12b18f9084411c9b793))
+
+## 1.18.0 (2026-02-27)
+
+Full Changelog: [v1.17.0...v1.18.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.17.0...v1.18.0)
+
+### Features
+
+* Remove `queries` from recall endpoint ([2387e39](https://github.com/turbopuffer/turbopuffer-typescript/commit/2387e390c7dfdd22b5210633722f8e15d968b801))
+
+## 1.17.0 (2026-02-19)
+
+Full Changelog: [v1.16.0...v1.17.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.16.0...v1.17.0)
+
+### Features
+
+* Add ranking-by-attribute to the spec. ([cd1c10f](https://github.com/turbopuffer/turbopuffer-typescript/commit/cd1c10f7d3446728c7cf1a8523f212a42da80a3f))
+
+## 1.16.0 (2026-02-08)
+
+Full Changelog: [v1.15.2...v1.16.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.15.2...v1.16.0)
+
+### Features
+
+* add support for `limit` query parameter ([712b664](https://github.com/turbopuffer/turbopuffer-typescript/commit/712b664eb93956b476defc56dc741ac983cf9508))
+* spec: clean up limit codegen ([d0e16e9](https://github.com/turbopuffer/turbopuffer-typescript/commit/d0e16e97f25de7ecab923409cf4e2d97b09af720))
+
+## 1.15.2 (2026-02-04)
+
+Full Changelog: [v1.15.1...v1.15.2](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.15.1...v1.15.2)
+
+### Chores
+
+* **client:** restructure abort controller binding ([1994913](https://github.com/turbopuffer/turbopuffer-typescript/commit/1994913914fb9b27a8477ca72054d1b9f6b883b9))
+* **internal:** refactor flag parsing for MCP servers and add debug flag ([029a82c](https://github.com/turbopuffer/turbopuffer-typescript/commit/029a82c251d65a760303bc585ba3ca67649e1774))
+
+## 1.15.1 (2026-02-04)
+
+Full Changelog: [v1.15.0...v1.15.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.15.0...v1.15.1)
+
+### Bug Fixes
+
+* **code-tool:** use templated baseURL when env unset ([#176](https://github.com/turbopuffer/turbopuffer-typescript/issues/176)) ([3ef9a0c](https://github.com/turbopuffer/turbopuffer-typescript/commit/3ef9a0c352c46fb31c8d1469b1951ce93d20056b))
+
+## 1.15.0 (2026-02-03)
+
+Full Changelog: [v1.14.10...v1.15.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.14.10...v1.15.0)
+
+### Features
+
+* ContainsAnyToken last_as_prefix docs ([4fa3782](https://github.com/turbopuffer/turbopuffer-typescript/commit/4fa37825e036636b695a29c28c0dc90b8bda3dd3))
+
+
+### Chores
+
+* regenerate custom types ([f54ce53](https://github.com/turbopuffer/turbopuffer-typescript/commit/f54ce534e6a000ceabf365c00df88485a2c9ad74))
+
+## 1.14.10 (2026-02-03)
+
+Full Changelog: [v1.14.9...v1.14.10](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.14.9...v1.14.10)
+
+### Bug Fixes
+
+* **client:** avoid memory leak with abort signals ([19bdb80](https://github.com/turbopuffer/turbopuffer-typescript/commit/19bdb80270dc9659976e0157b759e9e42f6b7550))
+
+
+### Chores
+
+* **client:** do not parse responses with empty content-length ([3384cb8](https://github.com/turbopuffer/turbopuffer-typescript/commit/3384cb868b90c4e9b783792b2d29d1beae515f06))
+* **internal:** support oauth authorization code flow for MCP servers ([eb9d706](https://github.com/turbopuffer/turbopuffer-typescript/commit/eb9d706a3c4bb730d6752b2f40f98f81f0bf0406))
+
+## 1.14.9 (2026-02-01)
+
+Full Changelog: [v1.14.8...v1.14.9](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.14.8...v1.14.9)
+
+## 1.14.8 (2026-01-29)
+
+Full Changelog: [v1.14.7...v1.14.8](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.14.7...v1.14.8)
+
+### Chores
+
+* trigger mcp publish ([64d6cd6](https://github.com/turbopuffer/turbopuffer-typescript/commit/64d6cd69a5ee49166df62b49260d3c3f3d73be2c))
+
+## 1.14.7 (2026-01-29)
+
+Full Changelog: [v1.14.6...v1.14.7](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.14.6...v1.14.7)
+
+### Chores
+
+* trigger mcp publish ([3b1b3eb](https://github.com/turbopuffer/turbopuffer-typescript/commit/3b1b3eb936cc3bd8a6b126905690e439d5a37bb8))
+
+## 1.14.6 (2026-01-29)
+
+Full Changelog: [v1.14.5...v1.14.6](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.14.5...v1.14.6)
+
+### Bug Fixes
+
+* **docs:** fix mcp installation instructions for remote servers ([a984c85](https://github.com/turbopuffer/turbopuffer-typescript/commit/a984c85d23646ea0ec1d95c2ee06add21dba007b))
+* **mcp:** allow falling back for required env variables ([9f3b951](https://github.com/turbopuffer/turbopuffer-typescript/commit/9f3b9517dd87dc8afc7cd7b747e482e58329c7c5))
+* **publish:** use npm registry directly for trusted publishing support ([44eb53b](https://github.com/turbopuffer/turbopuffer-typescript/commit/44eb53b523dbef825894d7c870a3349fe17483a9))
+* remove duplicate registry setting ([c611e83](https://github.com/turbopuffer/turbopuffer-typescript/commit/c611e834ca7b792920854d8fd5e00ed6669408d0))
+
+
+### Chores
+
+* clean up npm publishing ([37ce6a5](https://github.com/turbopuffer/turbopuffer-typescript/commit/37ce6a510eb60410b61f1b9bc362aa29a8093f97))
+* **internal:** codegen related update ([b50fa44](https://github.com/turbopuffer/turbopuffer-typescript/commit/b50fa44af4628b266da457760b71f430400bf80d))
+* **internal:** codegen related update ([888628c](https://github.com/turbopuffer/turbopuffer-typescript/commit/888628cf993522f6125b812c605aa267ec26df4b))
+* **internal:** version bump ([30ce6e1](https://github.com/turbopuffer/turbopuffer-typescript/commit/30ce6e1a936e76ec4969623de458b8e5a0c4d54d))
+* manual updates ([fff001a](https://github.com/turbopuffer/turbopuffer-typescript/commit/fff001a5562b900298903452828fd81fc5601c95))
+* **mcp:** up tsconfig lib version to es2022 ([d3bac23](https://github.com/turbopuffer/turbopuffer-typescript/commit/d3bac23cbd51d3628d93c2898ae72d322443bed0))
+* regenerate custom types ([db9309c](https://github.com/turbopuffer/turbopuffer-typescript/commit/db9309cf3f432980bc2a1f8eaf107305fa322fca))
+
+## 1.14.5 (2026-01-27)
+
+Full Changelog: [v1.14.4...v1.14.5](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.14.4...v1.14.5)
+
+### Bug Fixes
+
+* add MCP server beta warning ([7147331](https://github.com/turbopuffer/turbopuffer-typescript/commit/71473316275ee39f6e1a148c7e99a720171d4bc6))
+
+
+### Chores
+
+* retrigger npm publishing ([eab6136](https://github.com/turbopuffer/turbopuffer-typescript/commit/eab6136237d1d2cb07b4c42b95eb3a33ecf6482d))
+
+## 1.14.4 (2026-01-27)
+
+Full Changelog: [v1.14.3...v1.14.4](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.14.3...v1.14.4)
+
+### Bug Fixes
+
+* unset NODE_AUTH_TOKEN ([4c9fad3](https://github.com/turbopuffer/turbopuffer-typescript/commit/4c9fad3981b37f610d8e80121f7f69e028d3e7ec))
+
+## 1.14.3 (2026-01-27)
+
+Full Changelog: [v1.14.2...v1.14.3](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.14.2...v1.14.3)
+
+### Bug Fixes
+
+* update npm registry URL (again) ([acc691a](https://github.com/turbopuffer/turbopuffer-typescript/commit/acc691ae3820dc99817e2e482d1ce274573af782))
+
+## 1.14.2 (2026-01-27)
+
+Full Changelog: [v1.14.1...v1.14.2](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.14.1...v1.14.2)
+
+### Bug Fixes
+
+* update npm registry URL ([2182765](https://github.com/turbopuffer/turbopuffer-typescript/commit/218276554ce1a0794e6923a6de3da11e72c71a8d))
+
+## 1.14.1 (2026-01-27)
+
+Full Changelog: [v1.14.0...v1.14.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.14.0...v1.14.1)
+
+### Bug Fixes
+
+* registry URL for publishing ([6194b59](https://github.com/turbopuffer/turbopuffer-typescript/commit/6194b59a78ea4ffc68b52b1c07bc15ec7e5b05dc))
+
+## 1.14.0 (2026-01-27)
+
+Full Changelog: [v1.13.0...v1.14.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.13.0...v1.14.0)
+
+### Features
+
+* export resource types from main entry point ([#163](https://github.com/turbopuffer/turbopuffer-typescript/issues/163)) ([36a94d6](https://github.com/turbopuffer/turbopuffer-typescript/commit/36a94d6b51df9a75a30afb05d9fd201c9a9f0ac0))
+
+## 1.13.0 (2026-01-26)
+
+Full Changelog: [v1.12.0...v1.13.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.12.0...v1.13.0)
+
+### Features
+
+* Add instructions to MCP server config ([2a603cf](https://github.com/turbopuffer/turbopuffer-typescript/commit/2a603cfe8e8eff8fa1bbf879d60598ded56ffa76))
+* spec: use OIDC for publishing TypeScript package ([0320473](https://github.com/turbopuffer/turbopuffer-typescript/commit/03204736f18d5966bd1b69708447dae72d607b03))
+
+
+### Chores
+
+* **ci:** upgrade `actions/github-script` ([3ba3472](https://github.com/turbopuffer/turbopuffer-typescript/commit/3ba34728fd85a6818558669c293910d5ceb4caa8))
+* **internal:** update lock file ([2dd4d34](https://github.com/turbopuffer/turbopuffer-typescript/commit/2dd4d34d078fcf9ac7d1fe7458fddf68b1fe1c77))
+* regenerate custom types ([5544f20](https://github.com/turbopuffer/turbopuffer-typescript/commit/5544f203576e0fd338f8e0f6e27fa86f75025619))
+
+## 1.12.0 (2026-01-21)
+
+Full Changelog: [v1.11.0...v1.12.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.11.0...v1.12.0)
+
+### Features
+
+* Apigen integration ([6386097](https://github.com/turbopuffer/turbopuffer-typescript/commit/6386097a4d1d6c6abc27e453de21463f406609b2))
+
+## 1.11.0 (2026-01-20)
+
+Full Changelog: [v1.10.1...v1.11.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.10.1...v1.11.0)
+
+### Features
+
+* [TPUF-1097] tpuf: return failed IDs for conditional writes ([787db7f](https://github.com/turbopuffer/turbopuffer-typescript/commit/787db7fa308949c9b260f35316339917237f1dae))
+
+
+### Chores
+
+* configure new SDK language ([746b7d0](https://github.com/turbopuffer/turbopuffer-typescript/commit/746b7d09ba81b7fd59e0a5de8f3d7562214bfae4))
+* fix typo in descriptions ([056c951](https://github.com/turbopuffer/turbopuffer-typescript/commit/056c9518f2ef106f87550ead2fc85819de7d13ee))
+* **internal:** codegen related update ([698b173](https://github.com/turbopuffer/turbopuffer-typescript/commit/698b17350ba15b628f48e2ad725459718995cb5f))
+* **internal:** codegen related update ([6d6ca04](https://github.com/turbopuffer/turbopuffer-typescript/commit/6d6ca04bb0cbb29b9c46665e600b5a011a33bec3))
+* **internal:** configure MCP Server hosting ([bf0e8e5](https://github.com/turbopuffer/turbopuffer-typescript/commit/bf0e8e53a4c212b5481c806d92a5478487585712))
+* **internal:** update `actions/checkout` version ([d0dcfeb](https://github.com/turbopuffer/turbopuffer-typescript/commit/d0dcfeb8f56c72a867d5539edc8ca612192c9ddb))
+* **internal:** upgrade babel, qs, js-yaml ([7905dc0](https://github.com/turbopuffer/turbopuffer-typescript/commit/7905dc091437211485133f6b07765b4c456a9d61))
+
+## 1.10.1 (2026-01-09)
+
+Full Changelog: [v1.10.0...v1.10.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.10.0...v1.10.1)
+
+### Chores
+
+* break long lines in snippets into multiline ([195ba1a](https://github.com/turbopuffer/turbopuffer-typescript/commit/195ba1a26da70cf503b661f785a7dd35b3ca193c))
+* **internal:** codegen related update ([2ff74ae](https://github.com/turbopuffer/turbopuffer-typescript/commit/2ff74aeb19e10b8f2d3de1eb63539c20a9de2209))
+
+## 1.10.0 (2025-12-08)
+
+Full Changelog: [v1.9.1...v1.10.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.9.1...v1.10.0)
+
+### Features
+
+* add word_v3 to the spec ([26740b3](https://github.com/turbopuffer/turbopuffer-typescript/commit/26740b3a0d32c22e4686433e0c5726fc896a3c7f))
+* disable compression by default ([#153](https://github.com/turbopuffer/turbopuffer-typescript/issues/153)) ([89f5d40](https://github.com/turbopuffer/turbopuffer-typescript/commit/89f5d406dadcfb6d2f483e0c57414afa4de21c42))
+* make word_v3 the default tokenizer ([#154](https://github.com/turbopuffer/turbopuffer-typescript/issues/154)) ([892913a](https://github.com/turbopuffer/turbopuffer-typescript/commit/892913a0a6ef75e2bcdc03f49ce148a4f58983a7))
+
+
+### Bug Fixes
+
+* **mcp:** correct code tool API endpoint ([1701b95](https://github.com/turbopuffer/turbopuffer-typescript/commit/1701b95571ac932f69f95120c6418944953683fd))
+* **mcp:** return correct lines on typescript errors ([ccc47d7](https://github.com/turbopuffer/turbopuffer-typescript/commit/ccc47d7e85fe9978b7417ada5c1175454d5642b3))
+
+
+### Chores
+
+* codegen updates ([6fc981e](https://github.com/turbopuffer/turbopuffer-typescript/commit/6fc981ebe44b4c463bfddc068541baaf4c7b428f))
+* **internal:** codegen related update ([9290e4b](https://github.com/turbopuffer/turbopuffer-typescript/commit/9290e4b7492dc28dcac8b34cc3d54373bd460597))
+* **internal:** codegen related update ([86ec03c](https://github.com/turbopuffer/turbopuffer-typescript/commit/86ec03c900b817d6226872b8edc6f1c40a848ddb))
+
+## 1.9.1 (2025-12-02)
+
+Full Changelog: [v1.9.0...v1.9.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.9.0...v1.9.1)
+
+### Documentation
+
+* add cross-region copy_from_namespace to write API docs ([7edf5ac](https://github.com/turbopuffer/turbopuffer-typescript/commit/7edf5acddeffa094a58234709047d597d0c28bf9))
+
+## 1.9.0 (2025-12-02)
+
+Full Changelog: [v1.8.0...v1.9.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.8.0...v1.9.0)
+
+### Features
+
+* sdks: add &lt;patch|delete&gt;_by_filter_allow_partial options ([21ecf04](https://github.com/turbopuffer/turbopuffer-typescript/commit/21ecf04cd0111d532f13a41bd1becd11ca35047e))
+
+
+### Chores
+
+* **client:** fix logger property type ([d2c8c17](https://github.com/turbopuffer/turbopuffer-typescript/commit/d2c8c1704e6dbf2d627e34212f5bb8cf5d9eedb8))
+* **internal:** upgrade eslint ([f425da8](https://github.com/turbopuffer/turbopuffer-typescript/commit/f425da86d8f8ff5a96e9ca7ce4c665de3c7c98f4))
+
+## 1.8.0 (2025-11-25)
+
+Full Changelog: [v1.7.0...v1.8.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.7.0...v1.8.0)
+
+### Features
+
+* site: add ascii_folding to docs and SDKs ([e06dffd](https://github.com/turbopuffer/turbopuffer-typescript/commit/e06dffd44abcb90c6a29c137c4d84778c45b04ab))
+
+## 1.7.0 (2025-11-17)
+
+Full Changelog: [v1.6.0...v1.7.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.6.0...v1.7.0)
+
+### Features
+
+* Allow for a CMEK key to be specified in copy_from_namespace ([99ea095](https://github.com/turbopuffer/turbopuffer-typescript/commit/99ea095e5ecfd151191d7c870db5daa7501fb822))
+* spec: add support for cross-org CFN to SDKs ([ed7f236](https://github.com/turbopuffer/turbopuffer-typescript/commit/ed7f2369e3f0ec1b454768a5b6291a47550a7320))
+
+## 1.6.0 (2025-11-06)
+
+Full Changelog: [v1.5.1...v1.6.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.5.1...v1.6.0)
+
+### Features
+
+* Add vector attribute schema to metadata endpoint ([cf43266](https://github.com/turbopuffer/turbopuffer-typescript/commit/cf4326678d8199d653723e892cdf67c9c6364a74))
+* Make `type` required on `AttributeSchemaConfig` ([b00d23e](https://github.com/turbopuffer/turbopuffer-typescript/commit/b00d23ef23733e5eeb9db32f0a03772ae4f27cf2))
+* openapi: Fix stainless warnings ([6cba3a6](https://github.com/turbopuffer/turbopuffer-typescript/commit/6cba3a6c75574a9a8ec1129e425a3e1250d20216))
+* openapi: name variants of `NamespaceMetadata.index` ([42f18a6](https://github.com/turbopuffer/turbopuffer-typescript/commit/42f18a65d8994a5e5c43fd5d6b83ba1213307c2e))
+
+## 1.5.1 (2025-10-27)
+
+Full Changelog: [v1.5.0...v1.5.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.5.0...v1.5.1)
+
+## 1.5.0 (2025-10-22)
+
+Full Changelog: [v1.3.0...v1.5.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.3.0...v1.5.0)
+
+### Features
+
+* Metadata endpoint updates (e.g. to track indexing progress) ([6ae8eb1](https://github.com/turbopuffer/turbopuffer-typescript/commit/6ae8eb1d13ce92db3bcfe40a8f05e1a39190a8b1))
+* required for patch_by_filter :facepalm: ([6347ce5](https://github.com/turbopuffer/turbopuffer-typescript/commit/6347ce58d4789d27a226abbd02207644e8b84e1c))
+* stainless: add patch_by_filter ([f3246b5](https://github.com/turbopuffer/turbopuffer-typescript/commit/f3246b50419e0cee301650785e94db57b403ede0))
+
+## 1.3.0 (2025-10-14)
+
+Full Changelog: [v1.2.1...v1.3.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.2.1...v1.3.0)
+
+### Features
+
+* Add float, []float and []bool to the list of valid types in the OpenAPI spec. ([fa677ce](https://github.com/turbopuffer/turbopuffer-typescript/commit/fa677ce4bf2bdb1512497e0642832cd70559d542))
+* Promote disable_backpressure to first-class Write property ([b5c7f9e](https://github.com/turbopuffer/turbopuffer-typescript/commit/b5c7f9e5778634ea9f7f52ba4f6f92318a39eec6))
+
+## 1.2.1 (2025-10-06)
+
+Full Changelog: [v1.2.0...v1.2.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.2.0...v1.2.1)
+
+### Performance Improvements
+
+* faster formatting ([744011e](https://github.com/turbopuffer/turbopuffer-typescript/commit/744011e38559d36ca46687730b37e1b0810a4071))
+
+
+### Chores
+
+* **internal:** codegen related update ([8b0246c](https://github.com/turbopuffer/turbopuffer-typescript/commit/8b0246ccf602990bd407f991dbc7c51ca7bcb5aa))
+* **internal:** fix incremental formatting in some cases ([c7e5e81](https://github.com/turbopuffer/turbopuffer-typescript/commit/c7e5e81633d3aeefc1523c95115a08f900956e0a))
+* **internal:** ignore .eslintcache ([d99cfbb](https://github.com/turbopuffer/turbopuffer-typescript/commit/d99cfbb0e867e66343febada810a25670545a38e))
+* **internal:** remove .eslintcache ([bede60b](https://github.com/turbopuffer/turbopuffer-typescript/commit/bede60b741eed66858ffd4b50bedf1697890333a))
+* **internal:** remove deprecated `compilerOptions.baseUrl` from tsconfig.json ([009e59e](https://github.com/turbopuffer/turbopuffer-typescript/commit/009e59e046628342e7c2a49866f5ebca533a2d21))
+* **internal:** use npm pack for build uploads ([631d898](https://github.com/turbopuffer/turbopuffer-typescript/commit/631d8987f2b6bd194a80769796e64472743856f3))
+* **jsdoc:** fix [@link](https://github.com/link) annotations to refer only to parts of the package‘s public interface ([aa93da5](https://github.com/turbopuffer/turbopuffer-typescript/commit/aa93da5c7c9c9ace004049fa870a29baea782e50))
+
+
+### Documentation
+
+* hint_cache_warm also update header and openapi ([27a2904](https://github.com/turbopuffer/turbopuffer-typescript/commit/27a2904bfe9b045a77eac233f08e650729461af0))
+
+## 1.2.0 (2025-09-19)
+
+Full Changelog: [v1.1.1...v1.2.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.1.1...v1.2.0)
+
+### Features
+
+* add WithParams variant to BM25 and ContainsAllTokens ([dba6675](https://github.com/turbopuffer/turbopuffer-typescript/commit/dba66753c4462c07de09118e3f99fafb56003791))
+
+
+### Chores
+
+* do not install brew dependencies in ./scripts/bootstrap by default ([0a8ce93](https://github.com/turbopuffer/turbopuffer-typescript/commit/0a8ce93cd8e0aa94ebff7bdcc2165f3e2c8182cc))
+
+## 1.1.1 (2025-09-11)
+
+Full Changelog: [v1.1.0...v1.1.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.1.0...v1.1.1)
+
+### Bug Fixes
+
+* coerce nullable values to undefined ([4e0bb4e](https://github.com/turbopuffer/turbopuffer-typescript/commit/4e0bb4e783a3ced1c7fdbdd95758a632acaf2bd8))
+
+
+### Chores
+
+* ci build action ([4e77a58](https://github.com/turbopuffer/turbopuffer-typescript/commit/4e77a587fda757777a78a553fd77917f97d86408))
+
+## 1.1.0 (2025-09-09)
+
+Full Changelog: [v1.0.0...v1.1.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v1.0.0...v1.1.0)
+
+### Features
+
+* spec: add dedicated type for AggregationGroup response ([edea304](https://github.com/turbopuffer/turbopuffer-typescript/commit/edea3045c782cc56d8356f1b8dc9d0d547e21241))
+* tpuf: add include_ground_truth option to recall endpoint ([f31e1b1](https://github.com/turbopuffer/turbopuffer-typescript/commit/f31e1b1843c26673db9af34bff1163c7f357bac7))
+
+
+### Chores
+
+* **internal:** update global Error reference ([5323be8](https://github.com/turbopuffer/turbopuffer-typescript/commit/5323be8e0d8caa9c474cf18c794bb8ffaeb345aa))
+
+## 1.0.0 (2025-08-28)
+
+Full Changelog: [v0.10.18...v1.0.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.18...v1.0.0)
+
+### Features
+
+* Make word_v2 the default FTS tokenizer ([b428340](https://github.com/turbopuffer/turbopuffer-typescript/commit/b428340858fdaceada3dccb3f6367e58ab0b726c))
+* **mcp:** add code execution tool ([329ad4b](https://github.com/turbopuffer/turbopuffer-typescript/commit/329ad4b3ee72e893b8ecef3bc0d40a59313a567c))
+
+
+### Chores
+
+* add package to package.json ([f61070d](https://github.com/turbopuffer/turbopuffer-typescript/commit/f61070dd9d6194ba1728762295e78ca0dfa1bbf7))
+* **client:** qualify global Blob ([e6d9204](https://github.com/turbopuffer/turbopuffer-typescript/commit/e6d92042c9b6fb36cfa6bbed36c79b14043068b8))
+* update CI script ([a265648](https://github.com/turbopuffer/turbopuffer-typescript/commit/a265648b3542e21518edba546690bf3c79c77908))
+
+## 0.10.18 (2025-08-18)
+
+Full Changelog: [v0.10.17...v0.10.18](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.17...v0.10.18)
+
+### Bug Fixes
+
+* **api:** add support for `group_by` query parameter ([901d005](https://github.com/turbopuffer/turbopuffer-typescript/commit/901d005dd3960ccfed1aba4d5424fab2f144f566))
+* remove 200 error code for hint_cache_warm API call (always 202 now) ([10306e5](https://github.com/turbopuffer/turbopuffer-typescript/commit/10306e523224d4ec99d7f877f2c5397a36291d36))
+
+
+### Chores
+
+* **deps:** update dependency @types/node to v20.17.58 ([ad69dfc](https://github.com/turbopuffer/turbopuffer-typescript/commit/ad69dfc3fdcfd2050359541aae1ff21c206b611a))
+* **internal:** codegen related update ([a5efca1](https://github.com/turbopuffer/turbopuffer-typescript/commit/a5efca18487b8fbf0205e965f96c8372be27f9b8))
+* **internal:** formatting change ([5199be7](https://github.com/turbopuffer/turbopuffer-typescript/commit/5199be7cc597b76daf69b6f5d6a3af76a72eb1b7))
+
+## 0.10.17 (2025-08-11)
+
+Full Changelog: [v0.10.16...v0.10.17](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.16...v0.10.17)
+
+### Chores
+
+* **internal:** update comment in script ([f1a172f](https://github.com/turbopuffer/turbopuffer-typescript/commit/f1a172f7c24a2b3b5707b904631225a25e971049))
+* update @stainless-api/prism-cli to v5.15.0 ([a0a42c7](https://github.com/turbopuffer/turbopuffer-typescript/commit/a0a42c7fcdc9105c6208f2584c60edbcc8e6eda4))
+
+## 0.10.16 (2025-08-08)
+
+Full Changelog: [v0.10.15...v0.10.16](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.15...v0.10.16)
+
+### Bug Fixes
+
+* use strict types for explainQuery ([#134](https://github.com/turbopuffer/turbopuffer-typescript/issues/134)) ([dcf99c4](https://github.com/turbopuffer/turbopuffer-typescript/commit/dcf99c4b2e23701ab8f195e68bcc0141214ded45))
+
+
+### Chores
+
+* **internal:** move publish config ([7c29d05](https://github.com/turbopuffer/turbopuffer-typescript/commit/7c29d05940788778a7d0d73404cb2548f06d6227))
+
+## 0.10.15 (2025-07-30)
+
+Full Changelog: [v0.10.14...v0.10.15](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.14...v0.10.15)
+
+### Bug Fixes
+
+* **api:** api update ([1926803](https://github.com/turbopuffer/turbopuffer-typescript/commit/19268037dca0a7ba1e0a0adaedbde2dfc7b8c178))
+* **api:** api update ([a9eda3e](https://github.com/turbopuffer/turbopuffer-typescript/commit/a9eda3edd2e4797f6377414da1f08786abd937df))
+
+## 0.10.14 (2025-07-29)
+
+Full Changelog: [v0.10.13...v0.10.14](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.13...v0.10.14)
+
+### Bug Fixes
+
+* **api:** api update ([23c008e](https://github.com/turbopuffer/turbopuffer-typescript/commit/23c008e9d4ebeb827ea87e53acaea8053398cc0d))
+* **api:** api update ([c385765](https://github.com/turbopuffer/turbopuffer-typescript/commit/c385765f65b065b2a3a5c4b0c59d390f80591074))
+
+
+### Chores
+
+* **internal:** remove redundant imports config ([f754eb2](https://github.com/turbopuffer/turbopuffer-typescript/commit/f754eb20a2005679ce4f38a5832ec6c414b42065))
+
+## 0.10.13 (2025-07-29)
+
+Full Changelog: [v0.10.12...v0.10.13](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.12...v0.10.13)
+
+### Bug Fixes
+
+* add support for regex filter ([81dc485](https://github.com/turbopuffer/turbopuffer-typescript/commit/81dc485e752164313a5709242d9072282106caae))
+* **api:** api update ([70dced2](https://github.com/turbopuffer/turbopuffer-typescript/commit/70dced29ef5d59cf753c12b00227f1ff473c715a))
+* **api:** api update ([e34e24c](https://github.com/turbopuffer/turbopuffer-typescript/commit/e34e24ca2dfde03826070404e76742bddc66ffd7))
+
+## 0.10.12 (2025-07-28)
+
+Full Changelog: [v0.10.11...v0.10.12](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.11...v0.10.12)
+
+### Bug Fixes
+
+* **api:** api update ([f74f49a](https://github.com/turbopuffer/turbopuffer-typescript/commit/f74f49a03924ccec27046a3702f1370fcc262501))
+* more precise types for filters that take arrays ([9273d74](https://github.com/turbopuffer/turbopuffer-typescript/commit/9273d74e84440781458bbccb8bb7abcd21411e10))
+
+## 0.10.11 (2025-07-26)
+
+Full Changelog: [v0.10.10...v0.10.11](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.10...v0.10.11)
+
+### Bug Fixes
+
+* run smoke tests in all supported non-Node runtimes ([#125](https://github.com/turbopuffer/turbopuffer-typescript/issues/125)) ([8eedc82](https://github.com/turbopuffer/turbopuffer-typescript/commit/8eedc82a94e6f9c88f039f0155ae605145185ec9))
+
+## 0.10.10 (2025-07-23)
+
+Full Changelog: [v0.10.9...v0.10.10](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.9...v0.10.10)
+
+### Bug Fixes
+
+* use conditional imports rather than dynamic imports ([#123](https://github.com/turbopuffer/turbopuffer-typescript/issues/123)) ([74390d9](https://github.com/turbopuffer/turbopuffer-typescript/commit/74390d958137f7d74e6558d7ac3687a3c7b4927e))
+
+## 0.10.9 (2025-07-18)
+
+Full Changelog: [v0.10.8...v0.10.9](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.8...v0.10.9)
+
+### Chores
+
+* **ts:** reorder package.json imports ([98dc585](https://github.com/turbopuffer/turbopuffer-typescript/commit/98dc585d783ec0c1926918475a6e6e3676cba20d))
+
+## 0.10.8 (2025-07-13)
+
+Full Changelog: [v0.10.7...v0.10.8](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.7...v0.10.8)
+
+### Features
+
+* **mcp:** support filtering tool results by a jq expression ([f7ec555](https://github.com/turbopuffer/turbopuffer-typescript/commit/f7ec5555d938891009f2d044503af2d87044c808))
+
+
+### Build System
+
+* improve smoke test ([#118](https://github.com/turbopuffer/turbopuffer-typescript/issues/118)) ([8cf9096](https://github.com/turbopuffer/turbopuffer-typescript/commit/8cf9096ad8303a7337f405e1a863c425075ad150))
+
+## 0.10.7 (2025-07-10)
+
+Full Changelog: [v0.10.6...v0.10.7](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.6...v0.10.7)
+
+### Bug Fixes
+
+* add test for new metadata endpoint ([d95e8f1](https://github.com/turbopuffer/turbopuffer-typescript/commit/d95e8f1973f87dcc23840ca7e97dd180275bf407))
+* **api:** api update ([f6a1a5d](https://github.com/turbopuffer/turbopuffer-typescript/commit/f6a1a5d9e49b46cb7c19291b7387cae3b3ae7896))
+* **api:** api update ([c8f4249](https://github.com/turbopuffer/turbopuffer-typescript/commit/c8f42499e2b165d9f3682215ff62506874b13fd3))
+* prevent vite from pre-bundling undici ([#112](https://github.com/turbopuffer/turbopuffer-typescript/issues/112)) ([5c114aa](https://github.com/turbopuffer/turbopuffer-typescript/commit/5c114aaf78349305d6555f349e8f7d317ada2c49))
+* restore async-ness of buildRequest ([9c7b2b1](https://github.com/turbopuffer/turbopuffer-typescript/commit/9c7b2b16fb41156097d1fad4ade7b06f2457adc1))
+* use namespace-resource style calls in tests ([e89f0c2](https://github.com/turbopuffer/turbopuffer-typescript/commit/e89f0c22a7afa459640efa48125b80d071dcfadb))
+
+
+### Chores
+
+* make some internal functions async ([2e07fd4](https://github.com/turbopuffer/turbopuffer-typescript/commit/2e07fd48829278f3a2043f5d1834c741f037ce13))
+
+## 0.10.6 (2025-07-09)
+
+Full Changelog: [v0.10.5...v0.10.6](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.5...v0.10.6)
+
+### Bug Fixes
+
+* **api:** add support for [Not]Contains[Any] operators ([#110](https://github.com/turbopuffer/turbopuffer-typescript/issues/110)) ([b6e9941](https://github.com/turbopuffer/turbopuffer-typescript/commit/b6e994104dd3a86f7105cb81702398a54b2c36c4))
+* **api:** api update ([c88ea45](https://github.com/turbopuffer/turbopuffer-typescript/commit/c88ea45e1265ae87020f405e99a8d1d48a3d7a85))
+* don't require region unless baseUrl contains {region} placeholder ([#111](https://github.com/turbopuffer/turbopuffer-typescript/issues/111)) ([5fba8ce](https://github.com/turbopuffer/turbopuffer-typescript/commit/5fba8cee002fbd9870eeb6feda041f8e83e40972))
+
+
+### Chores
+
+* add docs to RequestOptions type ([981f436](https://github.com/turbopuffer/turbopuffer-typescript/commit/981f436ab628c8ef6d95f635142d0c460e0b17fd))
+
+## 0.10.5 (2025-07-01)
+
+Full Changelog: [v0.10.4...v0.10.5](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.4...v0.10.5)
+
+### Bug Fixes
+
+* add support for `$ref_new` expressions ([#106](https://github.com/turbopuffer/turbopuffer-typescript/issues/106)) ([46ef836](https://github.com/turbopuffer/turbopuffer-typescript/commit/46ef836c1ee103f740e4d872c5d2da3b0f617963))
+* allow options.fetch to be a promise ([87ac00a](https://github.com/turbopuffer/turbopuffer-typescript/commit/87ac00a5ea1c2d6b1928831cbf297cca04ede35f))
+* **api:** api update ([f1f4eb4](https://github.com/turbopuffer/turbopuffer-typescript/commit/f1f4eb4f64d708ef08f3d134dd56b6d99133f9ed))
+* **api:** api update ([b013d65](https://github.com/turbopuffer/turbopuffer-typescript/commit/b013d65fe51f93ef80cb397ae6d824b59555bff7))
+* **ci:** release-doctor — report correct token name ([39f10b3](https://github.com/turbopuffer/turbopuffer-typescript/commit/39f10b33a6a8fb0974cfffcb70338d2628549ae1))
+* **client:** explicitly copy fetch in withOptions ([6b8700b](https://github.com/turbopuffer/turbopuffer-typescript/commit/6b8700bf07f244ffa9de4733aa41851a6d407fe3))
+* **client:** get fetchOptions type more reliably ([39d37fa](https://github.com/turbopuffer/turbopuffer-typescript/commit/39d37fa560f3888dd8778e167b23f26e54c241cc))
+* correct name of stainless bot ([#107](https://github.com/turbopuffer/turbopuffer-typescript/issues/107)) ([de84ddd](https://github.com/turbopuffer/turbopuffer-typescript/commit/de84ddd5c1194086d640d3e6a05148d2c9776712))
+* **README:** improve headline example ([#105](https://github.com/turbopuffer/turbopuffer-typescript/issues/105)) ([a0cff47](https://github.com/turbopuffer/turbopuffer-typescript/commit/a0cff473d5dd08867407841007a64eb36dd72166))
+* strict types for write conditions ([#104](https://github.com/turbopuffer/turbopuffer-typescript/issues/104)) ([c8654d0](https://github.com/turbopuffer/turbopuffer-typescript/commit/c8654d09ba3865fec9cc707fcfc67d3e3e2e21f5))
+
+
+### Chores
+
+* **ci:** only run for pushes and fork pull requests ([50a8869](https://github.com/turbopuffer/turbopuffer-typescript/commit/50a88690e1fd42d53fb6d5cae4f7cd68c9ec7a64))
+* **client:** improve path param validation ([edf77f1](https://github.com/turbopuffer/turbopuffer-typescript/commit/edf77f1d51bf752b1a404a56d53add6f2f205b64))
+
+
+### Refactors
+
+* **types:** replace Record with mapped types ([a1d14dc](https://github.com/turbopuffer/turbopuffer-typescript/commit/a1d14dcfb153ba9512c64e112cff5cf4fc7bfa7c))
+
+## 0.10.4 (2025-06-20)
+
+Full Changelog: [v0.10.3...v0.10.4](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.3...v0.10.4)
+
+### Features
+
+* **api:** introduce dedicated Query model ([111f45a](https://github.com/turbopuffer/turbopuffer-typescript/commit/111f45a7797a502b72c25051ac0a0ad4bfc3ad18))
+
+
+### Bug Fixes
+
+* strict types for new QueryParam type ([55a3785](https://github.com/turbopuffer/turbopuffer-typescript/commit/55a378558cc1f63a6a2ef0093c732d46bb8371a7))
+
+
+### Chores
+
+* **readme:** update badges ([650ce70](https://github.com/turbopuffer/turbopuffer-typescript/commit/650ce70edab85b7c4f8aefcb30fff73d5f296f25))
+* **readme:** use better example snippet for undocumented params ([2e8a0bf](https://github.com/turbopuffer/turbopuffer-typescript/commit/2e8a0bfe6a1b1c1a3daa3f05313d6439eab06d98))
+
+## 0.10.3 (2025-06-19)
+
+Full Changelog: [v0.10.2...v0.10.3](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.2...v0.10.3)
+
+### Features
+
+* **client:** add support for endpoint-specific base URLs ([277ee87](https://github.com/turbopuffer/turbopuffer-typescript/commit/277ee87aab93f780b16c3886927877af04288837))
+
+
+### Bug Fixes
+
+* publish script — handle NPM errors correctly ([0e1670e](https://github.com/turbopuffer/turbopuffer-typescript/commit/0e1670edb84ebb3896c381fd44c32917262673de))
+* strict types for async query and multi_query APIs ([#101](https://github.com/turbopuffer/turbopuffer-typescript/issues/101)) ([d5ed3b4](https://github.com/turbopuffer/turbopuffer-typescript/commit/d5ed3b429a592db2a1e9a6f6f6a70568b305816a))
+
+
+### Chores
+
+* **ci:** enable for pull requests ([83600c3](https://github.com/turbopuffer/turbopuffer-typescript/commit/83600c30fcc15d10ce2083af1c85220a7943bed2))
+* **client:** refactor imports ([f04378d](https://github.com/turbopuffer/turbopuffer-typescript/commit/f04378dde83d1b3c102c5b3b0f06da0f539340c6))
+* **internal:** codegen related update ([52ec226](https://github.com/turbopuffer/turbopuffer-typescript/commit/52ec2267524fdb7533794f0e48d60d396af24cfe))
+
+## 0.10.2 (2025-06-13)
+
+Full Changelog: [v0.10.1...v0.10.2](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.1...v0.10.2)
+
+### Bug Fixes
+
+* convert to Undici 6-compatible headers object ([#98](https://github.com/turbopuffer/turbopuffer-typescript/issues/98)) ([caa7bd6](https://github.com/turbopuffer/turbopuffer-typescript/commit/caa7bd6d057b1a22dd8d87cd445df75e1247ecaf))
+
+## 0.10.1 (2025-06-11)
+
+Full Changelog: [v0.10.0...v0.10.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.0...v0.10.1)
+
+### Features
+
+* **api:** Add support for new `multiQuery` api
+
+
+### Bug Fixes
+
+* correct documentation for client_response_ms perf metric ([#96](https://github.com/turbopuffer/turbopuffer-typescript/issues/96)) ([95874e0](https://github.com/turbopuffer/turbopuffer-typescript/commit/95874e041bb7a8565855c102cefaf5e7d105fa61))
+* **README:** align documentation link with other SDKs ([b01efe5](https://github.com/turbopuffer/turbopuffer-typescript/commit/b01efe53bf67b484d203e1496bb961cc677513db))
+* **README:** install from npm ([97755b3](https://github.com/turbopuffer/turbopuffer-typescript/commit/97755b3c8457420a139550d722e38686c13af658))
+
+## 0.10.0 (2025-06-09)
+
+Full Changelog: [v0.10.0-alpha.11...v0.10.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.0-alpha.11...v0.10.0)
+
+### Bug Fixes
+
+* restore `File` import in uploads.test.ts ([9b08f90](https://github.com/turbopuffer/turbopuffer-typescript/commit/9b08f9068e41c7f5b747e804b77910f7d4203c60))
+
+
+### Chores
+
+* avoid type error in certain environments ([0e834a6](https://github.com/turbopuffer/turbopuffer-typescript/commit/0e834a62eb77424c85dbc69062caaab318a97de8))
+* **docs:** use top-level-await in example snippets ([29932c6](https://github.com/turbopuffer/turbopuffer-typescript/commit/29932c60701d727bc86b1126bc726ed7c8792dab))
+* **internal:** fix readablestream types in node 20 ([4c8007f](https://github.com/turbopuffer/turbopuffer-typescript/commit/4c8007fd97a6254ef0b5afe882c1608ef4e993fd))
+* **internal:** version bump ([e6cdb28](https://github.com/turbopuffer/turbopuffer-typescript/commit/e6cdb28e070d5d2a21ad624ef21292a5ae887f53))
+* **internal:** version bump ([91da5bc](https://github.com/turbopuffer/turbopuffer-typescript/commit/91da5bc9aea92110a8036225163e3fd89918b3f2))
+* **internal:** version bump ([27063a3](https://github.com/turbopuffer/turbopuffer-typescript/commit/27063a35f03cd8216ac8bdc9429849672aee3896))
+* **internal:** version bump ([f458b0e](https://github.com/turbopuffer/turbopuffer-typescript/commit/f458b0ecd3ca202c81ab8ba525b843aefd2b9a74))
+
+## 0.10.0-alpha.11 (2025-06-09)
+
+Full Changelog: [v0.10.0-alpha.10...v0.10.0-alpha.11](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.0-alpha.10...v0.10.0-alpha.11)
+
+### Features
+
+* add `connectTimeout` and `idleTimeout` options ([#92](https://github.com/turbopuffer/turbopuffer-typescript/issues/92)) ([2eb22fd](https://github.com/turbopuffer/turbopuffer-typescript/commit/2eb22fd019fde4478acc1e7269d34384ea6133df))
+* restore exists() method ([aab677a](https://github.com/turbopuffer/turbopuffer-typescript/commit/aab677a3699419a9ad9af64b111cc188b0c38624))
+
+
+### Bug Fixes
+
+* fix WARNING syntax in README ([e4bd9fb](https://github.com/turbopuffer/turbopuffer-typescript/commit/e4bd9fb03505564981bd629f04c484d9f4259880))
+* formatting ([4ad681b](https://github.com/turbopuffer/turbopuffer-typescript/commit/4ad681bcf9d07978a9227074382f52c61016ae3b))
+
+## 0.10.0-alpha.10 (2025-06-08)
+
+Full Changelog: [v0.10.0-alpha.9...v0.10.0-alpha.10](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.0-alpha.9...v0.10.0-alpha.10)
+
+### Bug Fixes
+
+* use dynamic imports, not require ([#90](https://github.com/turbopuffer/turbopuffer-typescript/issues/90)) ([7740215](https://github.com/turbopuffer/turbopuffer-typescript/commit/7740215964b4a627371255ddc1487a0476e217bf))
+
+## 0.10.0-alpha.9 (2025-06-08)
+
+Full Changelog: [v0.10.0-alpha.8...v0.10.0-alpha.9](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.0-alpha.8...v0.10.0-alpha.9)
+
+### Features
+
+* use faster undici request API in Node environments ([#88](https://github.com/turbopuffer/turbopuffer-typescript/issues/88)) ([dd2c13c](https://github.com/turbopuffer/turbopuffer-typescript/commit/dd2c13c41283ca21b4cba1dcf43e5bbd6070e23f))
+
+## 0.10.0-alpha.8 (2025-06-06)
+
+Full Changelog: [v0.10.0-alpha.7...v0.10.0-alpha.8](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.0-alpha.7...v0.10.0-alpha.8)
+
+### Features
+
+* **api:** api update ([c2f5189](https://github.com/turbopuffer/turbopuffer-typescript/commit/c2f5189d25587270219feadbc3569f323c678acf))
+
+
+### Bug Fixes
+
+* **guide:** update UPGRADING.md ([c0c3e36](https://github.com/turbopuffer/turbopuffer-typescript/commit/c0c3e36962fb8f284b4bdd8fde17a39d05aefee8))
+* upgrade to latest supplemental codegen ([dee0c3a](https://github.com/turbopuffer/turbopuffer-typescript/commit/dee0c3a0654c3c5947d3f3617c07e0b1cb3ba395))
+
+
+### Chores
+
+* **internal:** codegen related update ([bfa9d8e](https://github.com/turbopuffer/turbopuffer-typescript/commit/bfa9d8ee7a0f800aa26de5f9c391a30dc79144ca))
+* **internal:** codegen related update ([c73299c](https://github.com/turbopuffer/turbopuffer-typescript/commit/c73299c4a31efa0c02b898be135f23d6623e8514))
+* **internal:** version bump ([5ecabb2](https://github.com/turbopuffer/turbopuffer-typescript/commit/5ecabb2e3ef2ab4803f5ac27477190d26a8b9860))
+
+## 0.10.0-alpha.7 (2025-06-03)
+
+Full Changelog: [v0.10.0-alpha.6...v0.10.0-alpha.7](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.0-alpha.6...v0.10.0-alpha.7)
+
+### Features
+
+* **api:** api update ([0ecd67c](https://github.com/turbopuffer/turbopuffer-typescript/commit/0ecd67c0ccd543e1353ca14a8ef49f46c8886eb2))
+
+
+### Bug Fixes
+
+* **upgrading:** remove some breaking changes that have been backed out ([6e5abef](https://github.com/turbopuffer/turbopuffer-typescript/commit/6e5abefebf4808e7417d9ce52d092817e993fa5b))
+
+
+### Chores
+
+* adjust eslint.config.mjs ignore pattern ([94b0741](https://github.com/turbopuffer/turbopuffer-typescript/commit/94b0741f5cbf2395cf7430a53bd9eb1bdbf0d298))
+* **deps:** bump eslint-plugin-prettier ([dc13a19](https://github.com/turbopuffer/turbopuffer-typescript/commit/dc13a193999e16861841c79b153853227682f192))
+* **internal:** update jest config ([1c38732](https://github.com/turbopuffer/turbopuffer-typescript/commit/1c3873212e0006c7f9b403a7dd190c40995359ec))
+
+## 0.10.0-alpha.6 (2025-05-30)
+
+Full Changelog: [v0.10.0-alpha.5...v0.10.0-alpha.6](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.0-alpha.5...v0.10.0-alpha.6)
+
+### Documentation
+
+* **pagination:** improve naming ([4ee6692](https://github.com/turbopuffer/turbopuffer-typescript/commit/4ee66929343332941a13c589d243bfe3118c189f))
+
+## 0.10.0-alpha.5 (2025-05-30)
+
+Full Changelog: [v0.10.0-alpha.4...v0.10.0-alpha.5](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.0-alpha.4...v0.10.0-alpha.5)
+
+### Features
+
+* **api:** api update ([37d6d14](https://github.com/turbopuffer/turbopuffer-typescript/commit/37d6d14ece940330e346f82047b73c285577d0dc))
+
+## 0.10.0-alpha.4 (2025-05-30)
+
+Full Changelog: [v0.10.0-alpha.3...v0.10.0-alpha.4](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.0-alpha.3...v0.10.0-alpha.4)
+
+### Features
+
+* **docs:** add UPGRADING.md ([1bb8284](https://github.com/turbopuffer/turbopuffer-typescript/commit/1bb8284bdce4b4a3aa80f9b4734761865f837e6b))
+
+
+### Bug Fixes
+
+* compat with more runtimes ([bd6f27e](https://github.com/turbopuffer/turbopuffer-typescript/commit/bd6f27ec98112c91bab8e25226b29110b106f579))
+
+## 0.10.0-alpha.3 (2025-05-29)
+
+Full Changelog: [v0.10.0-alpha.2...v0.10.0-alpha.3](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.0-alpha.2...v0.10.0-alpha.3)
+
+### Features
+
+* **api:** api update ([4f9daca](https://github.com/turbopuffer/turbopuffer-typescript/commit/4f9daca48b35f7fff0e6729a70555e5a7f589b6e))
+* **api:** api update ([1e6c3fc](https://github.com/turbopuffer/turbopuffer-typescript/commit/1e6c3fcaffbfc2855752c1103262dd107600ffac))
+* **api:** api update ([7c7587a](https://github.com/turbopuffer/turbopuffer-typescript/commit/7c7587a0224b28c2039bc8a3d35b645dbea1bf62))
+* **api:** api update ([8754d0d](https://github.com/turbopuffer/turbopuffer-typescript/commit/8754d0dacd7dd1a4cea28e8841a3415ce244ee4e))
+* **api:** api update ([9d2a817](https://github.com/turbopuffer/turbopuffer-typescript/commit/9d2a8175e472d42b1ad7545c909e12024694bb98))
+
+## 0.10.0-alpha.2 (2025-05-29)
+
+Full Changelog: [v0.10.0-alpha.1...v0.10.0-alpha.2](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.10.0-alpha.1...v0.10.0-alpha.2)
+
+### Features
+
+* **api:** api update ([ecff88b](https://github.com/turbopuffer/turbopuffer-typescript/commit/ecff88b29412d1d717004120d68de77cda5f6985))
+
+
+### Bug Fixes
+
+* **ci:** fix publishing to npm ([668c06d](https://github.com/turbopuffer/turbopuffer-typescript/commit/668c06db3f5bab19385c4a5991e45d8d01a9638b))
+
+## 0.10.0-alpha.1 (2025-05-29)
+
+Full Changelog: [v0.9.0-alpha.1...v0.10.0-alpha.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.9.0-alpha.1...v0.10.0-alpha.1)
+
+### Features
+
+* **api:** api update ([c14cf57](https://github.com/turbopuffer/turbopuffer-typescript/commit/c14cf57c0605191d00225a79c254ba22f4a0f4af))
+* **api:** api update ([bc8fcc6](https://github.com/turbopuffer/turbopuffer-typescript/commit/bc8fcc69ff66dc7ede53c494ead64059962dbdb6))
+* **api:** api update ([dc38411](https://github.com/turbopuffer/turbopuffer-typescript/commit/dc384110dd1988c7f3c63796035002e0bfb19b47))
+* **api:** api update ([d1780e7](https://github.com/turbopuffer/turbopuffer-typescript/commit/d1780e78369667a9e1023ef15580d73a0c610cea))
+* **api:** api update ([3653631](https://github.com/turbopuffer/turbopuffer-typescript/commit/365363157c9449f7de7d9b0dc79a31b027e82e75))
+* **api:** api update ([6d1b1af](https://github.com/turbopuffer/turbopuffer-typescript/commit/6d1b1af92ba79120ade3b3315eb2827a66816a98))
+* **api:** api update ([5902b93](https://github.com/turbopuffer/turbopuffer-typescript/commit/5902b935c5268593264e9ed8eb40f461df311337))
+* **api:** api update ([388b596](https://github.com/turbopuffer/turbopuffer-typescript/commit/388b596b8544b051566debdc461e3d03f06c3e74))
+* **api:** api update ([661b823](https://github.com/turbopuffer/turbopuffer-typescript/commit/661b823c2320ecdec391fefd714512021cd7725d))
+* **api:** api update ([9cb5187](https://github.com/turbopuffer/turbopuffer-typescript/commit/9cb5187fcf0cb69561923f3ea6a7aab26a258052))
+* **api:** api update ([f05af25](https://github.com/turbopuffer/turbopuffer-typescript/commit/f05af25e33ee5c2edce54c5f6b00ea8b606cfdd3))
+* **api:** api update ([c049039](https://github.com/turbopuffer/turbopuffer-typescript/commit/c0490399b9aba67d8633804e7b988db3fa220ba0))
+* **api:** api update ([e9f7ac6](https://github.com/turbopuffer/turbopuffer-typescript/commit/e9f7ac62c76ef7830b2fb5b81f5201da5509e0e4))
+* **api:** api update ([7209546](https://github.com/turbopuffer/turbopuffer-typescript/commit/7209546472d2ae6157b8fc42060a65f4ce3c8d9c))
+* **api:** api update ([d62280f](https://github.com/turbopuffer/turbopuffer-typescript/commit/d62280fe25ccb123219a754037101dd28f8ad819))
+* **api:** api update ([1847a87](https://github.com/turbopuffer/turbopuffer-typescript/commit/1847a87ed40abdcb5dd14f58c01206859f3877ab))
+* **api:** api update ([c8a1805](https://github.com/turbopuffer/turbopuffer-typescript/commit/c8a1805f00663fe33935286acf510ac7bb83a4b4))
+* **api:** api update ([93879f6](https://github.com/turbopuffer/turbopuffer-typescript/commit/93879f6d9431d14c23bbe7b65c3cd8e775ec28b4))
+* **api:** api update ([9832850](https://github.com/turbopuffer/turbopuffer-typescript/commit/983285069f39312da239a8f32018e5942e5bd446))
+* **api:** api update ([1c41b77](https://github.com/turbopuffer/turbopuffer-typescript/commit/1c41b7737bbc1742047201265773c3f88c3f7ea6))
+* **api:** api update ([61ccb60](https://github.com/turbopuffer/turbopuffer-typescript/commit/61ccb6019e7e5c2a5b93b6f640081b1621a61275))
+* **api:** api update ([442acea](https://github.com/turbopuffer/turbopuffer-typescript/commit/442acead663efe624e2cef6d81f42558be69cb0c))
+* **api:** api update ([3e3d909](https://github.com/turbopuffer/turbopuffer-typescript/commit/3e3d9097e36d121386facfe04071abe34c5b53c4))
+* **api:** api update ([b2f5d4e](https://github.com/turbopuffer/turbopuffer-typescript/commit/b2f5d4e94f4a9853226afc4a5ab76ed9ca1a610e))
+* **api:** api update ([ebc8e3b](https://github.com/turbopuffer/turbopuffer-typescript/commit/ebc8e3b8dd6d24efb330dc979f1eecd08ff7c519))
+* **api:** api update ([e678a5b](https://github.com/turbopuffer/turbopuffer-typescript/commit/e678a5ba3e21141bbd6a2844a7622190b53462e5))
+* **api:** api update ([0d7a295](https://github.com/turbopuffer/turbopuffer-typescript/commit/0d7a2958d64744b24315be364eca781fd10f891b))
+* **api:** api update ([d955268](https://github.com/turbopuffer/turbopuffer-typescript/commit/d955268c6cca1e1d3742df4925bc2fa869e505f0))
+* **api:** api update ([665d5a0](https://github.com/turbopuffer/turbopuffer-typescript/commit/665d5a0f9478c34fd345534dd937a1fae18d408f))
+* **api:** api update ([9373822](https://github.com/turbopuffer/turbopuffer-typescript/commit/9373822dc5a77a0c3c1680ced86ef38556408c40))
+* **api:** api update ([b8f8f3f](https://github.com/turbopuffer/turbopuffer-typescript/commit/b8f8f3f47fbb418a7a10c8994af99b39c02132c4))
+* **api:** api update ([1102c27](https://github.com/turbopuffer/turbopuffer-typescript/commit/1102c2734a99b769c860caf500c52cba6a374e4d))
+* **api:** api update ([c238171](https://github.com/turbopuffer/turbopuffer-typescript/commit/c2381715a1dcf4b48354a192d5a2b8aaf9156723))
+* **api:** api update ([870888f](https://github.com/turbopuffer/turbopuffer-typescript/commit/870888f42f3003758f0f986d9c5943448884b12d))
+* **api:** api update ([2ff59c7](https://github.com/turbopuffer/turbopuffer-typescript/commit/2ff59c70cb17915b6d06220165ad5eca6716ce69))
+* **api:** api update ([527bb1f](https://github.com/turbopuffer/turbopuffer-typescript/commit/527bb1f494aee029c7899e03e55151d6ea9e63cc))
+* **api:** api update ([c6cf33a](https://github.com/turbopuffer/turbopuffer-typescript/commit/c6cf33a0f3d82e2b3b669b60fd5241a387302329))
+* **api:** api update ([5147661](https://github.com/turbopuffer/turbopuffer-typescript/commit/5147661ea2870a5a686d8d22d8341f3da6908212))
+* **api:** api update ([6d944ca](https://github.com/turbopuffer/turbopuffer-typescript/commit/6d944ca98d9aa5de7a5363c9f9f50237f1b090b7))
+* **api:** api update ([aff1090](https://github.com/turbopuffer/turbopuffer-typescript/commit/aff109057adaa30e5a117fc49fc0fb109599614b))
+* **api:** api update ([dea1df8](https://github.com/turbopuffer/turbopuffer-typescript/commit/dea1df82cbf995137cbfab915a8076ff4e4b9040))
+* **api:** api update ([20bf71d](https://github.com/turbopuffer/turbopuffer-typescript/commit/20bf71d8652874acfea925957e8fbeed265868ff))
+* **api:** api update ([9414104](https://github.com/turbopuffer/turbopuffer-typescript/commit/9414104c4f623f12eb74e29bc9d06ae0b011b8bb))
+* **api:** api update ([38fa437](https://github.com/turbopuffer/turbopuffer-typescript/commit/38fa4371b495d6378e6f6370c6e4cb27ed8257fd))
+* **api:** api update ([2021afb](https://github.com/turbopuffer/turbopuffer-typescript/commit/2021afb6b40b26b34ac2a64542e2a70fa12e4813))
+* **api:** api update ([83dc99c](https://github.com/turbopuffer/turbopuffer-typescript/commit/83dc99c25ad1c652a5d9d0c35ed74f8a72632ffd))
+* **api:** api update ([365d563](https://github.com/turbopuffer/turbopuffer-typescript/commit/365d56396e26e7479d761026bc8d615ccf8798ab))
+* **api:** manual updates ([8502b23](https://github.com/turbopuffer/turbopuffer-typescript/commit/8502b233a50b85411d48b8a81b2c6bbaf29a0673))
+
+
+### Chores
+
+* **docs:** grammar improvements ([c156eb4](https://github.com/turbopuffer/turbopuffer-typescript/commit/c156eb45d7f941bc2dd4c2af6da4d9d19c6bddac))
+* improve publish-npm script --latest tag logic ([03a0534](https://github.com/turbopuffer/turbopuffer-typescript/commit/03a05340e2401b8e01ef0f4a07ed9887b7604ae0))
+* **internal:** codegen related update ([9c4395e](https://github.com/turbopuffer/turbopuffer-typescript/commit/9c4395e334b4e854e8fa2df37985d4e0dfc1479b))
+* **internal:** codegen related update ([e09d70a](https://github.com/turbopuffer/turbopuffer-typescript/commit/e09d70a6ed09d330d564d0867dd78336691079ec))
+* **package:** remove engines ([b256e5a](https://github.com/turbopuffer/turbopuffer-typescript/commit/b256e5a46544d538cae262bccb3c2daaf10c8d63))
+
+## 0.9.0-alpha.1 (2025-05-13)
+
+Full Changelog: [v0.8.0...v0.9.0-alpha.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v0.8.0...v0.9.0-alpha.1)
+
+### Features
+
+* **api:** api update ([b2ef37a](https://github.com/turbopuffer/turbopuffer-typescript/commit/b2ef37adc944f9aed21a0d8b8854037796ff7de8))
+
+
+### Chores
+
+* sync repo ([127ca76](https://github.com/turbopuffer/turbopuffer-typescript/commit/127ca76fe6b7f52299e727bbe88766d05a83b86d))
+* update SDK settings ([b7f00b5](https://github.com/turbopuffer/turbopuffer-typescript/commit/b7f00b513d4defc9cec866e8ea1830ed7a92f525))
+* update SDK settings ([956d49b](https://github.com/turbopuffer/turbopuffer-typescript/commit/956d49b2ccd68965cb4f2c7b623f666d6c936952))
