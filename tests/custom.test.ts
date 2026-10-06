@@ -706,10 +706,9 @@ test('sanity', async () => {
   expect(performance.server_total_ms).toBeGreaterThan(2);
 
   const billing = resultsWithPerformance.billing;
-  expect(billing).toEqual({
-    billable_logical_bytes_queried: 256000000,
-    billable_logical_bytes_returned: 24,
-  });
+  expect(billing.billable_logical_bytes_returned).toEqual(24);
+  // 256MB was the old query floor; 1.28GB is current pricing.
+  expect([256000000, 1280000000]).toContain(billing.billable_logical_bytes_queried);
 
   const results2 = await ns.query({
     rank_by: ['vector', 'ANN', [1, 1]],
