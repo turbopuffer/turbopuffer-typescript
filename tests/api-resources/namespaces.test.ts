@@ -354,6 +354,7 @@ describe('resource namespaces', () => {
       namespace: 'namespace',
       branch_from_namespace: 'string',
       copy_from_namespace: 'string',
+      create_namespace: true,
       delete_by_filter: {},
       delete_by_filter_allow_partial: true,
       delete_condition: {},
