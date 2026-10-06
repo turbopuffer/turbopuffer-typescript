@@ -345,6 +345,7 @@ describe('resource namespaces', () => {
       namespace: 'namespace',
       branch_from_namespace: 'string',
       copy_from_namespace: 'string',
+      create_namespace: true,
       deletes: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
       disable_backpressure: true,
       distance_metric: 'cosine_distance',
