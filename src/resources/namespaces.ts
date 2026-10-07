@@ -2007,12 +2007,12 @@ export interface NamespaceWriteParams {
   namespace?: string;
 
   /**
-   * Body param: The namespace to create an instant, copy-on-write clone of.
+   * Body param
    */
   branch_from_namespace?: BranchFromNamespaceParams;
 
   /**
-   * Body param: The namespace to copy documents from.
+   * Body param
    */
   copy_from_namespace?: CopyFromNamespaceParams;
 
