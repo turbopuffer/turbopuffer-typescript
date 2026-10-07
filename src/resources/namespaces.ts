@@ -836,8 +836,7 @@ export namespace NamespaceMetadata {
     unindexed_bytes: number;
 
     /**
-     * The number of rows in the write-ahead log that have not yet been indexed. Write
-     * backpressure is applied when this exceeds the unindexed row limit.
+     * The number of rows in the write-ahead log that have not yet been indexed.
      */
     unindexed_rows: number;
   }
