@@ -816,6 +816,11 @@ export namespace NamespaceMetadata {
      * not yet been indexed.
      */
     unindexed_bytes: number;
+
+    /**
+     * The number of rows in the write-ahead log that have not yet been indexed.
+     */
+    unindexed_rows: number;
   }
 
   /**
