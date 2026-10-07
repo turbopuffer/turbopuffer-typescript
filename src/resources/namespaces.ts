@@ -971,6 +971,22 @@ export interface QueryPerformance {
    * queries to complete if the namespace was at its concurrency limit.
    */
   server_total_ms: number;
+
+  /**
+   * Time spent embedding text, in milliseconds. Only set when using a native
+   * embedding model.
+   */
+  embedding_ms?: number;
+
+  /**
+   * The number of tokens embedded. Only set when using a native embedding model.
+   */
+  embedding_tokens?: number;
+
+  /**
+   * The timestamp of the last write operation that the query observed.
+   */
+  last_included_write_at?: string;
 }
 
 /**
@@ -1089,6 +1105,17 @@ export interface WritePerformance {
    * Request time measured on the server, in milliseconds.
    */
   server_total_ms: number;
+
+  /**
+   * Time spent embedding text, in milliseconds. Only set when using a native
+   * embedding model.
+   */
+  embedding_ms?: number;
+
+  /**
+   * The number of tokens embedded. Only set when using a native embedding model.
+   */
+  embedding_tokens?: number;
 }
 
 /**
@@ -1983,12 +2010,12 @@ export interface NamespaceWriteParams {
   namespace?: string;
 
   /**
-   * Body param: The namespace to create an instant, copy-on-write clone of.
+   * Body param
    */
   branch_from_namespace?: BranchFromNamespaceParams;
 
   /**
-   * Body param: The namespace to copy documents from.
+   * Body param
    */
   copy_from_namespace?: CopyFromNamespaceParams;
 
