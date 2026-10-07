@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.10.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.9.0...v2.10.0) (2026-10-07)
+
+
+### Features
+
+* stainless to stlc migration ([be8dda9](https://github.com/turbopuffer/turbopuffer-typescript/commit/be8dda91a862807adafa92eb5e5e760be1e2ec46))
+* stlc: qol fixes ([d4b1df7](https://github.com/turbopuffer/turbopuffer-typescript/commit/d4b1df7573525b41c591e385d91f847031b145b8))
+
 ## 2.9.0 (2026-09-18)
 
 Full Changelog: [v2.8.0...v2.9.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.8.0...v2.9.0)
