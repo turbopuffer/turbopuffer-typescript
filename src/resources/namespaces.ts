@@ -834,6 +834,11 @@ export namespace NamespaceMetadata {
      * not yet been indexed.
      */
     unindexed_bytes: number;
+
+    /**
+     * The number of rows in the write-ahead log that have not yet been indexed.
+     */
+    unindexed_rows: number;
   }
 
   /**
@@ -1000,11 +1005,6 @@ export interface QueryPerformance {
    * The number of tokens embedded. Only set when using a native embedding model.
    */
   embedding_tokens?: number;
-
-  /**
-   * The timestamp of the last write operation that the query observed.
-   */
-  last_included_write_at?: string;
 }
 
 /**
