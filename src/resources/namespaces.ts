@@ -994,6 +994,17 @@ export interface QueryPerformance {
    * queries to complete if the namespace was at its concurrency limit.
    */
   server_total_ms: number;
+
+  /**
+   * Time spent embedding text, in milliseconds. Only set when using a native
+   * embedding model.
+   */
+  embedding_ms?: number;
+
+  /**
+   * The number of tokens embedded. Only set when using a native embedding model.
+   */
+  embedding_tokens?: number;
 }
 
 /**
@@ -1118,6 +1129,17 @@ export interface WritePerformance {
    * Request time measured on the server, in milliseconds.
    */
   server_total_ms: number;
+
+  /**
+   * Time spent embedding text, in milliseconds. Only set when using a native
+   * embedding model.
+   */
+  embedding_ms?: number;
+
+  /**
+   * The number of tokens embedded. Only set when using a native embedding model.
+   */
+  embedding_tokens?: number;
 }
 
 /**
