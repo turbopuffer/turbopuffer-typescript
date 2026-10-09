@@ -229,6 +229,23 @@ describe('resource namespaces', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('readOnlyOptimize: only required params', async () => {
+    const responsePromise = client.namespaces.readOnlyOptimize({ namespace: 'namespace' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('readOnlyOptimize: required and optional params', async () => {
+    const response = await client.namespaces.readOnlyOptimize({ namespace: 'namespace' });
+  });
+
+  // Mock server tests are disabled
   test.skip('recall: only required params', async () => {
     const responsePromise = client.namespaces.recall({ namespace: 'namespace' });
     const rawResponse = await responsePromise.asResponse();
