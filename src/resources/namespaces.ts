@@ -120,6 +120,17 @@ export class Namespace extends APIResource {
   }
 
   /**
+   * Optimize a namespace for a read-only workload.
+   */
+  readOnlyOptimize(
+    params: NamespaceReadOnlyOptimizeParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ReadOnlyOptimizeResponse> {
+    const { namespace = this._client.defaultNamespace } = params ?? {};
+    return this._client.post(path`/v2/namespaces/${namespace}/read_only_optimize`, options);
+  }
+
+  /**
    * Evaluate recall.
    */
   recall(
@@ -834,6 +845,11 @@ export namespace NamespaceMetadata {
      * not yet been indexed.
      */
     unindexed_bytes: number;
+
+    /**
+     * The number of rows in the write-ahead log that have not yet been indexed.
+     */
+    unindexed_rows: number;
   }
 
   /**
@@ -989,6 +1005,35 @@ export interface QueryPerformance {
    * queries to complete if the namespace was at its concurrency limit.
    */
   server_total_ms: number;
+
+  /**
+   * Time spent embedding text, in milliseconds. Only set when using a native
+   * embedding model.
+   */
+  embedding_ms?: number;
+
+  /**
+   * The number of tokens embedded. Only set when using a native embedding model.
+   */
+  embedding_tokens?: number;
+}
+
+/**
+ * The response to a successful read-only optimize request.
+ */
+export interface ReadOnlyOptimizeResponse {
+  /**
+   * `OK` if the namespace is optimized for a read-only workload, or `ACCEPTED` if
+   * the optimization is in progress.
+   */
+  status: 'OK' | 'ACCEPTED';
+
+  /**
+   * The billing information for a write request.
+   */
+  billing?: WriteBilling;
+
+  message?: string;
 }
 
 /**
@@ -1113,6 +1158,17 @@ export interface WritePerformance {
    * Request time measured on the server, in milliseconds.
    */
   server_total_ms: number;
+
+  /**
+   * Time spent embedding text, in milliseconds. Only set when using a native
+   * embedding model.
+   */
+  embedding_ms?: number;
+
+  /**
+   * The number of tokens embedded. Only set when using a native embedding model.
+   */
+  embedding_tokens?: number;
 }
 
 /**
@@ -1894,6 +1950,13 @@ export namespace NamespaceQueryParams {
   }
 }
 
+export interface NamespaceReadOnlyOptimizeParams {
+  /**
+   * The name of the namespace.
+   */
+  namespace?: string;
+}
+
 export interface NamespaceRecallParams {
   /**
    * Path param: The name of the namespace.
@@ -2180,6 +2243,7 @@ export declare namespace Namespaces {
     type PinningConfig as PinningConfig,
     type QueryBilling as QueryBilling,
     type QueryPerformance as QueryPerformance,
+    type ReadOnlyOptimizeResponse as ReadOnlyOptimizeResponse,
     type RerankLimit as RerankLimit,
     type Row as Row,
     type RrfParams as RrfParams,
@@ -2213,6 +2277,7 @@ export declare namespace Namespaces {
     type NamespaceMultiQueryParams as NamespaceMultiQueryParams,
     type NamespacePollCopyFromParams as NamespacePollCopyFromParams,
     type NamespaceQueryParams as NamespaceQueryParams,
+    type NamespaceReadOnlyOptimizeParams as NamespaceReadOnlyOptimizeParams,
     type NamespaceRecallParams as NamespaceRecallParams,
     type NamespaceSchemaParams as NamespaceSchemaParams,
     type NamespaceStartCopyFromParams as NamespaceStartCopyFromParams,

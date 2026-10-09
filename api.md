@@ -48,6 +48,7 @@ Types:
 - <code><a href="./src/resources/namespaces.ts">PinningConfig</a></code>
 - <code><a href="./src/resources/namespaces.ts">QueryBilling</a></code>
 - <code><a href="./src/resources/namespaces.ts">QueryPerformance</a></code>
+- <code><a href="./src/resources/namespaces.ts">ReadOnlyOptimizeResponse</a></code>
 - <code><a href="./src/resources/namespaces.ts">RerankLimit</a></code>
 - <code><a href="./src/resources/namespaces.ts">Row</a></code>
 - <code><a href="./src/resources/namespaces.ts">RrfParams</a></code>
@@ -84,6 +85,7 @@ Methods:
 - <code title="post /v2/namespaces/{namespace}/query?stainless_overload=multiQuery">client.namespaces.<a href="./src/resources/namespaces.ts">multiQuery</a>({ ...params }) -> NamespaceMultiQueryResponse</code>
 - <code title="get /v1/namespaces/{namespace}/operations/{token}?stainless_overload=pollCopyFrom">client.namespaces.<a href="./src/resources/namespaces.ts">pollCopyFrom</a>(token, { ...params }) -> CopyFromNamespaceOperation</code>
 - <code title="post /v2/namespaces/{namespace}/query">client.namespaces.<a href="./src/resources/namespaces.ts">query</a>({ ...params }) -> NamespaceQueryResponse</code>
+- <code title="post /v2/namespaces/{namespace}/read_only_optimize">client.namespaces.<a href="./src/resources/namespaces.ts">readOnlyOptimize</a>({ ...params }) -> ReadOnlyOptimizeResponse</code>
 - <code title="post /v1/namespaces/{namespace}/_debug/recall">client.namespaces.<a href="./src/resources/namespaces.ts">recall</a>({ ...params }) -> NamespaceRecallResponse</code>
 - <code title="get /v1/namespaces/{namespace}/schema">client.namespaces.<a href="./src/resources/namespaces.ts">schema</a>({ ...params }) -> NamespaceSchemaResponse</code>
 - <code title="post /v2/namespaces/{namespace}/async?stainless_overload=startCopyFrom">client.namespaces.<a href="./src/resources/namespaces.ts">startCopyFrom</a>({ ...params }) -> NamespaceStartCopyFromResponse</code>
