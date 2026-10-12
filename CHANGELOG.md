@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.11.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.10.0...v2.11.0) (2026-10-08)
+
+
+### Features
+
+* embedding: openapi embedding stats ([357421b](https://github.com/turbopuffer/turbopuffer-typescript/commit/357421b75c2c29ae261b06f72efb2066bdacd841))
+* metadata: expose unindexed_rows in index status ([6d8c4ce](https://github.com/turbopuffer/turbopuffer-typescript/commit/6d8c4cec94573446e74e9b71d63a8a5163de3d65))
+
 ## [2.10.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.9.0...v2.10.0) (2026-10-07)
 
 
