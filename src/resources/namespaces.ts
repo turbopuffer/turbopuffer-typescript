@@ -1028,7 +1028,8 @@ export interface RerankModelParams {
   attribute: string;
 
   /**
-   * The reranking model to use.
+   * The reranking model to use, for example `voyage/rerank-3`. See
+   * https://turbopuffer.com/docs/reranking#models for the available models.
    */
   model: string;
 
@@ -1707,11 +1708,6 @@ export namespace NamespaceExplainQueryParams {
   export interface Consistency {
     /**
      * The query's consistency level.
-     *
-     * - `strong` - Strong consistency. Requires a round-trip to object storage to
-     *   fetch the latest writes.
-     * - `eventual` - Eventual consistency. Does not require a round-trip to object
-     *   storage, but may not see the latest writes.
      */
     level?: 'strong' | 'eventual';
   }
@@ -1844,11 +1840,6 @@ export namespace NamespaceMultiQueryParams {
   export interface Consistency {
     /**
      * The query's consistency level.
-     *
-     * - `strong` - Strong consistency. Requires a round-trip to object storage to
-     *   fetch the latest writes.
-     * - `eventual` - Eventual consistency. Does not require a round-trip to object
-     *   storage, but may not see the latest writes.
      */
     level?: 'strong' | 'eventual';
   }
@@ -1952,11 +1943,6 @@ export namespace NamespaceQueryParams {
   export interface Consistency {
     /**
      * The query's consistency level.
-     *
-     * - `strong` - Strong consistency. Requires a round-trip to object storage to
-     *   fetch the latest writes.
-     * - `eventual` - Eventual consistency. Does not require a round-trip to object
-     *   storage, but may not see the latest writes.
      */
     level?: 'strong' | 'eventual';
   }
