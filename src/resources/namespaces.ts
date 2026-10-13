@@ -1004,13 +1004,13 @@ export interface RerankLimit {
  */
 export interface RerankModelParams {
   /**
-   * The string attribute to score. Must be included in `include_attributes` in every
-   * query.
+   * Which string attribute to score. It must also be in `include_attributes` in
+   * every query.
    */
   attribute: string;
 
   /**
-   * The reranking model to use.
+   * Which reranking model to use.
    */
   model: string;
 
