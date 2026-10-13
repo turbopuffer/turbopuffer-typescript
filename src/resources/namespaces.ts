@@ -1028,7 +1028,8 @@ export interface RerankModelParams {
   attribute: string;
 
   /**
-   * The reranking model to use.
+   * The reranking model to use, e.g. `voyage/rerank-3`. See
+   * https://turbopuffer.com/docs/reranking#models for the available models.
    */
   model: string;
 
