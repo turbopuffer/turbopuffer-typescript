@@ -218,6 +218,11 @@ describe('resource namespaces', () => {
       limit: 0,
       offset: 0,
       rank_by: ['id', 'asc'],
+      rerank_by: {
+        attribute: 'attribute',
+        model: 'model',
+        query: 'query',
+      },
       top_k: 0,
       vector_encoding: 'float',
     });

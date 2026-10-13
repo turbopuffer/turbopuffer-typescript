@@ -1018,6 +1018,27 @@ export interface RerankLimit {
 }
 
 /**
+ * Rerank retrieved candidates with a model.
+ */
+export interface RerankModelParams {
+  /**
+   * The string attribute to score. Must be included in `include_attributes` in every
+   * query.
+   */
+  attribute: string;
+
+  /**
+   * The reranking model to use.
+   */
+  model: string;
+
+  /**
+   * The query text to score each document against.
+   */
+  query: string;
+}
+
+/**
  * A single document, in a row-based format.
  */
 export interface Row {
@@ -1686,6 +1707,11 @@ export namespace NamespaceExplainQueryParams {
   export interface Consistency {
     /**
      * The query's consistency level.
+     *
+     * - `strong` - Strong consistency. Requires a round-trip to object storage to
+     *   fetch the latest writes.
+     * - `eventual` - Eventual consistency. Does not require a round-trip to object
+     *   storage, but may not see the latest writes.
      */
     level?: 'strong' | 'eventual';
   }
@@ -1818,6 +1844,11 @@ export namespace NamespaceMultiQueryParams {
   export interface Consistency {
     /**
      * The query's consistency level.
+     *
+     * - `strong` - Strong consistency. Requires a round-trip to object storage to
+     *   fetch the latest writes.
+     * - `eventual` - Eventual consistency. Does not require a round-trip to object
+     *   storage, but may not see the latest writes.
      */
     level?: 'strong' | 'eventual';
   }
@@ -1899,6 +1930,11 @@ export interface NamespaceQueryParams {
   rank_by?: RankBy;
 
   /**
+   * Body param: Rerank retrieved candidates with a model.
+   */
+  rerank_by?: RerankModelParams;
+
+  /**
    * Body param: The number of results to return.
    */
   top_k?: number;
@@ -1916,6 +1952,11 @@ export namespace NamespaceQueryParams {
   export interface Consistency {
     /**
      * The query's consistency level.
+     *
+     * - `strong` - Strong consistency. Requires a round-trip to object storage to
+     *   fetch the latest writes.
+     * - `eventual` - Eventual consistency. Does not require a round-trip to object
+     *   storage, but may not see the latest writes.
      */
     level?: 'strong' | 'eventual';
   }
@@ -2208,6 +2249,7 @@ export declare namespace Namespaces {
     type QueryBilling as QueryBilling,
     type QueryPerformance as QueryPerformance,
     type RerankLimit as RerankLimit,
+    type RerankModelParams as RerankModelParams,
     type Row as Row,
     type RrfParams as RrfParams,
     type SaturateParams as SaturateParams,

@@ -7,6 +7,7 @@ import { DecayParams } from '../index';
 import { EmbedParams } from '../index';
 import { FuzzyParams } from '../index';
 import { HighlightConfigParams } from '../index';
+import { RerankModelParams } from '../index';
 import { RrfParams } from '../index';
 import { SaturateParams } from '../index';
 
@@ -107,4 +108,4 @@ export type RankByText<T = Record<string, any>> =
   | ['Saturate', RankByText<T>, SaturateParams]
   | ['Decay', RankByText<T>, DecayParams]
   | ['Dist', RankByText<T>, any];
-export type RerankBy<T = Record<string, any>> = ['RRF'] | ['RRF', RrfParams];
+export type RerankBy<T = Record<string, any>> = ['RRF'] | ['RRF', RrfParams] | RerankModelParams;
