@@ -1028,7 +1028,7 @@ export interface RerankModelParams {
   attribute: string;
 
   /**
-   * The reranking model to use.
+   * Which reranking model to use.
    */
   model: string;
 
@@ -1707,6 +1707,11 @@ export namespace NamespaceExplainQueryParams {
   export interface Consistency {
     /**
      * The query's consistency level.
+     *
+     * - `strong` - Strong consistency. Requires a round-trip to object storage to
+     *   fetch the latest writes.
+     * - `eventual` - Eventual consistency. Does not require a round-trip to object
+     *   storage, but may not see the latest writes.
      */
     level?: 'strong' | 'eventual';
   }
@@ -1839,6 +1844,11 @@ export namespace NamespaceMultiQueryParams {
   export interface Consistency {
     /**
      * The query's consistency level.
+     *
+     * - `strong` - Strong consistency. Requires a round-trip to object storage to
+     *   fetch the latest writes.
+     * - `eventual` - Eventual consistency. Does not require a round-trip to object
+     *   storage, but may not see the latest writes.
      */
     level?: 'strong' | 'eventual';
   }
@@ -1942,6 +1952,11 @@ export namespace NamespaceQueryParams {
   export interface Consistency {
     /**
      * The query's consistency level.
+     *
+     * - `strong` - Strong consistency. Requires a round-trip to object storage to
+     *   fetch the latest writes.
+     * - `eventual` - Eventual consistency. Does not require a round-trip to object
+     *   storage, but may not see the latest writes.
      */
     level?: 'strong' | 'eventual';
   }
