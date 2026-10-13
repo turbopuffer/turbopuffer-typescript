@@ -39,6 +39,7 @@ export {
   type QueryBilling,
   type QueryPerformance,
   type RerankLimit,
+  type RerankModelParams,
   type Row,
   type RrfParams,
   type SaturateParams,
