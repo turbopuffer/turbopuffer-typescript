@@ -1010,7 +1010,7 @@ export interface RerankModelParams {
   attribute: string;
 
   /**
-   * The reranking model to use.
+   * Which reranking model to use.
    */
   model: string;
 
