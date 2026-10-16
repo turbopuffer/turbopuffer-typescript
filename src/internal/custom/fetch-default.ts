@@ -1,17 +1,7 @@
 import { Fetch } from '../builtin-types';
 import { HttpClientOptions } from './http-client';
 
-const fetchSmuggling: Fetch = async (url, options) => {
-  const response = await fetch(url, options);
-
-  // Smuggle the performance clock into the response object.
-  Object.defineProperty(response, 'clock', {
-    value: (options as any).clock,
-    enumerable: true,
-  });
-
-  return response;
-};
+const fetchDefault: Fetch = (url, options) => fetch(url, options);
 
 export const makeFetch = (_clientOptions: HttpClientOptions) => {
   if (typeof fetch === 'undefined') {
@@ -25,5 +15,5 @@ export const makeFetch = (_clientOptions: HttpClientOptions) => {
   //
   // TODO(benesch): would it be better to throw an error?
 
-  return fetchSmuggling;
+  return fetchDefault;
 };

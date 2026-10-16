@@ -2,7 +2,7 @@ import { Agent } from 'undici';
 import { HttpClientOptions } from './http-client';
 import { promisify } from 'node:util';
 import { gunzip as gunzipNode } from 'node:zlib';
-import { RequestClock } from './performance';
+import { dispatchTimings } from '../observer';
 import { UndiciHeaders } from 'undici/types/dispatcher';
 
 const gunzip = promisify(gunzipNode);
@@ -24,8 +24,8 @@ export const makeFetch = (clientOptions: HttpClientOptions) => {
       throw new Error('url must be a string or URL in this implementation of fetch');
     }
 
-    // Extract the smuggled clock from the request options.
-    let clock: RequestClock = (options as any).clock;
+    // Only available synchronously, before the first await.
+    const timings = dispatchTimings();
 
     // Convert from `fetch` to `undici` request format.
     let requestHeaders: UndiciHeaders;
@@ -58,18 +58,19 @@ export const makeFetch = (clientOptions: HttpClientOptions) => {
       body: options.body as any,
       signal: options.signal,
     });
-    clock.responseHeadersEnd = performance.now();
+    // undici's diagnostics mark these more precisely when they're available.
+    if (timings) timings.responseHeaders ??= performance.now();
 
     let bodyBuffer = await body.arrayBuffer();
-    clock.bodyReadEnd = performance.now();
-    clock.decompressEnd = clock.bodyReadEnd; // ovewritten later if we actually decompress
+    const bodyEnd = performance.now();
+    let decompressEnd = bodyEnd; // overwritten later if we actually decompress
 
     // Convert from `undici` to `fetch` response format.
     const responseHeaders = new Headers();
     for (const [key, value] of Object.entries(headers)) {
       if (key === 'content-encoding' && value === 'gzip') {
         bodyBuffer = await gunzip(bodyBuffer);
-        clock.decompressEnd = performance.now();
+        decompressEnd = performance.now();
       } else if (typeof value === 'string') {
         responseHeaders.append(key, value);
       } else if (Array.isArray(value)) {
@@ -79,18 +80,16 @@ export const makeFetch = (clientOptions: HttpClientOptions) => {
       }
     }
 
-    const response = new Response(bodyBuffer, {
+    if (timings) {
+      timings.bodyEnd ??= bodyEnd;
+      timings.extra['decompress_start'] = bodyEnd;
+      timings.extra['decompress_end'] = decompressEnd;
+    }
+
+    return new Response(bodyBuffer, {
       status: statusCode,
       headers: responseHeaders,
     });
-
-    // Smuggle the performance clock into the response object.
-    Object.defineProperty(response, 'clock', {
-      value: clock,
-      enumerable: true,
-    });
-
-    return response;
   };
 
   return fetchUndici;

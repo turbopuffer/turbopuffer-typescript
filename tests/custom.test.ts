@@ -1202,13 +1202,11 @@ test('compression', async () => {
   expect(performance.client_total_ms).toBeGreaterThan(0);
   expect(performance.client_compress_ms).toBeGreaterThan(0);
   expect(performance.client_deserialize_ms).toBeGreaterThan(0);
+  expect(performance.client_response_ms).toBeGreaterThan(0);
+  expect(performance.client_body_read_ms).toBeGreaterThan(0);
   if (isTrulyNode) {
-    expect(performance.client_response_ms).toBeGreaterThan(0);
-    expect(performance.client_body_read_ms).toBeGreaterThan(0);
     expect(performance.client_decompress_ms).toBeGreaterThan(0); // Response should be compressed
   } else {
-    expect(performance.client_response_ms).toBeUndefined();
-    expect(performance.client_body_read_ms).toBeUndefined();
     expect(performance.client_decompress_ms).toBeUndefined();
   }
 });
@@ -1242,13 +1240,11 @@ test('default_compression_disabled', async () => {
   expect(performance.client_total_ms).toBeGreaterThan(0);
   expect(performance.client_compress_ms).toEqual(0);
   expect(performance.client_deserialize_ms).toBeGreaterThan(0);
+  expect(performance.client_response_ms).toBeGreaterThan(0);
+  expect(performance.client_body_read_ms).toBeGreaterThan(0);
   if (isTrulyNode) {
-    expect(performance.client_response_ms).toBeGreaterThan(0);
-    expect(performance.client_body_read_ms).toBeGreaterThan(0);
     expect(performance.client_decompress_ms).toEqual(0);
   } else {
-    expect(performance.client_response_ms).toBeUndefined();
-    expect(performance.client_body_read_ms).toBeUndefined();
     expect(performance.client_decompress_ms).toBeUndefined();
   }
 });
