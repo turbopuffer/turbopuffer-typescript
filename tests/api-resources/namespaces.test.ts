@@ -93,6 +93,7 @@ describe('resource namespaces', () => {
       compute_attributes: { foo: ['foo', 'VectorDist', [0]] },
       consistency: { level: 'strong' },
       distance_metric: 'cosine_distance',
+      effort: { ann: 0.1, ann_filter: 'auto' },
       exclude_attributes: ['string'],
       group_by: [{}],
       include_attributes: true,
@@ -159,6 +160,7 @@ describe('resource namespaces', () => {
         {
           compute_attributes: { foo: ['foo', 'VectorDist', [0]] },
           distance_metric: 'cosine_distance',
+          effort: { ann: 0.1, ann_filter: 'auto' },
           exclude_attributes: ['string'],
           group_by: [{}],
           include_attributes: true,
@@ -212,6 +214,7 @@ describe('resource namespaces', () => {
       compute_attributes: { foo: ['foo', 'VectorDist', [0]] },
       consistency: { level: 'strong' },
       distance_metric: 'cosine_distance',
+      effort: { ann: 0.1, ann_filter: 'auto' },
       exclude_attributes: ['string'],
       group_by: [{}],
       include_attributes: true,
