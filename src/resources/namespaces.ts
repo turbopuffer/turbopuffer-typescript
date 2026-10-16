@@ -353,6 +353,9 @@ export interface Bm25ClauseParams {
 export type BranchFromNamespaceParams = string | BranchFromNamespaceParams.BranchFromNamespaceConfig;
 
 export namespace BranchFromNamespaceParams {
+  /**
+   * Configuration for branching from another namespace.
+   */
   export interface BranchFromNamespaceConfig {
     /**
      * The namespace to create an instant, copy-on-write clone of.
@@ -407,6 +410,9 @@ export type CopyFromNamespaceOperation =
   | CopyFromNamespaceOperation.Finished;
 
 export namespace CopyFromNamespaceOperation {
+  /**
+   * The copy is still in progress.
+   */
   export interface Running {
     /**
      * The time at which the operation started.
@@ -422,12 +428,18 @@ export namespace CopyFromNamespaceOperation {
     progress?: string;
   }
 
+  /**
+   * The copy has finished, successfully or not.
+   */
   export interface Finished {
     /**
      * The time at which the operation finished.
      */
     finish_time: string;
 
+    /**
+     * The result of the copy.
+     */
     result: NamespacesAPI.CopyFromNamespaceOperationResult;
 
     /**
@@ -439,6 +451,9 @@ export namespace CopyFromNamespaceOperation {
   }
 }
 
+/**
+ * The result of a finished copy operation.
+ */
 export type CopyFromNamespaceOperationResult =
   | CopyFromNamespaceOperationResult.Success
   | CopyFromNamespaceOperationResult.Error;
@@ -446,12 +461,15 @@ export type CopyFromNamespaceOperationResult =
 export namespace CopyFromNamespaceOperationResult {
   export interface Success {
     /**
-     * The response to a successful write request.
+     * The copy succeeded, with the result of its write.
      */
     success: NamespacesAPI.WriteResult;
   }
 
   export interface Error {
+    /**
+     * The copy failed, with its error.
+     */
     error: NamespacesAPI.OperationError;
   }
 }
@@ -462,6 +480,9 @@ export namespace CopyFromNamespaceOperationResult {
 export type CopyFromNamespaceParams = string | CopyFromNamespaceParams.CopyFromNamespaceConfig;
 
 export namespace CopyFromNamespaceParams {
+  /**
+   * Configuration for copying documents from another namespace.
+   */
   export interface CopyFromNamespaceConfig {
     /**
      * The namespace to copy documents from.
@@ -771,6 +792,9 @@ export interface NamespaceMetadata {
    */
   encryption: Encryption;
 
+  /**
+   * The state of the namespace's index.
+   */
   index: NamespaceMetadata.IndexUpToDate | NamespaceMetadata.IndexUpdating;
 
   /**
@@ -804,10 +828,16 @@ export interface NamespaceMetadata {
 }
 
 export namespace NamespaceMetadata {
+  /**
+   * Every document in the namespace is indexed.
+   */
   export interface IndexUpToDate {
     status: 'up-to-date';
   }
 
+  /**
+   * Some documents are in the write-ahead log and haven't been indexed yet.
+   */
   export interface IndexUpdating {
     status: 'updating';
 
@@ -887,6 +917,9 @@ export interface NamespaceMetadataPatch {
   read_only?: boolean;
 }
 
+/**
+ * The error of an asynchronous operation that failed.
+ */
 export interface OperationError {
   /**
    * The response to an unsuccessful request.
@@ -1010,7 +1043,7 @@ export interface RerankModelParams {
   attribute: string;
 
   /**
-   * The reranking model to use.
+   * Which reranking model to use.
    */
   model: string;
 
@@ -1140,7 +1173,7 @@ export interface WritePerformance {
 }
 
 /**
- * The response to a successful write request.
+ * The copy succeeded, with the result of its write.
  */
 export interface WriteResult {
   /**
@@ -1372,6 +1405,9 @@ export interface NamespaceHintCacheWarmResponse {
    */
   status: 'ACCEPTED';
 
+  /**
+   * A message describing the result of the request.
+   */
   message?: string;
 }
 
@@ -1389,15 +1425,35 @@ export interface NamespaceMultiQueryResponse {
    */
   performance: QueryPerformance;
 
+  /**
+   * The results of each subquery, in the same order as `queries`. With `rerank_by`,
+   * a single result combining the subqueries' rows.
+   */
   results: Array<NamespaceMultiQueryResponse.Result>;
 }
 
 export namespace NamespaceMultiQueryResponse {
+  /**
+   * The result of a query, or of one subquery of a multi-query.
+   */
   export interface Result {
+    /**
+     * One object per aggregation group, with its group key and the value of each
+     * requested aggregation. Only present when `aggregate_by` and `group_by` are both
+     * set.
+     */
     aggregation_groups?: Array<NamespacesAPI.AggregationGroup>;
 
+    /**
+     * The value of each requested aggregation, keyed by its label. Only present when
+     * `aggregate_by` is set without `group_by`.
+     */
     aggregations?: { [key: string]: unknown };
 
+    /**
+     * The documents that matched the query, ordered by `rank_by`. Only present when
+     * `rank_by` is set.
+     */
     rows?: Array<NamespacesAPI.Row>;
   }
 }
@@ -1416,10 +1472,23 @@ export interface NamespaceQueryResponse {
    */
   performance: QueryPerformance;
 
+  /**
+   * One object per aggregation group, with its group key and the value of each
+   * requested aggregation. Only present when `aggregate_by` and `group_by` are both
+   * set.
+   */
   aggregation_groups?: Array<AggregationGroup>;
 
+  /**
+   * The value of each requested aggregation, keyed by its label. Only present when
+   * `aggregate_by` is set without `group_by`.
+   */
   aggregations?: { [key: string]: unknown };
 
+  /**
+   * The documents that matched the query, ordered by `rank_by`. Only present when
+   * `rank_by` is set.
+   */
   rows?: Array<Row>;
 }
 
@@ -1451,6 +1520,9 @@ export interface NamespaceRecallResponse {
 }
 
 export namespace NamespaceRecallResponse {
+  /**
+   * The ground truth for one of the queries.
+   */
   export interface GroundTruth {
     /**
      * The true nearest neighbors with their distances and vectors.
@@ -1469,6 +1541,9 @@ export namespace NamespaceRecallResponse {
  */
 export type NamespaceSchemaResponse = { [key: string]: AttributeSchemaConfig };
 
+/**
+ * The response to a successful request to start a copy.
+ */
 export interface NamespaceStartCopyFromResponse {
   /**
    * The token identifying the copy operation.
@@ -2167,6 +2242,9 @@ export namespace NamespaceWriteParams {
      */
     filters: unknown;
 
+    /**
+     * The attributes to set on every document that matches `filters`.
+     */
     patch: { [key: string]: unknown };
   }
 }
