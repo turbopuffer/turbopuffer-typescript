@@ -11,7 +11,7 @@
 import { type Turbopuffer } from '../../client';
 import * as Errors from '../../core/error';
 import { buildHeaders } from '../headers';
-import { type RequestClock } from './performance';
+import { type RequestObservation } from '../observer';
 import { type FinalRequestOptions } from '../request-options';
 import { sleep } from '../utils/sleep';
 
@@ -43,9 +43,13 @@ export async function maybePoll(
   response: Response,
   requestURL: string,
   options: FinalRequestOptions,
-  clock: RequestClock,
+  observation: RequestObservation,
 ): Promise<Response> {
   if (!respondAsyncApplied(response)) return response;
+
+  // The final response replaces this one, so its body is done being read here.
+  await response.arrayBuffer().catch(() => {});
+  observation.bodyRead();
 
   const location = extractLocation(response, requestURL);
   const timeout = new Timeout(options.timeout ?? client.timeout);
@@ -61,7 +65,7 @@ export async function maybePoll(
       signal: options.signal,
     });
 
-    const resp = resolvePollResponse(poll, clock);
+    const resp = resolvePollResponse(poll, observation);
     if (resp) return resp;
 
     await sleep(timeout.sleepDurationMs());
@@ -91,21 +95,22 @@ function extractLocation(response: Response, origURL: string): string {
   return resolved.toString();
 }
 
-function resolvePollResponse(body: PollBody, clock: RequestClock): Response | null {
+function resolvePollResponse(body: PollBody, observation: RequestObservation): Response | null {
   if (body.status === 'running') return null;
 
   if (body.result && 'success' in body.result) {
-    const resp = new Response(JSON.stringify(body.result.success), {
+    return new Response(JSON.stringify(body.result.success), {
       status: 200,
       headers: { 'content-type': 'application/json' },
     });
-    // Carry the original request's clock so client perf metrics propagate correctly.
-    Object.defineProperty(resp, 'clock', { value: clock, enumerable: true });
-    return resp;
   }
 
   if (body.result?.error) {
     const err = body.result.error;
+    // The request ends with the operation's status, which Response only accepts when it's valid.
+    if (err.status_code >= 200 && err.status_code <= 599) {
+      observation.replaceResponse(new Response(null, { status: err.status_code }));
+    }
     throw Errors.APIError.generate(err.status_code, err.detail as object, undefined, new Headers());
   }
 

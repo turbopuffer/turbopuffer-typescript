@@ -11,6 +11,7 @@ import type { APIResponseProps } from './internal/parse';
 import { getPlatformHeaders } from './internal/detect-platform';
 import * as Shims from './internal/shims';
 import * as Opts from './internal/request-options';
+import { RequestObservation, traceableFetch, type RequestObserver, type Timings } from './internal/observer';
 import { stringifyQuery } from './internal/utils/query';
 import { VERSION } from './version';
 import * as Errors from './core/error';
@@ -113,8 +114,8 @@ import {
 } from './internal/utils/log';
 import { isEmptyObj } from './internal/utils/values';
 import { compress } from './internal/custom/compress';
-import { RequestClock } from './internal/custom/performance';
 import * as RespondAsync from './internal/custom/respond-async';
+import { TurbopufferObserver, telemetryBuffer } from './internal/custom/telemetry';
 import { makeFetch } from '#fetch';
 
 export interface ClientOptions {
@@ -169,6 +170,12 @@ export interface ClientOptions {
    * Defaults to false.
    */
   compression?: boolean | undefined;
+  /**
+   * Whether to report the client's own request timings to turbopuffer, attached to later requests.
+   *
+   * Defaults to process.env['TURBOPUFFER_TELEMETRY'], or false if it isn't set.
+   */
+  telemetry?: boolean | undefined;
   /**
    * Additional `RequestInit` options to be passed to `fetch` calls.
    * Properties will be overridden by per-request `fetchOptions`.
@@ -244,6 +251,8 @@ export class Turbopuffer {
   #encoder: Opts.RequestEncoder;
   protected idempotencyHeader?: string;
   private _options: ClientOptions;
+  /** Observes requests, such as to record their timings. Custom code installs it. */
+  protected _observer?: RequestObserver | undefined;
 
   /**
    * API Client for interfacing with the Turbopuffer API.
@@ -310,11 +319,19 @@ export class Turbopuffer {
     this.maxRetries = options.maxRetries ?? 4;
     this.fetch =
       options.fetch ??
-      makeFetch({
-        connectTimeout: options.connectTimeout ?? 10 * 1000,
-        connectionIdleTimeout: options.idleTimeout ?? 60 * 1000,
-      });
+      traceableFetch(
+        makeFetch({
+          connectTimeout: options.connectTimeout ?? 10 * 1000,
+          connectionIdleTimeout: options.idleTimeout ?? 60 * 1000,
+        }),
+      );
     this.#encoder = Opts.FallbackEncoder;
+
+    // Always installed, since it also fills in the client performance fields of responses.
+    const telemetry = telemetryBuffer(options.telemetry, apiKey, this.baseURL, this);
+    // Copies keep the resolved setting instead of reading the environment again.
+    options.telemetry = telemetry !== undefined;
+    this._observer = new TurbopufferObserver(telemetry);
 
     const customHeadersEnv = readEnv('TURBOPUFFER_CUSTOM_HEADERS');
     if (customHeadersEnv) {
@@ -502,22 +519,21 @@ export class Turbopuffer {
     optionsInput: PromiseOrValue<FinalRequestOptions>,
     retriesRemaining: number | null,
     retryOfRequestLogID: string | undefined,
+    observation?: RequestObservation,
   ): Promise<APIResponseProps> {
-    const clock: RequestClock = {
-      requestStart: performance.now(),
-    };
-
     const options = await optionsInput;
     const maxRetries = options.maxRetries ?? this.maxRetries;
     if (retriesRemaining == null) {
       retriesRemaining = maxRetries;
     }
+    observation ??= RequestObservation.start(this, this._observer, options);
+    observation.startAttempt(maxRetries - retriesRemaining);
 
     await this.prepareOptions(options);
 
     const { req, url, timeout } = await this.buildRequest(options, {
       retryCount: maxRetries - retriesRemaining,
-      clock,
+      timings: observation.timings,
     });
 
     await this.prepareRequest(req, { url, options });
@@ -539,17 +555,20 @@ export class Turbopuffer {
     );
 
     if (options.signal?.aborted) {
-      throw new Errors.APIUserAbortError();
+      throw observation.fail(new Errors.APIUserAbortError());
     }
 
     const controller = new AbortController();
-    let response = await this.fetchWithTimeout(url, req, timeout, controller).catch(castToError);
+    observation.beforeSend(url, req);
+    let response = await observation
+      .dispatch(this.fetch, () => this.fetchWithTimeout(url, req, timeout, controller))
+      .catch(castToError);
     const headersTime = Date.now();
 
     if (response instanceof globalThis.Error) {
       const retryMessage = `retrying, ${retriesRemaining} attempts remaining`;
       if (options.signal?.aborted) {
-        throw new Errors.APIUserAbortError();
+        throw observation.fail(new Errors.APIUserAbortError(), response);
       }
       // detect native connection timeout errors
       // deno throws "TypeError: error sending request for url (https://example/): client error (Connect): tcp connect error: Operation timed out (os error 60): Operation timed out (os error 60)"
@@ -559,6 +578,7 @@ export class Turbopuffer {
         isAbortError(response) ||
         /timed? ?out/i.test(String(response) + ('cause' in response ? String(response.cause) : ''));
       if (retriesRemaining) {
+        observation.onError(response);
         loggerFor(this).info(
           `[${requestLogID}] connection ${isTimeout ? 'timed out' : 'failed'} - ${retryMessage}`,
         );
@@ -571,7 +591,13 @@ export class Turbopuffer {
             message: response.message,
           }),
         );
-        return this.retryRequest(options, retriesRemaining, retryOfRequestLogID ?? requestLogID);
+        return this.retryRequest(
+          options,
+          retriesRemaining,
+          retryOfRequestLogID ?? requestLogID,
+          undefined,
+          observation,
+        );
       }
       loggerFor(this).info(
         `[${requestLogID}] connection ${isTimeout ? 'timed out' : 'failed'} - error; no more retries left`,
@@ -586,10 +612,12 @@ export class Turbopuffer {
         }),
       );
       if (isTimeout) {
-        throw new Errors.APIConnectionTimeoutError();
+        throw observation.fail(new Errors.APIConnectionTimeoutError(), response);
       }
-      throw new Errors.APIConnectionError({ cause: response });
+      throw observation.fail(new Errors.APIConnectionError({ cause: response }), response);
     }
+
+    observation.onResponse(response);
 
     const responseInfo = `[${requestLogID}${retryLogStr}] ${req.method} ${url} ${
       response.ok ? 'succeeded' : 'failed'
@@ -618,6 +646,7 @@ export class Turbopuffer {
           retriesRemaining,
           retryOfRequestLogID ?? requestLogID,
           response.headers,
+          observation,
         );
       }
 
@@ -626,6 +655,7 @@ export class Turbopuffer {
       loggerFor(this).info(`${responseInfo} - ${retryMessage}`);
 
       const errText = await response.text().catch((err: any) => castToError(err).message);
+      observation.bodyRead();
       const errJSON = safeJSON(errText) as any;
       const errMessage = errJSON ? undefined : errText;
 
@@ -642,7 +672,7 @@ export class Turbopuffer {
       );
 
       const err = this.makeStatusError(response.status, errJSON, errMessage, response.headers);
-      throw err;
+      throw observation.fail(err);
     }
 
     loggerFor(this).info(responseInfo);
@@ -657,11 +687,14 @@ export class Turbopuffer {
       }),
     );
 
-    response = await RespondAsync.maybePoll(this, response, url, options, clock);
+    try {
+      response = await RespondAsync.maybePoll(this, response, url, options, observation);
+    } catch (err) {
+      // Polling happens after the attempts, which would otherwise end the request.
+      throw observation.fail(err);
+    }
 
-    clock.deserializeStart = performance.now();
-
-    return { response, options, controller, requestLogID, retryOfRequestLogID, startTime };
+    return { response, options, controller, requestLogID, retryOfRequestLogID, startTime, observation };
   }
 
   getAPIList<Item, PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>>(
@@ -718,8 +751,7 @@ export class Turbopuffer {
 
     try {
       // use undefined this binding; fetch errors if bound to something else in browser/cloudflare
-      const fetch = await this.fetch;
-      return await fetch.call(undefined, url, fetchOptions);
+      return await this.fetch.call(undefined, url, fetchOptions);
     } finally {
       clearTimeout(timeout);
     }
@@ -753,6 +785,7 @@ export class Turbopuffer {
     retriesRemaining: number,
     requestLogID: string,
     responseHeaders?: Headers | undefined,
+    observation?: RequestObservation,
   ): Promise<APIResponseProps> {
     let timeoutMillis: number | undefined;
 
@@ -784,7 +817,7 @@ export class Turbopuffer {
     }
     await sleep(timeoutMillis);
 
-    return this.makeRequest(options, retriesRemaining - 1, requestLogID);
+    return this.makeRequest(options, retriesRemaining - 1, requestLogID, observation);
   }
 
   private calculateDefaultRetryTimeoutMillis(retriesRemaining: number, maxRetries: number): number {
@@ -804,11 +837,7 @@ export class Turbopuffer {
 
   async buildRequest(
     inputOptions: FinalRequestOptions,
-    { retryCount = 0, clock }: { retryCount?: number; clock: RequestClock } = {
-      clock: {
-        requestStart: 0,
-      },
-    },
+    { retryCount = 0, timings }: { retryCount?: number; timings?: Timings | undefined } = {},
   ): Promise<{ req: FinalizedRequestInit; url: string; timeout: number }> {
     const options = { ...inputOptions };
     const { method, path, query, defaultBaseURL } = options;
@@ -816,12 +845,19 @@ export class Turbopuffer {
     const url = this.buildURL(path!, query as Record<string, unknown>, defaultBaseURL);
     if ('timeout' in options) validatePositiveInteger('timeout', options.timeout);
     options.timeout = options.timeout ?? this.timeout;
+    if (timings) timings.serializeBegin = performance.now();
     let content = this.buildBody({ options });
-    clock.compressStart = performance.now();
-    clock.compressEnd = clock.compressStart; // overwritten later if we actually compress
+    if (timings) timings.serializeEnd = performance.now();
+    const compressBegin = performance.now();
+    let compressEnd = compressBegin; // overwritten later if we actually compress
     if (this.compression) {
-      content = await compress(content);
-      clock.compressEnd = performance.now();
+      const compressed = await compress(content);
+      if (compressed.body !== content.body) compressEnd = performance.now();
+      content = compressed;
+    }
+    if (timings) {
+      timings.extra['compress_begin'] = compressBegin;
+      timings.extra['compress_end'] = compressEnd;
     }
     const { bodyHeaders, body } = content;
     const reqHeaders = await this.buildHeaders({ options: inputOptions, method, bodyHeaders, retryCount });
@@ -836,12 +872,6 @@ export class Turbopuffer {
       ...((this.fetchOptions as any) ?? {}),
       ...((options.fetchOptions as any) ?? {}),
     };
-
-    // Smuggle the performance clock into the request object.
-    Object.defineProperty(req, 'clock', {
-      value: clock,
-      enumerable: true,
-    });
 
     return { req, url, timeout: options.timeout };
   }
