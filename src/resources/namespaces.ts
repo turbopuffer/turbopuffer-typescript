@@ -1458,20 +1458,14 @@ export interface NamespaceMultiQueryResponse {
 
 export namespace NamespaceMultiQueryResponse {
   /**
-   * The result of a query, or of one subquery of a multi-query.
+   * The result of a query, or of one subquery of a multi-query. With `aggregate_by`,
+   * `aggregations` maps each aggregation's label to its value. With `group_by` as
+   * well, `aggregation_groups` holds one object per group instead, with its group
+   * key and the value of each aggregation.
    */
   export interface Result {
-    /**
-     * One object per aggregation group, with its group key and the value of each
-     * requested aggregation. Only present when `aggregate_by` and `group_by` are both
-     * set.
-     */
     aggregation_groups?: Array<NamespacesAPI.AggregationGroup>;
 
-    /**
-     * The value of each requested aggregation, keyed by its label. Only present when
-     * `aggregate_by` is set without `group_by`.
-     */
     aggregations?: { [key: string]: unknown };
 
     /**
@@ -1483,7 +1477,10 @@ export namespace NamespaceMultiQueryResponse {
 }
 
 /**
- * The result of a query.
+ * The result of a query. With `aggregate_by`, `aggregations` maps each
+ * aggregation's label to its value. With `group_by` as well, `aggregation_groups`
+ * holds one object per group instead, with its group key and the value of each
+ * aggregation.
  */
 export interface NamespaceQueryResponse {
   /**
@@ -1496,17 +1493,8 @@ export interface NamespaceQueryResponse {
    */
   performance: QueryPerformance & ClientPerformance;
 
-  /**
-   * One object per aggregation group, with its group key and the value of each
-   * requested aggregation. Only present when `aggregate_by` and `group_by` are both
-   * set.
-   */
   aggregation_groups?: Array<AggregationGroup>;
 
-  /**
-   * The value of each requested aggregation, keyed by its label. Only present when
-   * `aggregate_by` is set without `group_by`.
-   */
   aggregations?: { [key: string]: unknown };
 
   /**
@@ -2194,7 +2182,8 @@ export interface NamespaceWriteParams {
   encryption?: Encryption;
 
   /**
-   * Body param: The patch and filter specifying which documents to patch.
+   * Body param: Sets the attributes in `patch` on every document that matches
+   * `filters`.
    */
   patch_by_filter?: NamespaceWriteParams.PatchByFilter;
 
@@ -2261,7 +2250,7 @@ export interface NamespaceWriteParams {
 
 export namespace NamespaceWriteParams {
   /**
-   * The patch and filter specifying which documents to patch.
+   * Sets the attributes in `patch` on every document that matches `filters`.
    */
   export interface PatchByFilter {
     /**
@@ -2269,9 +2258,6 @@ export namespace NamespaceWriteParams {
      */
     filters: Filter;
 
-    /**
-     * The attributes to set on every document that matches `filters`.
-     */
     patch: { [key: string]: unknown };
   }
 }
