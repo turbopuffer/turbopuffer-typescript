@@ -430,6 +430,19 @@ describe('requests', () => {
     expect(record!['total_us']).toBeGreaterThan(0);
   });
 
+  test('parse failures are recorded', async () => {
+    const notJson: Reply = () =>
+      new Response('not json', { status: 200, headers: { 'content-type': 'application/json' } });
+    const { fetch, sent } = mockFetch(notJson, json(queryBody()));
+    const ns = newClient({ fetch, maxRetries: 0 }).namespace('my-ns');
+
+    await expect(ns.query({ top_k: 1 })).rejects.toThrow();
+    await ns.query({ top_k: 1 });
+
+    const [record] = sentRecords(sent[1]!.telemetry)!;
+    expect([record!['status'], record!['error']]).toEqual([200, 'other']);
+  });
+
   test('failures are recorded', async () => {
     const { fetch, sent } = mockFetch(
       hangUntilAborted,

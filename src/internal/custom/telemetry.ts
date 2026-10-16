@@ -296,8 +296,8 @@ class TurbopufferScope implements RequestScope {
     }
 
     let error: string | undefined;
-    if (result.errorKind === 'canceled') {
-      error = 'canceled';
+    if (result.errorKind === 'canceled' || result.errorKind === 'other') {
+      error = result.errorKind;
     } else if (result.errorKind !== undefined) {
       error = result.errorKind.endsWith('timeout') ? 'timeout' : 'connect';
     }
