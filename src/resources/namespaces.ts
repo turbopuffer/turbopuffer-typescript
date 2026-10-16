@@ -353,6 +353,9 @@ export interface Bm25ClauseParams {
 export type BranchFromNamespaceParams = string | BranchFromNamespaceParams.BranchFromNamespaceConfig;
 
 export namespace BranchFromNamespaceParams {
+  /**
+   * Configuration for branching from another namespace.
+   */
   export interface BranchFromNamespaceConfig {
     /**
      * The namespace to create an instant, copy-on-write clone of.
@@ -407,6 +410,9 @@ export type CopyFromNamespaceOperation =
   | CopyFromNamespaceOperation.Finished;
 
 export namespace CopyFromNamespaceOperation {
+  /**
+   * The copy is still in progress.
+   */
   export interface Running {
     /**
      * The time at which the operation started.
@@ -422,12 +428,18 @@ export namespace CopyFromNamespaceOperation {
     progress?: string;
   }
 
+  /**
+   * The copy has finished, successfully or not.
+   */
   export interface Finished {
     /**
      * The time at which the operation finished.
      */
     finish_time: string;
 
+    /**
+     * The result of the copy.
+     */
     result: NamespacesAPI.CopyFromNamespaceOperationResult;
 
     /**
@@ -439,6 +451,9 @@ export namespace CopyFromNamespaceOperation {
   }
 }
 
+/**
+ * The result of a finished copy operation.
+ */
 export type CopyFromNamespaceOperationResult =
   | CopyFromNamespaceOperationResult.Success
   | CopyFromNamespaceOperationResult.Error;
@@ -446,12 +461,15 @@ export type CopyFromNamespaceOperationResult =
 export namespace CopyFromNamespaceOperationResult {
   export interface Success {
     /**
-     * The response to a successful write request.
+     * The copy succeeded, with the result of its write.
      */
     success: NamespacesAPI.WriteResult;
   }
 
   export interface Error {
+    /**
+     * The copy failed, with its error.
+     */
     error: NamespacesAPI.OperationError;
   }
 }
@@ -462,6 +480,9 @@ export namespace CopyFromNamespaceOperationResult {
 export type CopyFromNamespaceParams = string | CopyFromNamespaceParams.CopyFromNamespaceConfig;
 
 export namespace CopyFromNamespaceParams {
+  /**
+   * Configuration for copying documents from another namespace.
+   */
   export interface CopyFromNamespaceConfig {
     /**
      * The namespace to copy documents from.
@@ -771,6 +792,9 @@ export interface NamespaceMetadata {
    */
   encryption: Encryption;
 
+  /**
+   * The state of the namespace's index.
+   */
   index: NamespaceMetadata.IndexUpToDate | NamespaceMetadata.IndexUpdating;
 
   /**
@@ -804,10 +828,16 @@ export interface NamespaceMetadata {
 }
 
 export namespace NamespaceMetadata {
+  /**
+   * Every document in the namespace is indexed.
+   */
   export interface IndexUpToDate {
     status: 'up-to-date';
   }
 
+  /**
+   * Some documents are in the write-ahead log and haven't been indexed yet.
+   */
   export interface IndexUpdating {
     status: 'updating';
 
@@ -887,6 +917,9 @@ export interface NamespaceMetadataPatch {
   read_only?: boolean;
 }
 
+/**
+ * The error of an asynchronous operation that failed.
+ */
 export interface OperationError {
   /**
    * The response to an unsuccessful request.
@@ -1010,7 +1043,7 @@ export interface RerankModelParams {
   attribute: string;
 
   /**
-   * The reranking model to use.
+   * Which reranking model to use.
    */
   model: string;
 
@@ -1140,7 +1173,7 @@ export interface WritePerformance {
 }
 
 /**
- * The response to a successful write request.
+ * The copy succeeded, with the result of its write.
  */
 export interface WriteResult {
   /**
@@ -1372,6 +1405,9 @@ export interface NamespaceHintCacheWarmResponse {
    */
   status: 'ACCEPTED';
 
+  /**
+   * A message describing the result of the request.
+   */
   message?: string;
 }
 
@@ -1389,21 +1425,38 @@ export interface NamespaceMultiQueryResponse {
    */
   performance: QueryPerformance;
 
+  /**
+   * The results of each subquery, in the same order as `queries`. With `rerank_by`,
+   * a single result combining the subqueries' rows.
+   */
   results: Array<NamespaceMultiQueryResponse.Result>;
 }
 
 export namespace NamespaceMultiQueryResponse {
+  /**
+   * The result of a query, or of one subquery of a multi-query. With `aggregate_by`,
+   * `aggregations` maps each aggregation's label to its value. With `group_by` as
+   * well, `aggregation_groups` holds one object per group instead, with its group
+   * key and the value of each aggregation.
+   */
   export interface Result {
     aggregation_groups?: Array<NamespacesAPI.AggregationGroup>;
 
     aggregations?: { [key: string]: unknown };
 
+    /**
+     * The documents that matched the query, ordered by `rank_by`. Only present when
+     * `rank_by` is set.
+     */
     rows?: Array<NamespacesAPI.Row>;
   }
 }
 
 /**
- * The result of a query.
+ * The result of a query. With `aggregate_by`, `aggregations` maps each
+ * aggregation's label to its value. With `group_by` as well, `aggregation_groups`
+ * holds one object per group instead, with its group key and the value of each
+ * aggregation.
  */
 export interface NamespaceQueryResponse {
   /**
@@ -1420,6 +1473,10 @@ export interface NamespaceQueryResponse {
 
   aggregations?: { [key: string]: unknown };
 
+  /**
+   * The documents that matched the query, ordered by `rank_by`. Only present when
+   * `rank_by` is set.
+   */
   rows?: Array<Row>;
 }
 
@@ -1451,6 +1508,12 @@ export interface NamespaceRecallResponse {
 }
 
 export namespace NamespaceRecallResponse {
+  /**
+   * One of the searches the evaluation ran: its query vector, sampled at random from
+   * the namespace's vectors unless `rank_by` is set, and the query's true nearest
+   * neighbors, found by exhaustive search. Recall compares these neighbors to the
+   * results of the approximate nearest neighbor (ANN) search.
+   */
   export interface GroundTruth {
     /**
      * The true nearest neighbors with their distances and vectors.
@@ -1469,6 +1532,9 @@ export namespace NamespaceRecallResponse {
  */
 export type NamespaceSchemaResponse = { [key: string]: AttributeSchemaConfig };
 
+/**
+ * The response to a successful request to start a copy.
+ */
 export interface NamespaceStartCopyFromResponse {
   /**
    * The token identifying the copy operation.
@@ -2092,7 +2158,8 @@ export interface NamespaceWriteParams {
   encryption?: Encryption;
 
   /**
-   * Body param: The patch and filter specifying which documents to patch.
+   * Body param: Sets the attributes in `patch` on every document that matches
+   * `filters`.
    */
   patch_by_filter?: NamespaceWriteParams.PatchByFilter;
 
@@ -2159,7 +2226,7 @@ export interface NamespaceWriteParams {
 
 export namespace NamespaceWriteParams {
   /**
-   * The patch and filter specifying which documents to patch.
+   * Sets the attributes in `patch` on every document that matches `filters`.
    */
   export interface PatchByFilter {
     /**
