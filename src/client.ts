@@ -845,18 +845,18 @@ export class Turbopuffer {
     const url = this.buildURL(path!, query as Record<string, unknown>, defaultBaseURL);
     if ('timeout' in options) validatePositiveInteger('timeout', options.timeout);
     options.timeout = options.timeout ?? this.timeout;
-    if (timings) timings.serializeStart = performance.now();
+    if (timings) timings.serializeBegin = performance.now();
     let content = this.buildBody({ options });
     if (timings) timings.serializeEnd = performance.now();
-    const compressStart = performance.now();
-    let compressEnd = compressStart; // overwritten later if we actually compress
+    const compressBegin = performance.now();
+    let compressEnd = compressBegin; // overwritten later if we actually compress
     if (this.compression) {
       const compressed = await compress(content);
       if (compressed.body !== content.body) compressEnd = performance.now();
       content = compressed;
     }
     if (timings) {
-      timings.extra['compress_start'] = compressStart;
+      timings.extra['compress_begin'] = compressBegin;
       timings.extra['compress_end'] = compressEnd;
     }
     const { bodyHeaders, body } = content;

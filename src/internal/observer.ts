@@ -27,27 +27,27 @@ export type ErrorKind =
 /**
  * Timestamps from `performance.now()` marking the progress of one attempt.
  *
- * A mark stays unset when its phase didn't happen or couldn't be observed, e.g. `connectStart` on a
+ * A mark stays unset when its phase didn't happen or couldn't be observed, e.g. `connectBegin` on a
  * reused connection. Connection phases are only traced through undici's diagnostics channels, such as on
  * Node, and only when the client uses its own fetch. Phases may overlap.
  */
 export interface Timings {
   /** The attempt began, before the request was built. */
-  attemptStart?: number | undefined;
-  serializeStart?: number | undefined;
+  attemptBegin?: number | undefined;
+  serializeBegin?: number | undefined;
   serializeEnd?: number | undefined;
   /** The request was built and handed to fetch. */
   requestReady?: number | undefined;
   /** Opening a new connection: DNS, TCP and TLS. */
-  connectStart?: number | undefined;
+  connectBegin?: number | undefined;
   connectEnd?: number | undefined;
   /** Writing the request headers and body. */
-  sendStart?: number | undefined;
+  sendBegin?: number | undefined;
   sendEnd?: number | undefined;
   responseHeaders?: number | undefined;
   bodyEnd?: number | undefined;
   /** Parsing the response body. Only on the final attempt. */
-  deserializeStart?: number | undefined;
+  deserializeBegin?: number | undefined;
   deserializeEnd?: number | undefined;
   /** Whether the attempt used an existing connection, unset when unknown. */
   reused?: boolean | undefined;
@@ -174,7 +174,7 @@ export class RequestObservation {
     this.request = undefined;
     this.response = undefined;
     this.trace = undefined;
-    this.attemptTimings = { attemptStart: performance.now(), extra: {} };
+    this.attemptTimings = { attemptBegin: performance.now(), extra: {} };
   }
 
   beforeSend(url: string, init: FinalizedRequestInit): void {
@@ -243,13 +243,13 @@ export class RequestObservation {
   startParse(): void {
     if (!this.scope || this.finished) return;
     this.bodyRead();
-    this.attemptTimings.deserializeStart = performance.now();
+    this.attemptTimings.deserializeBegin = performance.now();
   }
 
   /** Ends the request with an error from reading or parsing the body of `response`. */
   parseFailed(response: Response, error: unknown): void {
     if (!this.scope || this.finished) return;
-    const parsing = this.attemptTimings.deserializeStart !== undefined;
+    const parsing = this.attemptTimings.deserializeBegin !== undefined;
     this.end(response, error, parsing ? 'other' : errorKind(error, this.canceled(), 'read'), undefined);
   }
 
@@ -309,7 +309,7 @@ export class RequestObservation {
   ): void {
     this.finished = true;
     const timings = this.attemptTimings;
-    if (timings.deserializeStart !== undefined) {
+    if (timings.deserializeBegin !== undefined) {
       timings.deserializeEnd = performance.now();
     }
     const scope = this.scope!;
@@ -395,7 +395,7 @@ class AttemptTrace {
   /** When undici created the attempt's request. */
   created: number | undefined;
   /** When undici began a connection while dispatching the attempt's request. */
-  connectStart: number | undefined;
+  connectBegin: number | undefined;
 
   constructor(
     readonly timings: Timings,
@@ -406,7 +406,7 @@ class AttemptTrace {
 
   phase(): Phase | undefined {
     if (this.created === undefined) return undefined;
-    if (this.timings.sendStart === undefined) return this.connectStart !== undefined ? 'connect' : 'pool';
+    if (this.timings.sendBegin === undefined) return this.connectBegin !== undefined ? 'connect' : 'pool';
     if (this.timings.sendEnd === undefined) return 'write';
     return 'read';
   }
@@ -451,7 +451,7 @@ function subscribe(): boolean {
   });
   dc.subscribe('undici:client:beforeConnect', () => {
     const trace = dispatching;
-    if (trace?.created !== undefined) trace.connectStart ??= performance.now();
+    if (trace?.created !== undefined) trace.connectBegin ??= performance.now();
   });
   dc.subscribe('undici:client:connected', ({ socket }: { socket: object }) => {
     connectedAt.set(socket, performance.now());
@@ -464,11 +464,11 @@ function subscribe(): boolean {
       const trace = traces.get(request);
       if (!trace) return;
       const timings = trace.timings;
-      timings.sendStart = performance.now();
+      timings.sendBegin = performance.now();
       timings.reused = !fresh;
       if (fresh) {
         // undici connects while dispatching unless the request has a streamed body, which it waits a tick for.
-        timings.connectStart = trace.connectStart ?? trace.created;
+        timings.connectBegin = trace.connectBegin ?? trace.created;
         timings.connectEnd = connectedAt.get(socket);
       }
     },

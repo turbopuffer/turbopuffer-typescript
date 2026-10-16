@@ -558,7 +558,7 @@ describe('respond-async', () => {
     expect(request.parsed).toBe(response);
     expect(request.retries).toBe(0);
     // The accepted response's body was read before polling began.
-    expect(request.timings.bodyEnd).toBeLessThanOrEqual(polls[0]!.timings.attemptStart!);
+    expect(request.timings.bodyEnd).toBeLessThanOrEqual(polls[0]!.timings.attemptBegin!);
     expect(request.timings.deserializeEnd).toBeGreaterThanOrEqual(polls[1]!.timings.deserializeEnd!);
   });
 
@@ -616,14 +616,14 @@ describe('connection phases', () => {
   test('durations', () => {
     const timings = (marks: Partial<Timings>): Timings => ({ extra: {}, ...marks });
     const newConnection = timings({
-      attemptStart: 0,
+      attemptBegin: 0,
       requestReady: 50,
-      connectStart: 150,
+      connectBegin: 150,
       connectEnd: 400,
-      sendStart: 410,
+      sendBegin: 410,
       sendEnd: 500,
       responseHeaders: 900,
-      extra: { compress_start: 60, compress_end: 100 },
+      extra: { compress_begin: 60, compress_end: 100 },
     });
     expect(computeDurations(newConnection, 1000)).toMatchObject({
       compress: 40,
@@ -634,9 +634,9 @@ describe('connection phases', () => {
     });
 
     const reusedConnection = timings({
-      attemptStart: 0,
+      attemptBegin: 0,
       requestReady: 100,
-      sendStart: 130,
+      sendBegin: 130,
       sendEnd: 160,
       responseHeaders: 300,
     });
@@ -649,15 +649,15 @@ describe('connection phases', () => {
 
     // Bodies are compressed before the request is handed to fetch, so the wait starts once it is.
     const compressedFirst = timings({
-      attemptStart: 0,
+      attemptBegin: 0,
       requestReady: 50,
-      sendStart: 70,
-      extra: { compress_start: 10, compress_end: 20 },
+      sendBegin: 70,
+      extra: { compress_begin: 10, compress_end: 20 },
     });
     expect(computeDurations(compressedFirst, 100).pool).toBe(20);
 
     // Untraced requests, e.g. through a custom fetch.
-    expect(computeDurations(timings({ attemptStart: 0 }), 400)).toEqual({ total: 400 });
+    expect(computeDurations(timings({ attemptBegin: 0 }), 400)).toEqual({ total: 400 });
   });
 
   test('the client traces connections', async () => {

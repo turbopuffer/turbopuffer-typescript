@@ -18,39 +18,39 @@ export type Durations = Partial<Record<Phase, number>>;
 /** Returns the duration of each client-side phase of an attempt ending at `end`, leaving out unobserved ones. */
 export function computeDurations(timings: Timings, end: number): Durations {
   const durations: Durations = {};
-  if (timings.attemptStart === undefined) {
+  if (timings.attemptBegin === undefined) {
     return durations;
   }
-  durations.total = end - timings.attemptStart;
+  durations.total = end - timings.attemptBegin;
 
-  if (timings.serializeStart !== undefined && timings.serializeEnd !== undefined) {
-    durations.serialize = timings.serializeEnd - timings.serializeStart;
+  if (timings.serializeBegin !== undefined && timings.serializeEnd !== undefined) {
+    durations.serialize = timings.serializeEnd - timings.serializeBegin;
   }
 
   // Set when building the request, which may compress its body.
-  const compressStart = timings.extra['compress_start'];
+  const compressBegin = timings.extra['compress_begin'];
   const compressEnd = timings.extra['compress_end'];
-  if (compressStart !== undefined && compressEnd !== undefined) {
-    durations.compress = compressEnd - compressStart;
+  if (compressBegin !== undefined && compressEnd !== undefined) {
+    durations.compress = compressEnd - compressBegin;
   }
 
   // Waiting for a free connection, until connecting a new one or sending on a reused one. The body is
   // compressed before the request is handed to fetch, so the wait starts at whichever came last.
-  const poolStart =
+  const poolBegin =
     compressEnd === undefined ? timings.requestReady
     : timings.requestReady === undefined ? compressEnd
     : Math.max(compressEnd, timings.requestReady);
-  const connectionReady = timings.connectStart ?? timings.sendStart;
-  if (poolStart !== undefined && connectionReady !== undefined) {
-    durations.pool = Math.max(connectionReady - poolStart, 0);
+  const connectionReady = timings.connectBegin ?? timings.sendBegin;
+  if (poolBegin !== undefined && connectionReady !== undefined) {
+    durations.pool = Math.max(connectionReady - poolBegin, 0);
   }
 
-  if (timings.connectStart !== undefined && timings.connectEnd !== undefined) {
-    durations.connect = timings.connectEnd - timings.connectStart;
+  if (timings.connectBegin !== undefined && timings.connectEnd !== undefined) {
+    durations.connect = timings.connectEnd - timings.connectBegin;
   }
 
-  if (timings.sendStart !== undefined && timings.sendEnd !== undefined) {
-    durations.send = timings.sendEnd - timings.sendStart;
+  if (timings.sendBegin !== undefined && timings.sendEnd !== undefined) {
+    durations.send = timings.sendEnd - timings.sendBegin;
   }
 
   // Covers the network round trip and the server. A body can finish sending after the headers arrive.
@@ -59,15 +59,15 @@ export function computeDurations(timings: Timings, end: number): Durations {
   }
 
   if (timings.responseHeaders !== undefined) {
-    durations.response = timings.responseHeaders - timings.attemptStart;
+    durations.response = timings.responseHeaders - timings.attemptBegin;
   }
 
   if (timings.bodyEnd !== undefined && timings.responseHeaders !== undefined) {
     durations.body_read = timings.bodyEnd - timings.responseHeaders;
   }
 
-  if (timings.deserializeStart !== undefined && timings.deserializeEnd !== undefined) {
-    durations.deserialize = timings.deserializeEnd - timings.deserializeStart;
+  if (timings.deserializeBegin !== undefined && timings.deserializeEnd !== undefined) {
+    durations.deserialize = timings.deserializeEnd - timings.deserializeBegin;
   }
 
   return durations;
@@ -100,10 +100,10 @@ export function mergeIntoPerformance(parsed: unknown, durations: Durations, timi
   }
 
   // Set by our Node fetch, which decompresses response bodies itself.
-  const decompressStart = timings.extra['decompress_start'];
+  const decompressBegin = timings.extra['decompress_begin'];
   const decompressEnd = timings.extra['decompress_end'];
-  if (decompressStart !== undefined && decompressEnd !== undefined) {
-    out.client_decompress_ms = decompressEnd - decompressStart;
+  if (decompressBegin !== undefined && decompressEnd !== undefined) {
+    out.client_decompress_ms = decompressEnd - decompressBegin;
   }
 }
 

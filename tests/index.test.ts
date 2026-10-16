@@ -855,13 +855,13 @@ describe('request observer', () => {
     expect(result!.error).toBeUndefined();
     const timings = result!.timings;
     const marks = [
-      timings.attemptStart,
-      timings.serializeStart,
+      timings.attemptBegin,
+      timings.serializeBegin,
       timings.serializeEnd,
       timings.requestReady,
       timings.responseHeaders,
       timings.bodyEnd,
-      timings.deserializeStart,
+      timings.deserializeBegin,
       timings.deserializeEnd,
     ];
     expect(marks.every((mark) => typeof mark === 'number')).toBe(true);
@@ -906,7 +906,7 @@ describe('request observer', () => {
     expect(result!.response!.status).toBe(404);
     expect(result!.parsed).toBeUndefined();
     expect(result!.timings.bodyEnd).toBeDefined();
-    expect(result!.timings.deserializeStart).toBeUndefined();
+    expect(result!.timings.deserializeBegin).toBeUndefined();
   });
 
   test('finishes a connection error', async () => {
@@ -1115,9 +1115,9 @@ describe('request observer', () => {
         expect(first!.reused).toBe(false);
         const marks = [
           first!.requestReady,
-          first!.connectStart,
+          first!.connectBegin,
           first!.connectEnd,
-          first!.sendStart,
+          first!.sendBegin,
           first!.sendEnd,
           first!.responseHeaders,
           first!.bodyEnd,
@@ -1125,8 +1125,8 @@ describe('request observer', () => {
         expect(marks.every((mark) => typeof mark === 'number')).toBe(true);
         expect([...marks].sort((a, b) => a! - b!)).toEqual(marks);
         expect(second!.reused).toBe(true);
-        expect(second!.connectStart).toBeUndefined();
-        expect(second!.sendStart).toBeDefined();
+        expect(second!.connectBegin).toBeUndefined();
+        expect(second!.sendBegin).toBeDefined();
       } finally {
         server.close();
       }

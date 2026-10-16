@@ -82,7 +82,7 @@ export const makeFetch = (clientOptions: HttpClientOptions) => {
 
     if (timings) {
       timings.bodyEnd ??= bodyEnd;
-      timings.extra['decompress_start'] = bodyEnd;
+      timings.extra['decompress_begin'] = bodyEnd;
       timings.extra['decompress_end'] = decompressEnd;
     }
 
