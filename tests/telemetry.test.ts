@@ -327,6 +327,20 @@ describe('requests', () => {
     }
   });
 
+  test('a request that fails before it is sent keeps buffered records', async () => {
+    const { fetch, sent } = mockFetch(json(queryBody()));
+    const ns = newClient({ fetch }).namespace('my-ns');
+
+    await ns.query({ top_k: 1 });
+    // Building the request fails, so it's never sent.
+    const unserializable = { top_k: 1, rank_by: 1n } as unknown as Parameters<typeof ns.query>[0];
+    await expect(ns.query(unserializable)).rejects.toThrow();
+    await ns.query({ top_k: 1 });
+
+    expect(sent).toHaveLength(2);
+    expect(sentRecords(sent[1]!.telemetry)!.map((record) => record['route'])).toEqual([QUERY_ROUTE]);
+  });
+
   test('disabled clients send nothing', async () => {
     const { fetch, sent } = mockFetch(json(queryBody()));
     const ns = new Turbopuffer({ baseURL: BASE_URL, apiKey: 'tpuf_A1...', fetch }).namespace('my-ns');

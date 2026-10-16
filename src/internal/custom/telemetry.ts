@@ -260,11 +260,13 @@ class TurbopufferScope implements RequestScope {
   constructor(
     private readonly buffer: TelemetryBuffer | undefined,
     private readonly info: RequestInfo,
-  ) {
-    this.batch = buffer?.take();
-  }
+  ) {}
 
-  attemptBegin(_attempt: number, request: ObservedRequest): void {
+  attemptBegin(attempt: number, request: ObservedRequest): void {
+    // Taken only once a request is about to be sent, so one that fails before then can't lose it.
+    if (attempt === 0) {
+      this.batch = this.buffer?.take();
+    }
     if (this.batch !== undefined) {
       request.init.headers.set(TELEMETRY_HEADER, this.batch.header);
     }
