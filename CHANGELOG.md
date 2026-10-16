@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.12.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.11.1...v2.12.0) (2026-10-16)
+
+
+### Features
+
+* OpenAPI: Add missing descriptions to prettify docblocks in output SDKs ([d994ac4](https://github.com/turbopuffer/turbopuffer-typescript/commit/d994ac44ae93a25347aaed0c4e62da60e7fc3f3b))
+
 ## [2.11.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.11.0...v2.11.1) (2026-10-13)
 
 
