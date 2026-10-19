@@ -11,6 +11,7 @@ import type { APIResponseProps } from './internal/parse';
 import { getPlatformHeaders } from './internal/detect-platform';
 import * as Shims from './internal/shims';
 import * as Opts from './internal/request-options';
+import { RequestObservation, traceableFetch, type RequestObserver, type Timings } from './internal/observer';
 import { stringifyQuery } from './internal/utils/query';
 import { VERSION } from './version';
 import * as Errors from './core/error';
@@ -214,6 +215,8 @@ export class Turbopuffer {
   #encoder: Opts.RequestEncoder;
   protected idempotencyHeader?: string;
   private _options: ClientOptions;
+  /** Observes requests, such as to record their timings. Custom code installs it. */
+  protected _observer?: RequestObserver | undefined;
 
   /**
    * API Client for interfacing with the Turbopuffer API.
@@ -262,7 +265,7 @@ export class Turbopuffer {
       defaultLogLevel;
     this.fetchOptions = options.fetchOptions;
     this.maxRetries = options.maxRetries ?? 4;
-    this.fetch = options.fetch ?? Shims.getDefaultFetch();
+    this.fetch = options.fetch ?? traceableFetch(Shims.getDefaultFetch());
     this.#encoder = Opts.FallbackEncoder;
 
     const customHeadersEnv = readEnv('TURBOPUFFER_CUSTOM_HEADERS');
@@ -444,17 +447,21 @@ export class Turbopuffer {
     optionsInput: PromiseOrValue<FinalRequestOptions>,
     retriesRemaining: number | null,
     retryOfRequestLogID: string | undefined,
+    observation?: RequestObservation,
   ): Promise<APIResponseProps> {
     const options = await optionsInput;
     const maxRetries = options.maxRetries ?? this.maxRetries;
     if (retriesRemaining == null) {
       retriesRemaining = maxRetries;
     }
+    observation ??= RequestObservation.start(this, this._observer, options);
+    observation.startAttempt(maxRetries - retriesRemaining);
 
     await this.prepareOptions(options);
 
     const { req, url, timeout } = await this.buildRequest(options, {
       retryCount: maxRetries - retriesRemaining,
+      timings: observation.timings,
     });
 
     await this.prepareRequest(req, { url, options });
@@ -476,17 +483,20 @@ export class Turbopuffer {
     );
 
     if (options.signal?.aborted) {
-      throw new Errors.APIUserAbortError();
+      throw observation.fail(new Errors.APIUserAbortError());
     }
 
     const controller = new AbortController();
-    const response = await this.fetchWithTimeout(url, req, timeout, controller).catch(castToError);
+    observation.beforeSend(url, req);
+    const response = await observation
+      .dispatch(this.fetch, () => this.fetchWithTimeout(url, req, timeout, controller))
+      .catch(castToError);
     const headersTime = Date.now();
 
     if (response instanceof globalThis.Error) {
       const retryMessage = `retrying, ${retriesRemaining} attempts remaining`;
       if (options.signal?.aborted) {
-        throw new Errors.APIUserAbortError();
+        throw observation.fail(new Errors.APIUserAbortError(), response);
       }
       // detect native connection timeout errors
       // deno throws "TypeError: error sending request for url (https://example/): client error (Connect): tcp connect error: Operation timed out (os error 60): Operation timed out (os error 60)"
@@ -496,6 +506,7 @@ export class Turbopuffer {
         isAbortError(response) ||
         /timed? ?out/i.test(String(response) + ('cause' in response ? String(response.cause) : ''));
       if (retriesRemaining) {
+        observation.onError(response);
         loggerFor(this).info(
           `[${requestLogID}] connection ${isTimeout ? 'timed out' : 'failed'} - ${retryMessage}`,
         );
@@ -508,7 +519,13 @@ export class Turbopuffer {
             message: response.message,
           }),
         );
-        return this.retryRequest(options, retriesRemaining, retryOfRequestLogID ?? requestLogID);
+        return this.retryRequest(
+          options,
+          retriesRemaining,
+          retryOfRequestLogID ?? requestLogID,
+          undefined,
+          observation,
+        );
       }
       loggerFor(this).info(
         `[${requestLogID}] connection ${isTimeout ? 'timed out' : 'failed'} - error; no more retries left`,
@@ -523,10 +540,12 @@ export class Turbopuffer {
         }),
       );
       if (isTimeout) {
-        throw new Errors.APIConnectionTimeoutError();
+        throw observation.fail(new Errors.APIConnectionTimeoutError(), response);
       }
-      throw new Errors.APIConnectionError({ cause: response });
+      throw observation.fail(new Errors.APIConnectionError({ cause: response }), response);
     }
+
+    observation.onResponse(response);
 
     const responseInfo = `[${requestLogID}${retryLogStr}] ${req.method} ${url} ${
       response.ok ? 'succeeded' : 'failed'
@@ -555,6 +574,7 @@ export class Turbopuffer {
           retriesRemaining,
           retryOfRequestLogID ?? requestLogID,
           response.headers,
+          observation,
         );
       }
 
@@ -563,6 +583,7 @@ export class Turbopuffer {
       loggerFor(this).info(`${responseInfo} - ${retryMessage}`);
 
       const errText = await response.text().catch((err: any) => castToError(err).message);
+      observation.bodyRead();
       const errJSON = safeJSON(errText) as any;
       const errMessage = errJSON ? undefined : errText;
 
@@ -579,7 +600,7 @@ export class Turbopuffer {
       );
 
       const err = this.makeStatusError(response.status, errJSON, errMessage, response.headers);
-      throw err;
+      throw observation.fail(err);
     }
 
     loggerFor(this).info(responseInfo);
@@ -594,7 +615,7 @@ export class Turbopuffer {
       }),
     );
 
-    return { response, options, controller, requestLogID, retryOfRequestLogID, startTime };
+    return { response, options, controller, requestLogID, retryOfRequestLogID, startTime, observation };
   }
 
   getAPIList<Item, PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>>(
@@ -685,6 +706,7 @@ export class Turbopuffer {
     retriesRemaining: number,
     requestLogID: string,
     responseHeaders?: Headers | undefined,
+    observation?: RequestObservation,
   ): Promise<APIResponseProps> {
     let timeoutMillis: number | undefined;
 
@@ -716,7 +738,7 @@ export class Turbopuffer {
     }
     await sleep(timeoutMillis);
 
-    return this.makeRequest(options, retriesRemaining - 1, requestLogID);
+    return this.makeRequest(options, retriesRemaining - 1, requestLogID, observation);
   }
 
   private calculateDefaultRetryTimeoutMillis(retriesRemaining: number, maxRetries: number): number {
@@ -736,7 +758,7 @@ export class Turbopuffer {
 
   async buildRequest(
     inputOptions: FinalRequestOptions,
-    { retryCount = 0 }: { retryCount?: number } = {},
+    { retryCount = 0, timings }: { retryCount?: number; timings?: Timings | undefined } = {},
   ): Promise<{ req: FinalizedRequestInit; url: string; timeout: number }> {
     const options = { ...inputOptions };
     const { method, path, query, defaultBaseURL } = options;
@@ -744,7 +766,9 @@ export class Turbopuffer {
     const url = this.buildURL(path!, query as Record<string, unknown>, defaultBaseURL);
     if ('timeout' in options) validatePositiveInteger('timeout', options.timeout);
     options.timeout = options.timeout ?? this.timeout;
+    if (timings) timings.serializeBegin = performance.now();
     const { bodyHeaders, body } = this.buildBody({ options });
+    if (timings) timings.serializeEnd = performance.now();
     const reqHeaders = await this.buildHeaders({ options: inputOptions, method, bodyHeaders, retryCount });
 
     const req: FinalizedRequestInit = {

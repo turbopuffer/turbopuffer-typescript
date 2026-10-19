@@ -5,6 +5,14 @@ import { APIPromise } from '@turbopuffer/turbopuffer/core/api-promise';
 import util from 'node:util';
 import Turbopuffer from '@turbopuffer/turbopuffer';
 import { APIUserAbortError } from '@turbopuffer/turbopuffer';
+import { APIConnectionError, APIConnectionTimeoutError, APIError } from '@turbopuffer/turbopuffer/core/error';
+import {
+  errorKind,
+  type RequestObserver,
+  type RequestResult,
+} from '@turbopuffer/turbopuffer/internal/observer';
+import http from 'node:http';
+import { type AddressInfo } from 'node:net';
 const defaultFetch = fetch;
 
 describe('instantiate client', () => {
@@ -741,4 +749,358 @@ describe('retries', () => {
     ).toEqual(JSON.stringify({ a: 1 }));
     expect(count).toEqual(3);
   });
+});
+
+describe('request observer', () => {
+  // Records each call as a string, and sets a header in each attempt.
+  const recorder = (events: string[], results: RequestResult[] = []): RequestObserver => ({
+    start(info) {
+      events.push(`start:${info.method}:${info.url}`);
+      return {
+        attemptBegin(attempt, request) {
+          events.push(`attemptBegin:${attempt}`);
+          request.init.headers.set('x-observed-attempt', String(attempt));
+        },
+        attemptEnd(result) {
+          events.push(
+            `attemptEnd:${result.attempt}:${result.response?.status}:${result.errorKind}:${result.reachedServer}`,
+          );
+        },
+        finish(result) {
+          events.push('finish');
+          results.push(result);
+        },
+      };
+    },
+  });
+
+  // Custom code installs observers, so there's no public option for it.
+  const observe = <C extends Turbopuffer>(client: C, observer: RequestObserver | undefined): C => {
+    (client as any)._observer = observer;
+    return client;
+  };
+
+  const json = (body: unknown, status = 200, headers: Record<string, string> = {}) =>
+    new Response(JSON.stringify(body), {
+      status,
+      headers: { 'Content-Type': 'application/json', ...headers },
+    });
+
+  test('observes each attempt and finishes once the response is parsed', async () => {
+    let count = 0;
+    const sent: (string | null)[] = [];
+    const testFetch = async (url: string | URL | Request, init: RequestInit = {}): Promise<Response> => {
+      sent.push((init.headers as Headers).get('x-observed-attempt'));
+      return count++ === 0 ? json({}, 500, { 'Retry-After-Ms': '1' }) : json({ a: 1 });
+    };
+    const events: string[] = [];
+    const results: RequestResult[] = [];
+    const client = observe(
+      new Turbopuffer({
+        baseURL: 'http://localhost:5000/',
+        apiKey: 'tpuf_A1...',
+        fetch: testFetch,
+        maxRetries: 1,
+      }),
+      recorder(events, results),
+    );
+
+    const promise = client.request({ path: '/foo', method: 'get' });
+    const response = await promise;
+    await promise.withResponse();
+
+    expect(response).toEqual({ a: 1 });
+    expect(events).toEqual([
+      'start:get:/foo',
+      'attemptBegin:0',
+      'attemptEnd:0:500:undefined:true',
+      'attemptBegin:1',
+      'attemptEnd:1:200:undefined:true',
+      'finish',
+    ]);
+    expect(sent).toEqual(['0', '1']);
+    const [result] = results;
+    expect(result!.retries).toBe(1);
+    expect(result!.parsed).toBe(response);
+    expect(result!.response!.status).toBe(200);
+    expect(result!.error).toBeUndefined();
+    const timings = result!.timings;
+    const marks = [
+      timings.attemptBegin,
+      timings.serializeBegin,
+      timings.serializeEnd,
+      timings.requestReady,
+      timings.responseHeaders,
+      timings.bodyEnd,
+      timings.deserializeBegin,
+      timings.deserializeEnd,
+    ];
+    expect(marks.every((mark) => typeof mark === 'number')).toBe(true);
+    expect([...marks].sort((a, b) => a! - b!)).toEqual(marks);
+  });
+
+  test('does not finish responses the caller reads', async () => {
+    const events: string[] = [];
+    const client = observe(
+      new Turbopuffer({
+        baseURL: 'http://localhost:5000/',
+        apiKey: 'tpuf_A1...',
+        fetch: async () => json({ a: 1 }),
+      }),
+      recorder(events),
+    );
+
+    const response = await client.request({ path: '/foo', method: 'get' }).asResponse();
+    expect(await response.json()).toEqual({ a: 1 });
+    expect(events).toEqual(['start:get:/foo', 'attemptBegin:0', 'attemptEnd:0:200:undefined:true']);
+  });
+
+  test('finishes an error response with the API error', async () => {
+    const events: string[] = [];
+    const results: RequestResult[] = [];
+    const client = observe(
+      new Turbopuffer({
+        baseURL: 'http://localhost:5000/',
+        apiKey: 'tpuf_A1...',
+        fetch: async () => json({ error: 'not found' }, 404),
+      }),
+      recorder(events, results),
+    );
+
+    const error = await client.request({ path: '/foo', method: 'get' }).catch((err) => err);
+
+    expect(error).toBeInstanceOf(APIError);
+    expect(events).toEqual(['start:get:/foo', 'attemptBegin:0', 'attemptEnd:0:404:undefined:true', 'finish']);
+    const [result] = results;
+    expect(result!.error).toBe(error);
+    expect(result!.errorKind).toBeUndefined();
+    expect(result!.response!.status).toBe(404);
+    expect(result!.parsed).toBeUndefined();
+    expect(result!.timings.bodyEnd).toBeDefined();
+    expect(result!.timings.deserializeBegin).toBeUndefined();
+  });
+
+  test('finishes a connection error', async () => {
+    const cause = Object.assign(new Error('connect ECONNREFUSED 127.0.0.1:1'), { code: 'ECONNREFUSED' });
+    const testFetch = async (): Promise<Response> => {
+      throw Object.assign(new TypeError('fetch failed'), { cause });
+    };
+    const events: string[] = [];
+    const results: RequestResult[] = [];
+    const client = observe(
+      new Turbopuffer({
+        baseURL: 'http://localhost:5000/',
+        apiKey: 'tpuf_A1...',
+        fetch: testFetch,
+        maxRetries: 0,
+      }),
+      recorder(events, results),
+    );
+
+    const error = await client.request({ path: '/foo', method: 'get' }).catch((err) => err);
+
+    expect(error).toBeInstanceOf(APIConnectionError);
+    expect(events).toEqual([
+      'start:get:/foo',
+      'attemptBegin:0',
+      'attemptEnd:0:undefined:connect_error:false',
+      'finish',
+    ]);
+    const [result] = results;
+    expect(result!.error).toBe(error);
+    expect(result!.errorKind).toBe('connect_error');
+    expect(result!.response).toBeUndefined();
+  });
+
+  test('finishes a timeout', async () => {
+    const testFetch = (url: string | URL | Request, { signal }: RequestInit = {}): Promise<Response> =>
+      new Promise(
+        (resolve, reject) => signal?.addEventListener('abort', () => reject(new Error('timed out'))),
+      );
+    const events: string[] = [];
+    const results: RequestResult[] = [];
+    const client = observe(
+      new Turbopuffer({
+        baseURL: 'http://localhost:5000/',
+        apiKey: 'tpuf_A1...',
+        fetch: testFetch,
+        timeout: 10,
+        maxRetries: 0,
+      }),
+      recorder(events, results),
+    );
+
+    const error = await client.request({ path: '/foo', method: 'get' }).catch((err) => err);
+
+    expect(error).toBeInstanceOf(APIConnectionTimeoutError);
+    expect(events).toEqual([
+      'start:get:/foo',
+      'attemptBegin:0',
+      'attemptEnd:0:undefined:timeout:undefined',
+      'finish',
+    ]);
+    expect(results[0]!.errorKind).toBe('timeout');
+  });
+
+  test('finishes a canceled request', async () => {
+    const controller = new AbortController();
+    const testFetch = (url: string | URL | Request, { signal }: RequestInit = {}): Promise<Response> =>
+      new Promise((resolve, reject) => {
+        signal?.addEventListener('abort', () =>
+          reject(Object.assign(new Error('aborted'), { name: 'AbortError' })),
+        );
+        controller.abort();
+      });
+    const events: string[] = [];
+    const results: RequestResult[] = [];
+    const client = observe(
+      new Turbopuffer({
+        baseURL: 'http://localhost:5000/',
+        apiKey: 'tpuf_A1...',
+        fetch: testFetch,
+      }),
+      recorder(events, results),
+    );
+
+    await expect(client.request({ path: '/foo', method: 'get', signal: controller.signal })).rejects.toThrow(
+      APIUserAbortError,
+    );
+    expect(events).toEqual([
+      'start:get:/foo',
+      'attemptBegin:0',
+      'attemptEnd:0:undefined:canceled:undefined',
+      'finish',
+    ]);
+    expect(results[0]!.errorKind).toBe('canceled');
+  });
+
+  test('ignores errors from observers', async () => {
+    const logger = { debug: jest.fn(), info: jest.fn(), warn: jest.fn(), error: jest.fn() };
+    const throwing: RequestObserver = {
+      start: () => ({
+        attemptBegin() {
+          throw new Error('attemptBegin');
+        },
+        attemptEnd() {
+          throw new Error('attemptEnd');
+        },
+        finish() {
+          throw new Error('finish');
+        },
+      }),
+    };
+    const client = observe(
+      new Turbopuffer({
+        baseURL: 'http://localhost:5000/',
+        apiKey: 'tpuf_A1...',
+        fetch: async () => json({ a: 1 }),
+        logger: logger,
+      }),
+      throwing,
+    );
+
+    expect(await client.request({ path: '/foo', method: 'get' })).toEqual({ a: 1 });
+    expect(logger.warn).toHaveBeenCalledTimes(3);
+
+    observe(client, {
+      start() {
+        throw new Error('start');
+      },
+    });
+    expect(await client.request({ path: '/foo', method: 'get' })).toEqual({ a: 1 });
+    expect(logger.warn).toHaveBeenCalledTimes(4);
+  });
+
+  test('does nothing without a scope', async () => {
+    const sent: (string | null)[] = [];
+    const testFetch = async (url: string | URL | Request, init: RequestInit = {}): Promise<Response> => {
+      sent.push((init.headers as Headers).get('x-observed-attempt'));
+      return json({ a: 1 });
+    };
+    const events: string[] = [];
+    const client = observe(
+      new Turbopuffer({
+        baseURL: 'http://localhost:5000/',
+        apiKey: 'tpuf_A1...',
+        fetch: testFetch,
+      }),
+      {
+        start(info) {
+          events.push(`start:${info.method}:${info.url}`);
+          return undefined;
+        },
+      },
+    );
+
+    expect(await client.request({ path: '/foo', method: 'get' })).toEqual({ a: 1 });
+    observe(client, undefined);
+    expect(await client.request({ path: '/foo', method: 'get' })).toEqual({ a: 1 });
+
+    expect(events).toEqual(['start:get:/foo']);
+    expect(sent).toEqual([null, null]);
+  });
+
+  test('classifies errors', () => {
+    const coded = (code: string) => Object.assign(new Error(code), { code });
+    const abort = Object.assign(new Error('aborted'), { name: 'AbortError' });
+    expect(errorKind(new APIConnectionTimeoutError(), false)).toBe('timeout');
+    expect(errorKind(new APIConnectionError({ cause: coded('UND_ERR_CONNECT_TIMEOUT') }), false)).toBe(
+      'connect_timeout',
+    );
+    expect(errorKind(new APIConnectionError({ cause: coded('ECONNRESET') }), false, 'read')).toBe(
+      'read_error',
+    );
+    expect(errorKind(abort, false, 'connect')).toBe('connect_timeout');
+    expect(errorKind(abort, true, 'connect')).toBe('canceled');
+    expect(errorKind(new APIUserAbortError(), false)).toBe('canceled');
+    expect(errorKind(new Error('bad'), false)).toBe('other');
+  });
+
+  // Connections are traced through undici's diagnostics channels on Node.
+  (typeof (process as any).getBuiltinModule === 'function' ? test : test.skip)(
+    'traces connections of its own fetch',
+    async () => {
+      const server = http.createServer((req, res) => {
+        req.resume();
+        req.on('end', () => {
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify({ a: 1 }));
+        });
+      });
+      await new Promise<void>((resolve) => server.listen(0, '127.0.0.1', resolve));
+      try {
+        const { port } = server.address() as AddressInfo;
+        const results: RequestResult[] = [];
+        const client = observe(
+          new Turbopuffer({ baseURL: `http://127.0.0.1:${port}`, apiKey: 'tpuf_A1...' }),
+          recorder([], results),
+        );
+
+        for (let i = 0; i < 2; i++) {
+          expect(await client.request({ path: '/foo', method: 'post', body: { i } })).toEqual({ a: 1 });
+          // undici frees the connection shortly after the body is read.
+          await new Promise((resolve) => setTimeout(resolve, 10));
+        }
+
+        const [first, second] = results.map((result) => result.timings);
+        expect(first!.reused).toBe(false);
+        const marks = [
+          first!.requestReady,
+          first!.connectBegin,
+          first!.connectEnd,
+          first!.sendBegin,
+          first!.sendEnd,
+          first!.responseHeaders,
+          first!.bodyEnd,
+        ];
+        expect(marks.every((mark) => typeof mark === 'number')).toBe(true);
+        expect([...marks].sort((a, b) => a! - b!)).toEqual(marks);
+        expect(second!.reused).toBe(true);
+        expect(second!.connectBegin).toBeUndefined();
+        expect(second!.sendBegin).toBeDefined();
+      } finally {
+        server.close();
+      }
+    },
+  );
 });
