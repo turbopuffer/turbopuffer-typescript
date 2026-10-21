@@ -12,11 +12,18 @@ import { computeDurations } from '@turbopuffer/turbopuffer/internal/custom/perfo
 import {
   MAX_BUFFERED_RECORDS,
   MAX_RECORDS_PER_HEADER,
+  REQUEST_ID_ALPHABET,
+  REQUEST_ID_BYTES,
+  REQUEST_ID_HEADER,
+  REQUEST_ID_PREFIX,
+  REQUEST_ID_RANDOM_BYTES,
   SAMPLE_RATE_HEADER,
   TELEMETRY_ENV_VAR,
   TELEMETRY_HEADER,
   TelemetryBuffer,
   TurbopufferObserver,
+  encodeBase32,
+  newRequestId,
   resolveEnabled,
   routeTemplate,
   sampling,
@@ -59,9 +66,14 @@ const connectError: Reply = () => {
 
 /** Answers requests with `replies` in order, repeating the last one, and remembers what was sent. */
 function mockFetch(...replies: Reply[]) {
-  const sent: { url: string; telemetry: string | null }[] = [];
+  const sent: { url: string; telemetry: string | null; requestId: string | null }[] = [];
   const fetch = async (url: string | URL | Request, init: RequestInit = {}): Promise<Response> => {
-    sent.push({ url: String(url), telemetry: (init.headers as Headers).get(TELEMETRY_HEADER) });
+    const headers = init.headers as Headers;
+    sent.push({
+      url: String(url),
+      telemetry: headers.get(TELEMETRY_HEADER),
+      requestId: headers.get(REQUEST_ID_HEADER),
+    });
     const reply = replies.length > 1 ? replies.shift()! : replies[0]!;
     return reply(init.signal);
   };
@@ -90,8 +102,35 @@ function takePayload(buffer: TelemetryBuffer) {
   return parseHeader(batch!.header)!;
 }
 
-function addRecord(buffer: TelemetryBuffer, status = 200) {
-  buffer.record({ method: 'post', url: QUERY_PATH, status, retries: 0, durations: { total: 5 } });
+function addRecord(buffer: TelemetryBuffer, status = 200, sampleRate = 1) {
+  buffer.record({ method: 'post', url: QUERY_PATH, status, retries: 0, durations: { total: 5 }, sampleRate });
+}
+
+/** The millisecond time and random bytes of a generated request ID, checking its format. */
+function decodeRequestId(id: string): { millis: number; random: number[] } {
+  expect(id.startsWith(REQUEST_ID_PREFIX)).toBe(true);
+  const encoded = id.slice(REQUEST_ID_PREFIX.length);
+  expect(encoded).toHaveLength(Math.ceil((REQUEST_ID_BYTES * 8) / 5));
+  const bytes: number[] = [];
+  let buffer = 0;
+  let bits = 0;
+  for (const c of encoded) {
+    const value = REQUEST_ID_ALPHABET.indexOf(c);
+    expect(value).toBeGreaterThanOrEqual(0);
+    buffer = (buffer << 5) | value;
+    bits += 5;
+    if (bits >= 8) {
+      bits -= 8;
+      bytes.push(buffer >> bits);
+      buffer &= (1 << bits) - 1;
+    }
+  }
+  expect([bytes.length, buffer]).toEqual([REQUEST_ID_BYTES, 0]);
+  let millis = 0;
+  for (let i = REQUEST_ID_RANDOM_BYTES; i < REQUEST_ID_BYTES; i++) {
+    millis = millis * 256 + (bytes[i]! ^ bytes[i - REQUEST_ID_RANDOM_BYTES]!);
+  }
+  return { millis, random: bytes.slice(0, REQUEST_ID_RANDOM_BYTES) };
 }
 
 const bufferOf = (client: Turbopuffer): TelemetryBuffer | undefined =>
@@ -197,6 +236,7 @@ describe('TelemetryBuffer', () => {
       retries: 2,
       durations: { total: 1.234567, compress: 0, deserialize: 0.000999 },
       serverTotalMs: 7,
+      sampleRate: 1,
     });
 
     const [record] = takePayload(buffer).records;
@@ -255,6 +295,29 @@ describe('TelemetryBuffer', () => {
     buffer.observeResponse(new Headers({ [SAMPLE_RATE_HEADER]: '0.5' }));
     buffer.observeResponse(new Headers({ [SAMPLE_RATE_HEADER]: value }));
     expect(buffer.sampleRate).toBe(0.5);
+  });
+
+  test('samples requests', () => {
+    const buffer = new TelemetryBuffer();
+    const advertise = (rate: string) => buffer.observeResponse(new Headers({ [SAMPLE_RATE_HEADER]: rate }));
+    sampling.random = () => 0.3;
+    advertise('0.5');
+    expect(buffer.sample()).toBe(0.5);
+    addRecord(buffer, 200, 0.5);
+    expect(takePayload(buffer).records[0]!['sample_rate']).toBe(0.5);
+
+    advertise('0.25');
+    expect(buffer.sample()).toBeUndefined();
+
+    sampling.random = () => 0;
+    advertise('0');
+    expect(buffer.sample()).toBeUndefined();
+
+    // A full rate isn't reported.
+    advertise('1');
+    expect(buffer.sample()).toBe(1);
+    addRecord(buffer, 200, 1);
+    expect(takePayload(buffer).records[0]).not.toHaveProperty('sample_rate');
   });
 });
 
@@ -349,6 +412,7 @@ describe('requests', () => {
     await ns.query({ top_k: 1 });
 
     expect(sent.map((request) => request.telemetry)).toEqual([null, null]);
+    expect(sent.map((request) => request.requestId)).toEqual([null, null]);
   });
 
   test('compression is recorded', async () => {
@@ -372,20 +436,27 @@ describe('requests', () => {
 
     expect(sent.map((request) => request.telemetry)).toEqual([null, null, null]);
     expect(bufferOf(client)!.sampleRate).toBe(0);
+    // Unrecorded requests have no request IDs to link.
+    expect(sent.slice(1).map((request) => request.requestId)).toEqual([null, null]);
   });
 
   test('the server sample rate is applied', async () => {
     const { fetch, sent } = mockFetch(json(queryBody(), 200, { [SAMPLE_RATE_HEADER]: '0.25' }));
     const ns = newClient({ fetch }).namespace('my-ns');
 
+    // Sampled before the server advertised a rate, so it's recorded at the full rate.
+    await ns.query({ top_k: 1 });
     sampling.random = () => 0.2;
     await ns.query({ top_k: 1 });
     sampling.random = () => 0.3;
     await ns.query({ top_k: 1 });
     await ns.query({ top_k: 1 });
 
-    expect(sentRecords(sent[1]!.telemetry)![0]!['sample_rate']).toBe(0.25);
-    expect(sent[2]!.telemetry).toBeNull();
+    expect(sentRecords(sent[1]!.telemetry)![0]).not.toHaveProperty('sample_rate');
+    expect(sentRecords(sent[2]!.telemetry)![0]!['sample_rate']).toBe(0.25);
+    expect(sent[3]!.telemetry).toBeNull();
+    // Unrecorded requests have no request IDs to link.
+    expect(sent[2]!.requestId).toBeNull();
   });
 
   test('a batch is sent again after a connect error', async () => {
@@ -488,6 +559,96 @@ describe('requests', () => {
     await promise.withResponse();
 
     expect(takePayload(bufferOf(client)!).records).toHaveLength(1);
+  });
+});
+
+describe('request IDs', () => {
+  const MILLIS = 1_792_497_600_123;
+
+  test('are encoded in base32', () => {
+    // The vectors of riverpro's uuidbase32, which uses the same encoding.
+    for (const [byte, encoded] of [
+      [0x00, '22222222222222222222222222'],
+      [0x01, '22222222222222222222222226'],
+      [0x0f, '2222222222222222222222223w'],
+      [0xff, '222222222222222222222222zw'],
+    ] as const) {
+      const bytes = new Uint8Array(16);
+      bytes[15] = byte;
+      expect(encodeBase32(bytes)).toBe(encoded);
+    }
+    expect(encodeBase32(new Uint8Array(16).fill(0xff))).toBe('zzzzzzzzzzzzzzzzzzzzzzzzzw');
+
+    // A request ID, generated by Python's base64 module independently of either implementation.
+    const random = [0x9f, 0x1c, 0x2e, 0x7a, 0x4b, 0x6d, 0x8e, 0x0f, 0x1a, 0x2b, 0x3c, 0x4d];
+    const id = newRequestId(MILLIS, Uint8Array.from(random));
+    expect(id).toBe('tpreq_nwi4wymfhqb2yalfblatxjfremalg');
+    expect(decodeRequestId(id!)).toEqual({ millis: MILLIS, random });
+  });
+
+  test('are generated from the time and random bytes', () => {
+    const first = decodeRequestId(newRequestId(MILLIS)!);
+    const second = decodeRequestId(newRequestId(MILLIS)!);
+    expect([first.millis, second.millis]).toEqual([MILLIS, MILLIS]);
+    expect(first.random).not.toEqual(second.random);
+  });
+
+  test('are sent with requests and repeated in their records', async () => {
+    const { fetch, sent } = mockFetch(json(queryBody()));
+    const ns = newClient({ fetch }).namespace('my-ns');
+
+    await ns.query({ top_k: 1 });
+    await ns.query({ top_k: 1 });
+
+    const ids = sent.map((request) => request.requestId!);
+    expect(ids[0]).not.toBe(ids[1]);
+    for (const id of ids) {
+      decodeRequestId(id);
+    }
+    expect(sentRecords(sent[1]!.telemetry)![0]!['request_id']).toBe(ids[0]);
+  });
+
+  test('are kept by retries', async () => {
+    const { fetch, sent } = mockFetch(json({}, 503), json(queryBody()));
+    const client = newClient({ fetch });
+
+    await client.namespace('my-ns').query({ top_k: 1 });
+
+    expect(sent).toHaveLength(2);
+    const id = sent[0]!.requestId;
+    expect(id).not.toBeNull();
+    expect(sent[1]!.requestId).toBe(id);
+    const [record] = takePayload(bufferOf(client)!).records;
+    expect([record!['request_id'], record!['retries']]).toEqual([id, 1]);
+  });
+
+  test('set by callers are kept and not recorded', async () => {
+    const { fetch, sent } = mockFetch(json(queryBody()));
+    const client = newClient({ fetch, defaultHeaders: { 'X-Request-Id': 'my-request' } });
+    const other = newClient({ fetch });
+
+    await client.namespace('my-ns').query({ top_k: 1 });
+    await other.namespace('my-ns').query({ top_k: 1 }, { headers: { 'X-Request-Id': 'my-other-request' } });
+
+    expect(sent.map((request) => request.requestId)).toEqual(['my-request', 'my-other-request']);
+    for (const c of [client, other]) {
+      expect(takePayload(bufferOf(c)!).records[0]).not.toHaveProperty('request_id');
+    }
+  });
+
+  test('are left out without Web Crypto', async () => {
+    jest.replaceProperty(globalThis as any, 'crypto', undefined);
+    const { fetch, sent } = mockFetch(json(queryBody()));
+    const ns = newClient({ fetch }).namespace('my-ns');
+
+    await ns.query({ top_k: 1 });
+    await ns.query({ top_k: 1 });
+
+    expect(sent.map((request) => request.requestId)).toEqual([null, null]);
+    // The request is still recorded, just without an ID to link.
+    const [record] = sentRecords(sent[1]!.telemetry)!;
+    expect(record!['route']).toBe(QUERY_ROUTE);
+    expect(record).not.toHaveProperty('request_id');
   });
 });
 
