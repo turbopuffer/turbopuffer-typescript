@@ -5,6 +5,9 @@
  * to a later request in the `X-turbopuffer-Client-Telemetry` header. The server controls how many requests
  * are recorded by advertising a sample rate in the `X-turbopuffer-Client-Telemetry-Sample-Rate` response
  * header.
+ *
+ * Each recorded request is sent with an `X-Request-Id` that its record repeats, so the server can show the
+ * client's timings in the same trace as its own.
  */
 
 import { type Turbopuffer } from '../../client';
@@ -23,11 +26,24 @@ import { computeDurations, mergeIntoPerformance, type Durations } from './perfor
 export const TELEMETRY_ENV_VAR = 'TURBOPUFFER_TELEMETRY';
 export const TELEMETRY_HEADER = 'X-turbopuffer-Client-Telemetry';
 export const SAMPLE_RATE_HEADER = 'X-turbopuffer-Client-Telemetry-Sample-Rate';
+/** Sorted by ASCII value, so that encoded IDs sort like their bytes. */
+export const REQUEST_ID_ALPHABET = '234567abcdefghijklmnopqrstuvwxyz';
+/**
+ * The bytes in a request ID before it's encoded. The first `REQUEST_ID_RANDOM_BYTES` are random, and the
+ * rest hold the time it was generated.
+ */
+export const REQUEST_ID_BYTES = 18;
+/** The request header that carries the IDs of recorded requests. */
+export const REQUEST_ID_HEADER = 'X-Request-Id';
+/** The prefix of generated request IDs. */
+export const REQUEST_ID_PREFIX = 'tpreq_';
+/** The random bytes at the start of a request ID. */
+export const REQUEST_ID_RANDOM_BYTES = 12;
 
 const TELEMETRY_VERSION = 1;
 
 // Keeps the header well under the 8 KB per-line limit of common proxies.
-export const MAX_RECORDS_PER_HEADER = 20;
+export const MAX_RECORDS_PER_HEADER = 16;
 export const MAX_BUFFERED_RECORDS = 1000;
 
 const TRUE_VALUES = new Set(['1', 'true', 'yes', 'on']);
@@ -119,7 +135,16 @@ export class TelemetryBuffer {
     }
   }
 
-  /** Samples and buffers a record for one request. `durations` are in milliseconds. */
+  /** Decides whether to record a request that's starting, returning the sample rate it's recorded at. */
+  sample(): number | undefined {
+    const rate = this._sampleRate;
+    if (rate <= 0 || (rate < 1 && sampling.random() >= rate)) {
+      return undefined;
+    }
+    return rate;
+  }
+
+  /** Buffers the record of a request sampled at `sampleRate`. `durations` are in milliseconds. */
   record({
     method,
     url,
@@ -129,6 +154,8 @@ export class TelemetryBuffer {
     serverTotalMs,
     error,
     reused,
+    requestId,
+    sampleRate,
   }: {
     method: string;
     url: string;
@@ -138,12 +165,11 @@ export class TelemetryBuffer {
     serverTotalMs?: number | undefined;
     error?: string | undefined;
     reused?: boolean | undefined;
+    /** The `X-Request-Id` the request was sent with, when the client generated it. */
+    requestId?: string | undefined;
+    /** The rate `sample` returned as the request started. */
+    sampleRate: number;
   }): void {
-    const rate = this._sampleRate;
-    if (rate <= 0 || (rate < 1 && sampling.random() >= rate)) {
-      return;
-    }
-
     const record: TelemetryRecord = { route: routeTemplate(method, url), status };
     if (error !== undefined) {
       record['error'] = error;
@@ -151,8 +177,11 @@ export class TelemetryBuffer {
     if (retries) {
       record['retries'] = retries;
     }
-    if (rate < 1) {
-      record['sample_rate'] = rate;
+    if (requestId !== undefined) {
+      record['request_id'] = requestId;
+    }
+    if (sampleRate < 1) {
+      record['sample_rate'] = sampleRate;
     }
     for (const [name, duration] of Object.entries(durations)) {
       // Covered by the connection phases, so it's only kept for the public performance fields.
@@ -244,6 +273,62 @@ export function telemetryBuffer(
   return buffer;
 }
 
+/** Encodes `bytes` in base32 with `REQUEST_ID_ALPHABET`, in RFC 4648's bit order without padding. */
+export function encodeBase32(bytes: Uint8Array): string {
+  let out = '';
+  let buffer = 0;
+  let bits = 0;
+  for (const byte of bytes) {
+    buffer = (buffer << 8) | byte;
+    bits += 8;
+    while (bits >= 5) {
+      bits -= 5;
+      out += REQUEST_ID_ALPHABET.charAt((buffer >> bits) & 31);
+    }
+    buffer &= (1 << bits) - 1;
+  }
+  if (bits > 0) {
+    out += REQUEST_ID_ALPHABET.charAt((buffer << (5 - bits)) & 31);
+  }
+  return out;
+}
+
+/**
+ * Generates the ID of a request that will be recorded, or undefined without a secure source of random
+ * bytes. Its format is private to turbopuffer, which only links IDs in the format it expects: 12 random
+ * bytes, then `now`, the 48-bit Unix time in milliseconds, XORed with the first 6 random bytes, in base32
+ * after a prefix.
+ */
+export function newRequestId(
+  now: number,
+  random: Uint8Array | undefined = randomBytes(REQUEST_ID_RANDOM_BYTES),
+): string | undefined {
+  if (random === undefined) {
+    return undefined;
+  }
+  const bytes = new Uint8Array(REQUEST_ID_BYTES);
+  bytes.set(random);
+  // The low bytes of the time, most significant first. Bitwise operators would truncate it to 32 bits.
+  let millis = Math.max(Math.floor(now), 0);
+  for (let i = REQUEST_ID_BYTES - 1; i >= REQUEST_ID_RANDOM_BYTES; i--) {
+    bytes[i] = millis % 256 ^ random[i - REQUEST_ID_RANDOM_BYTES]!;
+    millis = Math.floor(millis / 256);
+  }
+  return REQUEST_ID_PREFIX + encodeBase32(bytes);
+}
+
+/**
+ * Random bytes from Web Crypto, which every supported runtime has. Without it there are none, so that
+ * requests go without IDs rather than getting guessable ones.
+ */
+function randomBytes(length: number): Uint8Array | undefined {
+  try {
+    return (globalThis as any).crypto.getRandomValues(new Uint8Array(length));
+  } catch {
+    return undefined;
+  }
+}
+
 /** Fills in client performance fields on responses, and records telemetry when enabled. */
 export class TurbopufferObserver implements RequestObserver {
   constructor(readonly telemetry: TelemetryBuffer | undefined) {}
@@ -256,19 +341,36 @@ export class TurbopufferObserver implements RequestObserver {
 class TurbopufferScope implements RequestScope {
   // Kept for later attempts until one of them may have reached the server.
   private batch: TelemetryBatch | undefined;
+  // Sent with every attempt, so retries share the request's trace.
+  private requestId: string | undefined;
+  // The rate the request is recorded at, or undefined if it isn't recorded.
+  private readonly sampleRate: number | undefined;
 
   constructor(
     private readonly buffer: TelemetryBuffer | undefined,
     private readonly info: RequestInfo,
-  ) {}
+  ) {
+    // Sampled up front, so that only requests whose records the server will get are sent with request IDs.
+    this.sampleRate = buffer?.sample();
+    if (this.sampleRate !== undefined) {
+      this.requestId = newRequestId(Date.now());
+    }
+  }
 
   attemptBegin(attempt: number, request: ObservedRequest): void {
     // Taken only once a request is about to be sent, so one that fails before then can't lose it.
     if (attempt === 0) {
       this.batch = this.buffer?.take();
+      // An ID set by the caller is theirs to use, so the request keeps it and isn't linked.
+      if (request.init.headers.has(REQUEST_ID_HEADER)) {
+        this.requestId = undefined;
+      }
     }
     if (this.batch !== undefined) {
       request.init.headers.set(TELEMETRY_HEADER, this.batch.header);
+    }
+    if (this.requestId !== undefined) {
+      request.init.headers.set(REQUEST_ID_HEADER, this.requestId);
     }
   }
 
@@ -294,6 +396,11 @@ class TurbopufferScope implements RequestScope {
       this.buffer.restore(this.batch);
       this.batch = undefined;
     }
+    // A rate of zero asks clients to stop recording, even requests that were already sampled.
+    const sampleRate = this.sampleRate;
+    if (sampleRate === undefined || this.buffer.sampleRate <= 0) {
+      return;
+    }
 
     let error: string | undefined;
     if (result.errorKind === 'canceled' || result.errorKind === 'other') {
@@ -313,6 +420,8 @@ class TurbopufferScope implements RequestScope {
       serverTotalMs: typeof serverTotalMs === 'number' ? serverTotalMs : undefined,
       error,
       reused: timings.reused,
+      requestId: this.requestId,
+      sampleRate,
     });
   }
 }
