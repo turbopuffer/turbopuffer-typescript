@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.13.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.12.0...v2.13.0) (2026-10-22)
+
+
+### Features
+
+* Send client-generated request IDs ([#242](https://github.com/turbopuffer/turbopuffer-typescript/issues/242)) ([cbda15d](https://github.com/turbopuffer/turbopuffer-typescript/commit/cbda15dd29a72cea9429b16ab32a77905275390e))
+
 ## [2.12.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.11.1...v2.12.0) (2026-10-20)
 
 
