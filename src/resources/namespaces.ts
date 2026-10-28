@@ -553,6 +553,13 @@ export namespace Encryption {
     key_name: string;
 
     mode: 'customer-managed';
+
+    /**
+     * The AWS KMS encryption context to send with every request that uses the key.
+     * Only supported on AWS, and must be enabled for your organization. Keys may not
+     * start with `tpuf:` or `aws:`.
+     */
+    encryption_context?: { [key: string]: string };
   }
 
   /**
