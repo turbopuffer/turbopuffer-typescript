@@ -51,7 +51,11 @@ describe('resource namespaces', () => {
     const response = await client.namespaces.copyFrom({
       namespace: 'namespace',
       source_namespace: 'source_namespace',
-      dest_encryption: { key_name: 'key_name', mode: 'customer-managed' },
+      dest_encryption: {
+        key_name: 'key_name',
+        mode: 'customer-managed',
+        encryption_context: { foo: 'string' },
+      },
       source_api_key: 'source_api_key',
       source_region: 'source_region',
     });
@@ -92,7 +96,7 @@ describe('resource namespaces', () => {
       namespace: 'namespace',
       aggregate_by: { foo: 'bar' },
       compute_attributes: { foo: 'bar' },
-      consistency: { level: 'strong', max_staleness_seconds: 1 },
+      consistency: { level: 'strong' },
       distance_metric: 'cosine_distance',
       exclude_attributes: ['string'],
       filters: {},
@@ -171,7 +175,7 @@ describe('resource namespaces', () => {
           top_k: 0,
         },
       ],
-      consistency: { level: 'strong', max_staleness_seconds: 1 },
+      consistency: { level: 'strong' },
       limit: 0,
       offset: 0,
       rerank_by: {},
@@ -214,7 +218,7 @@ describe('resource namespaces', () => {
       namespace: 'namespace',
       aggregate_by: { foo: 'bar' },
       compute_attributes: { foo: 'bar' },
-      consistency: { level: 'strong', max_staleness_seconds: 1 },
+      consistency: { level: 'strong' },
       distance_metric: 'cosine_distance',
       exclude_attributes: ['string'],
       filters: {},
@@ -294,7 +298,11 @@ describe('resource namespaces', () => {
     const response = await client.namespaces.startCopyFrom({
       namespace: 'namespace',
       source_namespace: 'source_namespace',
-      dest_encryption: { key_name: 'key_name', mode: 'customer-managed' },
+      dest_encryption: {
+        key_name: 'key_name',
+        mode: 'customer-managed',
+        encryption_context: { foo: 'string' },
+      },
       source_api_key: 'source_api_key',
       source_region: 'source_region',
     });
@@ -366,7 +374,11 @@ describe('resource namespaces', () => {
       deletes: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
       disable_backpressure: true,
       distance_metric: 'cosine_distance',
-      encryption: { key_name: 'key_name', mode: 'customer-managed' },
+      encryption: {
+        key_name: 'key_name',
+        mode: 'customer-managed',
+        encryption_context: { foo: 'string' },
+      },
       patch_by_filter: {
         filters: {},
         patch: { foo: 'bar' },
