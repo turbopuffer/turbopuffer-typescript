@@ -91,7 +91,7 @@ describe('resource namespaces', () => {
     const response = await client.namespace('namespace').explainQuery({
       namespace: 'namespace',
       compute_attributes: { foo: ['foo', 'VectorDist', [0]] },
-      consistency: { level: 'strong' },
+      consistency: { level: 'strong', max_staleness_seconds: 1 },
       distance_metric: 'cosine_distance',
       exclude_attributes: ['string'],
       group_by: [{}],
@@ -168,7 +168,7 @@ describe('resource namespaces', () => {
           top_k: 0,
         },
       ],
-      consistency: { level: 'strong' },
+      consistency: { level: 'strong', max_staleness_seconds: 1 },
       limit: 0,
       offset: 0,
       rerank_by: ['RRF'],
@@ -210,7 +210,7 @@ describe('resource namespaces', () => {
     const response = await client.namespace('namespace').query({
       namespace: 'namespace',
       compute_attributes: { foo: ['foo', 'VectorDist', [0]] },
-      consistency: { level: 'strong' },
+      consistency: { level: 'strong', max_staleness_seconds: 1 },
       distance_metric: 'cosine_distance',
       exclude_attributes: ['string'],
       group_by: [{}],
