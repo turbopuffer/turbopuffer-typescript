@@ -1685,7 +1685,7 @@ export interface NamespaceExplainQueryParams {
   /**
    * Body param: The consistency level for a query.
    */
-  consistency?: NamespaceExplainQueryParams.Consistency;
+  consistency?: NamespaceExplainQueryParams.Strong | NamespaceExplainQueryParams.Eventual;
 
   /**
    * Body param: A function used to calculate vector similarity.
@@ -1744,18 +1744,23 @@ export interface NamespaceExplainQueryParams {
 
 export namespace NamespaceExplainQueryParams {
   /**
-   * The consistency level for a query.
+   * Strong consistency. Requires a round-trip to object storage to fetch the latest
+   * writes.
    */
-  export interface Consistency {
-    /**
-     * The query's consistency level.
-     */
-    level?: 'strong' | 'eventual';
+  export interface Strong {
+    level: 'strong';
+  }
+
+  /**
+   * Eventual consistency. Does not require a round-trip to object storage, but may
+   * not see the latest writes.
+   */
+  export interface Eventual {
+    level: 'eventual';
 
     /**
-     * How long an eventually consistent query may reuse the node's cached view of the
-     * namespace before refreshing it from object storage. Only valid with
-     * `level: eventual`. Defaults to 60.
+     * How long the query may reuse the node's cached view of the namespace before
+     * refreshing it from object storage. Defaults to 60.
      */
     max_staleness_seconds?: number;
   }
@@ -1789,7 +1794,7 @@ export interface NamespaceMultiQueryParams {
   /**
    * Body param: The consistency level for a query.
    */
-  consistency?: NamespaceMultiQueryParams.Consistency;
+  consistency?: NamespaceMultiQueryParams.Strong | NamespaceMultiQueryParams.Eventual;
 
   /**
    * Body param: Limits the total number of reranked documents returned.
@@ -1883,18 +1888,23 @@ export namespace NamespaceMultiQueryParams {
   }
 
   /**
-   * The consistency level for a query.
+   * Strong consistency. Requires a round-trip to object storage to fetch the latest
+   * writes.
    */
-  export interface Consistency {
-    /**
-     * The query's consistency level.
-     */
-    level?: 'strong' | 'eventual';
+  export interface Strong {
+    level: 'strong';
+  }
+
+  /**
+   * Eventual consistency. Does not require a round-trip to object storage, but may
+   * not see the latest writes.
+   */
+  export interface Eventual {
+    level: 'eventual';
 
     /**
-     * How long an eventually consistent query may reuse the node's cached view of the
-     * namespace before refreshing it from object storage. Only valid with
-     * `level: eventual`. Defaults to 60.
+     * How long the query may reuse the node's cached view of the namespace before
+     * refreshing it from object storage. Defaults to 60.
      */
     max_staleness_seconds?: number;
   }
@@ -1929,7 +1939,7 @@ export interface NamespaceQueryParams {
   /**
    * Body param: The consistency level for a query.
    */
-  consistency?: NamespaceQueryParams.Consistency;
+  consistency?: NamespaceQueryParams.Strong | NamespaceQueryParams.Eventual;
 
   /**
    * Body param: A function used to calculate vector similarity.
@@ -1993,18 +2003,23 @@ export interface NamespaceQueryParams {
 
 export namespace NamespaceQueryParams {
   /**
-   * The consistency level for a query.
+   * Strong consistency. Requires a round-trip to object storage to fetch the latest
+   * writes.
    */
-  export interface Consistency {
-    /**
-     * The query's consistency level.
-     */
-    level?: 'strong' | 'eventual';
+  export interface Strong {
+    level: 'strong';
+  }
+
+  /**
+   * Eventual consistency. Does not require a round-trip to object storage, but may
+   * not see the latest writes.
+   */
+  export interface Eventual {
+    level: 'eventual';
 
     /**
-     * How long an eventually consistent query may reuse the node's cached view of the
-     * namespace before refreshing it from object storage. Only valid with
-     * `level: eventual`. Defaults to 60.
+     * How long the query may reuse the node's cached view of the namespace before
+     * refreshing it from object storage. Defaults to 60.
      */
     max_staleness_seconds?: number;
   }
