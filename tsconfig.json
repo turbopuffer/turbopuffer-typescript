@@ -1,6 +1,6 @@
 {
   "include": ["src", "tests", "examples"],
-  "exclude": [],
+  "exclude": ["tests/api-resources"],
   "compilerOptions": {
     "target": "es2020",
     "lib": ["es2020"],
