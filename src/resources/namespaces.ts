@@ -5,9 +5,6 @@ import * as NamespacesAPI from './namespaces';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
-import { AggregateBy, Expr, Filter, GroupBy, RankBy, RerankBy } from './custom';
-import { ClientPerformance } from '../internal/custom/performance';
-import { NotFoundError } from '../error';
 
 export class Namespace extends APIResource {
   /**
@@ -142,21 +139,6 @@ export class Namespace extends APIResource {
   }
 
   /**
-   * Check whether the namespace exists.
-   */
-  async exists() {
-    try {
-      await this.schema();
-      return true;
-    } catch (e) {
-      if (e instanceof NotFoundError) {
-        return false;
-      }
-      throw e;
-    }
-  }
-
-  /**
    * Start copying all documents from another namespace into this one. Returns an
    * operation token without waiting for the copy to finish. Use the token to poll
    * for progress and the result.
@@ -203,6 +185,21 @@ export class Namespace extends APIResource {
   ): APIPromise<NamespaceWriteResponse> {
     const { namespace = this._client.defaultNamespace, ...body } = params ?? {};
     return this._client.post(path`/v2/namespaces/${namespace}`, { body, maxRetries: 6, ...options });
+  }
+
+  /**
+   * Check whether the namespace exists.
+   */
+  async exists() {
+    try {
+      await this.schema();
+      return true;
+    } catch (e) {
+      if (e instanceof NotFoundError) {
+        return false;
+      }
+      throw e;
+    }
   }
 }
 
@@ -2378,3 +2375,8 @@ export declare namespace Namespaces {
     type NamespaceWriteParams as NamespaceWriteParams,
   };
 }
+
+// Custom imports are at the end so that changes to the generated imports above don't conflict with them.
+import type { AggregateBy, Expr, Filter, GroupBy, RankBy, RerankBy } from './custom';
+import type { ClientPerformance } from '../internal/custom/performance';
+import { NotFoundError } from '../error';

@@ -10,7 +10,7 @@ const client = new Turbopuffer({
 describe('resource namespaces', () => {
   // Mock server tests are disabled
   test.skip('branchFrom: only required params', async () => {
-    const responsePromise = client.namespace('namespace').branchFrom({
+    const responsePromise = client.namespaces.branchFrom({
       namespace: 'namespace',
       source_namespace: 'source_namespace',
     });
@@ -25,7 +25,7 @@ describe('resource namespaces', () => {
 
   // Mock server tests are disabled
   test.skip('branchFrom: required and optional params', async () => {
-    const response = await client.namespace('namespace').branchFrom({
+    const response = await client.namespaces.branchFrom({
       namespace: 'namespace',
       source_namespace: 'source_namespace',
     });
@@ -33,7 +33,7 @@ describe('resource namespaces', () => {
 
   // Mock server tests are disabled
   test.skip('copyFrom: only required params', async () => {
-    const responsePromise = client.namespace('namespace').copyFrom({
+    const responsePromise = client.namespaces.copyFrom({
       namespace: 'namespace',
       source_namespace: 'source_namespace',
     });
@@ -48,7 +48,7 @@ describe('resource namespaces', () => {
 
   // Mock server tests are disabled
   test.skip('copyFrom: required and optional params', async () => {
-    const response = await client.namespace('namespace').copyFrom({
+    const response = await client.namespaces.copyFrom({
       namespace: 'namespace',
       source_namespace: 'source_namespace',
       dest_encryption: { key_name: 'key_name', mode: 'customer-managed' },
@@ -59,7 +59,7 @@ describe('resource namespaces', () => {
 
   // Mock server tests are disabled
   test.skip('deleteAll: only required params', async () => {
-    const responsePromise = client.namespace('namespace').deleteAll();
+    const responsePromise = client.namespaces.deleteAll({ namespace: 'namespace' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -71,12 +71,12 @@ describe('resource namespaces', () => {
 
   // Mock server tests are disabled
   test.skip('deleteAll: required and optional params', async () => {
-    const response = await client.namespace('namespace').deleteAll();
+    const response = await client.namespaces.deleteAll({ namespace: 'namespace' });
   });
 
   // Mock server tests are disabled
   test.skip('explainQuery: only required params', async () => {
-    const responsePromise = client.namespace('namespace').explainQuery();
+    const responsePromise = client.namespaces.explainQuery({ namespace: 'namespace' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -88,16 +88,19 @@ describe('resource namespaces', () => {
 
   // Mock server tests are disabled
   test.skip('explainQuery: required and optional params', async () => {
-    const response = await client.namespace('namespace').explainQuery({
+    const response = await client.namespaces.explainQuery({
       namespace: 'namespace',
-      compute_attributes: { foo: ['foo', 'VectorDist', [0]] },
+      aggregate_by: { foo: 'bar' },
+      compute_attributes: { foo: 'bar' },
       consistency: { level: 'strong' },
       distance_metric: 'cosine_distance',
       exclude_attributes: ['string'],
+      filters: {},
       group_by: [{}],
       include_attributes: true,
       limit: 0,
       offset: 0,
+      rank_by: {},
       top_k: 0,
       vector_encoding: 'float',
     });
@@ -105,7 +108,7 @@ describe('resource namespaces', () => {
 
   // Mock server tests are disabled
   test.skip('hintCacheWarm: only required params', async () => {
-    const responsePromise = client.namespace('namespace').hintCacheWarm();
+    const responsePromise = client.namespaces.hintCacheWarm({ namespace: 'namespace' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -117,12 +120,12 @@ describe('resource namespaces', () => {
 
   // Mock server tests are disabled
   test.skip('hintCacheWarm: required and optional params', async () => {
-    const response = await client.namespace('namespace').hintCacheWarm();
+    const response = await client.namespaces.hintCacheWarm({ namespace: 'namespace' });
   });
 
   // Mock server tests are disabled
   test.skip('metadata: only required params', async () => {
-    const responsePromise = client.namespace('namespace').metadata();
+    const responsePromise = client.namespaces.metadata({ namespace: 'namespace' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -134,14 +137,12 @@ describe('resource namespaces', () => {
 
   // Mock server tests are disabled
   test.skip('metadata: required and optional params', async () => {
-    const response = await client.namespace('namespace').metadata();
+    const response = await client.namespaces.metadata({ namespace: 'namespace' });
   });
 
   // Mock server tests are disabled
   test.skip('multiQuery: only required params', async () => {
-    const responsePromise = client
-      .namespace('namespace')
-      .multiQuery({ namespace: 'namespace', queries: [{}] });
+    const responsePromise = client.namespaces.multiQuery({ namespace: 'namespace', queries: [{}] });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -153,32 +154,34 @@ describe('resource namespaces', () => {
 
   // Mock server tests are disabled
   test.skip('multiQuery: required and optional params', async () => {
-    const response = await client.namespace('namespace').multiQuery({
+    const response = await client.namespaces.multiQuery({
       namespace: 'namespace',
       queries: [
         {
-          compute_attributes: { foo: ['foo', 'VectorDist', [0]] },
+          aggregate_by: { foo: 'bar' },
+          compute_attributes: { foo: 'bar' },
           distance_metric: 'cosine_distance',
           exclude_attributes: ['string'],
+          filters: {},
           group_by: [{}],
           include_attributes: true,
           limit: 0,
           offset: 0,
-          rank_by: ['id', 'asc'],
+          rank_by: {},
           top_k: 0,
         },
       ],
       consistency: { level: 'strong' },
       limit: 0,
       offset: 0,
-      rerank_by: ['RRF'],
+      rerank_by: {},
       vector_encoding: 'float',
     });
   });
 
   // Mock server tests are disabled
   test.skip('pollCopyFrom: only required params', async () => {
-    const responsePromise = client.namespace('namespace').pollCopyFrom('token', { namespace: 'namespace' });
+    const responsePromise = client.namespaces.pollCopyFrom('token', { namespace: 'namespace' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -190,12 +193,12 @@ describe('resource namespaces', () => {
 
   // Mock server tests are disabled
   test.skip('pollCopyFrom: required and optional params', async () => {
-    const response = await client.namespace('namespace').pollCopyFrom('token', { namespace: 'namespace' });
+    const response = await client.namespaces.pollCopyFrom('token', { namespace: 'namespace' });
   });
 
   // Mock server tests are disabled
   test.skip('query: only required params', async () => {
-    const responsePromise = client.namespace('namespace').query({});
+    const responsePromise = client.namespaces.query({ namespace: 'namespace' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -207,17 +210,19 @@ describe('resource namespaces', () => {
 
   // Mock server tests are disabled
   test.skip('query: required and optional params', async () => {
-    const response = await client.namespace('namespace').query({
+    const response = await client.namespaces.query({
       namespace: 'namespace',
-      compute_attributes: { foo: ['foo', 'VectorDist', [0]] },
+      aggregate_by: { foo: 'bar' },
+      compute_attributes: { foo: 'bar' },
       consistency: { level: 'strong' },
       distance_metric: 'cosine_distance',
       exclude_attributes: ['string'],
+      filters: {},
       group_by: [{}],
       include_attributes: true,
       limit: 0,
       offset: 0,
-      rank_by: ['id', 'asc'],
+      rank_by: {},
       rerank_by: {
         attribute: 'attribute',
         model: 'model',
@@ -230,7 +235,7 @@ describe('resource namespaces', () => {
 
   // Mock server tests are disabled
   test.skip('recall: only required params', async () => {
-    const responsePromise = client.namespace('namespace').recall();
+    const responsePromise = client.namespaces.recall({ namespace: 'namespace' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -242,7 +247,7 @@ describe('resource namespaces', () => {
 
   // Mock server tests are disabled
   test.skip('recall: required and optional params', async () => {
-    const response = await client.namespace('namespace').recall({
+    const response = await client.namespaces.recall({
       namespace: 'namespace',
       filters: {},
       include_ground_truth: true,
@@ -254,7 +259,7 @@ describe('resource namespaces', () => {
 
   // Mock server tests are disabled
   test.skip('schema: only required params', async () => {
-    const responsePromise = client.namespace('namespace').schema();
+    const responsePromise = client.namespaces.schema({ namespace: 'namespace' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -266,12 +271,12 @@ describe('resource namespaces', () => {
 
   // Mock server tests are disabled
   test.skip('schema: required and optional params', async () => {
-    const response = await client.namespace('namespace').schema();
+    const response = await client.namespaces.schema({ namespace: 'namespace' });
   });
 
   // Mock server tests are disabled
   test.skip('startCopyFrom: only required params', async () => {
-    const responsePromise = client.namespace('namespace').startCopyFrom({
+    const responsePromise = client.namespaces.startCopyFrom({
       namespace: 'namespace',
       source_namespace: 'source_namespace',
     });
@@ -286,7 +291,7 @@ describe('resource namespaces', () => {
 
   // Mock server tests are disabled
   test.skip('startCopyFrom: required and optional params', async () => {
-    const response = await client.namespace('namespace').startCopyFrom({
+    const response = await client.namespaces.startCopyFrom({
       namespace: 'namespace',
       source_namespace: 'source_namespace',
       dest_encryption: { key_name: 'key_name', mode: 'customer-managed' },
@@ -297,7 +302,7 @@ describe('resource namespaces', () => {
 
   // Mock server tests are disabled
   test.skip('updateMetadata: only required params', async () => {
-    const responsePromise = client.namespace('namespace').updateMetadata({});
+    const responsePromise = client.namespaces.updateMetadata({ namespace: 'namespace' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -309,12 +314,16 @@ describe('resource namespaces', () => {
 
   // Mock server tests are disabled
   test.skip('updateMetadata: required and optional params', async () => {
-    const response = await client.namespace('namespace').updateMetadata({ pinning: true, read_only: true });
+    const response = await client.namespaces.updateMetadata({
+      namespace: 'namespace',
+      pinning: true,
+      read_only: true,
+    });
   });
 
   // Mock server tests are disabled
   test.skip('updateSchema: only required params', async () => {
-    const responsePromise = client.namespace('namespace').updateSchema();
+    const responsePromise = client.namespaces.updateSchema({ namespace: 'namespace' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -326,7 +335,7 @@ describe('resource namespaces', () => {
 
   // Mock server tests are disabled
   test.skip('updateSchema: required and optional params', async () => {
-    const response = await client.namespace('namespace').updateSchema({
+    const response = await client.namespaces.updateSchema({
       namespace: 'namespace',
       schema: { foo: 'string' },
     });
@@ -334,7 +343,7 @@ describe('resource namespaces', () => {
 
   // Mock server tests are disabled
   test.skip('write: only required params', async () => {
-    const responsePromise = client.namespace('namespace').write();
+    const responsePromise = client.namespaces.write({ namespace: 'namespace' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -346,27 +355,31 @@ describe('resource namespaces', () => {
 
   // Mock server tests are disabled
   test.skip('write: required and optional params', async () => {
-    const response = await client.namespace('namespace').write({
+    const response = await client.namespaces.write({
       namespace: 'namespace',
       branch_from_namespace: 'string',
       copy_from_namespace: 'string',
       create_namespace: true,
+      delete_by_filter: {},
+      delete_by_filter_allow_partial: true,
+      delete_condition: {},
       deletes: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],
       disable_backpressure: true,
       distance_metric: 'cosine_distance',
       encryption: { key_name: 'key_name', mode: 'customer-managed' },
       patch_by_filter: {
-        filters: ['name', 'Eq', 'foo'],
+        filters: {},
         patch: { foo: 'bar' },
       },
-      delete_by_filter_allow_partial: true,
       patch_by_filter_allow_partial: true,
       patch_columns: { id: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'], vector: [[0]] },
+      patch_condition: {},
       patch_rows: [{ id: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', vector: [0] }],
       return_affected_ids: true,
       schema: { foo: 'string' },
       sharding: { num_shards: 1 },
       upsert_columns: { id: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'], vector: [[0]] },
+      upsert_condition: {},
       upsert_rows: [{ id: '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', vector: [0] }],
     });
   });
