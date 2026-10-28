@@ -1751,6 +1751,13 @@ export namespace NamespaceExplainQueryParams {
      * The query's consistency level.
      */
     level?: 'strong' | 'eventual';
+
+    /**
+     * How long an eventually consistent query may reuse the node's cached view of the
+     * namespace before refreshing it from object storage. Only valid with
+     * `level: eventual`. Defaults to 60.
+     */
+    max_staleness_seconds?: number;
   }
 }
 
@@ -1883,6 +1890,13 @@ export namespace NamespaceMultiQueryParams {
      * The query's consistency level.
      */
     level?: 'strong' | 'eventual';
+
+    /**
+     * How long an eventually consistent query may reuse the node's cached view of the
+     * namespace before refreshing it from object storage. Only valid with
+     * `level: eventual`. Defaults to 60.
+     */
+    max_staleness_seconds?: number;
   }
 }
 
@@ -1986,6 +2000,13 @@ export namespace NamespaceQueryParams {
      * The query's consistency level.
      */
     level?: 'strong' | 'eventual';
+
+    /**
+     * How long an eventually consistent query may reuse the node's cached view of the
+     * namespace before refreshing it from object storage. Only valid with
+     * `level: eventual`. Defaults to 60.
+     */
+    max_staleness_seconds?: number;
   }
 }
 
