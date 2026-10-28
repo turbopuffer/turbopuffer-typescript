@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.13.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.12.0...v2.13.0) (2026-10-28)
+
+
+### Features
+
+* openapi: add encryption_context to customer-managed encryption ([71984a1](https://github.com/turbopuffer/turbopuffer-typescript/commit/71984a1b83570e9aa0af29891788cadd68998cad))
+* Send client-generated request IDs ([#242](https://github.com/turbopuffer/turbopuffer-typescript/issues/242)) ([cbda15d](https://github.com/turbopuffer/turbopuffer-typescript/commit/cbda15dd29a72cea9429b16ab32a77905275390e))
+* spec: split query consistency into strong and eventual variants ([fecfa07](https://github.com/turbopuffer/turbopuffer-typescript/commit/fecfa0742a620c623a00d05da799ab0d3f6125f2))
+* tpuf-engine: add max_staleness_seconds to eventual consistency ([5e0d5f5](https://github.com/turbopuffer/turbopuffer-typescript/commit/5e0d5f598cfd43e585b287da96d9660123e18343))
+
+
+### Chores
+
+* keep custom code out of spec-driven generated files ([#245](https://github.com/turbopuffer/turbopuffer-typescript/issues/245)) ([186f352](https://github.com/turbopuffer/turbopuffer-typescript/commit/186f352adfc649977a5dcb9f3bc2e870c56c8890))
+
 ## [2.12.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.11.1...v2.12.0) (2026-10-20)
 
 
