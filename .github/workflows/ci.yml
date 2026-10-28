@@ -37,7 +37,8 @@ jobs:
   build:
     timeout-minutes: 5
     name: build
-    runs-on: ${{ startsWith(github.repository, 'stainless-sdks/') && 'depot-ubuntu-24.04' || 'ubuntu-latest' }}
+    # Pinned because the Playwright in yarn.lock can't install browsers on Ubuntu 26.04, which ubuntu-latest now is.
+    runs-on: ${{ startsWith(github.repository, 'stainless-sdks/') && 'depot-ubuntu-24.04' || 'ubuntu-24.04' }}
     if: (github.event_name == 'push' || github.event.pull_request.head.repo.fork) && (github.event_name != 'push' || github.event.head_commit.message != 'codegen metadata')
     permissions:
       contents: read
