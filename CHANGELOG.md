@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.14.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.13.0...v2.14.0) (2026-10-29)
+
+
+### Features
+
+* Respect Node's env proxy settings in the Node transport ([#246](https://github.com/turbopuffer/turbopuffer-typescript/issues/246)) ([a1ad4ea](https://github.com/turbopuffer/turbopuffer-typescript/commit/a1ad4eafbcf477061155fc0ed60f72ca1810d619))
+
 ## [2.13.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.12.0...v2.13.0) (2026-10-28)
 
 
