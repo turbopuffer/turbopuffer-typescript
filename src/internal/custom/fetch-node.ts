@@ -1,4 +1,6 @@
-import { Agent } from 'undici';
+// A namespace import, because a named import of something missing from an
+// older undici fails to load under ESM.
+import * as undici from 'undici';
 import { HttpClientOptions } from './http-client';
 import { promisify } from 'node:util';
 import { gunzip as gunzipNode } from 'node:zlib';
@@ -7,14 +9,49 @@ import { UndiciHeaders } from 'undici/types/dispatcher';
 
 const gunzip = promisify(gunzipNode);
 
+/**
+ * Whether Node was asked to send requests through the proxies in `HTTP_PROXY`,
+ * `HTTPS_PROXY`, and `NO_PROXY`, which it then does for its own `fetch`. As in
+ * Node, flags override `NODE_USE_ENV_PROXY`, and later flags override earlier
+ * ones.
+ *
+ * See https://nodejs.org/api/http.html#built-in-proxy-support
+ */
+export const useEnvProxy = (): boolean => {
+  let enabled = process.env['NODE_USE_ENV_PROXY'] === '1';
+  // Flags in NODE_OPTIONS are missing from execArgv and come before it.
+  const flags = [...(process.env['NODE_OPTIONS'] ?? '').split(/\s+/), ...process.execArgv];
+  for (const flag of flags) {
+    if (flag === '--use-env-proxy') {
+      enabled = true;
+    } else if (flag === '--no-use-env-proxy') {
+      enabled = false;
+    }
+  }
+  return enabled;
+};
+
 export const makeFetch = (clientOptions: HttpClientOptions) => {
-  const agent = new Agent({
+  const agentOptions = {
     keepAliveTimeout: clientOptions.connectionIdleTimeout,
     keepAliveMaxTimeout: 24 * 60 * 60 * 1000, // maximum configurable idle timeout with server hint
     connect: {
       timeout: clientOptions.connectTimeout,
     },
-  });
+  };
+
+  // Proxies replace `connect` with their own, so the connect timeout is also
+  // given for connections to the proxy and through it. undici before 6.14.0,
+  // which some users manage to link against (see the note on headers below),
+  // lacks EnvHttpProxyAgent and keeps connecting directly.
+  const agent: undici.Dispatcher =
+    useEnvProxy() && undici.EnvHttpProxyAgent ?
+      new undici.EnvHttpProxyAgent({
+        ...agentOptions,
+        proxyTls: { timeout: clientOptions.connectTimeout },
+        requestTls: { timeout: clientOptions.connectTimeout },
+      })
+    : new undici.Agent(agentOptions);
 
   const fetchUndici: typeof fetch = async (url, options = {}) => {
     // Validate limited subset of `fetch` that we support.
@@ -47,10 +84,14 @@ export const makeFetch = (clientOptions: HttpClientOptions) => {
       requestHeaders = options.headers;
     }
 
+    // Like Node's fetch, use a dispatcher given in `fetchOptions`, such as an
+    // undici ProxyAgent. It replaces the client's own along with its timeouts.
+    const dispatcher = (options as { dispatcher?: undici.Dispatcher }).dispatcher ?? agent;
+
     // Make request using undici's low-level request API, which is much faster
     // than the high-level fetch API. (*This* shim doesn't need to be standards
     // compliant, which is why we can outperform the built-in fetch shim.)
-    const { statusCode, headers, body } = await agent.request({
+    const { statusCode, headers, body } = await dispatcher.request({
       origin: url.origin,
       path: url.search ? `${url.pathname}${url.search}` : url.pathname,
       method: options.method || 'GET',
