@@ -830,6 +830,11 @@ export interface NamespaceMetadata {
   updated_at: string;
 
   /**
+   * The attribute the namespace is arranged by. Omitted when not set.
+   */
+  arrange_by?: string;
+
+  /**
    * Configuration for namespace pinning, along with the current status of the pinned
    * namespace.
    */
@@ -2164,6 +2169,15 @@ export interface NamespaceWriteParams {
    * Path param: The name of the namespace.
    */
   namespace?: string;
+
+  /**
+   * Body param: Experimental. Stores documents in ranges of this attribute, ordered
+   * by it, so queries filtering on a narrow range of it or ordered by it skip the
+   * rest. Documents should be written in roughly ascending order of it. Must have
+   * type `int`, `uint`, `datetime` or `string`, and can only be set on a namespace's
+   * inaugural write.
+   */
+  arrange_by?: string;
 
   /**
    * Body param: The namespace to create an instant, copy-on-write clone of.
