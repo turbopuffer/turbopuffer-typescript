@@ -365,6 +365,7 @@ describe('resource namespaces', () => {
   test.skip('write: required and optional params', async () => {
     const response = await client.namespaces.write({
       namespace: 'namespace',
+      arrange_by: 'arrange_by',
       branch_from_namespace: 'string',
       copy_from_namespace: 'string',
       create_namespace: true,
