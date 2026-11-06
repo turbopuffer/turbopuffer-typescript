@@ -830,9 +830,10 @@ export interface NamespaceMetadata {
   updated_at: string;
 
   /**
-   * The attribute the namespace is arranged by. Omitted when not set.
+   * Experimental. How a namespace stores its documents. Can only be set on a
+   * namespace's inaugural write, and cannot be changed later.
    */
-  arrange_by?: string;
+  layout?: NamespaceMetadata.Layout;
 
   /**
    * Configuration for namespace pinning, along with the current status of the pinned
@@ -878,6 +879,20 @@ export namespace NamespaceMetadata {
      * The number of rows in the write-ahead log that have not yet been indexed.
      */
     unindexed_rows: number;
+  }
+
+  /**
+   * Experimental. How a namespace stores its documents. Can only be set on a
+   * namespace's inaugural write, and cannot be changed later.
+   */
+  export interface Layout {
+    /**
+     * Stores documents in ranges of this attribute, ordered by it, so queries
+     * filtering on a narrow range of it or ordered by it skip the rest. Documents
+     * should be written in roughly ascending order of it. Must have type `int`,
+     * `uint`, `datetime` or `string`.
+     */
+    arrange_by?: string;
   }
 
   /**
@@ -2171,15 +2186,6 @@ export interface NamespaceWriteParams {
   namespace?: string;
 
   /**
-   * Body param: Experimental. Stores documents in ranges of this attribute, ordered
-   * by it, so queries filtering on a narrow range of it or ordered by it skip the
-   * rest. Documents should be written in roughly ascending order of it. Must have
-   * type `int`, `uint`, `datetime` or `string`, and can only be set on a namespace's
-   * inaugural write.
-   */
-  arrange_by?: string;
-
-  /**
    * Body param: The namespace to create an instant, copy-on-write clone of.
    */
   branch_from_namespace?: BranchFromNamespaceParams;
@@ -2234,6 +2240,12 @@ export interface NamespaceWriteParams {
    * Body param: The encryption configuration for a namespace.
    */
   encryption?: Encryption;
+
+  /**
+   * Body param: Experimental. How a namespace stores its documents. Can only be set
+   * on a namespace's inaugural write, and cannot be changed later.
+   */
+  layout?: NamespaceWriteParams.Layout;
 
   /**
    * Body param: Sets the attributes in `patch` on every document that matches
@@ -2303,6 +2315,20 @@ export interface NamespaceWriteParams {
 }
 
 export namespace NamespaceWriteParams {
+  /**
+   * Experimental. How a namespace stores its documents. Can only be set on a
+   * namespace's inaugural write, and cannot be changed later.
+   */
+  export interface Layout {
+    /**
+     * Stores documents in ranges of this attribute, ordered by it, so queries
+     * filtering on a narrow range of it or ordered by it skip the rest. Documents
+     * should be written in roughly ascending order of it. Must have type `int`,
+     * `uint`, `datetime` or `string`.
+     */
+    arrange_by?: string;
+  }
+
   /**
    * Sets the attributes in `patch` on every document that matches `filters`.
    */
