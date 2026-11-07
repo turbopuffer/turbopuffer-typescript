@@ -830,8 +830,8 @@ export interface NamespaceMetadata {
   updated_at: string;
 
   /**
-   * Experimental. How a namespace stores its documents. Can only be set on a
-   * namespace's inaugural write, and cannot be changed later.
+   * Experimental. How a namespace stores its documents. A change applies to
+   * documents indexed after it.
    */
   layout?: NamespaceMetadata.Layout;
 
@@ -882,15 +882,15 @@ export namespace NamespaceMetadata {
   }
 
   /**
-   * Experimental. How a namespace stores its documents. Can only be set on a
-   * namespace's inaugural write, and cannot be changed later.
+   * Experimental. How a namespace stores its documents. A change applies to
+   * documents indexed after it.
    */
   export interface Layout {
     /**
      * Stores documents in ranges of this attribute, ordered by it, so queries
      * filtering on a narrow range of it or ordered by it skip the rest. Documents
      * should be written in roughly ascending order of it. Must have type `int`,
-     * `uint`, `datetime` or `string`.
+     * `uint`, `datetime` or `string`. `id` resets the namespace to the default layout.
      */
     arrange_by?: string;
   }
@@ -2242,8 +2242,8 @@ export interface NamespaceWriteParams {
   encryption?: Encryption;
 
   /**
-   * Body param: Experimental. How a namespace stores its documents. Can only be set
-   * on a namespace's inaugural write, and cannot be changed later.
+   * Body param: Experimental. How a namespace stores its documents. A change applies
+   * to documents indexed after it.
    */
   layout?: NamespaceWriteParams.Layout;
 
@@ -2316,15 +2316,15 @@ export interface NamespaceWriteParams {
 
 export namespace NamespaceWriteParams {
   /**
-   * Experimental. How a namespace stores its documents. Can only be set on a
-   * namespace's inaugural write, and cannot be changed later.
+   * Experimental. How a namespace stores its documents. A change applies to
+   * documents indexed after it.
    */
   export interface Layout {
     /**
      * Stores documents in ranges of this attribute, ordered by it, so queries
      * filtering on a narrow range of it or ordered by it skip the rest. Documents
      * should be written in roughly ascending order of it. Must have type `int`,
-     * `uint`, `datetime` or `string`.
+     * `uint`, `datetime` or `string`. `id` resets the namespace to the default layout.
      */
     arrange_by?: string;
   }
