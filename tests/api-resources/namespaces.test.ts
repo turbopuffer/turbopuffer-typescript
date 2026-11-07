@@ -379,6 +379,7 @@ describe('resource namespaces', () => {
         mode: 'customer-managed',
         encryption_context: { foo: 'string' },
       },
+      layout: { arrange_by: 'arrange_by' },
       patch_by_filter: {
         filters: {},
         patch: { foo: 'bar' },
