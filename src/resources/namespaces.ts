@@ -887,12 +887,13 @@ export namespace NamespaceMetadata {
    */
   export interface Layout {
     /**
-     * Stores documents in ranges of this attribute, ordered by it, so queries
-     * filtering on a narrow range of it or ordered by it skip the rest. Documents
+     * Stores documents in ranges of an attribute, in ascending order, so queries
+     * filtering on a narrow range of it or ranking by it skip the rest. Documents
      * should be written in roughly ascending order of it. Must have type `int`,
-     * `uint`, `datetime` or `string`. `id` resets the namespace to the default layout.
+     * `uint`, `datetime` or `string`. `["id", "asc"]` resets the namespace to the
+     * default layout.
      */
-    arrange_by?: string;
+    rank_by?: Array<unknown>;
   }
 
   /**
@@ -2321,12 +2322,13 @@ export namespace NamespaceWriteParams {
    */
   export interface Layout {
     /**
-     * Stores documents in ranges of this attribute, ordered by it, so queries
-     * filtering on a narrow range of it or ordered by it skip the rest. Documents
+     * Stores documents in ranges of an attribute, in ascending order, so queries
+     * filtering on a narrow range of it or ranking by it skip the rest. Documents
      * should be written in roughly ascending order of it. Must have type `int`,
-     * `uint`, `datetime` or `string`. `id` resets the namespace to the default layout.
+     * `uint`, `datetime` or `string`. `["id", "asc"]` resets the namespace to the
+     * default layout.
      */
-    arrange_by?: string;
+    rank_by?: Array<unknown>;
   }
 
   /**
