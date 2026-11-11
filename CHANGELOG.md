@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.14.1](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.14.0...v2.14.1) (2026-11-11)
+
+
+### Chores
+
+* regenerate SDK ([1900671](https://github.com/turbopuffer/turbopuffer-typescript/commit/1900671a50dfbf73892726a6593061d2d6702344))
+
 ## [2.14.0](https://github.com/turbopuffer/turbopuffer-typescript/compare/v2.13.0...v2.14.0) (2026-10-29)
 
 
